@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xxw.mapper.AuthMapper">
+    <resultMap id="AuthResultMap" type="xxw.po.Auth">
+        <id column="ID" property="id" jdbcType="VARCHAR" />
+        <result column="AUTH_ID" property="authId" jdbcType="VARCHAR"/>
+        <result column="AUTH_TYPE" property="authType" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="getAllAuth" resultMap="AuthResultMap">
+        select * from AUTHORITY
+    </select>
+    <select id="getAuthByRoleId" parameterType="java.lang.String" resultType="java.lang.String">
+        select AUTH_ID from ROLEADDAUTH where ROLE_ID=#{roleId,jdbcType=VARCHAR}
+    </select>
+    <select id="getAuthByAuthId" parameterType="java.lang.String" resultType="java.lang.String">
+        select AUTH_TYPE from AUTHORITY where AUTH_ID=#{authId,jdbcType=VARCHAR}
+    </select>
+</mapper>

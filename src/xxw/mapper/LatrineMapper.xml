@@ -1,0 +1,1338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xxw.mapper.LatrineMapper">
+  <resultMap id="BaseResultMap" type="xxw.po.Latrine" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="COUNTY" property="county" jdbcType="VARCHAR" />
+    <result column="TOWN" property="town" jdbcType="VARCHAR" />
+    <result column="VILLAGE" property="village" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="ID_CARD" property="idCard" jdbcType="VARCHAR" />
+    <result column="HOUSE_NUM" property="houseNum" jdbcType="VARCHAR" />
+    <result column="RENOVATE_MODE_ID" property="renovateModeId" jdbcType="VARCHAR" />
+    <result column="RENOVATE_MODE" property="renovateMode" jdbcType="VARCHAR" />
+    <result column="RENOVATE_DATE" property="renovateDate" jdbcType="VARCHAR" />
+    <result column="CHECK_DATE" property="checkDate" jdbcType="VARCHAR" />
+    <result column="TEL" property="tel" jdbcType="VARCHAR" />
+    <result column="RESP_UNIT" property="respUnit" jdbcType="VARCHAR" />
+    <result column="X" property="x" jdbcType="VARCHAR" />
+    <result column="Y" property="y" jdbcType="VARCHAR" />
+    <result column="CURRENT" property="current" jdbcType="VARCHAR" />
+    <result column="IS_CHECK" property="isCheck" jdbcType="DECIMAL" />
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR" />
+    <result column="UNIQUE_ID" property="uniqueId" jdbcType="VARCHAR" />
+    <result column="RENOVATE_CODE" property="renovateCode" jdbcType="VARCHAR" />
+    <result column="VIL_INDEX" property="vilIndex" jdbcType="DECIMAL" />
+    <result column="CURRENT_ID" property="currentId" jdbcType="DECIMAL" />
+    <result column="BUILDER" property="builder" jdbcType="VARCHAR" />
+    <result column="SUPERVISOR" property="supervisor" jdbcType="VARCHAR" />
+    <result column="INSPECTOR" property="inspector" jdbcType="VARCHAR" />
+    <result column="FLUSH_MODE" property="flushMode" jdbcType="VARCHAR" />
+    <result column="TOILET_LOCATION" property="toiletLocation" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="FileResultMap" type="xxw.po.UploadFile" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="RECORD_ID" property="recordID" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="SRCNAME" property="srcName" jdbcType="VARCHAR" />
+    <result column="SAVENAME" property="saveName" jdbcType="VARCHAR" />
+    <result column="UPLOAD_YEAR" property="uploadYear" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, COUNTY, TOWN, VILLAGE, "NAME", ID_CARD, HOUSE_NUM, RENOVATE_MODE_ID, RENOVATE_MODE,
+    RENOVATE_DATE, CHECK_DATE, TEL, RESP_UNIT, X, Y, "CURRENT", IS_CHECK, REMARKS, UNIQUE_ID,
+    RENOVATE_CODE, VIL_INDEX, CURRENT_ID,BUILDER,SUPERVISOR,INSPECTOR
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select
+    <include refid="Base_Column_List" />
+    from LATRINE
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from LATRINE
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByUdi" parameterType="java.lang.String" >
+    delete from LATRINE
+    where UNIQUE_ID = #{unique_id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="xxw.po.Latrine" >
+    insert into LATRINE (ID, COUNTY, TOWN,
+    VILLAGE, "NAME", ID_CARD,
+    HOUSE_NUM, RENOVATE_MODE_ID, RENOVATE_MODE,
+    RENOVATE_DATE, CHECK_DATE, TEL,
+    RESP_UNIT, X, Y, "CURRENT",
+    IS_CHECK, REMARKS, UNIQUE_ID,
+    RENOVATE_CODE, VIL_INDEX, CURRENT_ID,BUILDER,SUPERVISOR,INSPECTOR
+    )
+    values (#{id,jdbcType=DECIMAL}, #{county,jdbcType=VARCHAR}, #{town,jdbcType=VARCHAR},
+    #{village,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR},
+    #{houseNum,jdbcType=VARCHAR}, #{renovateModeId,jdbcType=VARCHAR}, #{renovateMode,jdbcType=VARCHAR},
+    #{renovateDate,jdbcType=VARCHAR}, #{checkDate,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},
+    #{respUnit,jdbcType=VARCHAR}, #{x,jdbcType=VARCHAR}, #{y,jdbcType=VARCHAR}, #{current,jdbcType=VARCHAR},
+    #{isCheck,jdbcType=DECIMAL}, #{remarks,jdbcType=VARCHAR}, #{uniqueId,jdbcType=VARCHAR},
+    #{renovateCode,jdbcType=VARCHAR}, #{vilIndex,jdbcType=DECIMAL}, #{currentId,jdbcType=DECIMAL}
+    , #{builder,jdbcType=VARCHAR}, #{supervisor,jdbcType=VARCHAR}, #{inspector,jdbcType=VARCHAR}
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="xxw.po.Latrine" >
+    insert into LATRINE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="county != null" >
+        COUNTY,
+      </if>
+      <if test="town != null" >
+        TOWN,
+      </if>
+      <if test="village != null" >
+        VILLAGE,
+      </if>
+      <if test="name != null" >
+        "NAME",
+      </if>
+      <if test="idCard != null" >
+        ID_CARD,
+      </if>
+      <if test="houseNum != null" >
+        HOUSE_NUM,
+      </if>
+      <if test="renovateModeId != null" >
+        RENOVATE_MODE_ID,
+      </if>
+      <if test="renovateMode != null" >
+        RENOVATE_MODE,
+      </if>
+      <if test="renovateDate != null" >
+        RENOVATE_DATE,
+      </if>
+      <if test="checkDate != null" >
+        CHECK_DATE,
+      </if>
+      <if test="tel != null" >
+        TEL,
+      </if>
+      <if test="respUnit != null" >
+        RESP_UNIT,
+      </if>
+      <if test="x != null" >
+        X,
+      </if>
+      <if test="y != null" >
+        Y,
+      </if>
+      <if test="current != null" >
+        "CURRENT",
+      </if>
+      <if test="isCheck != null" >
+        IS_CHECK,
+      </if>
+      <if test="remarks != null" >
+        REMARKS,
+      </if>
+      <if test="uniqueId != null" >
+        UNIQUE_ID,
+      </if>
+      <if test="renovateCode != null" >
+        RENOVATE_CODE,
+      </if>
+      <if test="vilIndex != null" >
+        VIL_INDEX,
+      </if>
+      <if test="currentId != null" >
+        CURRENT_ID,
+      </if>
+      <if test="builder != null" >
+        BUILDER,
+      </if>
+      <if test="supervisor != null" >
+        SUPERVISOR,
+      </if>
+      <if test="inspector != null" >
+        INSPECTOR,
+      </if>
+      <if test="flushMode != null" >
+        FLUSH_MODE,
+      </if>
+      <if test="toiletLocation != null" >
+        TOILET_LOCATION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="county != null" >
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="town != null" >
+        #{town,jdbcType=VARCHAR},
+      </if>
+      <if test="village != null" >
+        #{village,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="houseNum != null" >
+        #{houseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="renovateModeId != null" >
+        #{renovateModeId,jdbcType=VARCHAR},
+      </if>
+      <if test="renovateMode != null" >
+        #{renovateMode,jdbcType=VARCHAR},
+      </if>
+      <if test="renovateDate != null" >
+        #{renovateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="checkDate != null" >
+        #{checkDate,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="respUnit != null" >
+        #{respUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="x != null" >
+        #{x,jdbcType=VARCHAR},
+      </if>
+      <if test="y != null" >
+        #{y,jdbcType=VARCHAR},
+      </if>
+      <if test="current != null" >
+        #{current,jdbcType=VARCHAR},
+      </if>
+      <if test="isCheck != null" >
+        #{isCheck,jdbcType=DECIMAL},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="uniqueId != null" >
+        #{uniqueId,jdbcType=VARCHAR},
+      </if>
+      <if test="renovateCode != null" >
+        #{renovateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vilIndex != null" >
+        #{vilIndex,jdbcType=DECIMAL},
+      </if>
+      <if test="currentId != null" >
+        #{currentId,jdbcType=DECIMAL},
+      </if>
+      <if test="builder != null" >
+        #{builder,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisor != null" >
+        #{supervisor,jdbcType=VARCHAR},
+      </if>
+      <if test="inspector != null" >
+        #{inspector,jdbcType=VARCHAR},
+      </if>
+      <if test="flushMode != null" >
+        #{flushMode,jdbcType=VARCHAR},
+      </if>
+      <if test="toiletLocation != null" >
+        #{toiletLocation,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="xxw.po.Latrine" >
+    update LATRINE
+    <set >
+      <if test="county != null" >
+        COUNTY = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="town != null" >
+        TOWN = #{town,jdbcType=VARCHAR},
+      </if>
+      <if test="village != null" >
+        VILLAGE = #{village,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        "NAME" = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        ID_CARD = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="houseNum != null" >
+        HOUSE_NUM = #{houseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="renovateModeId != null" >
+        RENOVATE_MODE_ID = #{renovateModeId,jdbcType=VARCHAR},
+      </if>
+      <if test="renovateMode != null" >
+        RENOVATE_MODE = #{renovateMode,jdbcType=VARCHAR},
+      </if>
+      <if test="renovateDate != null" >
+        RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="checkDate != null" >
+        CHECK_DATE = #{checkDate,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        TEL = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="respUnit != null" >
+        RESP_UNIT = #{respUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="x != null" >
+        X = #{x,jdbcType=VARCHAR},
+      </if>
+      <if test="y != null" >
+        Y = #{y,jdbcType=VARCHAR},
+      </if>
+      <if test="current != null" >
+        "CURRENT" = #{current,jdbcType=VARCHAR},
+      </if>
+      <if test="isCheck != null" >
+        IS_CHECK = #{isCheck,jdbcType=DECIMAL},
+      </if>
+      <if test="remarks != null" >
+        REMARKS = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="uniqueId != null" >
+        UNIQUE_ID = #{uniqueId,jdbcType=VARCHAR},
+      </if>
+      <if test="renovateCode != null" >
+        RENOVATE_CODE = #{renovateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vilIndex != null" >
+        VIL_INDEX = #{vilIndex,jdbcType=DECIMAL},
+      </if>
+      <if test="currentId != null" >
+        CURRENT_ID = #{currentId,jdbcType=DECIMAL},
+      </if>
+      <if test="builder != null" >
+        BUILDER = #{builder,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisor != null" >
+        SUPERVISOR = #{supervisor,jdbcType=VARCHAR},
+      </if>
+      <if test="inspector != null" >
+        INSPECTOR = #{inspector,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="flushMode != null" >
+        FLUSH_MODE = #{flushMode,jdbcType=VARCHAR},
+      </if>
+      <if test="toiletLocation != null" >
+        TOILET_LOCATION = #{toiletLocation,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateLatrineInfo" parameterType="xxw.po.Latrine" >
+    update LATRINE
+    <set >
+      <if test="county != null" >
+        COUNTY = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="town != null" >
+        TOWN = #{town,jdbcType=VARCHAR},
+      </if>
+      <if test="village != null" >
+        VILLAGE = #{village,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        "NAME" = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        ID_CARD = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="houseNum != null" >
+        HOUSE_NUM = #{houseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="renovateModeId != null" >
+        RENOVATE_MODE_ID = #{renovateModeId,jdbcType=VARCHAR},
+      </if>
+      <if test="renovateMode != null" >
+        RENOVATE_MODE = #{renovateMode,jdbcType=VARCHAR},
+      </if>
+      <if test="renovateDate != null" >
+        RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="checkDate != null" >
+        CHECK_DATE = #{checkDate,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        TEL = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="respUnit != null" >
+        RESP_UNIT = #{respUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="x != null" >
+        X = #{x,jdbcType=VARCHAR},
+      </if>
+      <if test="y != null" >
+        Y = #{y,jdbcType=VARCHAR},
+      </if>
+      <if test="current != null" >
+        "CURRENT" = #{current,jdbcType=VARCHAR},
+      </if>
+      <if test="isCheck != null" >
+        IS_CHECK = #{isCheck,jdbcType=DECIMAL},
+      </if>
+      <if test="remarks != null" >
+        REMARKS = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="uniqueId != null" >
+        UNIQUE_ID = #{uniqueId,jdbcType=VARCHAR},
+      </if>
+      <if test="renovateCode != null" >
+        RENOVATE_CODE = #{renovateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vilIndex != null" >
+        VIL_INDEX = #{vilIndex,jdbcType=DECIMAL},
+      </if>
+      <if test="currentId != null" >
+        CURRENT_ID = #{currentId,jdbcType=DECIMAL},
+      </if>
+      <if test="builder != null" >
+        BUILDER = #{builder,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisor != null" >
+        SUPERVISOR = #{supervisor,jdbcType=VARCHAR},
+      </if>
+      <if test="inspector != null" >
+        INSPECTOR = #{inspector,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="xxw.po.Latrine" >
+    update LATRINE
+    set COUNTY = #{county,jdbcType=VARCHAR},
+      TOWN = #{town,jdbcType=VARCHAR},
+      VILLAGE = #{village,jdbcType=VARCHAR},
+      "NAME" = #{name,jdbcType=VARCHAR},
+      ID_CARD = #{idCard,jdbcType=VARCHAR},
+      HOUSE_NUM = #{houseNum,jdbcType=VARCHAR},
+      RENOVATE_MODE_ID = #{renovateModeId,jdbcType=VARCHAR},
+      RENOVATE_MODE = #{renovateMode,jdbcType=VARCHAR},
+      RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR},
+      CHECK_DATE = #{checkDate,jdbcType=VARCHAR},
+      TEL = #{tel,jdbcType=VARCHAR},
+      RESP_UNIT = #{respUnit,jdbcType=VARCHAR},
+      X = #{x,jdbcType=VARCHAR},
+      Y = #{y,jdbcType=VARCHAR},
+      "CURRENT" = #{current,jdbcType=VARCHAR},
+      IS_CHECK = #{isCheck,jdbcType=DECIMAL},
+      REMARKS = #{remarks,jdbcType=VARCHAR},
+      UNIQUE_ID = #{uniqueId,jdbcType=VARCHAR},
+      RENOVATE_CODE = #{renovateCode,jdbcType=VARCHAR},
+      VIL_INDEX = #{vilIndex,jdbcType=DECIMAL},
+      CURRENT_ID = #{currentId,jdbcType=DECIMAL},
+      BUILDER = #{builder,jdbcType=VARCHAR},
+      SUPERVISOR = #{supervisor,jdbcType=VARCHAR},
+      INSPECTOR = #{inspector,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+  <sql id="OracleDialectPrefix" >
+    <if test="page != null and limit != null">
+      select * from ( select row_.*, rownum rownum_ from (
+    </if>
+  </sql>
+  <sql id="OracleDialectSuffix" >
+    <if test="page != null and limit != null" >
+      <![CDATA[ ) row_ ) where rownum_ > (#{page}-1) * #{limit} and rownum_ <= #{page} * #{limit} ]]>
+    </if>
+  </sql>
+
+  <delete id="deleteAll">
+    delete from LATRINE
+  </delete>
+
+  <select id="queryCounty" resultType="java.lang.String">
+    select COUNTY
+    from LATRINE
+    where 1 = 1
+    <if test="town != null">
+      AND TOWN = #{town,jdbcType=VARCHAR}
+    </if>
+      AND ROWNUM = 1
+  </select>
+  <select id="queryCountyX" resultType="java.lang.String">
+    select COUNTY
+    from LATRINE
+    where 1 = 1
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    AND ROWNUM = 1
+  </select>
+  <select id="queryCounties" resultType="java.lang.String">
+    select DISTINCT(COUNTY)
+    from LATRINE
+    where 1 = 1
+    <if test="renovateDate != null">
+      AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="check != null">
+      AND IS_CHECK = #{check,jdbcType=DECIMAL}
+    </if>
+  </select>
+  <select id="queryTowns" resultType="java.lang.String">
+    select DISTINCT(TOWN)
+    from LATRINE
+    where 1 = 1
+    <if test="county != null">
+      AND COUNTY = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateDate != null">
+      AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="check != null">
+      AND IS_CHECK = #{check,jdbcType=DECIMAL}
+    </if>
+  </select>
+  <select id="queryTownsX" resultType="java.lang.String">
+    select DISTINCT(TOWN)
+    from LATRINE
+    where 1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateDate != null">
+      AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="check != null">
+      AND IS_CHECK = #{check,jdbcType=DECIMAL}
+    </if>
+  </select>
+  <select id="queryVillages" resultType="java.lang.String">
+    select DISTINCT(VILLAGE)
+    from LATRINE
+    where 1 = 1
+    <if test="county != null">
+      AND COUNTY = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND TOWN = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateDate != null">
+      AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="check != null">
+      AND IS_CHECK = #{check,jdbcType=DECIMAL}
+    </if>
+  </select>
+  <select id="queryVillagesX" resultType="java.lang.String">
+    select DISTINCT(VILLAGE)
+    from LATRINE
+    where 1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateDate != null">
+      AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="check != null">
+      AND IS_CHECK = #{check,jdbcType=DECIMAL}
+    </if>
+  </select>
+  <select id="queryLatrineByPaging" resultMap="BaseResultMap">
+    <include refid="OracleDialectPrefix" />
+    select *
+    from LATRINE
+    where  1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateDate != null">
+      AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="checkDate != null">
+      AND CHECK_DATE = #{checkDate,jdbcType=VARCHAR}
+    </if>
+    <if test="ischeck != null">
+      AND IS_CHECK = #{ischeck,jdbcType=DECIMAL}
+    </if>
+    <if test="name != null">
+      AND "NAME" LIKE CONCAT('%', CONCAT(#{name,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="vilstate != null">
+      AND VILLAGESTATE = #{vilstate,jdbcType=VARCHAR}
+    </if>
+    <if test="currentXz != null">
+      AND CURRENT_ID = #{currentXz,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateModeFs != null">
+      AND RENOVATE_MODE_ID = #{renovateModeFs,jdbcType=VARCHAR}
+    </if>
+    <if test="flushModeCs != null">
+      AND FLUSH_MODE = #{flushModeCs,jdbcType=VARCHAR}
+    </if>
+    <if test="toiletLocationWz != null">
+      AND TOILET_LOCATION = #{toiletLocationWz,jdbcType=VARCHAR}
+    </if>
+    <if test="cardcf !=null">
+      AND ID_CARD IN (select ID_CARD FROM LATRINE
+      where 1=1
+      <if test="county != null">
+        AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+      </if>
+      <if test="town != null">
+        AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+      </if>
+      <if test="village != null">
+        AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+      </if>
+      <if test="renovateDate != null">
+        AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+      </if>
+      <if test="checkDate != null">
+        AND CHECK_DATE = #{checkDate,jdbcType=VARCHAR}
+      </if>
+      <if test="ischeck != null">
+        AND IS_CHECK = #{ischeck,jdbcType=DECIMAL}
+      </if>
+      <if test="name != null">
+        AND "NAME" LIKE CONCAT('%', CONCAT(#{name,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="vilstate != null">
+        AND VILLAGESTATE = #{vilstate,jdbcType=VARCHAR}
+      </if>
+      <if test="currentXz != null">
+        AND CURRENT_ID = #{currentXz,jdbcType=VARCHAR}
+      </if>
+      <if test="renovateModeFs != null">
+        AND RENOVATE_MODE_ID = #{renovateModeFs,jdbcType=VARCHAR}
+      </if>
+      <if test="flushModeCs != null">
+        AND FLUSH_MODE = #{flushModeCs,jdbcType=VARCHAR}
+      </if>
+      <if test="toiletLocationWz != null">
+        AND TOILET_LOCATION = #{toiletLocationWz,jdbcType=VARCHAR}
+      </if>
+      AND STATE in
+      <foreach collection="states" item="state" index="index" open="(" close=")" separator=",">
+        #{state}
+      </foreach>
+      GROUP BY ID_CARD HAVING COUNT(ID_CARD)>1)
+    </if>
+      AND STATE in
+    <foreach collection="states" item="state" index="index" open="(" close=")" separator=",">
+      #{state}
+    </foreach>
+    ORDER BY "COUNTY"  ASC ,"TOWN" ASC,"VILLAGE" ASC,"ID_CARD"  ASC
+    <include refid="OracleDialectSuffix" />
+  </select>
+
+  <select id="queryLatrineCountByPage" resultMap="BaseResultMap">
+    select *
+    from LATRINE
+    where  1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateDate != null">
+      AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="checkDate != null">
+      AND CHECK_DATE = #{checkDate,jdbcType=VARCHAR}
+    </if>
+    <if test="ischeck != null">
+      AND IS_CHECK = #{ischeck,jdbcType=DECIMAL}
+    </if>
+    <if test="name != null">
+      AND "NAME" LIKE CONCAT('%', CONCAT(#{name,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="vilstate != null">
+      AND VILLAGESTATE = #{vilstate,jdbcType=VARCHAR}
+    </if>
+    <if test="currentXz != null">
+      AND CURRENT_ID = #{currentXz,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateModeFs != null">
+      AND RENOVATE_MODE_ID = #{renovateModeFs,jdbcType=VARCHAR}
+    </if>
+    <if test="flushModeCs != null">
+      AND FLUSH_MODE = #{flushModeCs,jdbcType=VARCHAR}
+    </if>
+    <if test="toiletLocationWz != null">
+      AND TOILET_LOCATION = #{toiletLocationWz,jdbcType=VARCHAR}
+    </if>
+    <if test="cardcf !=null">
+      AND ID_CARD IN (select ID_CARD FROM LATRINE
+      where 1=1
+      <if test="county != null">
+        AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+      </if>
+      <if test="town != null">
+        AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+      </if>
+      <if test="village != null">
+        AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+      </if>
+      <if test="renovateDate != null">
+        AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+      </if>
+      <if test="checkDate != null">
+        AND CHECK_DATE = #{checkDate,jdbcType=VARCHAR}
+      </if>
+      <if test="ischeck != null">
+        AND IS_CHECK = #{ischeck,jdbcType=DECIMAL}
+      </if>
+      <if test="name != null">
+        AND "NAME" LIKE CONCAT('%', CONCAT(#{name,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="vilstate != null">
+        AND VILLAGESTATE = #{vilstate,jdbcType=VARCHAR}
+      </if>
+      <if test="currentXz != null">
+        AND CURRENT_ID = #{currentXz,jdbcType=VARCHAR}
+      </if>
+      <if test="renovateModeFs != null">
+        AND RENOVATE_MODE_ID = #{renovateModeFs,jdbcType=VARCHAR}
+      </if>
+      <if test="flushModeCs != null">
+        AND FLUSH_MODE = #{flushModeCs,jdbcType=VARCHAR}
+      </if>
+      <if test="toiletLocationWz != null">
+        AND TOILET_LOCATION = #{toiletLocationWz,jdbcType=VARCHAR}
+      </if>
+      AND STATE in
+      <foreach collection="states" item="state" index="index" open="(" close=")" separator=",">
+        #{state}
+      </foreach>
+      GROUP BY ID_CARD HAVING COUNT(ID_CARD)>1)
+    </if>
+    AND STATE in
+    <foreach collection="states" item="state" index="index" open="(" close=")" separator=",">
+      #{state}
+    </foreach>
+    ORDER BY "COUNTY"  ASC ,"TOWN" ASC,"VILLAGE" ASC,"ID_CARD"  ASC
+  </select>
+
+  <select id="queryLatrineByPagingX" resultMap="BaseResultMap">
+    <include refid="OracleDialectPrefix" />
+    select *
+    from LATRINE
+    where  1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND VILLAGE = #{village,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateDate != null">
+      AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="name != null">
+      AND "NAME" LIKE CONCAT('%', CONCAT(#{name,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="check != null">
+      AND IS_CHECK = #{check,jdbcType=DECIMAL}
+    </if>
+    AND STATE in
+    <foreach collection="states" item="state" index="index" open="(" close=")" separator=",">
+      #{state}
+    </foreach>
+    ORDER BY "VIL_INDEX" ASC
+    <include refid="OracleDialectSuffix" />
+  </select>
+  <select id="queryLatrineCount" resultType="java.lang.Integer">
+    select
+    count(1)
+    from LATRINE
+    where 1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateDate != null">
+      AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="name != null">
+      AND "NAME" LIKE CONCAT('%', CONCAT(#{name,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="check != null">
+      AND IS_CHECK = #{check,jdbcType=DECIMAL}
+    </if>
+  </select>
+  <select id="queryCountyAcrossLatrineCount" resultType="java.lang.Integer">
+    select
+    count(1)
+    from LATRINE
+    where 1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateDate != null">
+      AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="check != null">
+      AND IS_CHECK = #{check,jdbcType=DECIMAL}
+    </if>
+    AND STATE in
+    <foreach collection="states" item="state" index="index" open="(" close=")" separator=",">
+      #{state}
+    </foreach>
+  </select>
+
+  <select id="queryLatrineCountByStates" resultType="java.lang.Integer">
+    select
+    count(1)
+    from LATRINE
+    where 1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateDate != null">
+      AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="checkDate != null">
+      AND CHECK_DATE = #{checkDate,jdbcType=VARCHAR}
+    </if>
+    <if test="name != null">
+      AND "NAME" LIKE CONCAT('%', CONCAT(#{name,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="check != null">
+      AND IS_CHECK = #{check,jdbcType=DECIMAL}
+    </if>
+    <if test="vilstate != null">
+      AND VILLAGESTATE = #{vilstate,jdbcType=VARCHAR}
+    </if>
+    <if test="currentXz != null">
+      AND CURRENT_ID = #{currentXz,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateModeFs != null">
+      AND RENOVATE_MODE_ID = #{renovateModeFs,jdbcType=VARCHAR}
+    </if>
+    <if test="flushModeCs != null">
+      AND FLUSH_MODE = #{flushModeCs,jdbcType=VARCHAR}
+    </if>
+    <if test="toiletLocationWz != null">
+      AND TOILET_LOCATION = #{toiletLocationWz,jdbcType=VARCHAR}
+    </if>
+    <if test="cardcf !=null">
+      AND ID_CARD IN (select ID_CARD FROM LATRINE
+      where 1=1
+      <if test="county != null">
+        AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+      </if>
+      <if test="town != null">
+        AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+      </if>
+      <if test="village != null">
+        AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+      </if>
+      <if test="renovateDate != null">
+        AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+      </if>
+      <if test="checkDate != null">
+        AND CHECK_DATE = #{checkDate,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null">
+        AND "NAME" LIKE CONCAT('%', CONCAT(#{name,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="check != null">
+        AND IS_CHECK = #{check,jdbcType=DECIMAL}
+      </if>
+      <if test="vilstate != null">
+        AND VILLAGESTATE = #{vilstate,jdbcType=VARCHAR}
+      </if>
+      <if test="currentXz != null">
+        AND CURRENT_ID = #{currentXz,jdbcType=VARCHAR}
+      </if>
+      <if test="renovateModeFs != null">
+        AND RENOVATE_MODE_ID = #{renovateModeFs,jdbcType=VARCHAR}
+      </if>
+      <if test="flushModeCs != null">
+        AND FLUSH_MODE = #{flushModeCs,jdbcType=VARCHAR}
+      </if>
+      <if test="toiletLocationWz != null">
+        AND TOILET_LOCATION = #{toiletLocationWz,jdbcType=VARCHAR}
+      </if>
+      AND STATE in
+      <foreach collection="states" item="state" index="index" open="(" close=")" separator=",">
+        #{state}
+      </foreach>
+      GROUP BY ID_CARD HAVING COUNT(ID_CARD)>1)
+    </if>
+    AND STATE in
+    <foreach collection="states" item="state" index="index" open="(" close=")" separator=",">
+      #{state}
+    </foreach>
+  </select>
+  <select id="queryLatrineCountX" resultType="java.lang.Integer">
+    select
+    count(1)
+    from LATRINE
+    where 1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND VILLAGE = #{village,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateDate != null">
+      AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="name != null">
+      AND "NAME" LIKE CONCAT('%', CONCAT(#{name,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="check != null">
+      AND IS_CHECK = #{check,jdbcType=DECIMAL}
+    </if>
+
+    AND STATE in
+    <foreach collection="states" item="state" index="index" open="(" close=")" separator=",">
+      #{state}
+    </foreach>
+  </select>
+  <select id="queryRenovateModeCount" resultType="java.util.Map">
+    select
+    RENOVATE_MODE_ID AS "id", COUNT(1) AS "count"
+    from LATRINE
+    where 1 = 1
+    <if test="county != null">
+      AND COUNTY = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND TOWN = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND VILLAGE = #{village,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateDate != null">
+      AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="check != null">
+      AND IS_CHECK = #{check,jdbcType=DECIMAL}
+    </if>
+    GROUP BY RENOVATE_MODE_ID
+  </select>
+  <select id="queryRenovateModeCountX" resultType="java.util.Map">
+    select
+    RENOVATE_MODE_ID AS "id", COUNT(1) AS "count"
+    from LATRINE
+    where 1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateDate != null">
+      AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="check != null">
+      AND IS_CHECK = #{check,jdbcType=DECIMAL}
+    </if>
+    GROUP BY RENOVATE_MODE_ID
+  </select>
+
+  <insert id="insertFile" parameterType="xxw.po.UploadFile">
+    insert into UPLOAD_FILE (RECORD_ID,"TYPE",SRCNAME,SAVENAME, UPLOAD_YEAR)
+    values (#{recordID,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{srcName,jdbcType=VARCHAR},
+    #{saveName,jdbcType=VARCHAR}, #{uploadYear,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertFiles" parameterType="java.util.List">
+    insert into UPLOAD_FILE (RECORD_ID,"TYPE",SRCNAME,SAVENAME, UPLOAD_YEAR)
+    <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+      SELECT #{item.recordID},#{item.type},#{item.srcName},#{item.saveName}, #{item.uploadYear} FROM dual
+    </foreach>
+  </insert>
+  <select id="selectPicByUniqueID" resultMap="FileResultMap" parameterType="java.lang.String">
+    SELECT
+    *
+    FROM
+    UPLOAD_FILE
+    WHERE
+    RECORD_ID = #{uniqueId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByUniqueIdAndSaveName" parameterType="java.lang.String" >
+    delete from UPLOAD_FILE
+    where RECORD_ID = #{0} AND  SAVENAME = #{1}
+  </delete>
+  <select id="judgevilindexrepeat" resultType="java.lang.Integer">
+    select
+    count(*)
+    from LATRINE
+    where 1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+    </if>
+    <if test="vilindex != null">
+      AND VIL_INDEX = #{vilindex,jdbcType=DECIMAL}
+    </if>
+  </select>
+  <select id="queryLatrine" resultType="map">
+    select *
+    from LATRINE
+    where  1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateDate != null">
+      AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="checkDate != null">
+      AND CHECK_DATE = #{checkDate,jdbcType=VARCHAR}
+    </if>
+    <if test="name != null">
+      AND "NAME" LIKE CONCAT('%', CONCAT(#{name,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="vilstate != null">
+      AND VILLAGESTATE = #{vilstate,jdbcType=VARCHAR}
+    </if>
+    <if test="hsstate != null">
+      AND IS_CHECK = #{hsstate,jdbcType=VARCHAR}
+    </if>
+    <if test="current != null">
+      AND CURRENT_ID = #{current,jdbcType=VARCHAR}
+    </if>
+    <if test="renovatemode != null">
+      AND RENOVATE_MODE_ID = #{renovatemode,jdbcType=VARCHAR}
+    </if>
+    <if test="flushmode != null">
+      AND FLUSH_MODE = #{flushmode,jdbcType=VARCHAR}
+    </if>
+    <if test="toiletlocation != null">
+      AND TOILET_LOCATION = #{toiletlocation,jdbcType=VARCHAR}
+    </if>
+    <if test="cardcf !=null">
+      AND ID_CARD IN (select ID_CARD FROM LATRINE where 1=1
+      <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+      <if test="town != null">
+        AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+      </if>
+      <if test="village != null">
+        AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+      </if>
+      <if test="renovateDate != null">
+        AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+      </if>
+      <if test="checkDate != null">
+        AND CHECK_DATE = #{checkDate,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null">
+        AND "NAME" LIKE CONCAT('%', CONCAT(#{name,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="vilstate != null">
+        AND VILLAGESTATE = #{vilstate,jdbcType=VARCHAR}
+      </if>
+      <if test="hsstate != null">
+        AND IS_CHECK = #{hsstate,jdbcType=VARCHAR}
+      </if>
+      <if test="current != null">
+        AND CURRENT_ID = #{current,jdbcType=VARCHAR}
+      </if>
+      <if test="renovatemode != null">
+        AND RENOVATE_MODE_ID = #{renovatemode,jdbcType=VARCHAR}
+      </if>
+      <if test="flushmode != null">
+        AND FLUSH_MODE = #{flushmode,jdbcType=VARCHAR}
+      </if>
+      <if test="toiletlocation != null">
+        AND TOILET_LOCATION = #{toiletlocation,jdbcType=VARCHAR}
+      </if>
+      AND STATE in
+      <foreach collection="shstates" item="shstate" index="index" open="(" close=")" separator=",">
+        #{shstate}
+      </foreach>
+      GROUP BY ID_CARD HAVING COUNT(ID_CARD)>1)
+    </if>
+    AND STATE in
+    <foreach collection="shstates" item="shstate" index="index" open="(" close=")" separator=",">
+      #{shstate}
+    </foreach>
+    ORDER BY "COUNTY"  ASC ,"TOWN" ASC, "ID_CARD"  ASC
+  </select>
+  <select id="queryXyUnqueidInfo" resultMap="BaseResultMap">
+    select X,Y,UNIQUE_ID,VIL_INDEX,VILLAGE
+    from LATRINE
+    where  1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+    </if>
+      and  X is not null and Y is not NULL
+      ORDER BY "UNIQUE_ID" ASC
+  </select>
+  <select id="queryByUnqueid" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from LATRINE
+    where UNIQUE_ID = #{uniqueId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectLatrineCounty" resultMap="BaseResultMap">
+    select DISTINCT COUNTY
+    from LATRINE
+    where  1 = 1
+    <if test="year != null">
+      AND RENOVATE_DATE = #{year,jdbcType=VARCHAR}
+    </if>
+
+  </select>
+  <select id="selectLatrineTown" resultMap="BaseResultMap">
+    select DISTINCT TOWN
+    from LATRINE
+    where  1 = 1
+    <if test="year != null">
+      AND RENOVATE_DATE = #{year,jdbcType=VARCHAR}
+    </if>
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <select id="selectLatrineVillage" resultMap="BaseResultMap">
+    select DISTINCT VILLAGE
+    from LATRINE
+    where  1 = 1
+    <if test="year != null">
+      AND RENOVATE_DATE = #{year,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <update id="updateState" parameterType="java.lang.String" >
+    update LATRINE
+    <set >
+      STATE=#{newState,jdbcType=VARCHAR},
+      <if test="rejectReason != null">
+        REJECTREASON = #{rejectReason,jdbcType=VARCHAR},
+      </if>
+      <if test="check != null">
+        IS_CHECK = #{check,jdbcType=VARCHAR}
+      </if>
+
+    </set>
+    where STATE=#{oldState,jdbcType=VARCHAR}
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+    </if>
+    <if test="renovateDate != null">
+      AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="name != null">
+      AND "NAME" LIKE CONCAT('%', CONCAT(#{name,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="vilstate != null">
+      AND VILLAGESTATE = #{vilstate,jdbcType=VARCHAR}
+    </if>
+    <if test="uniqueId != null">
+      AND UNIQUE_ID = #{uniqueId,jdbcType=VARCHAR}
+    </if>
+    <if test="cardcf !=null">
+      AND ID_CARD IN (select ID_CARD FROM LATRINE
+      where 1=1
+      <if test="county != null">
+        AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+      </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) =#{village,jdbcType=VARCHAR}
+    </if>
+      <if test="renovateDate != null">
+        AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null">
+        AND "NAME" LIKE CONCAT('%', CONCAT(#{name,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="vilstate != null">
+        AND VILLAGESTATE = #{vilstate,jdbcType=VARCHAR}
+      </if>
+      GROUP BY ID_CARD HAVING COUNT(ID_CARD)>1 )
+    </if>
+
+  </update>
+  <select id="selectCountByParam" resultType="java.lang.Integer">
+    select
+    count(*)
+    from LATRINE
+    where 1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND VILLAGE = #{village,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <select id="selectCountByState" resultType="java.lang.Integer">
+    select
+    count(*)
+    from LATRINE
+    where 1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+    </if>
+      AND IS_CHECK = 1
+
+  </select>
+  <select id="selectTownXy" resultType="map">
+    select
+    x,y
+    from LATRINE_TOWNXY
+    where 1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+
+  </select>
+
+  <select id="selectMaxId" resultType="java.lang.Integer">
+    select
+    Max(id)
+    from LATRINE
+  </select>
+
+  <select id="auditProgress" resultType="java.util.Map">
+    select max(CASE WHEN state='1' THEN count else 0 end)state1,max(CASE WHEN state='0' THEN count else 0 end)state0,max(CASE WHEN state='2' THEN count else 0 end)state2,max(CASE WHEN state='3' THEN count else 0 end)state3,max(CASE WHEN state='4' THEN count else 0 end)state4,max(CASE WHEN state='5' THEN count else 0 end)state5,max(CASE WHEN state='6' THEN count else 0 end)state6,max(CASE WHEN state='7' THEN count else 0 end)state7 from
+    (select state,count(state)as count from LATRINE
+    where 1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+    </if>
+    GROUP BY state)
+
+<!--    <if test="renovateDate != null">
+    AND RENOVATE_DATE = #{renovateDate,jdbcType=VARCHAR}
+  </if>-->
+  </select>
+  <select id="cxtown" resultType="java.lang.String">
+    select  DISTINCT
+    TOWN
+    from LATRINE
+    where 1 = 1
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <update id="setCqVillage" parameterType="java.lang.String" >
+    update LATRINE
+    <set >
+      IS_CHECK=1,
+      <if test="current != null">
+        CURRENT_ID = #{current,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        STATE = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="vilstate != null">
+        VILLAGESTATE = #{vilstate,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where 1=1
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+      AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+  </update>
+  <select id="selectVillageCount" resultType="java.lang.Integer">
+    select  COUNT(1)
+    from LATRINE
+    where 1 = 1
+    <if test="county != null">
+      AND SUBSTR(COUNTY, 0, LENGTH(#{county,jdbcType=VARCHAR})) = #{county,jdbcType=VARCHAR}
+    </if>
+    <if test="town != null">
+      AND SUBSTR(TOWN, 0, LENGTH(#{town,jdbcType=VARCHAR})) = #{town,jdbcType=VARCHAR}
+    </if>
+    <if test="village != null">
+      AND SUBSTR(VILLAGE, 0, LENGTH(#{village,jdbcType=VARCHAR})) = #{village,jdbcType=VARCHAR}
+    </if>
+    <if test="check != null">
+      AND IS_CHECK = #{check,jdbcType=DECIMAL}
+    </if>
+  </select>
+</mapper>

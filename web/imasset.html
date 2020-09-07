@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
+    <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
+    <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+    <script src="js/assetsConfig/eximAssets.js"></script>
+    <style>
+        .right{
+            float: right;
+        }
+        .labelstyle{
+            margin-top: 0.5%;
+        }
+        .left{
+            float: left;
+        }
+        .checkboxstyle{
+            display: block;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+        .fonts{
+            font-size: 15px;
+            background-color: #f1f1f1 !important;
+        }
+        .tablemar{
+            margin-top: 1%;
+        }
+        .colorsty{
+            background: #efeff6;
+        }
+    </style>
+</head>
+<body class="colorsty">
+<div class="container-fluid" id="ifrmheight">
+    <ol class="breadcrumb fonts">
+        <li><a href="#">业务功能</a></li>
+        <li class="active">资产信息</li>
+    </ol>
+    <div style="height: 100%;margin-top: -6%">
+        <div class="panel panel-default" style="height: 80%;z-index: 1000;margin-top: 8%;width: 96%;margin-left: 2%">
+            <div class="panel-body">
+                <form id="assetsform" name="assetsform"   enctype="multipart/form-data">
+                    <input type="file" name="file"  id="assetsFile" onchange="importAssetsInfo()"  style="display: none;" />
+                    <input type="text" name="zctype" id="zclx" style="display: none;" />
+
+                    <button type="button" class="btn btn-primary right" id="importAssets" name="importAssets">
+                        <span class="glyphicon glyphicon-folder-open"></span>导入
+                    </button>
+                    <button type="button" class="btn btn-info right" id="exportAssets" name="exportAssets">
+                        <span class="glyphicon glyphicon-folder-open"></span>导出
+                    </button>
+                </form>
+                <table id="assetsTable" class="table table-hover tablemar">
+                    <caption>资产信息表</caption>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('ifrmheight').style.height=parent.window.document.getElementById('chartheight').scrollHeight*0.883+"px";
+    </script>
+</div>
+</body>
+</html>

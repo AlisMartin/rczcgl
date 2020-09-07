@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
+    <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="http://192.168.0.12/arcgis_js_api/library/3.18/3.18/dijit/themes/soria/soria.css"/>
+    <link rel="stylesheet" type="text/css" href="http://192.168.0.12/arcgis_js_api/library/3.18/3.18/esri/css/esri.css"/>
+    <script type="text/javascript">
+        var LOCAL_ARCGIS_API_PATH =  "192.168.0.12/arcgis_js_api/library/3.18/3.18/";
+    </script>
+
+    <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="js/ehtnicInformation/ethnicInformation.js"></script>
+    <script type="text/javascript" src="http://192.168.0.12/arcgis_js_api/library/3.18/3.18/init.js"></script>
+    <script type="text/javascript" src="js/ehtnicInformation/map.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div style="height: 542px;margin-left: -14px;margin-top: 7px">
+                <div class="panel panel-primary" style="height: 100%;overflow-y: auto">
+                    <div class="panel-heading"><h3 class="panel-title">条件过滤</h3> </div>
+                    <div class="panel-body">
+                        <div id="tree">
+                        </div>
+                        <div id="rktree">
+                        </div>
+                        <div id="jccstree">
+                        </div>
+                        <div id="jyyltree">
+                        </div>
+                        <div id="jjtree">
+                        </div>
+                        <div id="whtree">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-md-9">
+            <div style="height: 542px;margin-top: 7px">
+                <div class="panel panel-primary" style="height: 100%">
+                    <!-- <div class="panel-heading"><h3 class="panel-title">大湄公河次区域民族分布信息表</h3> </div>-->
+                    <div class="panel-body">
+                        <div id="map" class="leaflet-container leaflet-retina leaflet-fade-anim" tabindex="0">
+                            <div id="legendPanel" style="bottom:3px;right:3px;position: absolute;z-index: 1000;">
+                                <div id="legendDiv"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

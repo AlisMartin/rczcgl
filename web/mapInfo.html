@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
+    <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="http://localhost/arcgis_js_api/library/3.18/3.18/dijit/themes/soria/soria.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/arcgis_js_api/library/3.18/3.18/esri/css/esri.css"/>
+    <script type="text/javascript">
+        var LOCAL_ARCGIS_API_PATH =  "localhost/arcgis_js_api/library/3.18/3.18/";
+    </script>
+
+    <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
+    <script type="text/javascript" src="http://localhost/arcgis_js_api/library/3.18/3.18/init.js"></script>
+    <script type="text/javascript" src="js/ehtnicInformation/map.js"></script>
+    <style>
+        .rowheight{
+            height: 100%;
+        }
+        .ifraheight{
+            height: 585px;
+            background-color: #f1f1f1;
+        }
+        .fonts{
+            font-size: 15px;
+            background-color: #f1f1f1 !important;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid ifraheight">
+    <ol class="breadcrumb fonts">
+        <li class="active">专题地图展示</li>
+    </ol>
+    <div style="height: 100%;margin-top: -8%">
+        <div class="panel panel-default" style="height: 90%;margin-top: 8%;width: 96%;margin-left: 2%">
+            <div class="panel-body" style="height: 100%">
+                <div id="map" class="leaflet-container leaflet-retina leaflet-fade-anim rowheight" tabindex="0">
+                    <div id="pop"></div>
+                    <div id="legendPanel" style="width:15%;height:46%;right:123px;position: absolute;z-index: 1000;">
+                        <div id="legendDiv"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   <!-- <div class="row rowheight">
+                    &lt;!&ndash; <div class="panel-heading"><h3 class="panel-title">大湄公河次区域民族分布信息表</h3> </div>&ndash;&gt;
+
+    </div>-->
+</div>
+
+</body>
+</html>

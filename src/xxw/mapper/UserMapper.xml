@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xxw.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="xxw.po.User">
+        <id column="ID" property="id" jdbcType="DECIMAL" />
+        <result column="USERNAME" property="userName" jdbcType="VARCHAR"/>
+        <result column="TEL" property="tel" jdbcType="VARCHAR"/>
+        <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+        <result column="STATE" property="state" jdbcType="VARCHAR"/>
+        <result column="ROLE" property="role" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="VARCHAR"/>
+    </resultMap>
+   <select id="getUserByName" parameterType="java.lang.String">
+       SELECT USERNAME FROM SYS_USER WHERE USERNAME=#{username,jdbcType=VARCHAR}
+   </select>
+    <select id="getUser" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT  *  FROM SYS_USER WHERE USERNAME=#{username,jdbcType=VARCHAR} and PASSWORD=#{password,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAllUser" resultMap="BaseResultMap">
+        SELECT  *  FROM SYS_USER
+    </select>
+    <insert id="addUser" parameterType="xxw.po.User">
+        insert into SYS_USER
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id !=null">
+                ID,
+            </if>
+            <if test="userName !=null">
+                USERNAME,
+            </if>
+            <if test="password !=null">
+                PASSWORD,
+            </if>
+            <if test="tel !=null">
+                TEL,
+            </if>
+            <if test="email !=null">
+                EMAIL,
+            </if>
+            <if test="state !=null">
+                STATE,
+            </if>
+            <if test="role !=null">
+                ROLE,
+            </if>
+            <if test="type !=null">
+                TYPE,
+            </if>
+            <if test="company !=null">
+                COMPANY,
+            </if>
+            <if test="department !=null">
+                DEPARTMENT,
+            </if>
+            <if test="position !=null">
+                POSITION ,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id !=null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="userName !=null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="password !=null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="tel !=null">
+                #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="email !=null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="state !=null">
+                #{state,jdbcType=VARCHAR},
+            </if>
+            <if test="role !=null">
+                #{role,jdbcType=VARCHAR},
+            </if>
+            <if test="type !=null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="company !=null">
+                #{company,jdbcType=VARCHAR},
+            </if>
+            <if test="department !=null">
+                #{department,jdbcType=VARCHAR},
+            </if>
+            <if test="position !=null">
+                #{position,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="editUser" parameterType="xxw.po.User">
+        update SYS_USER
+        <trim prefix="set" suffixOverrides=",">
+        <if test="userName != null">
+            USERNAME = #{userName,jdbcType=VARCHAR},
+        </if>
+        <if test="password != null">
+            PASSWORD = #{password,jdbcType=VARCHAR},
+        </if>
+        <if test="tel != null">
+            TEL = #{tel,jdbcType=VARCHAR},
+        </if>
+        <if test="email != null">
+            EMAIL = #{email,jdbcType=VARCHAR},
+        </if>
+        <if test="type != null">
+            TYPE = #{type,jdbcType=VARCHAR},
+        </if>
+        </trim>
+        where ID= #{id,jdbcType=VARCHAR}
+    </update>
+    <delete id="deleteUser" parameterType="java.lang.String">
+        delete from SYS_USER where id=#{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="userAddRole" useGeneratedKeys="false" keyProperty="id" parameterType="java.lang.String">
+        <selectKey resultType="String" keyProperty="id" order="BEFORE">
+            select USERADDROLEID.nextval as id from dual
+        </selectKey>
+        insert into USERADDROLE("ID","USER_ID","ROLE_ID") VALUES (#{id,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{roleId,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="selectUserRoleIdByUser" parameterType="java.lang.String" resultType="java.lang.String">
+        select ROLE_ID from USERADDROLE where USER_ID=#{userId,jdbcType=VARCHAR}
+    </select>
+    <update id="userUpdateRole" parameterType="java.lang.String">
+        update USERADDROLE set ROLE_ID=#{roleId,jdbcType=VARCHAR} where USER_ID=#{userId,jdbcType=VARCHAR}
+    </update>
+    <delete id="userClearRole" parameterType="java.lang.String">
+        delete from USERADDROLE WHERE USER_ID=#{userId,jdbcType=VARCHAR}
+    </delete>
+</mapper>

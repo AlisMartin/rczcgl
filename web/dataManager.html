@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
+    <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
+    <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="js/ehtnicInformation/ethnicInformation.js"></script>
+    <style>
+        .uploadbtn{
+            margin-top: 10%;
+            margin-left: 45%;
+            width: 150px;
+        }
+        .ifraheight{
+            height: 585px;
+            background-color: #f1f1f1;
+        }
+        .rowheight{
+            height: 100%;
+        }
+        .fonts{
+            font-size: 15px;
+            background-color: #f1f1f1 !important;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid ifraheight">
+    <ol class="breadcrumb fonts">
+        <li><a href="#">数据管理</a></li>
+        <li class="active">数据展示</li>
+    </ol>
+    <div style="height: 580px;margin-top: -6%">
+        <div class="panel panel-default" style="height: 80%;z-index: 1000;margin-top: 8%;width: 96%;margin-left: 2%">
+            <div class="panel-body">
+                <table id="table" class="table table-hover">
+                <thead>
+                <tr>
+                    <th>地图区域面ID</th>
+                    <th>国家代码</th>
+                    <th>国家</th>
+                    <th>统计起始时间</th>
+                    <th>统计截止时间</th>
+                    <th>民族</th>
+                    <th>sqkm分布面积（km2）</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>123</td>
+                    <td>asd223</td>
+                    <td>中国</td>
+                    <td>1995</td>
+                    <td>2014</td>
+                    <td>汉族</td>
+                    <td>9000</td>
+                </tr>
+                <tr>
+                    <td>123</td>
+                    <td>asd223</td>
+                    <td>中国</td>
+                    <td>1995</td>
+                    <td>2014</td>
+                    <td>回族</td>
+                    <td>3400</td>
+                </tr>
+                <tr>
+                    <td>123</td>
+                    <td>asd223</td>
+                    <td>中国</td>
+                    <td>1995</td>
+                    <td>2014</td>
+                    <td>苗族</td>
+                    <td>2000</td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <!--    <div class="panel panel-default" style="height: 26%;z-index: 3000;width: 98%;margin-left: 1%">
+                &lt;!&ndash; <div class="panel-heading"><h3 class="panel-title">大湄公河次区域民族分布信息表</h3> </div>&ndash;&gt;
+                <div class="panel-body">
+                    <form id="fileupload1" enctype="multipart/form-data" style="display:none;">
+                        <input type="file" id="upfile1">
+                    </form>
+                    <buttion id="btnup" type="button" class="btn btn-info uploadbtn">上传文件</buttion>
+                </div>
+
+            </div>-->
+    </div>
+
+</div>
+</body>
+</html>

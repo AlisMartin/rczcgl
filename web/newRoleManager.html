@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
+    <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
+    <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+    <script src="js/userRole/userRole.js"></script>
+    <style>
+        .tablemar{
+            margin-top: 1%;
+        }
+        .uploadbtn{
+            margin-top: 10%;
+            margin-left: 45%;
+            width: 150px;
+        }
+        .ifraheight{
+            height: 585px;
+            background-color: #f1f1f1;
+        }
+        .rowheight{
+            height: 100%;
+        }
+        .colorsty{
+            background: #efeff6;
+        }
+        .fonts{
+            font-size: 15px;
+            background-color: #f1f1f1 !important;
+        }
+    </style>
+</head>
+<body class="colorsty">
+<div class="container-fluid" id="ifrmheight">
+    <ol class="breadcrumb fonts">
+        <li><a href="#">系统管理</a></li>
+        <li class="active">角色管理</li>
+    </ol>
+    <div style="height: 100%;margin-top: -6%">
+        <div class="panel panel-default" style="height: 80%;z-index: 1000;margin-top: 8%;width: 96%;margin-left: 2%">
+            <div class="panel-body">
+                <div style="float: right">
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addmodal">
+                        <span class="glyphicon glyphicon-plus"></span>添加
+                    </button>
+                    <button type="button" class="btn btn-warning" id="editRole">
+                        <span class="glyphicon glyphicon-pencil"></span>修改
+                    </button>
+                    <button type="button" class="btn btn-danger" id="deleteRole">
+                        <span class="glyphicon glyphicon-minus"></span>删除
+                    </button>
+                </div>
+                <table id="roleTable" class="table tablemar">
+                </table>
+                <div class="modal" tabindex="-1" role="dialog" id="addmodal">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">添加角色</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="addform">
+                                <div class="modal-body">
+
+                                    <div class="form-group">
+                                        <label for="role">角色名</label>
+                                        <input type="text" class="form-control" id="role">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" id="saveRole">保存</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal" tabindex="-1" role="dialog" id="editmodal">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">修改角色</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="form-group">
+                                    <label for="role1">角色名</label>
+                                    <input type="text" class="form-control" id="role1">
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden" class="form-control" id="roleId1">
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-primary" id="saveeditRole">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal" tabindex="-1" role="dialog" id="deletemodal">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">删除角色</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <p>确定要删除选中用户吗！</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-primary" id="scRole">确定</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('ifrmheight').style.height=parent.window.document.getElementById('chartheight').scrollHeight*0.883+"px";
+    </script>
+</div>
+</body>
+</html>

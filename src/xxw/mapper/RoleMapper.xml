@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xxw.mapper.RoleMapper">
+    <resultMap id="BaseResultMap" type="xxw.po.User">
+        <id column="ID" property="id" jdbcType="DECIMAL" />
+        <result column="USERNAME" property="userName" jdbcType="VARCHAR"/>
+        <result column="TEL" property="tel" jdbcType="VARCHAR"/>
+        <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+        <result column="STATE" property="state" jdbcType="VARCHAR"/>
+        <result column="ROLE" property="role" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="RoleResultMap" type="xxw.po.Role">
+        <id column="ID" property="id" jdbcType="VARCHAR" />
+        <result column="ROLE_ID" property="roleId" jdbcType="VARCHAR"/>
+        <result column="ROLE" property="role" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="addRole" useGeneratedKeys="false" keyProperty="id" parameterType="xxw.po.Role">
+        <selectKey resultType="String" keyProperty="id" order="BEFORE">
+            select ID_SEQ.nextval as id from dual
+        </selectKey>
+        insert into ROLE
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id !=null">
+                ID,
+            </if>
+            <if test="roleId !=null">
+                ROLE_ID,
+            </if>
+            <if test="role !=null">
+                ROLE,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id !=null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="roleId !=null">
+                #{roleId,jdbcType=VARCHAR},
+            </if>
+            <if test="role !=null">
+                #{role,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateRole" parameterType="java.lang.String">
+        update ROLE
+        <trim prefix="set" suffixOverrides=",">
+            <if test="role != null">
+                ROLE = #{role,jdbcType=VARCHAR},
+            </if>
+
+        </trim>
+        where ROLE_ID= #{roleId,jdbcType=VARCHAR}
+    </update>
+    <delete id="deleteRole" parameterType="java.lang.String">
+        delete from ROLE where  ROLE_ID=#{role_Id,jdbcType=VARCHAR}
+    </delete>
+    <select id="getAllRoles" resultMap="RoleResultMap">
+        select * from ROLE
+    </select>
+
+    <insert id="roleAddAuth" useGeneratedKeys="false" keyProperty="id" parameterType="java.lang.String">
+        <selectKey resultType="String" keyProperty="id" order="BEFORE">
+            select ROLEADDAUTHID.nextval as id from dual
+        </selectKey>
+        insert into ROLEADDAUTH("ID","ROLE_ID","AUTH_ID") VALUES (#{id,jdbcType=VARCHAR},#{roleId,jdbcType=VARCHAR},#{authId,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="selectAuthByRoleId" parameterType="java.lang.String" resultType="java.lang.String">
+        select AUTH_ID from ROLEADDAUTH where ROLE_ID=#{roleId,jdbcType=VARCHAR}
+    </select>
+    <update id="roleUpdateAuth" parameterType="java.lang.String">
+        update ROLEADDAUTH set AUTH_ID=#{authId,jdbcType=VARCHAR} where ROLE_ID=#{roleId,jdbcType=VARCHAR}
+    </update>
+    <delete id="roleClearAuth" parameterType="java.lang.String">
+        delete from ROLEADDAUTH WHERE ROLE_ID=#{roleId,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="selectRoleByUserId" parameterType="java.lang.String" resultMap="RoleResultMap">
+        select a.* from ROLE a inner JOIN  USERADDROLE b on a.ROLE_ID=b.ROLE_ID and b.USER_ID=#{userId,jdbcType=VARCHAR}
+    </select>
+</mapper>

@@ -1,0 +1,47 @@
+$(function(){
+    debugger;
+    $("#userManager").click(function(){
+        $("#InfoList").attr("src","newUserManager.html?random="+Math.floor(Math.random()*100000));
+    });
+    $("#roleManager").click(function(){
+        $("#InfoList").attr("src","newRoleManager.html?random="+Math.floor(Math.random()*100000));
+    });
+    $("#auditManager").click(function(){
+        $("#InfoList").attr("src","newAuthority.html?random="+Math.floor(Math.random()*100000));
+    });
+    $("#logInfo").click(function(){
+        $("#InfoList").attr("src","newLogInfo.html?random="+Math.floor(Math.random()*100000));
+    });
+    $("#userAddRole").click(function(){
+        $("#InfoList").attr("src","newUserAddRole.html?random="+Math.floor(Math.random()*100000));
+    });
+    $("#roleAddAuth").click(function(){
+        $("#InfoList").attr("src","newRoleAddAudit.html?random="+Math.floor(Math.random()*100000));
+    });
+    $("#sysConfig").click(function(){
+        $("#InfoList").attr("src","assetsConfig.html?random="+Math.floor(Math.random()*100000));
+    });
+    $("#fileManager").click(function(){
+        $("#InfoList").attr("src","FileManager.html?random="+Math.floor(Math.random()*100000));
+    });
+    $("#departManager").click(function(){
+        $("#InfoList").attr("src","departManager.html?random="+Math.floor(Math.random()*100000));
+    });
+    $("#landAssets").click(function(){
+        $("#InfoList").attr("src","imasset.html?zctype=1&&random="+Math.floor(Math.random()*100000));
+    });
+    $("#houseAssets").click(function(){
+        $("#InfoList").attr("src","imasset.html?zctype=2&&random="+Math.floor(Math.random()*100000));
+    });
+    $("#seaAssets").click(function(){
+        $("#InfoList").attr("src","imasset.html?zctype=3&&random="+Math.floor(Math.random()*100000));
+    });
+    $("#nodeAddUser").click(function(){
+        $("#InfoList").attr("src","nodeAddUser.html?random="+Math.floor(Math.random()*100000));
+    });
+
+ /*   $("#assetsManager").click(function(){
+        $("#InfoList").attr("src","imExAssets.html?random="+Math.floor(Math.random()*100000));
+    });*/
+
+})

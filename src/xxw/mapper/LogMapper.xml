@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xxw.mapper.LogMapper">
+    <resultMap id="LogResultMap" type="xxw.po.Log">
+        <id column="ID" property="id" jdbcType="VARCHAR" />
+        <result column="EVENT_TYPE" property="eventType" jdbcType="VARCHAR"/>
+        <result column="EVENT_DATE" property="eventDate" jdbcType="VARCHAR"/>
+        <result column="EVENT_DESC" property="eventDesc" jdbcType="VARCHAR"/>
+        <result column="USERID" property="userId" jdbcType="VARCHAR"/>
+        <result column="USERNAME" property="userName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="getLogs" resultMap="LogResultMap">
+        select * from SYS_LOG
+    </select>
+    <insert id="inertLog" useGeneratedKeys="false" keyProperty="id" parameterType="xxw.po.Log">
+        <selectKey resultType="String" keyProperty="id" order="BEFORE">
+            select LOGID.nextval as id from dual
+        </selectKey>
+        insert into SYS_LOG("ID","EVENT_TYPE","EVENT_DATE","EVENT_DESC","USERID","USERNAME")VALUES(#{id,jdbcType=VARCHAR},#{eventType,jdbcType=VARCHAR},#{eventDate,jdbcType=DATE},#{eventDesc,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{userName,jdbcType=VARCHAR})
+    </insert>
+</mapper>

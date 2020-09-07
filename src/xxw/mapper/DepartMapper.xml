@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xxw.mapper.DepartMapper">
+
+    <select id="getNodes" resultType="java.util.Map">
+        select * from DEPARTTREE where 1=1
+        <if test="level !=null">
+            and LEVEL= #{level,jdbcType=VARCHAR}
+        </if>
+        <if test="parentNodeId !=null">
+            and PARENTNODEID= #{parentNodeId,jdbcType=VARCHAR}
+        </if>
+    </select>
+    <insert id="insertNode"  parameterType="java.lang.String">
+        insert into DEPARTTREE
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+
+            <if test="id != null" >
+                "ID",
+            </if>
+            <if test="nodeName != null" >
+                "NODENAME",
+            </if>
+            <if test="nodeId != null" >
+                "NODEID",
+            </if>
+            <if test="pnodeId != null" >
+                "PARENTNODEID",
+            </if>
+            <if test="level != null" >
+                "LEVEL",
+            </if>
+            <if test="depart != null" >
+                "DEPART",
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if>
+
+            <if test="nodeName != null" >
+                #{nodeName,jdbcType=VARCHAR},
+            </if>
+            <if test="nodeId != null" >
+                #{nodeId,jdbcType=VARCHAR},
+            </if>
+            <if test="pnodeId != null" >
+                #{pnodeId,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null" >
+                #{level,jdbcType=VARCHAR},
+            </if>
+            <if test="depart != null" >
+                #{depart,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="getNodesInfo" resultType="xxw.po.DepartTree">
+        select * from DEPARTTREE where 1=1
+        <if test="level !=null">
+            and LEVEL= #{level,jdbcType=VARCHAR}
+        </if>
+        <if test="parentNodeId !=null">
+            and PARENTNODEID= #{parentNodeId,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="getMaxLevel" resultType="java.lang.String">
+        select max("LEVEL") from DEPARTTREE
+    </select>
+
+    <select id="getDepart" resultType="xxw.po.DepartTree">
+        select * from DEPARTTREE where 1=1
+        <if test="depart !=null">
+            and DEPART= #{depart,jdbcType=VARCHAR}
+        </if>
+        <if test="pnodeId !=null">
+            and PARENTNODEID= #{pnodeId,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+</mapper>

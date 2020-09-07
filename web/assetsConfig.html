@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
+    <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
+    <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+    <script src="js/assetsConfig/assetsConfig.js"></script>
+    <style>
+        .uploadbtn{
+            margin-top: 10%;
+            margin-left: 45%;
+            width: 150px;
+        }
+        .ifraheight{
+            height: 585px;
+            background-color: #f1f1f1;
+        }
+        .rowheight{
+            height: 100%;
+        }
+        .fonts{
+            font-size: 15px;
+            background-color: #f1f1f1 !important;
+        }
+        .tablemar{
+            margin-top: 1%;
+        }
+        .colorsty{
+            background: #efeff6;
+        }
+    </style>
+</head>
+<body class="colorsty">
+<div class="container-fluid" id="ifrmheight">
+    <ol class="breadcrumb fonts">
+        <li><a href="#">系统管理</a></li>
+        <li class="active">系统配置</li>
+    </ol>
+    <div style="height: 100%;margin-top: -6%">
+        <div class="panel panel-default" style="height: 80%;z-index: 1000;margin-top: 8%;width: 96%;margin-left: 2%">
+            <div class="panel-body">
+                <div style="float: right">
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addConfig">
+                        <span class="glyphicon glyphicon-plus"></span>添加
+                    </button>
+                </div>
+                <table id="configTable" class="table table-hover tablemar">
+                    <caption>资产信息项配置表</caption>
+                </table>
+                <div class="modal" tabindex="-1" id="addConfig" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">添加配置项</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="addform">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="zctype">资产类型</label>
+                                        <select class="form-control" id="zctype">
+                                            <option value="1">土地资产</option>
+                                            <option value="2">房屋资产</option>
+                                            <option value="3">海域资产</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fieldname">资产信息项</label>
+                                        <input type="text" class="form-control" id="fieldname">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" id="saveConfig">保存</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('ifrmheight').style.height=parent.window.document.getElementById('chartheight').scrollHeight*0.883+"px";
+    </script>
+</div>
+</body>
+</html>

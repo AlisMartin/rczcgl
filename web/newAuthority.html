@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
+    <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
+    <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+    <script src="js/Authority/auth.js"></script>
+    <style>
+        .tablemar{
+            margin-top: 1%;
+        }
+        .uploadbtn{
+            margin-top: 10%;
+            margin-left: 45%;
+            width: 150px;
+        }
+        .ifraheight{
+            height: 585px;
+            background-color: #f1f1f1;
+        }
+        .rowheight{
+            height: 100%;
+        }
+        .fonts{
+            font-size: 15px;
+            background-color: #f1f1f1 !important;
+        }
+        .colorsty{
+            background: #efeff6;
+        }
+    </style>
+</head>
+<body class="colorsty">
+<div class="container-fluid" id="ifrmheight">
+    <ol class="breadcrumb fonts">
+        <li><a href="#">系统管理</a></li>
+        <li class="active">用户管理</li>
+    </ol>
+    <div style="height: 100%;margin-top: -6%">
+        <div class="panel panel-default" style="height: 80%;z-index: 1000;margin-top: 8%;width: 96%;margin-left: 2%">
+            <div class="panel-body">
+                <table id="authTable" class="table tablemar">
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('ifrmheight').style.height=parent.window.document.getElementById('chartheight').scrollHeight*0.883+"px";
+    </script>
+</div>
+</body>
+</html>
