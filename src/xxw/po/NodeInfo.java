@@ -12,6 +12,16 @@ public class NodeInfo {
     private String flowName;
     private String flowtype;
 
+    public String getTreeid() {
+        return treeid;
+    }
+
+    public void setTreeid(String treeid) {
+        this.treeid = treeid;
+    }
+
+    private String treeid;
+
     public String getId() {
         return id;
     }

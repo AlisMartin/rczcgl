@@ -5,6 +5,10 @@
     <select id="getNodes" resultType="xxw.po.NodeInfo">
       select * from NODECONFIG
     </select>
+    <update id="upNode" parameterType="java.lang.String">
+        update NODECONFIG set USERID=#{id,jdbcType=VARCHAR} ,TREEID=#{treeid,jdbcType=VARCHAR}
+        where NODEID=#{nodeId,jdbcType=VARCHAR} and FLOWTYPE=#{flowType,jdbcType=VARCHAR}
+    </update>
     <insert id="insertNode"  parameterType="java.lang.String">
         insert into DEPARTTREE
         <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -73,5 +77,171 @@
             and PARENTNODEID= #{pnodeId,jdbcType=VARCHAR}
         </if>
     </select>
+
+   <!--创建流程实例-->
+    <insert id="createFlow"   useGeneratedKeys="false" keyProperty="id"    parameterType="xxw.po.FlowInstance">
+        <selectKey resultType="String" keyProperty="id" order="BEFORE">
+            select FLOW_SEQ.nextval as id from dual
+        </selectKey>
+        insert into FLOWINSTANCE
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+
+            "ID",
+            <if test="flowId != null" >
+                "FLOWID",
+            </if>
+            <if test="nowNode != null" >
+                "NOWNODE",
+            </if>
+            <if test="startDate != null" >
+                "STARTDATE",
+            </if>
+            <if test="endDate != null" >
+                "ENDDATE",
+            </if>
+            <if test="flowType != null" >
+                "FLOWTYPE",
+            </if>
+            <if test="status != null" >
+                "STATUS",
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+                #{id,jdbcType=VARCHAR},
+
+
+            <if test="flowId != null" >
+                #{flowId,jdbcType=VARCHAR},
+            </if>
+            <if test="nowNode != null" >
+                #{nowNode,jdbcType=VARCHAR},
+            </if>
+            <if test="startDate != null" >
+                #{startDate,jdbcType=DATE},
+            </if>
+            <if test="endDate != null" >
+                #{endDate,jdbcType=DATE},
+            </if>
+            <if test="flowType != null" >
+                #{flowType,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!--更新流程实例-->
+    <update id="updateFlow" parameterType="xxw.po.FlowInstance">
+        update FLOWINSTANCE set
+        <if test="nowNode != null" >
+           NOWNODE= #{nowNode,jdbcType=VARCHAR},
+        </if>
+        <if test="startDate != null" >
+            STARTDATE= #{startDate,jdbcType=DATE},
+        </if>
+        <if test="endDate != null" >
+            ENDDATE= #{endDate,jdbcType=DATE},
+        </if>
+        <if test="status != null" >
+            STATUS= #{status,jdbcType=VARCHAR},
+        </if>
+        where FLOWID=#{flowId,jdbcType=VARCHAR}
+    </update>
+
+    <!--创建流程历史信息-->
+    <insert id="createFlowHistory"   useGeneratedKeys="false" keyProperty="id"    parameterType="xxw.po.FlowHistory">
+        <selectKey resultType="String" keyProperty="id" order="BEFORE">
+            select FLOWHISTORY_SEQ.nextval as id from dual
+        </selectKey>
+        insert into FLOWHISTORY
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+
+            "ID",
+            <if test="flowId != null" >
+                "FLOWID",
+            </if>
+            <if test="node != null" >
+                "NODE",
+            </if>
+            <if test="startDate != null" >
+                "STARTDATE",
+            </if>
+            <if test="endDate != null" >
+                "ENDDATE",
+            </if>
+            <if test="flowType != null" >
+                "FLOWTYPE",
+            </if>
+            <if test="status != null" >
+                "STATUS",
+            </if>
+            <if test="nodeOrder != null" >
+                "NODEORDER",
+            </if>
+            <if test="file != null" >
+                "FILE",
+            </if>
+            <if test="rejectReason != null" >
+                "REJECTREASON",
+            </if>
+            <if test="sqInfo != null" >
+                "SQINFO",
+            </if>
+            <if test="sqReason != null" >
+                "SQREASON",
+            </if>
+            <if test="user != null" >
+                "USER",
+            </if>
+            <if test="dusers != null" >
+                "DUSERS",
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{id,jdbcType=VARCHAR},
+
+
+            <if test="flowId != null" >
+                #{flowId,jdbcType=VARCHAR},
+            </if>
+            <if test="node != null" >
+                #{node,jdbcType=VARCHAR},
+            </if>
+            <if test="startDate != null" >
+                #{startDate,jdbcType=DATE},
+            </if>
+            <if test="endDate != null" >
+                #{endDate,jdbcType=DATE},
+            </if>
+            <if test="flowType != null" >
+                #{flowType,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="nodeOrder != null" >
+                #{nodeOrder,jdbcType=VARCHAR},
+            </if>
+            <if test="file != null" >
+                #{file,jdbcType=VARCHAR},
+            </if>
+            <if test="rejectReason != null" >
+                #{rejectReason,jdbcType=VARCHAR},
+            </if>
+            <if test="sqInfo != null" >
+                #{sqInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="sqReason != null" >
+                #{sqReason,jdbcType=VARCHAR},
+            </if>
+            <if test="user != null" >
+                #{user,jdbcType=VARCHAR},
+            </if>
+            <if test="dusers != null" >
+                #{dusers,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 
 </mapper>

@@ -18,6 +18,8 @@ public class DepartTree {
 
     private List<DepartTree> nodes;
 
+    private String depart;
+
     public String getId() {
         return id;
     }
@@ -64,6 +66,14 @@ public class DepartTree {
 
     public void setNodes(List<DepartTree> nodes) {
         this.nodes = nodes;
+    }
+
+    public String getDepart() {
+        return depart;
+    }
+
+    public void setDepart(String depart) {
+        this.depart = depart;
     }
 
 
