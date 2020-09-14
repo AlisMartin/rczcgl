@@ -37,12 +37,6 @@ public class AssetsController {
     @ResponseBody
     public int insertAssetsConfig(HttpServletRequest request,AssetsConfig assetsConfig){
         int i=0;
-      /*  String zctype=request.getParameter("zctype");
-        String fieldname=request.getParameter("fieldname");
-        String field=request.getParameter("field");*/
-    /*    assetsConfig.setZctype(zctype);
-        assetsConfig.setField(field);
-        assetsConfig.setFieldname(fieldname);*/
         i=assetsMapper.insertConfig(assetsConfig);
         return i;
     }
