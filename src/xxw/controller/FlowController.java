@@ -38,14 +38,14 @@ public class FlowController {
 
     @RequestMapping("/createFLow")
     @ResponseBody
-    public ResponseObject createFLow(FlowInstance flowInstance){
+    public ResponseObject createFLow(FlowHistory flowInstance){
         int i=0;
         flowMapper.createFlow(flowInstance);
         return new ResponseObject(i,"","");
     }
     @RequestMapping("/updateFLow")
     @ResponseBody
-    public ResponseObject updateFLow(FlowInstance flowInstance){
+    public ResponseObject updateFLow(FlowHistory flowInstance){
         int i=0;
         flowMapper.updateFlow(flowInstance);
         return new ResponseObject(i,"","");
@@ -60,8 +60,26 @@ public class FlowController {
 
     @RequestMapping("/queryFlowInfos")
     @ResponseBody
-    public ResponseObject queryFlowInfos(HttpServletRequest request){
+    public List<FlowHistory> queryFlowInfos(HttpServletRequest request){
         //flowMapper.createFlowHistory(flowHistory);
-        return new ResponseObject(1,"","");
+        String flowType=request.getParameter("flowType");
+        return flowMapper.queryFlowInfos(flowType);
+    }
+    @RequestMapping("/queryFile")
+    @ResponseBody
+    public List<String> queryFile(HttpServletRequest request){
+        String filetype=request.getParameter("filetype");
+        String com=request.getParameter("com");
+        String pos=request.getParameter("pos");
+        if(filetype.equals("com")){
+            return flowMapper.selectCom();
+        }else if(filetype.equals("pos")){
+            return flowMapper.selectPos(com);
+        }else if(filetype.equals("type")){
+            return  flowMapper.selectType(com,pos);
+        }else{
+            return null;
+        }
+
     }
 }

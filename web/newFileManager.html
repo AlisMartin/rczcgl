@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
+    <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
+    <link href="third/webuploader/webuploader.css" rel="stylesheet" type="text/css" />
+    <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+    <script src="third/webuploader/webuploader.nolog.min.js"></script>
+    <script src="js/fileManager/filemanager.js"></script>
+
+    <style>
+        .labelstyle{
+            margin-top: 0.5%;
+        }
+        .left{
+            float: left;
+        }
+        .checkboxstyle{
+            display: block;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+        .colorsty{
+            background: #efeff6;
+        }
+        .tablemar{
+            margin-top: 1%;
+        }
+        .fonts{
+            font-size: 15px;
+            background-color: #f1f1f1 !important;
+        }
+    </style>
+</head>
+<body class="colorsty">
+<div class="container-fluid" id="ifrmheight">
+    <ol class="breadcrumb fonts">
+        <li><a href="#">业务功能</a></li>
+        <li class="active">文件管理</li>
+    </ol>
+    <div style="height: 100%;margin-top: -6%">
+        <div class="panel panel-default" style="height: 80%;z-index: 1000;margin-top: 8%;width: 96%;margin-left: 2%">
+            <div class="panel-body">
+                <label class="left labelstyle">资产类型：</label>
+                <select class="checkboxstyle left" id="zctype">
+                    <option value="1">土地资产</option>
+                    <option value="2">房屋资产</option>
+                    <option value="3">海域资产</option>
+                </select>
+                <div style="float: right">
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#fileup">
+                        <span class="glyphicon glyphicon-plus"></span>附件上传
+                    </button>
+                    <button type="button" class="btn btn-warning"  id="filelook">
+                        <span class="glyphicon glyphicon-pencil"></span>附件查看
+                    </button>
+                    <button type="button" class="btn btn-danger" id="filedown">
+                        <span class="glyphicon glyphicon-minus"></span>附件下载
+                    </button>
+                </div>
+                <table id="fileTable" class="table tablemar">
+                </table>
+                <div class="modal" tabindex="-1" id="fileup" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">上传文件</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div id="uploader" class="wu-example">
+                                <div id="fileList" class="uploader-list"></div>
+                                <div>
+                                    <label class="left labelstyle">一级文件目录：</label>
+                                    <select class="checkboxstyle left" id="fileone">
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="left labelstyle">二级文件目录：</label>
+                                    <select class="checkboxstyle left" id="fileTwo">
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="left labelstyle">三级文件目录：</label>
+                                    <select class="checkboxstyle left" id="fileTree">
+                                    </select>
+                                </div>
+                                <div id="picker">选择文件</div>
+                                <div id="uparea" style="border:1px dashed #f1f1f1;height: 100px;margin-top: 3%">
+                                    <div id="fontregion" style="margin-top: 10%;margin-left: 44%;font-size: 30px;color:#f1f1f1"><span>文件上传区域</span></div>
+                                    <div id="fileInfo" class="fileinfo uploader-list"></div>
+                                </div>
+
+                                <div>
+                                    <button id="ctlBtn" type="button" class="btn btn-info" style="margin-top: 5%">开始上传</button>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-primary" id="savefile">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal" tabindex="-1" role="dialog" id="editmodal">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">修改用户</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <div class="form-group">
+                                        <label for="userName">用户名</label>
+                                        <input type="text" class="form-control" id="userName1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tel">电话</label>
+                                        <input type="text" class="form-control" id="tel1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">邮箱</label>
+                                        <input type="text" class="form-control" id="email1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="type">用户类型</label>
+                                        <input type="text" class="form-control" id="type1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="type">密码</label>
+                                        <input type="password" class="form-control" id="password1">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="hidden" class="form-control" id="userid1">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" id="saveeditUser">保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal" tabindex="-1" role="dialog" id="deletemodal">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">删除用户</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <p>确定要删除选中用户吗！</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                    <button type="button" class="btn btn-primary" id="scUser">确定</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.getElementById('ifrmheight').style.height=parent.window.document.getElementById('chartheight').scrollHeight*0.883+"px";
+        </script>
+    </div>
+</body>
+</html>

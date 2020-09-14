@@ -39,6 +39,9 @@ $(function(){
     $("#nodeAddUser").click(function(){
         $("#InfoList").attr("src","nodeAddUser.html?random="+Math.floor(Math.random()*100000));
     });
+    $("#FlowFileManager").click(function(){
+        $("#InfoList").attr("src","newFileManager.html?random="+Math.floor(Math.random()*100000));
+    });
 
  /*   $("#assetsManager").click(function(){
         $("#InfoList").attr("src","imExAssets.html?random="+Math.floor(Math.random()*100000));
