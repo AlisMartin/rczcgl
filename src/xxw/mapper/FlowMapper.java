@@ -29,5 +29,10 @@ public interface FlowMapper {
 
     List<String> selectType(@Param("com")String com,@Param("pos")String pos);
 
-    List<Map<String,String>>selectFile(@Param("com")String com,@Param("pos")String pos,@Param("type")String type);
+    List<Map<String,String>>selectFile(@Param("com")String com,@Param("pos")String pos,@Param("type")String type,@Param("fileDate")String fileDate);
+
+    List<Map<String,String>>selectPathId(@Param("com")String com,@Param("pos")String pos,@Param("type")String type);
+
+    int insertManagerFile(@Param("fileId")String fileId,@Param("fileName")String fileName,@Param("filePath")String filePath,@Param("realName")String realName,@Param("pathId")String pathId,@Param("fileDate")String fileDate);
+    void savefilefold(@Param("com")String com,@Param("pos")String pos,@Param("type")String type,@Param("pathid")String pathid);
 }

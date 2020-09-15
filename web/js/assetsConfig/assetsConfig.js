@@ -16,6 +16,7 @@ $(function(){
         url:'/rczcgl/assetsconfig/getConfigInfo.action',
         method:'post',
         clickToSelect:true,
+        singleSelect: true,
         sidePagination:"client",
         pagination:true,
         pageNumber:1,
@@ -52,6 +53,10 @@ $(function(){
             {
                 field:"fieldname",
                 title:'资产信息项'
+            },
+            {
+                field:"order",
+                title:'顺序'
             }
         ],
         onLoadSuccess:function(){
@@ -62,19 +67,102 @@ $(function(){
     $("#saveConfig").click(function(){
         insertConfig();
     })
+    $("#queryconfig").click(function(){
+        getconfiglist();
+    })
+    $("#xgconfig").click(function(){
+        debugger;
+        var rowdata=$("#configTable").bootstrapTable('getSelections');
+        if(rowdata.length<=0){
+            alert("请选择一条需要修改的配置信息！")
+            return;
+        }else{
+            $("#editConfig").modal('show');
+            $("#editzctype").val(rowdata[0].zctype);
+            $("#editfieldname").val(rowdata[0].fieldname);
+            $("#editorder").val(rowdata[0].order);
+
+        }
+    })
+
+    $("#deleteconfig").click(function(){
+        var rowdata=$("#configTable").bootstrapTable('getSelections');
+        if(rowdata.length<=0){
+            alert("请选择要删除的配置项！");
+            return;
+        }else{
+            var param={};
+            param.show="0";
+            param.id=rowdata[0].id
+            $.ajax({
+                type:"post",
+                url:"/rczcgl/assetsconfig/updateConfig.action",
+                sync:false,
+                data:param,
+                success:function(data){
+                    debugger;
+                    alert("删除成功！");
+                    $("#configTable").bootstrapTable('refresh');
+                },
+                error:function(){
+                }
+            })
+        }
+    })
+
+    $("#bcconfig").click(function(){
+        debugger;
+        var rowdata=$("#configTable").bootstrapTable('getSelections');
+        var param={};
+        param.zctype=$("#editzctype").val();
+        param.fieldname=$("#editfieldname").val();
+        param.order=$("#editorder").val();
+        param.id=rowdata[0].id;
+        var flag=queryOrder(param.zctype,param.order);
+        if(flag){
+            $.ajax({
+                type:"post",
+                url:"/rczcgl/assetsconfig/updateConfig.action",
+                sync:false,
+                data:param,
+                success:function(data){
+                    debugger;
+                    alert("修改成功！");
+                    $("#configTable").bootstrapTable('refresh');
+                },
+                error:function(){
+                }
+            })
+        }else{
+            alert("序号已存在！");
+        }
+
+    })
 
 })
 
 function getconfiglist(){
     debugger;
+    var zctype=$("#zclx").val();
+    var param={};
+    if(zctype!=null&&zctype!=""){
+        param.zctype=zctype;
+    }
     $.ajax({
         type:"post",
-        url:"/rczcgl/assetsconfig/getConfigInfo.action",
+        url:"/rczcgl/assetsconfig/getAllConfigInfo.action",
         sync:false,
-        data:{},
+        data:param,
         success:function(data){
             debugger;
+            landassets.zcinfo=[];
+            houseassets.zcinfo=[];
+            seaassets.zcinfo=[];
+            var dataarray=[];
             for(var i=0;i<data.length;i++){
+                if(data[i].show=="1"){
+                    dataarray.push(data[i]);
+                }
                 if(data[i].zctype=="1"){
                     landassets.zcinfo.push(data[i]);
                 }
@@ -85,6 +173,7 @@ function getconfiglist(){
                     seaassets.zcinfo.push(data[i]);
                 }
             }
+            $("#configTable").bootstrapTable('load',dataarray);
         },
         error:function(){
         }
@@ -95,7 +184,10 @@ function insertConfig(){
     debugger;
     var zctype=$("#zctype").val();
     var fieldname=$("#fieldname").val();
+    var order=$("#order").val();
     var fieldlength="field";
+    var flag=queryOrder(zctype,order);
+
     switch (zctype){
         case '1':
             fieldlength = fieldlength+(landassets.zcinfo.length+1);
@@ -106,26 +198,53 @@ function insertConfig(){
         case '3':
             fieldlength = fieldlength+(seaassets.zcinfo.length+1);
     }
+    if(flag){
+        $.ajax({
+            type:"post",
+            url:"/rczcgl/assetsconfig/insertConfig.action",
+            sync:false,
+            data:{'fieldname':fieldname,'zctype':zctype,'field':fieldlength,'order':order,'show':'1'},
+            success:function(data){
+                debugger;
+                if(data=='1'){
+                    alert("添加成功！");
+                    landassets.zcinfo=[];
+                    houseassets.zcinfo=[];
+                    seaassets.zcinfo=[];
+                    $("#addConfig").modal('hide');
+                    $("#configTable").bootstrapTable('refresh');
+                }
+                getconfiglist();
+            },
+            error:function(){
+                alert("添加失败！请稍后重试！");
+                $("#addConfig").modal('hide');
+            }
+        })
+    }else{
+        alert("序号已存在,请重新输入!");
+        $("#addConfig").modal('hide');
+    }
+
+}
+
+
+function queryOrder(zctype,order){
+    debugger;
+    var flag=true;
     $.ajax({
         type:"post",
-        url:"/rczcgl/assetsconfig/insertConfig.action",
-        sync:false,
-        data:{'fieldname':fieldname,'zctype':zctype,'field':fieldlength},
+        url:"/rczcgl/assetsconfig/getAllConfigInfo.action",
+        async:false,
+        data:{'zctype':zctype,'order':order},
         success:function(data){
             debugger;
-            if(data=='1'){
-                alert("添加成功！");
-                landassets.zcinfo=[];
-                houseassets.zcinfo=[];
-                seaassets.zcinfo=[];
-                $("#addConfig").modal('hide');
-                $("#configTable").bootstrapTable('refresh');
+            if(data!=null){
+                flag=false;
             }
-            getconfiglist();
         },
         error:function(){
-            alert("添加失败！请稍后重试！");
-            $("#addConfig").modal('hide');
         }
     })
+    return flag;
 }

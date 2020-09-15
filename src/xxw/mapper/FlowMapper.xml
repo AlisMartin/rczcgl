@@ -283,5 +283,104 @@
         <if test="type !=null">
             and a.TYPE= #{type,jdbcType=VARCHAR}
         </if>
+        <if test="fileDate !=null">
+            and b.FILEDATE= #{fileDate,jdbcType=VARCHAR}
+        </if>
     </select>
+    <select id="selectPathId" parameterType="java.lang.String" resultType="java.util.HashMap">
+        select * from FILEMANAGER  WHERE 1=1
+        <if test="com !=null">
+            and COM= #{com,jdbcType=VARCHAR}
+        </if>
+        <if test="pos !=null">
+            and POS= #{pos,jdbcType=VARCHAR}
+        </if>
+        <if test="type !=null">
+            and TYPE= #{type,jdbcType=VARCHAR}
+        </if>
+    </select>
+    <insert id="insertManagerFile"   useGeneratedKeys="false" keyProperty="id"    parameterType="java.lang.String">
+        <selectKey resultType="String" keyProperty="id" order="BEFORE">
+            select FILE_SEQ.nextval as id from dual
+        </selectKey>
+        insert into ASSETS_FILE
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+
+            "ID",
+            <if test="fileId != null" >
+                "FILEID",
+            </if>
+            <if test="fileName != null" >
+                "FILENAME",
+            </if>
+            <if test="filePath != null" >
+                "FILEPATH",
+            </if>
+            <if test="realName != null" >
+                "REALNAME",
+            </if>
+            <if test="pathId != null" >
+                "PATHID",
+            </if>
+            <if test="fileDate !=null">
+                "FILEDATE",
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{id,jdbcType=VARCHAR},
+            <if test="fileId != null" >
+                #{fileId,jdbcType=VARCHAR},
+            </if>
+            <if test="fileName != null" >
+                #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="filePath != null" >
+                #{filePath,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null" >
+                #{relaName,jdbcType=VARCHAR},
+            </if>
+            <if test="pathId != null" >
+                #{pathId,jdbcType=VARCHAR},
+            </if>
+            <if test="fileDate != null" >
+                #{fileDate,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="savefilefold"   useGeneratedKeys="false" keyProperty="id"    parameterType="java.lang.String">
+        <selectKey resultType="String" keyProperty="id" order="BEFORE">
+            select FILEFOLD_SEQ.nextval as id from dual
+        </selectKey>
+        insert into FILEMANAGER
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+
+            "ID","PATHID",
+
+            <if test="com != null" >
+                "COM",
+            </if>
+            <if test="pos != null" >
+                "POS",
+            </if>
+            <if test="type != null" >
+                "TYPE",
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{id,jdbcType=VARCHAR},#{pathid,jdbcType=VARCHAR},
+            <if test="com != null" >
+                #{com,jdbcType=VARCHAR},
+            </if>
+            <if test="pos != null" >
+                #{pos,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 </mapper>

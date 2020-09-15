@@ -13,6 +13,26 @@
     <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
     <script src="js/assetsConfig/assetsConfig.js"></script>
     <style>
+        .checkboxstyle{
+            display: block;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+        .left{
+            float: left;
+        }
         .uploadbtn{
             margin-top: 10%;
             margin-left: 45%;
@@ -46,9 +66,23 @@
     <div style="height: 100%;margin-top: -6%">
         <div class="panel panel-default" style="height: 80%;z-index: 1000;margin-top: 8%;width: 96%;margin-left: 2%">
             <div class="panel-body">
+                <select class="checkboxstyle left" id="zclx">
+                    <option value="1">土地资产</option>
+                    <option value="2">房屋资产</option>
+                    <option value="3">海域资产</option>
+                </select>
                 <div style="float: right">
                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addConfig">
                         <span class="glyphicon glyphicon-plus"></span>添加
+                    </button>
+                    <button type="button" class="btn btn-info" id="xgconfig">
+                        <span class="glyphicon glyphicon-plus"></span>修改
+                    </button>
+                    <button type="button" class="btn btn-info" id="deleteconfig">
+                        <span class="glyphicon glyphicon-plus"></span>删除
+                    </button>
+                    <button type="button" class="btn btn-info" id="queryconfig">
+                        <span class="glyphicon glyphicon-plus"></span>查询
                     </button>
                 </div>
                 <table id="configTable" class="table table-hover tablemar">
@@ -77,10 +111,50 @@
                                         <label for="fieldname">资产信息项</label>
                                         <input type="text" class="form-control" id="fieldname">
                                     </div>
+                                    <div class="form-group">
+                                        <label for="fieldname">顺序</label>
+                                        <input type="text" class="form-control" id="order">
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                                     <button type="button" class="btn btn-primary" id="saveConfig">保存</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal" tabindex="-1" id="editConfig" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">添加配置项</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="editform">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="editzctype">资产类型</label>
+                                        <select class="form-control" id="editzctype">
+                                            <option value="1">土地资产</option>
+                                            <option value="2">房屋资产</option>
+                                            <option value="3">海域资产</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="editfieldname">资产信息项</label>
+                                        <input type="text" class="form-control" id="editfieldname">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="editorder">顺序</label>
+                                        <input type="text" class="form-control" id="editorder">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" id="bcconfig">保存</button>
                                 </div>
                             </form>
                         </div>
