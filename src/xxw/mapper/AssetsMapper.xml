@@ -29,6 +29,16 @@
         </if>
         order by ID,FIELD
     </select>
+    <select id="getFieldByTypeAndName" resultType="String">
+        select FIELD from ASSETS_CONFIG where FIELDNAME= '公司名称'
+        <!--<if test="zctype !=null">-->
+            <!--and ZCTYPE= #{zctype,jdbcType=VARCHAR}-->
+        <!--</if>-->
+        and ZCTYPE in
+        <foreach collection="zctypes" item="zctype" index="index" open="(" close=")" separator=",">
+            #{zctype}
+        </foreach>
+    </select>
     <select id="getAssetsInfoByMap" resultType="map">
         select * from ASSETS_INFO where 1=1
         <if test="zctype !=null">
@@ -40,6 +50,22 @@
         <if test="zctype !=null">
             and ZCTYPE= #{zctype,jdbcType=VARCHAR},
         </if>
+    </select>
+    <select id="getAssetsInfoByName" resultType="xxw.po.AssetsInfo">
+        select * from ASSETS_INFO where 1=1
+        <if test="name !=null and field1 != null">
+            and ${field1} LIKE #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="name !=null and field2 != null">
+            OR ${field2} LIKE #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="name !=null and field3 != null">
+            OR ${field3} LIKE #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="name !=null and field4 != null">
+            OR ${field4} LIKE #{name,jdbcType=VARCHAR}
+        </if>
+        order by ID
     </select>
     <insert id="insertConfig" useGeneratedKeys="false" keyProperty="id" parameterType="java.lang.String">
         <selectKey resultType="String" keyProperty="id" order="BEFORE">
