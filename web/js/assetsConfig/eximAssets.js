@@ -16,6 +16,13 @@ $(function(){
     $("#exportAssets").click(function(){
         exportAssetsInfo();
     });
+    //新增资产
+    $("#addAsset").click(function(){
+        $("#add").modal('show');
+    });
+    $("#saveAsset").click(function(){
+        addAsset();
+    });
     $("#zctype").change(function(){
         param.zctype=$('#zctype').val();
         getcolumn();
@@ -110,6 +117,17 @@ function getcolumn(){
                 obj.field=data[i].field;
                 obj.title=data[i].fieldname;
                 columns.push(obj);
+
+                var htmlLeft = '',htmlRight = '';
+                if(i%2 === 0){
+                    htmlLeft = htmlLeft + '<div class="form-group"> <label for="'+ data[i].field +'">'+ data[i].fieldname + '</label>'+
+                        '<input type="text" class="form-control" id="'+ data[i].field +'" name="'+ data[i].field +'"> </div>'
+                }else{
+                    htmlRight = htmlRight + '<div class="form-group"> <label for="'+ data[i].field +'">'+ data[i].fieldname + '</label>'+
+                        '<input type="text" class="form-control" id="'+ data[i].field +'" name="'+ data[i].field +'"> </div>'
+                }
+                $("#landAssetsLeft").append(htmlLeft);
+                $("#landAssetsRight").append(htmlRight);
             }
 
 
@@ -158,6 +176,25 @@ function importAssetsInfo(){
         },
         error:function(){
             $("#assetsform")[0].reset();
+        }
+    })
+}
+
+function addAsset(){
+    var arr = $("#addform").serializeArray();
+    arr.push({name: "zctype", value: param.zctype});
+    $.ajax({
+        type: "post",
+        url: "/rczcgl/assetsconfig/addAssetsByType.action",
+        data: JSON.stringify(arr),
+        contentType: "application/json;charset=UTF-8",
+        datatype: "json",
+        success: function (res) {
+            $('#assetsTable').bootstrapTable('refresh');
+            $("#add").modal('hide');
+        },
+        error: function (res) {
+            alert("系统错误，请稍后重试！");
         }
     })
 }

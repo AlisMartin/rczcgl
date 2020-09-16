@@ -1,10 +1,13 @@
 package xxw.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import xxw.po.AssetVO;
+import xxw.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import xxw.mapper.AssetsMapper;
 import xxw.po.AssetsConfig;
@@ -12,7 +15,10 @@ import xxw.po.AssetsInfo;
 import xxw.po.AssetsParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by lp on 2020/8/7.
@@ -48,6 +54,49 @@ public class AssetsController {
             return  info;
         }else{
             return null;
+        }
+    }
+    @RequestMapping("/getAssetsInfoByName")
+    @ResponseBody
+    public Map<String,Object> findAssetsInfoByName(@RequestBody JSONObject json){
+        Map<String,Object> res = new HashMap<>();
+        JSONArray zctypes = json.getJSONArray("zctypes");
+        String name = json.getString("name");
+        List<String> info=assetsMapper.getFieldByTypeAndName(zctypes);
+
+        String field1,field2,field3,field4;
+        field1=info.get(0);
+        field2=info.size()>1?info.get(1):null;
+        field3=info.size()>1?info.get(2):null;
+        field4=info.size()>1?info.get(3):null;
+        List<AssetsInfo> infoList=assetsMapper.getAssetsInfoByName(StringUtil.formatLike(name),field1,field2,field3,field4);
+        if (infoList.size()>0){
+            res.put("code",1);
+            res.put("data",infoList);
+            return  res;
+        }else{
+            res.put("code",0);
+            res.put("data",null);
+            return  res;
+        }
+    }
+    @RequestMapping("/addAssetsByType")
+    @ResponseBody
+    public ResponseObject addAssetsByType(@RequestBody List<AssetVO> dto) {
+        Map<String, Object> res = new HashMap<>();
+        Map<String, String> insertInfo = new HashMap<>();
+        for (AssetVO assetVO : dto) {
+            if (StringUtil.isNotEmpty(assetVO.getValue())) {
+                insertInfo.put(assetVO.getName(), assetVO.getValue());
+            }
+        }
+        UUID uuid = UUID.randomUUID();
+        insertInfo.put("zcid", uuid.toString());
+        int i = assetsMapper.insertAssetsInfo(insertInfo);
+        if (i == 1) {
+            return new ResponseObject(1, "³É¹¦", "");
+        } else {
+            return new ResponseObject(1, "Ê§°Ü", "");
         }
     }
 }

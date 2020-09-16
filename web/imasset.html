@@ -13,16 +13,19 @@
     <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
     <script src="js/assetsConfig/eximAssets.js"></script>
     <style>
-        .right{
+        .right {
             float: right;
         }
-        .labelstyle{
+
+        .labelstyle {
             margin-top: 0.5%;
         }
-        .left{
+
+        .left {
             float: left;
         }
-        .checkboxstyle{
+
+        .checkboxstyle {
             display: block;
             height: 34px;
             padding: 6px 12px;
@@ -33,20 +36,23 @@
             background-image: none;
             border: 1px solid #ccc;
             border-radius: 4px;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
         }
-        .fonts{
+
+        .fonts {
             font-size: 15px;
             background-color: #f1f1f1 !important;
         }
-        .tablemar{
+
+        .tablemar {
             margin-top: 1%;
         }
-        .colorsty{
+
+        .colorsty {
             background: #efeff6;
         }
     </style>
@@ -60,10 +66,13 @@
     <div style="height: 100%;margin-top: -6%">
         <div class="panel panel-default" style="height: 80%;z-index: 1000;margin-top: 8%;width: 96%;margin-left: 2%">
             <div class="panel-body">
-                <form id="assetsform" name="assetsform"   enctype="multipart/form-data">
-                    <input type="file" name="file"  id="assetsFile" onchange="importAssetsInfo()"  style="display: none;" />
-                    <input type="text" name="zctype" id="zclx" style="display: none;" />
-
+                <form id="assetsform" name="assetsform" enctype="multipart/form-data">
+                    <input type="file" name="file" id="assetsFile" onchange="importAssetsInfo()"
+                           style="display: none;"/>
+                    <input type="text" name="zctype" id="zclx" style="display: none;"/>
+                    <button type="button" class="btn btn-info" id="addAsset" name="addAsset">
+                        <span class="glyphicon glyphicon-plus"></span>新增资产
+                    </button>
                     <button type="button" class="btn btn-primary right" id="importAssets" name="importAssets">
                         <span class="glyphicon glyphicon-folder-open"></span>导入
                     </button>
@@ -74,11 +83,40 @@
                 <table id="assetsTable" class="table table-hover tablemar">
                     <caption>资产信息表</caption>
                 </table>
+                <div class="modal" tabindex="-1" id="add" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">新增资产</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="addform" action="" method="post">
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-6" id="landAssetsLeft">
+
+                                        </div>
+                                        <div class="col-md-6" id="landAssetsRight">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" id="saveAsset">保存</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <script>
-        document.getElementById('ifrmheight').style.height=parent.window.document.getElementById('chartheight').scrollHeight*0.883+"px";
+        document.getElementById('ifrmheight').style.height = parent.window.document.getElementById('chartheight').scrollHeight * 0.883 + "px";
     </script>
 </div>
 </body>

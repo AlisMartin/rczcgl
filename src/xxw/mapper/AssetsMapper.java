@@ -1,6 +1,8 @@
 package xxw.mapper;
 
+import com.alibaba.fastjson.JSONArray;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 import xxw.po.AssetsConfig;
 import xxw.po.AssetsInfo;
 
@@ -13,6 +15,8 @@ import java.util.Map;
 public interface AssetsMapper {
     List<AssetsConfig> getAssetsConfigInfo(@Param("zctype")String zctype);
     List<AssetsInfo> getAssetsInfo(@Param("zctype")String zctype);
+    List<String> getFieldByTypeAndName(@Param("zctypes")JSONArray zctypes);
+    List<AssetsInfo> getAssetsInfoByName(@Param("name")String name,@Param("field1")String field1,@Param("field2")String field2,@Param("field3")String field3,@Param("field4")String field4);
     List<Map<String,String>> getAssetsInfoByMap(@Param("zctype")String zctype);
     int insertConfig(AssetsConfig assetsConfig);
     int insertAssetsInfo(@Param("assetsMap")Map<String,String> assetsMap);

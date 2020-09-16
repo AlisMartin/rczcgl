@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <!--<link rel="stylesheet" href="https://js.arcgis.com/3.33/esri/css/esri.css">-->
+    <link rel="stylesheet"
+          href="http://118.190.54.143:8090/arcgis_js_v39_api/arcgis_js_api/library/3.9/3.9/js/esri/css/esri.css">
+    <!--<link rel="stylesheet"
+          href="http://118.190.54.143:8090/arcgis_js_v39_api/arcgis_js_api/library/3.9/3.9/js/dojo/dijit/themes/claro/claro.css">
+-->
+    <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
+    <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
+    <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+
+    <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+    <!--<script src="https://js.arcgis.com/3.33/"></script>-->
+    <script type="text/javascript"
+            src="http://118.190.54.143:8090/arcgis_js_v39_api/arcgis_js_api/library/3.9/3.9/init.js"></script>
+    <!--
+    <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
+    <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.33/esri/css/esri.css">
+
+    <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>-->
+
+
+</head>
+<style>
+    html, body, #map {
+        height: 100%;
+    }
+
+    .search {
+        position: absolute;
+        left: 70px;
+        top: 20px;
+        width: 300px;
+    }
+
+    #divShowResult, #layers {
+        position: absolute;
+        right: 30px;
+        top: 20px;
+    }
+</style>
+<body>
+<div id="map">
+
+</div>
+<!--<div id="divShowResult" style="height: 30%;overflow-y: scroll;"></div>-->
+<div class="search">
+    <div class="input-group">
+        <input type="text" class="form-control" id="searchCon" placeholder="请输入资产名称">
+
+        <div class="input-group-addon">
+            <span class="glyphicon glyphicon-search" id="search" aria-hidden="true"></span>
+        </div>
+    </div>
+    <table id="assetsTable" class="table table-hover tablemar">
+        <!--<caption>资产信息表</caption>-->
+    </table>
+</div>
+<div id="layers">
+    <nav class="navbar navbar-default">
+        <div class="navbar-header">
+            <label class="checkbox-inline">
+                <input type="checkbox" name="ckb" id="inlineCheckbox1" value="0" checked="checked"> 土地资产
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" name="ckb" id="inlineCheckbox2" value="2"> 房屋资产
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" name="ckb" id="inlineCheckbox3" value="3"> 海域资产
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" name="ckb" id="inlineCheckbox4" value="4"> 其他资产
+            </label>
+        </div>
+    </nav>
+</div>
+</body>
+<script src="js/oneMap/oneMap.js"></script>
+</html>
