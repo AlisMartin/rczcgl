@@ -26,7 +26,20 @@ public class AssetsController {
     @ResponseBody
     public List<AssetsConfig> getConfigList(HttpServletRequest request){
         String zctype=request.getParameter("zctype");
-        List<AssetsConfig> info=assetsMapper.getAssetsConfigInfo(zctype);
+        String order=request.getParameter("order");
+        List<AssetsConfig> info=assetsMapper.getAssetsConfigInfo(zctype,order);
+        if(info.size()>0){
+            return  info;
+        }else{
+            return null;
+        }
+    }
+    @RequestMapping("/getAllConfigInfo")
+    @ResponseBody
+    public List<AssetsConfig> getAllConfigList(HttpServletRequest request){
+        String zctype=request.getParameter("zctype");
+        String order=request.getParameter("order");
+        List<AssetsConfig> info=assetsMapper.getAllAssetsConfigInfo(zctype,order);
         if(info.size()>0){
             return  info;
         }else{
@@ -40,10 +53,17 @@ public class AssetsController {
         i=assetsMapper.insertConfig(assetsConfig);
         return i;
     }
+    @RequestMapping("/updateConfig")
+    @ResponseBody
+    public int updateConfig(HttpServletRequest request,AssetsConfig assetsConfig){
+        int i=0;
+        i=assetsMapper.updateConfig(assetsConfig);
+        return i;
+    }
     @RequestMapping("/getAssetsInfo")
     @ResponseBody
-    public List<AssetsInfo> getAssetsInfo(HttpServletRequest request,AssetsParam assetsParam){
-        List<AssetsInfo> info=assetsMapper.getAssetsInfo(assetsParam.getZctype());
+    public List<AssetsInfo> getAssetsInfo(HttpServletRequest request,AssetsConfig assetsConfig){
+        List<AssetsInfo> info=assetsMapper.getAssetsInfo(assetsConfig.getZctype());
         if(info.size()>0){
             return  info;
         }else{

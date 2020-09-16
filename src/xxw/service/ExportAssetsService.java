@@ -25,7 +25,7 @@ public class ExportAssetsService {
     AssetsMapper assetsMapper;
     public void exportAssetsInfo(String zctype,String path,String name){
         //获取导出列及列名
-        List<AssetsConfig> configlist=assetsMapper.getAssetsConfigInfo(zctype);
+        List<AssetsConfig> configlist=assetsMapper.getAssetsConfigInfo(zctype,null);
         //获取导出资产信息
         List<Map<String,String>> infomap=assetsMapper.getAssetsInfoByMap(zctype);
 
@@ -103,7 +103,7 @@ public class ExportAssetsService {
         public List<Map<String,String>> importAssetsInfo(MultipartFile file,String zctype){
             int num=1;
             //获取导出列及列名
-            List<AssetsConfig> configlist=assetsMapper.getAssetsConfigInfo(zctype);
+            List<AssetsConfig> configlist=assetsMapper.getAssetsConfigInfo(zctype,null);
             List<Map<String,String>> maplist=new ArrayList<Map<String,String>>();
             try {
                // POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());

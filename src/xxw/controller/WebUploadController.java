@@ -1,11 +1,8 @@
 package xxw.controller;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,13 +10,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import xxw.mapper.FlowMapper;
 import xxw.po.Webuploader;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by lp on 2020/6/2.
@@ -27,11 +28,89 @@ import java.util.List;
 @Controller
 @RequestMapping("/upload")
 public class WebUploadController {
+    @Autowired
+    FlowMapper flowMapper;
+
     @RequestMapping("/fileupload")
     @ResponseBody
     public String upload(HttpServletRequest request,MultipartFile file, String chunks,String chunk,String name,String zcid)throws IOException{
         try{
             String tempPath = request.getRealPath("/") + "assetsfile/"+zcid+"/";
+            if(file!=null){
+                if((null==chunks&&null==chunk)||("").equals(chunks)&&("").equals(chunk)){
+
+                    File parentFile=new File(tempPath);
+                    if(!parentFile.exists()){
+                        parentFile.mkdirs();
+                    }
+                    File destTempFile=new File(parentFile+"/"+name);
+               /*     if(!destTempFile.exists()){
+                        destTempFile.createNewFile();
+                    }*/
+                    FileUtils.copyInputStreamToFile(file.getInputStream(),destTempFile);
+                    destTempFile.createNewFile();
+                    return "上传完毕";
+                }
+                String tempFileDir=tempPath+"\\part\\"+File.separator+name;
+                File parentFileDir=new File(tempFileDir);
+                if(!parentFileDir.exists()){
+                    parentFileDir.mkdirs();
+                }
+                File f=new File(tempFileDir+File.separator+name+"_"+chunk+".part");
+                if(!f.exists()){
+                    FileUtils.copyInputStreamToFile(file.getInputStream(), f);
+                    f.createNewFile();
+                }
+                boolean uploadDone=true;
+                for(int i=0;i<Integer.parseInt(chunks);i++){
+                    File partFile=new File(tempFileDir,name+"_"+i+".part");
+                    if(!partFile.exists()){
+                        uploadDone=false;
+                        return "上传完毕";
+                    }
+                }
+                if(uploadDone){
+                    synchronized (this){
+                        File destTempFile=new File(tempPath,name);
+                        for(int i=0;i<Integer.parseInt(chunks);i++){
+                            File partFile=new File(tempFileDir,name+"_"+i+".part");
+                            FileOutputStream destTempfos=new FileOutputStream(destTempFile,true);
+                            FileUtils.copyFile(partFile,destTempfos);
+                            destTempfos.close();
+                        }
+                        FileUtils.deleteDirectory(parentFileDir);
+                    }
+                }
+                return "上传完毕";
+            }
+            return "上传完毕";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "上传完毕";
+        }
+    }
+
+    /*
+     *文件管理功能 文件上传
+     */
+    @RequestMapping("/filemanagerupload")
+    @ResponseBody
+    public String fielmanagerupload(HttpServletRequest request,MultipartFile file, String chunks,String chunk,String name,String com,String pos,String filetype)throws IOException{
+        try{
+            String coms=request.getParameter("com");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+            Date date = new Date();
+            String year=sdf.format(date);
+            String filePath="";
+            if(filetype.equals("请选择")||filetype.equals("null")){
+                filetype=null;
+            }
+            if(filetype==null){
+                filePath="filemanager/"+year+"/"+com+"/"+pos;
+            }else{
+                filePath="filemanager/"+year+"/"+com+"/"+pos+"/"+filetype;
+            }
+            String tempPath = request.getRealPath("/") + filePath;
             if(file!=null){
                 if((null==chunks&&null==chunk)||("").equals(chunks)&&("").equals(chunk)){
 
@@ -131,4 +210,5 @@ public class WebUploadController {
             }
         }
     }
+
 }

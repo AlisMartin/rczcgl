@@ -11,10 +11,12 @@ import java.util.Map;
  * Created by lp on 2020/8/7.
  */
 public interface AssetsMapper {
-    List<AssetsConfig> getAssetsConfigInfo(@Param("zctype")String zctype);
+    List<AssetsConfig> getAssetsConfigInfo(@Param("zctype")String zctype,@Param("order")String order);
+    List<AssetsConfig> getAllAssetsConfigInfo(@Param("zctype")String zctype,@Param("order")String order);
     List<AssetsInfo> getAssetsInfo(@Param("zctype")String zctype);
     List<Map<String,String>> getAssetsInfoByMap(@Param("zctype")String zctype);
     int insertConfig(AssetsConfig assetsConfig);
     int insertAssetsInfo(@Param("assetsMap")Map<String,String> assetsMap);
+    int updateConfig(AssetsConfig assetsConfig);
 
 }

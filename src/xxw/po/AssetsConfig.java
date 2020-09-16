@@ -8,6 +8,8 @@ public class AssetsConfig {
     private String zctype;
     private String field;
     private String fieldname;
+    private String show;
+    private String order;
     public String getId() {
         return id;
     }
@@ -40,4 +42,19 @@ public class AssetsConfig {
         this.fieldname = fieldname;
     }
 
+    public String getShow() {
+        return show;
+    }
+
+    public void setShow(String show) {
+        this.show = show;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
 }

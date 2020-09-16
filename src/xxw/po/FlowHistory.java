@@ -20,6 +20,15 @@ public class FlowHistory {
     private String sqReason;
     private String user;
     private String dusers;
+    private String show;
+
+    public String getShow() {
+        return show;
+    }
+
+    public void setShow(String show) {
+        this.show = show;
+    }
 
     public String getId() {
         return id;

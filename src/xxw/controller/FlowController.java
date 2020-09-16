@@ -10,7 +10,11 @@ import xxw.po.FlowInstance;
 import xxw.po.NodeInfo;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by lp on 2020/9/4.
@@ -38,14 +42,14 @@ public class FlowController {
 
     @RequestMapping("/createFLow")
     @ResponseBody
-    public ResponseObject createFLow(FlowInstance flowInstance){
+    public ResponseObject createFLow(FlowHistory flowInstance){
         int i=0;
         flowMapper.createFlow(flowInstance);
         return new ResponseObject(i,"","");
     }
     @RequestMapping("/updateFLow")
     @ResponseBody
-    public ResponseObject updateFLow(FlowInstance flowInstance){
+    public ResponseObject updateFLow(FlowHistory flowInstance){
         int i=0;
         flowMapper.updateFlow(flowInstance);
         return new ResponseObject(i,"","");
@@ -60,8 +64,92 @@ public class FlowController {
 
     @RequestMapping("/queryFlowInfos")
     @ResponseBody
-    public ResponseObject queryFlowInfos(HttpServletRequest request){
+    public List<FlowHistory> queryFlowInfos(HttpServletRequest request){
         //flowMapper.createFlowHistory(flowHistory);
-        return new ResponseObject(1,"","");
+        String flowType=request.getParameter("flowType");
+        return flowMapper.queryFlowInfos(flowType);
+    }
+    @RequestMapping("/queryFile")
+    @ResponseBody
+    public ResponseObject queryFile(HttpServletRequest request){
+        String filetype=request.getParameter("filetype");
+        String com=request.getParameter("com");
+        String pos=request.getParameter("pos");
+        if(filetype.equals("com")){
+            return new ResponseObject(1,"",flowMapper.selectCom());
+        }else if(filetype.equals("pos")){
+            return new ResponseObject(1,"",flowMapper.selectPos(com));
+        }else if(filetype.equals("type")){
+            return  new ResponseObject(1,"",flowMapper.selectType(com,pos));
+        }else{
+            return null;
+        }
+
+    }
+    @RequestMapping("/queryPathId")
+    @ResponseBody
+    public ResponseObject queryPathId(HttpServletRequest request){
+        String filetype=request.getParameter("filetype");
+        String com=request.getParameter("com");
+        String pos=request.getParameter("pos");
+        if(filetype.equals("请选择")||filetype.equals("null")){
+            filetype=null;
+        }
+        return new ResponseObject(1,"",flowMapper.selectPathId(com,pos,filetype));
+
+    }
+
+    @RequestMapping("/queryManagerFileList")
+    @ResponseBody
+    public List<Map<String,String>> queryManagerFileList(HttpServletRequest request){
+        String filetype=request.getParameter("filetype");
+        String com=request.getParameter("com");
+        String pos=request.getParameter("pos");
+        String fileDate=request.getParameter("fileDate");
+/*
+        if(!filetype.isEmpty()&&!filetype.equals("��ѡ��")&&!filetype.equals("null")){
+            filetype=null;
+        }*/
+        return flowMapper.selectFile(com,pos,filetype,fileDate);
+
+    }
+
+    @RequestMapping("/insertManagerFile")
+    @ResponseBody
+    public void insertManagerFile(HttpServletRequest request){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        Date date=new Date();
+        String year=sdf.format(date);
+        String filetype=request.getParameter("filetype");
+        if(filetype.equals("请选择")||filetype.equals("null")){
+            filetype=null;
+        }
+        String com=request.getParameter("com");
+        String pos=request.getParameter("pos");
+        String filename=request.getParameter("filename");
+        String pathId=request.getParameter("pathId");
+        String filepath="";
+        if(filetype==null){
+            filepath="filemanager/"+year+"/"+com+"/"+pos;
+        }else{
+            filepath="filemanager/"+year+"/"+com+"/"+pos+"/"+filetype;
+        }
+
+        UUID uid=UUID.randomUUID();
+        String id=uid.toString();
+        flowMapper.insertManagerFile(id,filename,filepath,null,pathId,year);
+
+    }
+
+    @RequestMapping("/savefold")
+    @ResponseBody
+    public int savefole(HttpServletRequest request){
+        String com=request.getParameter("com");
+        String pos=request.getParameter("pos");
+        String type=request.getParameter("type");
+        UUID uid=UUID.randomUUID();
+        String id=uid.toString();
+        flowMapper.savefilefold(com,pos,type,id);
+        return 1;
     }
 }
