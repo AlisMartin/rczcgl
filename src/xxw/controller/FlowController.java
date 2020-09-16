@@ -1,7 +1,9 @@
 package xxw.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import xxw.mapper.FlowMapper;
@@ -92,7 +94,7 @@ public class FlowController {
         String filetype=request.getParameter("filetype");
         String com=request.getParameter("com");
         String pos=request.getParameter("pos");
-        if(filetype.equals("请选择")||filetype.equals("null")){
+        if(filetype.equals("请�?�择")||filetype.equals("null")){
             filetype=null;
         }
         return new ResponseObject(1,"",flowMapper.selectPathId(com,pos,filetype));
@@ -114,6 +116,14 @@ public class FlowController {
 
     }
 
+    @RequestMapping("/insertFile")
+    @ResponseBody
+    public void insertFile(@RequestBody JSONObject json){
+        String zcid = json.getString("zcid");
+        String fileid = json.getString("fileid");
+        flowMapper.updateFile(fileid, zcid);
+    }
+
     @RequestMapping("/insertManagerFile")
     @ResponseBody
     public void insertManagerFile(HttpServletRequest request){
@@ -121,7 +131,7 @@ public class FlowController {
         Date date=new Date();
         String year=sdf.format(date);
         String filetype=request.getParameter("filetype");
-        if(filetype.equals("请选择")||filetype.equals("null")){
+        if(filetype.equals("请�?�择")||filetype.equals("null")){
             filetype=null;
         }
         String com=request.getParameter("com");

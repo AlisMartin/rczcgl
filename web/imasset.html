@@ -6,11 +6,13 @@
     <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
     <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
+    <link href="third/webuploader/webuploader.css" rel="stylesheet" type="text/css"/>
     <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
     <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
     <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+    <script src="third/webuploader/webuploader.nolog.min.js"></script>
     <script src="js/assetsConfig/eximAssets.js"></script>
     <style>
         .right {
@@ -95,20 +97,72 @@
                             <form id="addform" action="" method="post">
                                 <div class="modal-body">
                                     <div class="row">
-                                        <div class="col-md-6" id="landAssetsLeft">
-
-                                        </div>
-                                        <div class="col-md-6" id="landAssetsRight">
-
-                                        </div>
+                                        <div class="col-md-6 landAssetsLeft"></div>
+                                        <div class="col-md-6 landAssetsRight"></div>
                                     </div>
-
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                                     <button type="button" class="btn btn-primary" id="saveAsset">保存</button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal" tabindex="-2" id="view" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">查看资产</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="viewform" action="" method="post">
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-6 landAssetsLeft"></div>
+                                        <div class="col-md-6 landAssetsRight"></div>
+                                    </div>
+                                    <table id="fileTable"></table>
+                                    <div id="map"></div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                    <!--<button type="button" class="btn btn-primary" id="saveAsset">保存</button>-->
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal" tabindex="-1" id="fileup" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">上传附件</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div id="uploader" class="wu-example">
+                                <div id="fileList" class="uploader-list"></div>
+                                <div id="picker">选择文件</div>
+                                <div id="uparea" style="border:1px dashed #f1f1f1;height: 100px;margin-top: 3%">
+                                    <div id="fontregion"
+                                         style="margin-top: 10%;margin-left: 44%;font-size: 30px;color:#f1f1f1"><span>文件上传区域</span>
+                                    </div>
+                                    <div id="fileInfo" class="fileinfo uploader-list"></div>
+                                </div>
+
+                                <div>
+                                    <button id="ctlBtn" type="button" class="btn btn-info" style="margin-top: 5%">开始上传
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-primary" id="savefile">保存</button>
+                            </div>
                         </div>
                     </div>
                 </div>

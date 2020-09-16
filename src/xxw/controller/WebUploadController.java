@@ -29,11 +29,12 @@ import java.util.UUID;
 @RequestMapping("/upload")
 public class WebUploadController {
     @Autowired
-    FlowMapper flowMapper;
+    private FlowMapper flowMapper;
 
     @RequestMapping("/fileupload")
     @ResponseBody
-    public String upload(HttpServletRequest request,MultipartFile file, String chunks,String chunk,String name,String zcid)throws IOException{
+    public ResponseObject upload(HttpServletRequest request,MultipartFile file, String chunks,String chunk,String name,String zcid)throws IOException{
+        ResponseObject responseObject = new ResponseObject();
         try{
             String tempPath = request.getRealPath("/") + "assetsfile/"+zcid+"/";
             if(file!=null){
@@ -49,7 +50,13 @@ public class WebUploadController {
                     }*/
                     FileUtils.copyInputStreamToFile(file.getInputStream(),destTempFile);
                     destTempFile.createNewFile();
-                    return "上传完毕";
+                    UUID uid=UUID.randomUUID();
+                    String id=uid.toString();
+                    flowMapper.insertManagerFile(id,name,parentFile.getPath(),null,null,null);
+                    responseObject.setCode(1);
+                    responseObject.setData(id);
+                    responseObject.setMessage("上传完毕");
+                    return responseObject;
                 }
                 String tempFileDir=tempPath+"\\part\\"+File.separator+name;
                 File parentFileDir=new File(tempFileDir);
@@ -66,7 +73,9 @@ public class WebUploadController {
                     File partFile=new File(tempFileDir,name+"_"+i+".part");
                     if(!partFile.exists()){
                         uploadDone=false;
-                        return "上传完毕";
+                        responseObject.setCode(1);
+                        responseObject.setMessage("上传完毕");
+                        return responseObject;
                     }
                 }
                 if(uploadDone){
@@ -81,12 +90,18 @@ public class WebUploadController {
                         FileUtils.deleteDirectory(parentFileDir);
                     }
                 }
-                return "上传完毕";
+                responseObject.setCode(1);
+                responseObject.setMessage("上传完毕");
+                return responseObject;
             }
-            return "上传完毕";
+            responseObject.setCode(1);
+            responseObject.setMessage("上传完毕");
+            return responseObject;
         }catch (Exception e){
             e.printStackTrace();
-            return "上传完毕";
+            responseObject.setCode(0);
+            responseObject.setMessage("上传出错");
+            return responseObject;
         }
     }
 

@@ -116,7 +116,7 @@ public class AssetsController {
         if (i == 1) {
             return new ResponseObject(1, "³É¹¦", "");
         } else {
-            return new ResponseObject(1, "Ê§°Ü", "");
+            return new ResponseObject(0, "Ê§°Ü", "");
         }
     }
 }
