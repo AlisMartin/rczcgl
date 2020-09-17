@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import xxw.po.AssetsConfig;
+import xxw.po.AssetsFile;
 import xxw.po.AssetsInfo;
 
 import java.util.List;
@@ -21,6 +22,8 @@ public interface AssetsMapper {
     List<Map<String,String>> getAssetsInfoByMap(@Param("zctype")String zctype);
     int insertConfig(AssetsConfig assetsConfig);
     int insertAssetsInfo(@Param("assetsMap")Map<String,String> assetsMap);
+    int updateAssetsInfo(@Param("assetsMap")Map<String,String> assetsMap);
     int updateConfig(AssetsConfig assetsConfig);
+    List<AssetsFile> getAssetFileListByZcid(@Param("zcid")String zcid);
 
 }

@@ -177,14 +177,6 @@ setTimeout(function(){
             //{field:"fieldname", title:'资产信息项'}
         ],
         queryParams:function(params){
-            //return param;
-            /*var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
-                //limit: params.limit, //页面大小
-                //offset: params.offset, //页码
-                //offset123: params, //页码
-                name: '公',
-                zctypes: [1,2]
-            };*/
             return JSON.stringify({
                 //limit: params.limit,
                 //offset: params.offset,

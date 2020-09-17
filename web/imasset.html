@@ -85,6 +85,7 @@
                 <table id="assetsTable" class="table table-hover tablemar">
                     <caption>资产信息表</caption>
                 </table>
+
                 <div class="modal" tabindex="-1" id="add" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -109,7 +110,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal" tabindex="-2" id="view" role="dialog">
+                <div class="modal" tabindex="-1" id="view" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -130,6 +131,30 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                                     <!--<button type="button" class="btn btn-primary" id="saveAsset">保存</button>-->
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal" tabindex="-1" id="editAssert" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">编辑资产</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="editform" action="" method="post">
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-6 landAssetsLeft"></div>
+                                        <div class="col-md-6 landAssetsRight"></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" id="editAsset">保存</button>
                                 </div>
                             </form>
                         </div>
@@ -162,6 +187,25 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                                 <button type="button" class="btn btn-primary" id="savefile">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal" tabindex="-1" id="filedown" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">附件下载</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <table id="filedownlist"></table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                <!--<button type="button" class="btn btn-primary" id="saveAsset">保存</button>-->
                             </div>
                         </div>
                     </div>

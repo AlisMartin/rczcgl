@@ -2,7 +2,7 @@ package xxw.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import xxw.po.AssetVO;
+import xxw.po.*;
 import xxw.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import xxw.mapper.AssetsMapper;
-import xxw.po.AssetsConfig;
-import xxw.po.AssetsInfo;
-import xxw.po.AssetsParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -118,5 +115,33 @@ public class AssetsController {
         } else {
             return new ResponseObject(0, "失败", "");
         }
+    }
+    @RequestMapping("/editAsset")
+    @ResponseBody
+    public ResponseObject editAsset(@RequestBody List<AssetVO> dto) {
+        Map<String, String> insertInfo = new HashMap<>();
+        for (AssetVO assetVO : dto) {
+            if (StringUtil.isNotEmpty(assetVO.getValue())) {
+                insertInfo.put(assetVO.getName(), assetVO.getValue());
+            }
+        }
+        int i = assetsMapper.updateAssetsInfo(insertInfo);
+        if (i == 1) {
+            return new ResponseObject(1, "成功", "");
+        } else {
+            return new ResponseObject(0, "失败", "");
+        }
+    }
+
+    @RequestMapping("/getAssetFileListByZcid")
+    @ResponseBody
+    public Map<String,Object> getAssetFileListByZcid(@RequestBody JSONObject json) {
+        Map<String,Object> res = new HashMap<>();
+        String zcid = json.getString("zcid");
+        List<AssetsFile> fileList = assetsMapper.getAssetFileListByZcid(zcid);
+        res.put("total",fileList.size());
+        res.put("rows",fileList);
+        res.put("msg","查询成功");
+        return res;
     }
 }

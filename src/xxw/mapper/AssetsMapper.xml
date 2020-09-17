@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="xxw.mapper.AssetsMapper">
     <resultMap id="AssetsResultMap" type="xxw.po.AssetsConfig">
-        <id column="ID" property="id" jdbcType="VARCHAR" />
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
         <result column="ZCTYPE" property="zctype" jdbcType="VARCHAR"/>
         <result column="FIELD" property="field" jdbcType="VARCHAR"/>
         <result column="FIELDNAME" property="fieldname" jdbcType="VARCHAR"/>
@@ -31,7 +31,7 @@
     <select id="getFieldByTypeAndName" resultType="String">
         select FIELD from ASSETS_CONFIG where FIELDNAME= '公司名称'
         <!--<if test="zctype !=null">-->
-            <!--and ZCTYPE= #{zctype,jdbcType=VARCHAR}-->
+        <!--and ZCTYPE= #{zctype,jdbcType=VARCHAR}-->
         <!--</if>-->
         and ZCTYPE in
         <foreach collection="zctypes" item="zctype" index="index" open="(" close=")" separator=",">
@@ -66,33 +66,40 @@
         </if>
         order by ID
     </select>
+    <select id="getAssetFileListByZcid" resultType="xxw.po.AssetsFile">
+        select * from ASSETS_FILE where 1=1
+        <if test="zcid !=null">
+            and ZCID= #{zcid,jdbcType=VARCHAR}
+        </if>
+    </select>
     <insert id="insertConfig" useGeneratedKeys="false" keyProperty="id" parameterType="java.lang.String">
         <selectKey resultType="String" keyProperty="id" order="BEFORE">
             select CONFIGSEQ.nextval as id from dual
         </selectKey>
-        insert into ASSETS_CONFIG("ID","ZCTYPE","FIELD","FIELDNAME","ORDER") VALUES (#{id,jdbcType=VARCHAR},#{zctype,jdbcType=VARCHAR},#{field,jdbcType=VARCHAR},#{fieldname,jdbcType=VARCHAR},#{order,jdbcType=VARCHAR})
+        insert into ASSETS_CONFIG("ID","ZCTYPE","FIELD","FIELDNAME","ORDER") VALUES
+        (#{id,jdbcType=VARCHAR},#{zctype,jdbcType=VARCHAR},#{field,jdbcType=VARCHAR},#{fieldname,jdbcType=VARCHAR},#{order,jdbcType=VARCHAR})
     </insert>
     <update id="updateConfig" parameterType="xxw.po.AssetsConfig">
         UPDATE ASSETS_CONFIG SET
-        <if test="id != null" >
+        <if test="id != null">
             ID= #{id,jdbcType=VARCHAR},
         </if>
-        <if test="zctype != null" >
+        <if test="zctype != null">
             ZCTYPE= #{zctype,jdbcType=VARCHAR},
         </if>
-        <if test="field != null" >
+        <if test="field != null">
             FIELD= #{field,jdbcType=VARCHAR},
         </if>
-        <if test="show != null" >
+        <if test="show != null">
             SHOW= #{show,jdbcType=VARCHAR},
         </if>
-        <if test="order != null" >
+        <if test="order != null">
             "ORDER"= #{order,jdbcType=VARCHAR},
         </if>
         where ID=#{id,jdbcType=VARCHAR}
     </update>
 
-    <insert id="insertAssetsInfo" parameterType="java.util.Map">
+    <insert id="insertAssetsInfo">
         insert into ASSETS_INFO(
         id,
         <foreach collection="assetsMap" item="value" index="key" separator=",">
@@ -106,4 +113,11 @@
         </foreach>
         )
     </insert>
+    <update id="updateAssetsInfo" parameterType="java.util.Map">
+        update ASSETS_INFO SET
+        <foreach collection="assetsMap" item="value" index="key" separator=",">
+            ${key} = #{value}
+        </foreach>
+        where zcid = #{assetsMap.zcid}
+    </update>
 </mapper>

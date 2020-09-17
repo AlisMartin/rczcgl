@@ -1,81 +1,84 @@
-var columns=[];
-var param={};
-var zcid="";
-var fileid="";
-$(function(){
+var columns = [];
+var param = {};
+var zcid = "";
+var fileid = "";
+$(function () {
     debugger;
-    var zctype=parent.document.getElementById("InfoList").src.split("?")[1].split("&&")[0];
-    zctype=zctype.substring(zctype.length-1,zctype.length);
-    param.zctype=zctype;
+    var zctype = parent.document.getElementById("InfoList").src.split("?")[1].split("&&")[0];
+    zctype = zctype.substring(zctype.length - 1, zctype.length);
+    param.zctype = zctype;
     //导入
-    $("#importAssets").click(function(){
+    $("#importAssets").click(function () {
         debugger;
         $("#assetsFile").click();
     });
     //导出
-    $("#exportAssets").click(function(){
+    $("#exportAssets").click(function () {
         exportAssetsInfo();
     });
     //新增资产
-    $("#addAsset").click(function(){
+    $("#addAsset").click(function () {
         $("#add").modal('show');
     });
-    $("#saveAsset").click(function(){
+    $("#saveAsset").click(function () {
         addAsset();
     });
-    $("#savefile").click(function(){
+    $("#editAsset").click(function () {
+        editAsset();
+    });
+    $("#savefile").click(function () {
         insertFile();
     });
 
-    $("#zctype").change(function(){
-        param.zctype=$('#zctype').val();
+    $("#zctype").change(function () {
+        param.zctype = $('#zctype').val();
         getcolumn();
         $('#assetsTable').bootstrapTable('destroy');
         $('#assetsTable').bootstrapTable({
-            url:'/rczcgl/assetsconfig/getAssetsInfo.action',
-            method:'get',
-            clickToSelect:true,
-            sidePagination:"client",
-            pagination:true,
-            pageNumber:1,
-            pageSize:5,
-            pageList:[5,10,20,50,100],
-            paginationPreText:"上一页",
-            paginationNextText:"下一页",
-            columns:columns,
-            queryParams:function(params){
+            url: '/rczcgl/assetsconfig/getAssetsInfo.action',
+            method: 'get',
+            clickToSelect: true,
+            sidePagination: "client",
+            pagination: true,
+            pageNumber: 1,
+            pageSize: 5,
+            pageList: [5, 10, 20, 50, 100],
+            paginationPreText: "上一页",
+            paginationNextText: "下一页",
+            columns: columns,
+            queryParams: function (params) {
                 return param;
             },
-            onLoadSuccess:function(){
+            onLoadSuccess: function () {
             },
-            onLoadError:function(){
+            onLoadError: function () {
             }
         })
     });
 
     //上传
-    $("#fileup").on('shown.bs.modal',function(){
+    $("#fileup").on('shown.bs.modal', function () {
         uploader = WebUploader.create({
-            auto:false,
+            auto: false,
             //swf路径
-            swf:'third/webuploader/Uploader.swf',
-            server:'/rczcgl/upload/fileupload.action',
-            pick:'#picker',
-            chunked:true,
-            chunkSize:200*1024*1024,
-            chunkRetry:3,
-            threads:1,
-            fileNumLimit:1,
-            fileSizeLimit:2000*1024*1024,
-            resize:false
+            swf: 'third/webuploader/Uploader.swf',
+            server: '/rczcgl/upload/fileupload.action',
+            pick: '#picker',
+            chunked: true,
+            chunkSize: 200 * 1024 * 1024,
+            chunkRetry: 3,
+            threads: 1,
+            fileNumLimit: 1,
+            fileSizeLimit: 2000 * 1024 * 1024,
+            resize: false
         });
-        uploader.on('fileQueued',function(file){
+        uploader.on('fileQueued', function (file) {
             $("div").remove("#fontregion");
-            $("#fileInfo").addClass('background-color','#f1f1f1');
-            $("#fileInfo").addClass('border-radius','10px');
+            $("#fileInfo").addClass('background-color', '#f1f1f1');
+            $("#fileInfo").addClass('border-radius', '10px');
             $("#fileInfo").html("");
-            $one=$("<div id='"+file.id+"'class='filename'>"+file.name+"</div>");
-            $two=$("<div id='state' class='zt'>等待上传......</div>");
+            $one = $("<div id='" + file.id + "'class='filename'>" + file.name + "</div>");
+            $two = $("<div id='state' class='zt'>等待上传......</div>");
             $("#fileInfo").append($one);
             $("#fileInfo").append($two);
         });
@@ -86,7 +89,7 @@ $(function(){
             // 避免重复创建
             if (!$percent.length) {
                 $percent = $('<div class="progress progress-striped active">' +
-                    '<div class="progress-bar" role="progressbar" style="width: 0%">'+percentage * 100+'%' +
+                    '<div class="progress-bar" role="progressbar" style="width: 0%">' + percentage * 100 + '%' +
                     '</div>' +
                     '</div>').appendTo($li).find('.progress-bar');
             }
@@ -95,16 +98,16 @@ $(function(){
         });
 
         //发送前填充数据
-        uploader.on( 'uploadBeforeSend', function( block, data ) {
+        uploader.on('uploadBeforeSend', function (block, data) {
             debugger;
             data.zcid = zcid;
         });
 
 
-        uploader.on('uploadSuccess', function (file,response) {
+        uploader.on('uploadSuccess', function (file, response) {
             $('#state').text('已上传');
             $('#' + file.id).find(".progress").find(".progress-bar").attr("class", "progress-bar progress-bar-success");
-            if(response.code == 1){
+            if (response.code == 1) {
                 fileid = response.data
             }
             alert(response.message);
@@ -145,60 +148,58 @@ $(function(){
         uploader.upload();//上传
     });
 
-    $('#fileup').on('hide.bs.modal',function(){
-        //$("#uparea").append('<div id="fontregion" style="margin-top: 10%;margin-left: 44%;font-size: 30px;color:#f1f1f1"><span>文件上传区域</span></div>');
+    $('#fileup').on('hide.bs.modal', function () {
         $("#fileInfo").empty();
         //$("#uparea").append
         uploader.destroy();
     });
 
 
-
     //获取动态列
     getcolumn();
     $('#assetsTable').bootstrapTable({
-        url:'/rczcgl/assetsconfig/getAssetsInfo.action',
-        method:'get',
-        clickToSelect:true,
-        sidePagination:"client",
-        pagination:true,
-        pageNumber:1,
-        pageSize:5,
-        pageList:[5,10,20,50,100],
-        paginationPreText:"上一页",
-        paginationNextText:"下一页",
-        columns:columns,
-        queryParams:function(params){
+        url: '/rczcgl/assetsconfig/getAssetsInfo.action',
+        method: 'get',
+        clickToSelect: true,
+        sidePagination: "client",
+        pagination: true,
+        pageNumber: 1,
+        pageSize: 5,
+        pageList: [5, 10, 20, 50, 100],
+        paginationPreText: "上一页",
+        paginationNextText: "下一页",
+        columns: columns,
+        queryParams: function (params) {
             return param;
         },
-        onLoadSuccess:function(){
+        onLoadSuccess: function () {
         },
-        onLoadError:function(){
+        onLoadError: function () {
         },
-        onClickCell:function(field,value,row,$element){
-            var a=$element;
-            var fieldname=a[0].innerText;
-            if(fieldname=="上传附件"){
-                $("#fileup").modal('show');
-                zcid=row.zcid;
-            }
+        onClickCell: function (field, value, row, $element) {
+            /*var a=$element;
+             var fieldname=a[0].innerText;
+             if(fieldname=="上传附件"){
+             $("#fileup").modal('show');
+             zcid=row.zcid;
+             }*/
         },
-        onCheck:function(row,$element){
+        onCheck: function (row, $element) {
             debugger;
-            var userId=row.id;
+            var userId = row.id;
             $.ajax({
-                type:"post",
-                url:"/rczcgl/user/getRoleByUserId.action",
-                sync:false,
-                data:{"userid":userId},
-                success:function(data){
+                type: "post",
+                url: "/rczcgl/user/getRoleByUserId.action",
+                sync: false,
+                data: {"userid": userId},
+                success: function (data) {
                     debugger;
                     $("#roleTable").bootstrapTable('uncheckAll');
-                    if(data!=""&&data!=null){
-                        $("#roleTable").bootstrapTable('checkBy',{field:'roleId',values:[data]});
+                    if (data != "" && data != null) {
+                        $("#roleTable").bootstrapTable('checkBy', {field: 'roleId', values: [data]});
                     }
                 },
-                error:function(){
+                error: function () {
                     alert("关联失败！")
                 }
             })
@@ -206,102 +207,132 @@ $(function(){
     })
 });
 
-function getcolumn(){
+function getcolumn() {
     debugger;
-    columns=[];
-    var zctype=$("#zctype").val();
-    var objfileup={
-        title:"附件上传",
-        field:'upfile',
-        formatter:function(value,row,index){
-            var html = "<a href='#' class='upfj'>上传附件</a>";
-            html += "<a href='#' class='view'>档案卡</a>";
-            return html;
-        }
-    };
+    columns = [];
+    var zctype = $("#zctype").val();
     $.ajax({
-        type:"post",
-        url:"/rczcgl/assetsconfig/getAllConfigInfo.action",
-        async:false,
-        data:param,
-        success:function(data){
-            for(var i=0;i<data.length;i++){
-                if(data[i].zctype=='1'){
-                    data[i].zctype="土地资产";
+        type: "post",
+        url: "/rczcgl/assetsconfig/getAllConfigInfo.action",
+        async: false,
+        data: param,
+        success: function (data) {
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].zctype == '1') {
+                    data[i].zctype = "土地资产";
                 }
-                if(data[i].zctype=='2'){
-                    data[i].zctype="房屋资产";
+                if (data[i].zctype == '2') {
+                    data[i].zctype = "房屋资产";
                 }
-                if(data[i].zctype=='3'){
-                    data[i].zctype="海域资产";
+                if (data[i].zctype == '3') {
+                    data[i].zctype = "海域资产";
                 }
-                var obj={};
-                obj.field=data[i].field;
-                obj.title=data[i].fieldname;
+                var obj = {};
+                obj.field = data[i].field;
+                obj.title = data[i].fieldname;
                 columns.push(obj);
 
-                var htmlLeft = '',htmlRight = '';
-                if(i%2 === 0){
-                    htmlLeft = htmlLeft + '<div class="form-group"> <label for="'+ data[i].field +'">'+ data[i].fieldname + '</label>'+
-                        '<input type="text" class="form-control" id="'+ data[i].field +'" name="'+ data[i].field +'"> </div>'
-                }else{
-                    htmlRight = htmlRight + '<div class="form-group"> <label for="'+ data[i].field +'">'+ data[i].fieldname + '</label>'+
-                        '<input type="text" class="form-control" id="'+ data[i].field +'" name="'+ data[i].field +'"> </div>'
+                var htmlLeft = '',
+                    htmlRight = '';
+                if (i % 2 === 0) {
+                    htmlLeft = htmlLeft + '<div class="form-group"> <label for="' + data[i].field + '">' + data[i].fieldname + '</label>' +
+                        '<input type="text" class="form-control" id="' + data[i].field + '" name="' + data[i].field + '"> </div>'
+                } else {
+                    htmlRight = htmlRight + '<div class="form-group"> <label for="' + data[i].field + '">' + data[i].fieldname + '</label>' +
+                        '<input type="text" class="form-control" id="' + data[i].field + '" name="' + data[i].field + '"> </div>'
                 }
                 $(".landAssetsLeft").append(htmlLeft);
                 $(".landAssetsRight").append(htmlRight);
             }
-            columns.push(objfileup);
+            $(".landAssetsLeft").append(' <input type="text" class="form-control" id="zcid" name="zcid" style="display: none"> ');
+            var toolCol = {
+                field: 'operate',
+                title: '操作',
+                formatter: btnGroup,    // 自定义方法，添加按钮组
+                events: {               // 注册按钮组事件
+                    'click #modRole': function (event, value, row, index) {
+                        $("#fileup").modal('show');
+                        zcid = row.zcid;
+                    },
+                    'click #modUser': function (event, value, row, index) {
+                        showInfo(row);
+                        loadData(row);
+                    },
+                    'click #edit': function (event, value, row, index) {
+                        loadData(row);
+                    },
+                    'click #filesdown': function (event, value, row, index) {
+                        showInfo(row);
+                    }
+                }
+            };
+            columns.push(toolCol);
         },
-        error:function(){
+        error: function () {
         }
     })
 }
 
-function exportAssetsInfo(){
+function exportAssetsInfo() {
     debugger;
     $.ajax({
-        type:"post",
-        url:"/rczcgl/export/exportAssets.action",
-        async:false,
-        data:param,
-        success:function(data){
-            var downloadA=document.createElement("a");
-            downloadA.setAttribute("href",data.data);
-            downloadA.setAttribute("target","_blank");
+        type: "post",
+        url: "/rczcgl/export/exportAssets.action",
+        async: false,
+        data: param,
+        success: function (data) {
+            var downloadA = document.createElement("a");
+            downloadA.setAttribute("href", data.data);
+            downloadA.setAttribute("target", "_blank");
             downloadA.click();
             downloadA.remove();
         },
-        error:function(){
+        error: function () {
         }
     })
 }
 
-function importAssetsInfo(){
+function importAssetsInfo() {
     debugger;
     $("#zclx").val(param.zctype);
-    var form=new FormData($("#assetsform")[0]);
-   $.ajax({
-        type:"post",
-        url:"/rczcgl/export/importAssets.action",
-        data:form,
-        async:false,
-        cache:false,
-        contentType:false,
-        processData:false,
-        success:function(data){
+    var form = new FormData($("#assetsform")[0]);
+    $.ajax({
+        type: "post",
+        url: "/rczcgl/export/importAssets.action",
+        data: form,
+        async: false,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (data) {
             alert("导入成功！");
             $("#assetsform")[0].reset();
             $('#assetsTable').bootstrapTable('refresh');
 
         },
-        error:function(){
+        error: function () {
             $("#assetsform")[0].reset();
         }
     })
 }
 
-function addAsset(){
+function btnGroup() {   // 自定义方法，添加操作按钮
+                        // data-target="xxx" 为点击按钮弹出指定名字的模态框
+    var html =
+        '<a href="####" class="btn btn-info" id="modUser" data-toggle="modal" data-target="#view" ' +
+        ' title="档案卡">' +
+        '<span class="glyphicon glyphicon-info-sign">档案卡</span></a>' +
+        '<a href="####" class="btn btn-primary" id="edit" data-toggle="modal" data-target="#editAssert" ' +
+        'style="margin-left:15px" title="编辑资产">' +
+        '<span class="glyphicon glyphicon-edit">编辑资产</span></a>'+
+        '<a href="####" class="btn btn-warning" id="modRole" title="上传附件" style="margin-left:15px">' +
+        '<span class="glyphicon glyphicon-upload">上传附件</span></a>' +
+        '<a href="####" class="btn btn-info" id="filesdown" data-toggle="modal" data-target="#filedown" style="margin-left:15px" title="下载附件">' +
+        '<span class="glyphicon glyphicon-download">下载附件</span></a>';
+    return html
+};
+
+function addAsset() {
     var arr = $("#addform").serializeArray();
     arr.push({name: "zctype", value: param.zctype});
     $.ajax({
@@ -320,18 +351,110 @@ function addAsset(){
     })
 }
 
-function insertFile(){
+function editAsset() {
+    var arr = $("#editform").serializeArray();
+    //arr.push({name: "zctype", value: param.zctype});
     $.ajax({
-        type:"post",
-        url:"/rczcgl/flow/insertFile.action",
-        data:JSON.stringify({'zcid':zcid,'fileid':fileid}),
+        type: "post",
+        url: "/rczcgl/assetsconfig/editAsset.action",
+        data: JSON.stringify(arr),
         contentType: "application/json;charset=UTF-8",
         datatype: "json",
-        success:function(resonsedata){
+        success: function (res) {
+            $('#assetsTable').bootstrapTable('refresh');
+            $("#editAssert").modal('hide');
+        },
+        error: function (res) {
+            alert("系统错误，请稍后重试！");
+        }
+    })
+}
+
+function insertFile() {
+    $.ajax({
+        type: "post",
+        url: "/rczcgl/flow/insertFile.action",
+        data: JSON.stringify({'zcid': zcid, 'fileid': fileid}),
+        contentType: "application/json;charset=UTF-8",
+        datatype: "json",
+        success: function (resonsedata) {
             alert("保存成功");
             $("#fileup").modal('hide');
         },
-        error:function(){
+        error: function () {
         }
     })
+}
+function showInfo(row) {
+    $("#fileTable").bootstrapTable('destroy');
+    $('#fileTable').bootstrapTable({
+        url: '/rczcgl/assetsconfig/getAssetFileListByZcid.action',
+        method: 'post',
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        clickToSelect: true,
+        sidePagination: "client",
+        pagination: true,
+        pageNumber: 1,
+        pageSize: 5,
+        pageList: [5, 10, 20, 50, 100],
+        paginationPreText: "上一页",
+        paginationNextText: "下一页",
+        columns: [{
+            field: 'filename',
+            title: '文件名称'
+        }, {
+            field: 'filepath',
+            title: '文件路径'
+        }],
+        queryParams: function (params) {
+            return JSON.stringify({
+                //limit: params.limit,
+                //offset: params.offset,
+                "zcid": row.zcid
+            });
+        },
+        onLoadSuccess: function () {
+            //$("#view").modal('show');
+        },
+        onLoadError: function () {
+        },
+        onClickCell: function (field, value, row, $element) {
+        },
+        onCheck: function (row, $element) {
+        }
+    })
+}
+
+function loadData(row) {
+    //var obj = eval("("+jsonStr+")");
+    var obj = row;
+    var key, value, tagName, type, arr;
+    for (x in obj) {
+        key = x;
+        value = obj[x];
+
+        $("[name='" + key + "'],[name='" + key + "[]']").each(function () {
+            tagName = $(this)[0].tagName;
+            type = $(this).attr('type');
+            if (tagName == 'INPUT') {
+                if (type == 'radio') {
+                    $(this).attr('checked', $(this).val() == value);
+                } else if (type == 'checkbox') {
+                    arr = value.split(',');
+                    for (var i = 0; i < arr.length; i++) {
+                        if ($(this).val() == arr[i]) {
+                            $(this).attr('checked', true);
+                            break;
+                        }
+                    }
+                } else {
+                    $(this).val(value);
+                }
+            } else if (tagName == 'SELECT' || tagName == 'TEXTAREA') {
+                $(this).val(value);
+            }
+
+        });
+    }
 }
