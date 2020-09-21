@@ -183,8 +183,27 @@
                                 </ul>
                             </div>
                         </li>-->
+                        <li class="nav-item ">
+                            <a class="nav-link" href="#" id="assetsSummary" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-fw fa-piggy-bank"></i> 资产汇总 </a>
+                            <div id="submenu-2" class="collapse submenu" style="">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#" id="landSummary">土地资产汇总</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#" id="houseSummary">房屋资产汇总</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#" id="seaSummary">海域资产汇总</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#" id="otherSummary">其他资产汇总</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" id="assetsManager" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-fw fa-rocket"></i> 资产信息管理 </a>
+                            <a class="nav-link" href="#" id="assetsManager" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-fw fa-rocket"></i> 资产管理 </a>
                             <div id="submenu-1" class="collapse submenu" style="">
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
@@ -202,20 +221,25 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="nav-item">
+                  <!--      <li class="nav-item">
                             <a class="nav-link" href="#" id="fileManager"><i class="fas fa-fw fa-chart-pie"></i> 资产附件管理 </a>
-                        </li>
+                        </li>-->
+
+                      <!--  <li class="nav-item ">
+                            <a class="nav-link" href="#" id="dataWarning"><i class="fab fa-fw fa-wpforms"></i>预报预警</a>
+                        </li>-->
                         <li class="nav-item ">
-                            <a class="nav-link" href="#" id="dataQuery"><i class="fab fa-fw fa-wpforms"></i>资产汇总</a>
+                            <a class="nav-link" href="#" id="assetsMap" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3" aria-controls="submenu-3"><i class="fa fa-fw fa-book"></i> 资产可视化 </a>
+                            <div id="submenu-3" class="collapse submenu" style="">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#" id="oneMap">资产一张图</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                         <li class="nav-item ">
                             <a class="nav-link" href="#" id="dataStatistic"><i class="fab fa-fw fa-wpforms"></i>资产统计</a>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link" href="#" id="dataWarning"><i class="fab fa-fw fa-wpforms"></i>预报预警</a>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link" href="#" id="oneMap"><i class="fab fa-fw fa-wpforms"></i>资产一张图</a>
                         </li>
                         <li class="nav-divider">
                             系统功能
@@ -224,9 +248,9 @@
                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-9" aria-controls="submenu-9"><i class="fas fa-f fa-folder"></i> 系统管理 </a>
                             <div id="submenu-9" class="collapse submenu" style="">
                                 <ul class="nav flex-column">
-                                    <li class="nav-item">
+                                  <!--  <li class="nav-item">
                                         <a class="nav-link" href="#" id="departManager">流程节点人员</a>
-                                    </li>
+                                    </li>-->
                                     <li class="nav-item">
                                         <a class="nav-link" href="#" id="userManager">用户管理</a>
                                     </li>
@@ -246,28 +270,28 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" id="sysConfig"><i class="fas fa-fw fa-inbox"></i> 系统配置 </a>
+                            <a class="nav-link" href="#" id="sysConfig"><i class="fas fa-fw fa-inbox"></i> 表单自定义 </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" id="logInfo"><i class="fas fa-fw fa-inbox"></i> 操作日志 </a>
+                            <a class="nav-link" href="#" id="logInfo"><i class="fas fa-fw fa-box"></i> 操作日志 </a>
                         </li>
                         <li class="nav-divider">
                             流程审批
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" id="nodeAddUser"><i class="fas fa-fw fa-inbox"></i> 流程节点审批人员配置 </a>
+                            <a class="nav-link" href="#" id="nodeAddUser"><i class="fas fa-fw fa-braille"></i> 节点审批人员配置 </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" id="FlowFileManager"><i class="fas fa-fw fa-inbox"></i> 文件管理 </a>
+                            <a class="nav-link" href="#" id="FlowFileManager"><i class="fas fa-fw fa-bus"></i> 文件管理 </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" id="FileFlowStart"><i class="fas fa-fw fa-inbox"></i> 文件流程发起 </a>
+                            <a class="nav-link" href="#" id="FileFlowStart"><i class="fas fa-fw fa-circle"></i> 文件流程发起 </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" id="FileFlowWork"><i class="fas fa-fw fa-inbox"></i> 文件流程审批 </a>
+                            <a class="nav-link" href="#" id="FileFlowWork"><i class="fas fa-fw fa-cloud"></i> 文件流程审批 </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" id="FileFlowWorks"><i class="fas fa-fw fa-inbox"></i> 文件流程审批 </a>
+                            <a class="nav-link" href="#" id="FileFlowWorks"><i class="fas fa-fw fa-plane"></i> 文件流程审批 </a>
                         </li>
                     </ul>
                 </div>

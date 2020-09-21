@@ -185,6 +185,7 @@ function insertConfig(){
     var zctype=$("#zctype").val();
     var fieldname=$("#fieldname").val();
     var order=$("#order").val();
+    var fieldType=$("#fieldType").val();
     var fieldlength="field";
     var flag=queryOrder(zctype,order);
 
@@ -203,7 +204,7 @@ function insertConfig(){
             type:"post",
             url:"/rczcgl/assetsconfig/insertConfig.action",
             sync:false,
-            data:{'fieldname':fieldname,'zctype':zctype,'field':fieldlength,'order':order,'show':'1'},
+            data:{'fieldname':fieldname,'zctype':zctype,'field':fieldlength,'order':order,'show':'1',fieldType:fieldType},
             success:function(data){
                 debugger;
                 if(data=='1'){
@@ -239,7 +240,7 @@ function queryOrder(zctype,order){
         data:{'zctype':zctype,'order':order},
         success:function(data){
             debugger;
-            if(data!=null){
+            if(data!=null&&data!=""){
                 flag=false;
             }
         },

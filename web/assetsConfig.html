@@ -70,6 +70,7 @@
                     <option value="1">土地资产</option>
                     <option value="2">房屋资产</option>
                     <option value="3">海域资产</option>
+                    <option value="4">其他资产</option>
                 </select>
                 <div style="float: right">
                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addConfig">
@@ -105,11 +106,20 @@
                                             <option value="1">土地资产</option>
                                             <option value="2">房屋资产</option>
                                             <option value="3">海域资产</option>
+                                            <option value="4">其他资产</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="fieldname">资产信息项</label>
                                         <input type="text" class="form-control" id="fieldname">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fieldType">字段类型</label>
+                                        <select class="form-control" id="fieldType">
+                                            <option value="1">字符串</option>
+                                            <option value="2">数字</option>
+                                            <option value="3">日期</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="fieldname">顺序</label>

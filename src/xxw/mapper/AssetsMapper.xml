@@ -79,8 +79,8 @@
         <selectKey resultType="String" keyProperty="id" order="BEFORE">
             select CONFIGSEQ.nextval as id from dual
         </selectKey>
-        insert into ASSETS_CONFIG("ID","ZCTYPE","FIELD","FIELDNAME","ORDER") VALUES
-        (#{id,jdbcType=VARCHAR},#{zctype,jdbcType=VARCHAR},#{field,jdbcType=VARCHAR},#{fieldname,jdbcType=VARCHAR},#{order,jdbcType=VARCHAR})
+        insert into ASSETS_CONFIG("ID","ZCTYPE","FIELD","FIELDNAME","ORDER","SHOW","FIELDTYPE") VALUES
+        (#{id,jdbcType=VARCHAR},#{zctype,jdbcType=VARCHAR},#{field,jdbcType=VARCHAR},#{fieldname,jdbcType=VARCHAR},#{order,jdbcType=VARCHAR},#{show,jdbcType=VARCHAR},#{fieldType,jdbcType=VARCHAR})
     </insert>
     <update id="updateConfig" parameterType="xxw.po.AssetsConfig">
         UPDATE ASSETS_CONFIG SET
