@@ -382,6 +382,9 @@
             and TYPE= #{type,jdbcType=VARCHAR}
         </if>
     </select>
+    <update id="updateFile" parameterType="java.lang.String" >
+        update ASSETS_FILE set ZCID=#{zcid} where FILEID=#{fileId}
+    </update>
     <insert id="insertManagerFile"   useGeneratedKeys="false" keyProperty="id"    parameterType="java.lang.String">
         <selectKey resultType="String" keyProperty="id" order="BEFORE">
             select FILE_SEQ.nextval as id from dual
