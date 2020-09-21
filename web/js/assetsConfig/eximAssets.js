@@ -2,6 +2,35 @@ var columns = [];
 var param = {};
 var zcid = "";
 var fileid = "";
+require(["esri/map",
+    "esri/layers/ArcGISDynamicMapServiceLayer",
+    "dojo/dom",
+    "dojo/on",
+    "esri/geometry/Point",
+    "esri/tasks/QueryTask",
+    "esri/SpatialReference",
+    "esri/tasks/query",
+    "esri/InfoTemplate",
+    "esri/symbols/SimpleMarkerSymbol",
+    "esri/symbols/SimpleLineSymbol",
+    "esri/symbols/SimpleFillSymbol",
+    "esri/Color",
+    "esri/layers/GraphicsLayer",
+    "esri/graphic",
+    "esri/layers/FeatureLayer",
+    "dojo/domReady!"], function (Map, ArcGISDynamicMapServiceLayer, dom, on, Point, QueryTask, SpatialReference, Query, InfoTemplate,
+                                 SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer, Graphic, FeatureLayer) {
+    map = new Map("newmap", {
+        basemap: "osm",  //topo-vector   For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
+        center: [122.376, 37.096], // longitude, latitude
+        zoom: 12
+    });
+    map = new Map("editmap", {
+        basemap: "osm",  //topo-vector   For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
+        center: [122.376, 37.096], // longitude, latitude
+        zoom: 12
+    });
+});
 $(function () {
     debugger;
     var zctype = parent.document.getElementById("InfoList").src.split("?")[1].split("&&")[0];
@@ -59,7 +88,7 @@ $(function () {
             paginationPreText: "上一页",
             paginationNextText: "下一页",
             columns: columns,
-            queryParamsType : "limit",
+            queryParamsType: "limit",
             queryParams: function (params) {
                 params.zctype = param.zctype;
                 return params;
@@ -169,19 +198,19 @@ $(function () {
         uploader.destroy();
     });
     //文件下载
-    $("#xiazai").click(function(){
+    $("#xiazai").click(function () {
         debugger;
-        var rowdata=$("#filedownlist").bootstrapTable('getSelections');
-        if(rowdata.length>0){
-            for(var i=0;i<rowdata.length;i++){
-                var downloadA=document.createElement("a");
-                downloadA.setAttribute("href","/rczcgl/"+rowdata[i].filepath+"/"+rowdata[i].filename);
-                downloadA.setAttribute("target","_blank");
-                downloadA.setAttribute("download",rowdata[i].filename);
+        var rowdata = $("#filedownlist").bootstrapTable('getSelections');
+        if (rowdata.length > 0) {
+            for (var i = 0; i < rowdata.length; i++) {
+                var downloadA = document.createElement("a");
+                downloadA.setAttribute("href", "/rczcgl/" + rowdata[i].filepath + "/" + rowdata[i].filename);
+                downloadA.setAttribute("target", "_blank");
+                downloadA.setAttribute("download", rowdata[i].filename);
                 downloadA.click();
                 downloadA.remove();
             }
-        }else{
+        } else {
             alert("请选择要下载的文件");
             return;
         }
@@ -207,7 +236,7 @@ $(function () {
         paginationPreText: "上一页",
         paginationNextText: "下一页",
         columns: columns,
-        queryParamsType : "limit",
+        queryParamsType: "limit",
         queryParams: function (params) {
             params.zctype = param.zctype;
             return params;
@@ -282,7 +311,7 @@ function getcolumn() {
             var toolCol = {
                 field: 'operate',
                 title: '操作',
-                width:'500px',
+                width: '500px',
                 class: 'toolCol',
                 formatter: btnGroup,    // 自定义方法，添加按钮组
                 events: {               // 注册按钮组事件
@@ -353,14 +382,14 @@ function importAssetsInfo() {
 }
 
 function btnGroup() {   // 自定义方法，添加操作按钮
-                        // data-target="xxx" 为点击按钮弹出指定名字的模态框
+    // data-target="xxx" 为点击按钮弹出指定名字的模态框
     var html =
         '<a href="####" class="btn btn-info" id="modUser" data-toggle="modal" data-target="#view" ' +
         ' title="档案卡">' +
         '<span class="glyphicon glyphicon-info-sign">档案卡</span></a>' +
         '<a href="####" class="btn btn-primary" id="edit" data-toggle="modal" data-target="#editAssert" ' +
         'style="margin-left:15px" title="编辑资产">' +
-        '<span class="glyphicon glyphicon-edit">编辑资产</span></a>'+
+        '<span class="glyphicon glyphicon-edit">编辑资产</span></a>' +
         '<a href="####" class="btn btn-warning" id="modRole" title="上传附件" style="margin-left:15px">' +
         '<span class="glyphicon glyphicon-upload">上传附件</span></a>' +
         '<a href="####" class="btn btn-info" id="filesdown" data-toggle="modal" data-target="#filedown" style="margin-left:15px" title="下载附件">' +
@@ -469,8 +498,8 @@ function showInfoDown(row) {
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         clickToSelect: true,
-        checkbox:true,
-        singleSelect:true,
+        checkbox: true,
+        singleSelect: true,
         sidePagination: "client",
         pagination: true,
         pageNumber: 1,
@@ -479,7 +508,7 @@ function showInfoDown(row) {
         paginationPreText: "上一页",
         paginationNextText: "下一页",
         columns: [
-            {checkbox:true},
+            {checkbox: true},
             {field: 'filename', title: '文件名称'},
             {field: 'filepath', title: '文件路径'}
         ],

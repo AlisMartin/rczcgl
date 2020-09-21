@@ -15,18 +15,21 @@ require(["esri/map",
     "esri/symbols/SimpleMarkerSymbol",
     "esri/symbols/SimpleLineSymbol",
     "esri/symbols/SimpleFillSymbol",
+    "esri/Color",
     "esri/layers/GraphicsLayer",
     "esri/graphic",
     "esri/layers/FeatureLayer",
     "dojo/domReady!"], function (Map, ArcGISDynamicMapServiceLayer, dom, on, Point, QueryTask, SpatialReference, Query, InfoTemplate,
-                                 SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, GraphicsLayer, Graphic, FeatureLayer) {
+                                 SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer, Graphic, FeatureLayer) {
     map = new Map("map", {
         basemap: "osm",  //topo-vector   For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
         center: [122.376, 37.096], // longitude, latitude
         zoom: 12
     });
-    var dynamicMapServiceLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/TEST4326/MapServer", {
-    });
+    var myinfotemplate = new InfoTemplate("Attributes", "Statsdfsfsdfse Name: ${STATE_NAME}<br>Population: ${Pop2001}");
+    var dynamicMapServiceLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/TEST4326/MapServer"
+        , {infotemplate:myinfotemplate});
+    var graphicsLayer = new GraphicsLayer();
     map.addLayer(dynamicMapServiceLayer);
 
     //对checkbox数组进行变量把选中的id添加到visible
@@ -37,8 +40,7 @@ require(["esri/map",
     function getLayersId(){
         var visible = [-1];
         $("input[name='ckb']:checkbox").each(function() {
-            if($(this).is(":checked"))
-            {
+            if($(this).is(":checked")) {
                 visible.push($(this).attr("value"));
             }
         });
@@ -46,12 +48,61 @@ require(["esri/map",
     }
 
 
+    map.on("click",mapClick);
+    //获得点击的地图坐标(点坐标)，并创建空间查询参数对象
+    function mapClick(e){
+        //获得用户点击的地图坐标
+        var point=e.mapPoint;
+        //实例化查询参数
+        query=new Query();
+        query.geometry = point;
+        query.outFields = ["*"];
+        query.outSpatialReference = map.spatialReference;
+        query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
+        query.returnGeometry = true;
+        //实例化查询对象
+        var queryTask = new QueryTask("http://localhost:6080/arcgis/rest/services/TEST/MapServer/0");
+        //进行查询
+        queryTask.execute(query,showFindResult)
+
+    }
+    function showFindResult(queryResult) {
+        if (queryResult.features == 0) {
+            //alert("没有该元素");
+            return;
+        }
+        for (var i = 0; i < queryResult.features.length; i++) {
+            //获得该图形的形状
+            var feature = queryResult.features[i];
+            var geometry = feature.geometry;
+            //定义高亮图形的符号
+            //1.定义面的边界线符号
+            var outline= new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT,new Color([255, 0, 0]), 1);
+            //2.定义面符号
+            var PolygonSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, outline,new Color([0, 255, 0, 1]));
+            //创建客户端图形
+            var infoTemplate = new InfoTemplate("属性", "资产名称: ${NAME}<br>资产金额: ${NUM}");
+            var attr = {
+                "NAME": feature.attributes.XMC,
+                "NUM": feature.attributes.TBMJ
+            };
+            var graphic = new Graphic(geometry, PolygonSymbol,attr,infoTemplate);
+            //将客户端图形添加到map中
+            map.graphics.clear();
+            map.graphics.add(graphic);
+            map.infoWindow.show(geometry.getExtent().getCenter());
+            map.infoWindow.setFeatures([graphic]);
+            map.centerAndZoom(geometry.getExtent().getCenter(),15);
+            //graphicsLayer.add(graphic);
+        }
+    }
+
     var zctypes = [1,2];
 
     $("#search").click(function () {
         var queryType = $("#searchCon").val();
         var zctypes = [1,2];
-        $.ajax({
+        /*$.ajax({
             async:false,
             type: "post",
             url: "/rczcgl/assetsconfig/getAssetsInfoByName.action",
@@ -59,12 +110,14 @@ require(["esri/map",
             contentType: "application/json;charset=UTF-8",
             datatype: "json",
             success: function (res) {
-                $("#assetsTable").bootstrapTable('load', res.data);
+                //$("#assetsTable").bootstrapTable('load', res.data);
+                loadRes(queryType,zctypes);
             },
             error: function (res) {
                 alert("系统错误，请稍后重试！");
             }
-        })
+        })*/
+        loadRes(queryType,zctypes);
 
     });
     /*//on(dom.byId("Btn"),"click",function(e){
@@ -145,7 +198,8 @@ require(["esri/map",
      }*/
 });
 
-setTimeout(function(){
+function loadRes(queryType,zctypes){
+    $('#assetsTable').bootstrapTable('destroy');
     $('#assetsTable').bootstrapTable({
         url:'/rczcgl/assetsconfig/getAssetsInfoByName.action',
         method:'post',
@@ -160,7 +214,7 @@ setTimeout(function(){
         paginationPreText:"上一页",
         paginationNextText:"下一页",
         columns:[
-            {checkbox:true},
+            //{checkbox:true},
             {field:'id', title:'ID'},
             {field:'zctype', title:'资产类型',
                 formatter:function(value,row,index){
@@ -180,12 +234,16 @@ setTimeout(function(){
             return JSON.stringify({
                 //limit: params.limit,
                 //offset: params.offset,
-                "name": '公',
-                "zctypes": [1,2]});
+                "name": queryType,
+                "zctypes": zctypes});
         },
         onLoadSuccess:function(){
         },
         onLoadError:function(){
+        },
+        onClickCell: function (field, value, row, $element) {
+            //todo
+            //点击获取图形，定位
         }
     });
 /*//得到查询的参数
@@ -198,4 +256,4 @@ setTimeout(function(){
         };
         return temp;
     };*/
-}, 5000);
+};

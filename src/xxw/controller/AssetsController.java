@@ -100,8 +100,8 @@ public class AssetsController {
         field4=info.size()>1?info.get(3):null;
         List<AssetsInfo> infoList=assetsMapper.getAssetsInfoByName(StringUtil.formatLike(name),field1,field2,field3,field4);
         if (infoList.size()>0){
-            res.put("code",1);
-            res.put("data",infoList);
+            res.put("total",infoList.size());
+            res.put("rows",infoList);
             return  res;
         }else{
             res.put("code",0);
