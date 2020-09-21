@@ -52,7 +52,7 @@ public class WebUploadController {
                     destTempFile.createNewFile();
                     UUID uid=UUID.randomUUID();
                     String id=uid.toString();
-                    flowMapper.insertManagerFile(id,name,parentFile.getPath(),null,null,null);
+                    flowMapper.insertManagerFile(id,name,"assetsfile/"+zcid+"/",null,null,null);
                     responseObject.setCode(1);
                     responseObject.setData(id);
                     responseObject.setMessage("上传完毕");

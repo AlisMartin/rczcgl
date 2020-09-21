@@ -17,6 +17,7 @@
     <style>
         .right {
             float: right;
+            margin-left: 12px;
         }
 
         .labelstyle {
@@ -72,14 +73,14 @@
                     <input type="file" name="file" id="assetsFile" onchange="importAssetsInfo()"
                            style="display: none;"/>
                     <input type="text" name="zctype" id="zclx" style="display: none;"/>
-                    <button type="button" class="btn btn-info" id="addAsset" name="addAsset">
-                        <span class="glyphicon glyphicon-plus"></span>新增资产
+                    <button type="button" class="btn btn-info right" id="exportAssets" name="exportAssets">
+                        <span class="glyphicon glyphicon-folder-open"></span>导出
                     </button>
                     <button type="button" class="btn btn-primary right" id="importAssets" name="importAssets">
                         <span class="glyphicon glyphicon-folder-open"></span>导入
                     </button>
-                    <button type="button" class="btn btn-info right" id="exportAssets" name="exportAssets">
-                        <span class="glyphicon glyphicon-folder-open"></span>导出
+                    <button type="button" class="btn btn-info right" id="addAsset" name="addAsset">
+                        <span class="glyphicon glyphicon-plus"></span>新增资产
                     </button>
                 </form>
                 <table id="assetsTable" class="table table-hover tablemar">
@@ -201,6 +202,9 @@
                                 </button>
                             </div>
                             <div class="modal-body">
+                                <button type="button" class="btn btn-info" id="xiazai">
+                                    <span class="glyphicon glyphicon-download"></span>下载附件
+                                </button>
                                 <table id="filedownlist"></table>
                             </div>
                             <div class="modal-footer">

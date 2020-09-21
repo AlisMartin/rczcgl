@@ -2,6 +2,9 @@ package xxw.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import xxw.po.*;
 import xxw.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,10 +68,18 @@ public class AssetsController {
     }
     @RequestMapping("/getAssetsInfo")
     @ResponseBody
-    public List<AssetsInfo> getAssetsInfo(HttpServletRequest request,AssetsConfig assetsConfig){
-        List<AssetsInfo> info=assetsMapper.getAssetsInfo(assetsConfig.getZctype());
-        if(info.size()>0){
-            return  info;
+    public Map<String,Object> getAssetsInfo(HttpServletRequest request,AssetsConfig assetsConfig){
+        Map<String,Object> res = new HashMap<>();
+        int offset = Integer.parseInt(request.getParameter("offset"));
+        int limit = Integer.parseInt(request.getParameter("limit"));
+
+        Page page = PageHelper.startPage(limit,offset);
+        List<AssetsInfo> info=assetsMapper.getAssetsInfo(assetsConfig.getZctype());//,request.getParameter("offset"), request.getParameter("limit")
+        PageInfo pageInfo = new PageInfo<>(info);
+        if(pageInfo.getList().size()>0){
+            res.put("total",page.getTotal());
+            res.put("rows",pageInfo.getList());
+            return  res;
         }else{
             return null;
         }

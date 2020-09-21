@@ -38,6 +38,10 @@ $(function () {
             url: '/rczcgl/assetsconfig/getAssetsInfo.action',
             method: 'get',
             clickToSelect: true,
+            search:true,
+            showSearchButton:true,
+            showSearchClearButton:true,
+            searchAlign:left,
             sidePagination: "client",
             pagination: true,
             pageNumber: 1,
@@ -47,7 +51,8 @@ $(function () {
             paginationNextText: "下一页",
             columns: columns,
             queryParams: function (params) {
-                return param;
+                params.zctype = param.zctype;
+                return params;
             },
             onLoadSuccess: function () {
             },
@@ -153,6 +158,25 @@ $(function () {
         //$("#uparea").append
         uploader.destroy();
     });
+    //文件下载
+    $("#xiazai").click(function(){
+        debugger;
+        var rowdata=$("#filedownlist").bootstrapTable('getSelections');
+        if(rowdata.length>0){
+            for(var i=0;i<rowdata.length;i++){
+                var downloadA=document.createElement("a");
+                downloadA.setAttribute("href","/rczcgl/"+rowdata[i].filepath+"/"+rowdata[i].filename);
+                downloadA.setAttribute("target","_blank");
+                downloadA.setAttribute("download",rowdata[i].filename);
+                downloadA.click();
+                downloadA.remove();
+            }
+        }else{
+            alert("请选择要下载的文件");
+            return;
+        }
+
+    })
 
 
     //获取动态列
@@ -161,7 +185,11 @@ $(function () {
         url: '/rczcgl/assetsconfig/getAssetsInfo.action',
         method: 'get',
         clickToSelect: true,
-        sidePagination: "client",
+        search:true,
+        showSearchButton:true,
+        showSearchClearButton:true,
+        searchAlign:"left",
+        sidePagination: "server",
         pagination: true,
         pageNumber: 1,
         pageSize: 5,
@@ -170,19 +198,14 @@ $(function () {
         paginationNextText: "下一页",
         columns: columns,
         queryParams: function (params) {
-            return param;
+            params.zctype = param.zctype;
+            return params;
         },
         onLoadSuccess: function () {
         },
         onLoadError: function () {
         },
         onClickCell: function (field, value, row, $element) {
-            /*var a=$element;
-             var fieldname=a[0].innerText;
-             if(fieldname=="上传附件"){
-             $("#fileup").modal('show');
-             zcid=row.zcid;
-             }*/
         },
         onCheck: function (row, $element) {
             debugger;
@@ -262,7 +285,7 @@ function getcolumn() {
                         loadData(row);
                     },
                     'click #filesdown': function (event, value, row, index) {
-                        showInfo(row);
+                        showInfoDown(row);
                     }
                 }
             };
@@ -330,7 +353,7 @@ function btnGroup() {   // 自定义方法，添加操作按钮
         '<a href="####" class="btn btn-info" id="filesdown" data-toggle="modal" data-target="#filedown" style="margin-left:15px" title="下载附件">' +
         '<span class="glyphicon glyphicon-download">下载附件</span></a>';
     return html
-};
+}
 
 function addAsset() {
     var arr = $("#addform").serializeArray();
@@ -407,6 +430,46 @@ function showInfo(row) {
             field: 'filepath',
             title: '文件路径'
         }],
+        queryParams: function (params) {
+            return JSON.stringify({
+                //limit: params.limit,
+                //offset: params.offset,
+                "zcid": row.zcid
+            });
+        },
+        onLoadSuccess: function () {
+            //$("#view").modal('show');
+        },
+        onLoadError: function () {
+        },
+        onClickCell: function (field, value, row, $element) {
+        },
+        onCheck: function (row, $element) {
+        }
+    })
+}
+function showInfoDown(row) {
+    $("#filedownlist").bootstrapTable('destroy');
+    $('#filedownlist').bootstrapTable({
+        url: '/rczcgl/assetsconfig/getAssetFileListByZcid.action',
+        method: 'post',
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        clickToSelect: true,
+        checkbox:true,
+        singleSelect:true,
+        sidePagination: "client",
+        pagination: true,
+        pageNumber: 1,
+        pageSize: 5,
+        pageList: [5, 10, 20, 50, 100],
+        paginationPreText: "上一页",
+        paginationNextText: "下一页",
+        columns: [
+            {checkbox:true},
+            {field: 'filename', title: '文件名称'},
+            {field: 'filepath', title: '文件路径'}
+        ],
         queryParams: function (params) {
             return JSON.stringify({
                 //limit: params.limit,
