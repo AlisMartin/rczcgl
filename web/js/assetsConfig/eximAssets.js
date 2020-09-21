@@ -29,6 +29,15 @@ $(function () {
     $("#savefile").click(function () {
         insertFile();
     });
+    $("#search").click(function () {
+        $('#table').bootstrapTable('refreshOptions', {
+            queryParams: function (params) {
+                params.zctype = param.zctype;
+                params.gsmc = $("#gsmc").val();
+                return params;
+            }
+        })
+    });
 
     $("#zctype").change(function () {
         param.zctype = $('#zctype').val();
@@ -38,11 +47,11 @@ $(function () {
             url: '/rczcgl/assetsconfig/getAssetsInfo.action',
             method: 'get',
             clickToSelect: true,
-            search:true,
-            showSearchButton:true,
-            showSearchClearButton:true,
-            searchAlign:left,
-            sidePagination: "client",
+            //search:true,
+            //showSearchButton:true,
+            //showSearchClearButton:true,
+            //searchAlign:left,
+            sidePagination: "server",
             pagination: true,
             pageNumber: 1,
             pageSize: 5,
@@ -50,6 +59,7 @@ $(function () {
             paginationPreText: "上一页",
             paginationNextText: "下一页",
             columns: columns,
+            queryParamsType : "limit",
             queryParams: function (params) {
                 params.zctype = param.zctype;
                 return params;
@@ -185,10 +195,10 @@ $(function () {
         url: '/rczcgl/assetsconfig/getAssetsInfo.action',
         method: 'get',
         clickToSelect: true,
-        search:true,
-        showSearchButton:true,
-        showSearchClearButton:true,
-        searchAlign:"left",
+        //search:true,
+        //showSearchButton:true,
+        //showSearchClearButton:true,
+        //searchAlign:"left",
         sidePagination: "server",
         pagination: true,
         pageNumber: 1,
@@ -197,6 +207,7 @@ $(function () {
         paginationPreText: "上一页",
         paginationNextText: "下一页",
         columns: columns,
+        queryParamsType : "limit",
         queryParams: function (params) {
             params.zctype = param.zctype;
             return params;
@@ -271,6 +282,8 @@ function getcolumn() {
             var toolCol = {
                 field: 'operate',
                 title: '操作',
+                width:'500px',
+                class: 'toolCol',
                 formatter: btnGroup,    // 自定义方法，添加按钮组
                 events: {               // 注册按钮组事件
                     'click #modRole': function (event, value, row, index) {

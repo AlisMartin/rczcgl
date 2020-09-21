@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
     <title></title>
     <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
@@ -26,6 +28,7 @@
 
         .left {
             float: left;
+            margin-right: 12px;
         }
 
         .checkboxstyle {
@@ -53,6 +56,11 @@
 
         .tablemar {
             margin-top: 1%;
+            /*display: table;*/
+            /*table-layout:fixed;*/
+        }
+        .toolCol .th-inner {
+            width:500px !important;
         }
 
         .colorsty {
@@ -73,6 +81,10 @@
                     <input type="file" name="file" id="assetsFile" onchange="importAssetsInfo()"
                            style="display: none;"/>
                     <input type="text" name="zctype" id="zclx" style="display: none;"/>
+
+                    <input type="text" class="form-control left" id="gsmc" name="gsmc" placeholder="请输入公司名称" style="width: 13%">
+                    <button type="button" class="btn btn-primary left">查询</button>
+
                     <button type="button" class="btn btn-info right" id="exportAssets" name="exportAssets">
                         <span class="glyphicon glyphicon-folder-open"></span>导出
                     </button>

@@ -72,12 +72,13 @@ public class AssetsController {
         Map<String,Object> res = new HashMap<>();
         int offset = Integer.parseInt(request.getParameter("offset"));
         int limit = Integer.parseInt(request.getParameter("limit"));
-
-        Page page = PageHelper.startPage(limit,offset);
-        List<AssetsInfo> info=assetsMapper.getAssetsInfo(assetsConfig.getZctype());//,request.getParameter("offset"), request.getParameter("limit")
+        String gsmc = request.getParameter("gsmc");
+        int pageNumber = offset==0?1:offset/limit + 1;
+        Page page = PageHelper.startPage(pageNumber,limit);
+        List<AssetsInfo> info=assetsMapper.getAssetsInfo(assetsConfig.getZctype());
         PageInfo pageInfo = new PageInfo<>(info);
         if(pageInfo.getList().size()>0){
-            res.put("total",page.getTotal());
+            res.put("total",pageInfo.getTotal());
             res.put("rows",pageInfo.getList());
             return  res;
         }else{
