@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xxw.mapper.FileMapper">
+    <select id="queryFileByParam" parameterType="java.lang.String" resultType="xxw.po.FileInfo">
+        select * from ASSETS_FILE where 1=1
+        <if test="fileName !=null">
+            and FILENAME= #{fileName,jdbcType=VARCHAR}
+        </if>
+        <if test="fileId !=null">
+            and FILEID= #{fileId,jdbcType=VARCHAR}
+        </if>
+    </select>
+</mapper>

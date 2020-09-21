@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
+    <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
+    <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="third/jquery.cookie.js"></script>
+    <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+    <script src="js/common/common.js"></script>
+    <script src="js/dataStatistic/dataStatistic.js"></script>
+    <script src="third/echarts.min.js"></script>
+    <style>
+        .fonts{
+            font-size: 15px;
+            background-color: #f1f1f1 !important;
+        }
+        .colorsty{
+            background: #efeff6;
+        }
+        .height{
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="colorsty">
+<div class="container-fluid" id="ifrmheight">
+    <ol class="breadcrumb fonts">
+    </ol>
+    <div style="height: 100%;margin-top: -6%">
+        <div class="panel panel-default" style="height: 98%;z-index: 1000;margin-top: 6%;width: 100%;">
+            <div class="panel-body height">
+            <div class="row height">
+                <div class="col-md-3 height">
+                    <div class="panel panel-default height">
+                        <div class="panel-heading">统计条件设置</div>
+                        <div class="panel-body">
+                            <form class="form" role="form">
+                                <div class="form-group">
+                                    <label for="sjDate">数据年份</label>
+                                       <select id="sjDate" class="form-control">
+                                           <option value="2018">2018</option>
+                                           <option value="2019">2019</option>
+                                           <option value="2020">2020</option>
+                                       </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="zclx">资产类型</label>
+                                        <select id="zclx" class="form-control">
+                                            <option value="1">土地</option>
+                                            <option value="2">房屋</option>
+                                            <option value="3">海域</option>
+                                            <option value="4">其他</option>
+                                        </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tjsx">统计属性</label>
+                                        <select id="tjsx" class="form-control">
+                                            <option value="1">资产汇总</option>
+                                            <option value="2">房屋出租</option>
+                                            <option value="3">融资期限</option>
+                                        </select>
+                                </div>
+                                        <button type="button" class="btn btn-default">统计分析</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9 height">
+                    <div class="row" style="height: 48%">
+                        <div class="col-md-6 height"><div id="zxechart" style="width: 100%;height: 100%"></div></div>
+                        <div class="col-md-6 height"><div id="zzechart" style="width: 100%;height: 100%"></div></div>
+                    </div>
+                    <div class="row" style="height: 48%">
+                        <div class="col-md-6 height"><div id="sxechart"  style="width: 100%;height: 100%"></div></div>
+                        <div class="col-md-6 height"><div id="sdechart"  style="width: 100%;height: 100%"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('ifrmheight').style.height=parent.window.document.getElementById('chartheight').scrollHeight*0.883+"px";
+    </script>
+</div>
+</body>
+</html>

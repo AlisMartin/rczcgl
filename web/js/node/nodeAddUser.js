@@ -109,6 +109,7 @@ $(function(){
             async:false,
             success:function(data){
                 alert("关联成功！");
+                $("#nodeTable").bootstrapTable('refresh');
             },
             error:function(){
                 alert("系统错误！");

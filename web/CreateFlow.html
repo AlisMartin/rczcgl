@@ -7,12 +7,20 @@
     <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
     <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
     <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="third/jquery.cookie.js"></script>
     <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
     <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
-    <script src="js/assetsConfig/assetsConfig.js"></script>
+    <script src="js/common/common.js"></script>
+    <script src="js/Flow/createFlow.js"></script>
     <style>
+        .tableborder{
+            border: 0;
+        }
+        .font{
+            text-align: center;
+        }
         .uploadbtn{
             margin-top: 10%;
             margin-left: 45%;
@@ -47,51 +55,103 @@
         <div class="panel panel-default" style="height: 80%;z-index: 1000;margin-top: 8%;width: 96%;margin-left: 2%">
             <div class="panel-body">
                 <div style="float: right">
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addConfig">
+                    <button type="button" class="btn btn-info"  id="fqlc">
                         <span class="glyphicon glyphicon-plus"></span>发起流程
                     </button>
                 </div>
-                <table id="flowTable" class="table table-hover tablemar">
+
+                <table id="flowInstanceTable" class="table table-hover tablemar">
                     <caption>流程信息一览表</caption>
                 </table>
-                <div class="modal" tabindex="-1" id="addConfig" role="dialog">
+                <div class="modal" tabindex="-1" id="addFlow" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">借据流程发起单</h5>
+                                <h5 class="modal-title">文件处理签条</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <form id="addform">
+                            <form id="addFlowForm">
                                 <div class="modal-body">
-                                    <div class="form-group">
-                                        <label for="createUser">发起人</label>
-                                        <input type="text" class="form-control" id="createUser">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="createDate">发起时间</label>
-                                        <input type="text" class="form-control" id="createDate">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="payInfo">费用申请明细</label>
-                                        <input type="text" class="form-control" id="payInfo">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="payReason">申请说明</label>
-                                        <input type="text" class="form-control" id="payReason">
-                                    </div>
+                                    <input type="hidden" id="user" name="user">
+                                    <input type="hidden" name="sqInfo"id="jsusers"/>
+                                    <table class="table table-bordered" id="flowtable">
+                                        <thead><th colspan="4" class="tableborder">文件处理签条</th></thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>发起人</td>
+                                            <td><input type="text" name="fqr" id="fqr" class="tableborder"/></td>
+                                            <td>发起时间</td>
+                                            <td><input type="text"  id="startDate" name="startDate" class="tableborder"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>来文机关</td>
+                                            <td><input type="text" id="lwjg" class="tableborder" name="lwjg"/></td>
+                                            <td>收文文号</td>
+                                            <td><input type="text" id="swwh" class="tableborder" name="swwh"/></td>
+                                        </tr>
+                                     <tr>
+                                            <td rowspan="2" class="font">收文时间</td>
+                                            <td rowspan="2" class="font"><input type="text" id="swsj" class="tableborder" name="swsj"/> </td>
+                                            <td>是否督办</td>
+                                            <td><input type="text" id="sfdb" class="tableborder" name="sfdb"/></td>
+                                     </tr>
+                                        <tr>
+                                            <td>督办时限</td>
+                                            <td><input type="text" id="dbsx" class="tableborder" name="dbsx"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td >文件名称</td>
+                                            <td colspan="3"><input type="text" id="wjmc" class="tableborder" name="wjmc"/> </td>
+                                        </tr>
+                                        <tr></tr>
+                                        <tr>
+                                            <td class="font">办文意见</td>
+                                            <td colspan="3"><input type="text" id="bwyj" class="tableborder" name="bwyj"/> </td>
+                                        </tr>
+                                        <tr></tr>
+                                        <tr>
+                                            <td class="font">领导批示</td>
+                                            <td colspan="3"><input type="text" id="ldps" class="tableborder" name="ldps"/> </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <button type="button" class="btn btn-primary" id="openFileModal">选择文件接收人员</button>
                                 </div>
                                 <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" id="saveConfig">发起</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                                    <button type="button" class="btn btn-primary" id="saveConfig">保存</button>
+
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
+
+                <div class="modal" tabindex="-1" id="treeModal" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">组织机构</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                                <div class="modal-body">
+                                    <tree id="departtree"></tree>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" id="saveUsers">确定</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
     </div>
     <script>
         document.getElementById('ifrmheight').style.height=parent.window.document.getElementById('chartheight').scrollHeight*0.883+"px";

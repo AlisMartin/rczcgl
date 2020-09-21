@@ -13,8 +13,21 @@
    <select id="getUserByName" parameterType="java.lang.String">
        SELECT USERNAME FROM SYS_USER WHERE USERNAME=#{username,jdbcType=VARCHAR}
    </select>
-    <select id="getUser" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="getUser" parameterType="java.lang.String" resultType="xxw.po.User">
         SELECT  *  FROM SYS_USER WHERE USERNAME=#{username,jdbcType=VARCHAR} and PASSWORD=#{password,jdbcType=VARCHAR}
+    </select>
+    <select id="queryUser" parameterType="java.lang.String" resultType="xxw.po.User">
+        SELECT  *  FROM SYS_USER WHERE 1=1
+        <if test="id != null">
+            AND  ID = #{id,jdbcType=VARCHAR}
+        </if>
+        <if test="username != null">
+            AND  USERNAME = #{username,jdbcType=VARCHAR}
+        </if>
+        <if test="password != null">
+          AND  PASSWORD = #{password,jdbcType=VARCHAR}
+        </if>
+
     </select>
     <select id="selectAllUser" resultMap="BaseResultMap">
         SELECT  *  FROM SYS_USER

@@ -21,8 +21,8 @@ public interface FlowMapper {
 
     int createFlowHistory(FlowHistory flowHistory);
 
-    List<FlowHistory>  queryFlowInfos(@Param("flowType")String flowType);
-
+    List<FlowHistory>  queryFlowInfos(@Param("flowType")String flowType,@Param("flowId")String flowId);
+    List<FlowHistory> queryFlowHistoryInfo(@Param("flowId")String flowId,@Param("node")String node);
     List<String> selectCom();
 
     List<String> selectPos(@Param("com")String com);

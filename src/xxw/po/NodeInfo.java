@@ -11,6 +11,7 @@ public class NodeInfo {
     private String userId;
     private String flowName;
     private String flowtype;
+    private String treeid;
 
     public String getTreeid() {
         return treeid;
@@ -20,7 +21,7 @@ public class NodeInfo {
         this.treeid = treeid;
     }
 
-    private String treeid;
+
 
     public String getId() {
         return id;

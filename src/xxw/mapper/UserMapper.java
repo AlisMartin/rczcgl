@@ -19,4 +19,5 @@ public interface UserMapper {
     String selectUserRoleIdByUser(@Param("userId")String userId);
     int userUpdateRole(@Param("userId")String userId,@Param("roleId")String roleId);
     int userClearRole(@Param("userId")String userId);
+    User queryUser(@Param("username")String username,@Param("password")String password,@Param("id")String id);
 }

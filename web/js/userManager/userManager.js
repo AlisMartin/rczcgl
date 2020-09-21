@@ -22,8 +22,8 @@ $(function(){
         }
     }*/
     initCompany();
-    initPosition();
-    initDepartMent();
+   // initPosition();
+   // initDepartMent();
 
 
     $("#company").change(function(){
@@ -36,6 +36,7 @@ $(function(){
             success:function(response){
                 $("#department").empty();
                 var data=response.data;
+                $("#department").append("<option value='请选择'>请选择</option>");
                 for(var i=0;i<data.length;i++){
                     $("#department").append("<option value="+ data[i].nodeId+">"+ data[i].nodeName+"</option>");
                 }
@@ -55,6 +56,7 @@ $(function(){
             success:function(response){
                 $("#position").empty();
                 var data=response.data;
+                $("#position").append("<option value='请选择'>请选择</option>");
                 for(var i=0;i<data.length;i++){
                     $("#position").append("<option value="+ data[i].nodeId+">"+ data[i].nodeName+"</option>");
                 }
@@ -184,6 +186,10 @@ function addUser(){
     var department=$("#department option:selected").text();
     var position=$("#position").val();
     var positionname=$("#position option:selected").text();
+    if(company==""||company=="请选择"||department==""||department=="请选择"||positionname=="请选择"||positionname==""){
+        alert("必须选择所属公司、部门、职位!");
+        return false;
+    }
     var level;
     for(var i=0;i<positionarr.length;i++){
         if(position==positionarr[i].nodeId){
@@ -251,6 +257,7 @@ function initCompany(){
         data:{"depart":"company"},
         success:function(response){
             var data=response.data;
+            $("#company").append("<option value='请选择'>请选择</option>");
             for(var i=0;i<data.length;i++){
                 $("#company").append("<option value="+ data[i].nodeId+">"+ data[i].nodeName+"</option>");
             }

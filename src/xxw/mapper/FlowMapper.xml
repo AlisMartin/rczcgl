@@ -105,11 +105,43 @@
             <if test="status != null" >
                 "STATUS",
             </if>
+            <if test="fqr != null" >
+                "FQR",
+            </if>
+            <if test="lwjg != null" >
+                "LWJG",
+            </if>
+            <if test="swwh != null" >
+                "SWWH",
+            </if>
+            <if test="swsj != null" >
+                "SWSJ",
+            </if>
+            <if test="sfdb != null" >
+                "SFDB",
+            </if>
+            <if test="dbsx != null" >
+                "DBSX",
+            </if>
+            <if test="wjmc != null" >
+                "WJMC",
+            </if>
+            <if test="bwyj != null" >
+                "BWYJ",
+            </if>
+            <if test="ldps != null" >
+                "LDPS",
+            </if>
+            <if test="dusers != null" >
+                "DUSERS",
+            </if>
+            <if test="sqInfo != null" >
+                "SQINFO",
+            </if>
+
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
                 #{id,jdbcType=VARCHAR},
-
-
             <if test="flowId != null" >
                 #{flowId,jdbcType=VARCHAR},
             </if>
@@ -117,16 +149,49 @@
                 #{node,jdbcType=VARCHAR},
             </if>
             <if test="startDate != null" >
-                #{startDate,jdbcType=DATE},
+                #{startDate,jdbcType=VARCHAR},
             </if>
             <if test="endDate != null" >
-                #{endDate,jdbcType=DATE},
+                #{endDate,jdbcType=VARCHAR},
             </if>
             <if test="flowType != null" >
                 #{flowType,jdbcType=VARCHAR},
             </if>
             <if test="status != null" >
                 #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="fqr != null" >
+                #{fqr,jdbcType=VARCHAR},
+            </if>
+            <if test="lwjg != null" >
+                #{lwjg,jdbcType=VARCHAR},
+            </if>
+            <if test="swwh != null" >
+                #{swwh,jdbcType=VARCHAR},
+            </if>
+            <if test="swsj != null" >
+                #{swsj,jdbcType=VARCHAR},
+            </if>
+            <if test="sfdb != null" >
+                #{sfdb,jdbcType=VARCHAR},
+            </if>
+            <if test="dbsx != null" >
+                #{dbsx,jdbcType=VARCHAR},
+            </if>
+            <if test="wjmc != null" >
+                #{wjmc,jdbcType=VARCHAR},
+            </if>
+            <if test="bwyj != null" >
+                #{bwyj,jdbcType=VARCHAR},
+            </if>
+            <if test="ldps != null" >
+                #{ldps,jdbcType=VARCHAR},
+            </if>
+            <if test="dusers != null" >
+                #{dusers,jdbcType=VARCHAR},
+            </if>
+            <if test="sqInfo != null" >
+                #{sqInfo,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -138,6 +203,29 @@
            NODE= #{node,jdbcType=VARCHAR},
         </if>
         <if test="startDate != null" >
+            STARTDATE= #{startDate,jdbcType=VARCHAR},
+        </if>
+        <if test="endDate != null" >
+            ENDDATE= #{endDate,jdbcType=VARCHAR},
+        </if>
+        <if test="dusers != null" >
+            DUSERS= #{dusers,jdbcType=VARCHAR},
+        </if>
+        <if test="status != null" >
+            STATUS= #{status,jdbcType=VARCHAR}
+        </if>
+        <if test="rejectReason != null" >
+            REJECTREASON= #{rejectReason,jdbcType=VARCHAR}
+        </if>
+        where FLOWID=#{flowId,jdbcType=VARCHAR}
+    </update>
+
+  <!--  <update id="updateFlowHistory" parameterType="xxw.po.FlowInstance">
+        update FLOWHISTORY set
+        <if test="node != null" >
+            NODE= #{node,jdbcType=VARCHAR},
+        </if>
+        <if test="startDate != null" >
             STARTDATE= #{startDate,jdbcType=DATE},
         </if>
         <if test="endDate != null" >
@@ -147,7 +235,7 @@
             STATUS= #{status,jdbcType=VARCHAR},
         </if>
         where FLOWID=#{flowId,jdbcType=VARCHAR}
-    </update>
+    </update>-->
 
     <!--创建流程历史信息-->
     <insert id="createFlowHistory"   useGeneratedKeys="false" keyProperty="id"    parameterType="xxw.po.FlowHistory">
@@ -158,98 +246,93 @@
         <trim prefix="(" suffix=")" suffixOverrides="," >
 
             "ID",
-            <if test="flowId != null" >
+            <if test="flowId != null and flowId != ''" >
                 "FLOWID",
             </if>
-            <if test="node != null" >
+            <if test="node != null and node != ''" >
                 "NODE",
             </if>
-            <if test="startDate != null" >
+            <if test="startDate != null and startDate != ''" >
                 "STARTDATE",
             </if>
-            <if test="endDate != null" >
+            <if test="endDate != null and endDate != ''" >
                 "ENDDATE",
             </if>
-            <if test="flowType != null" >
+            <if test="flowType != null and flowType != ''" >
                 "FLOWTYPE",
             </if>
-            <if test="status != null" >
+            <if test="status != null and status != ''" >
                 "STATUS",
             </if>
-            <if test="nodeOrder != null" >
-                "NODEORDER",
-            </if>
-            <if test="file != null" >
+            <if test="file != null and file != ''" >
                 "FILE",
             </if>
-            <if test="rejectReason != null" >
+            <if test="rejectReason != null and rejectReason != ''" >
                 "REJECTREASON",
             </if>
-            <if test="sqInfo != null" >
-                "SQINFO",
-            </if>
-            <if test="sqReason != null" >
-                "SQREASON",
-            </if>
-            <if test="user != null" >
+
+            <if test="user != null and user != ''" >
                 "USER",
-            </if>
-            <if test="dusers != null" >
-                "DUSERS",
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             #{id,jdbcType=VARCHAR},
 
 
-            <if test="flowId != null" >
+            <if test="flowId != null and flowId != ''" >
                 #{flowId,jdbcType=VARCHAR},
             </if>
-            <if test="node != null" >
+            <if test="node != null and node != ''" >
                 #{node,jdbcType=VARCHAR},
             </if>
-            <if test="startDate != null" >
-                #{startDate,jdbcType=DATE},
+            <if test="startDate != null and startDate != ''" >
+                #{startDate,jdbcType=VARCHAR},
             </if>
-            <if test="endDate != null" >
-                #{endDate,jdbcType=DATE},
+            <if test="endDate != null and endDate != ''" >
+                #{endDate,jdbcType=VARCHAR},
             </if>
-            <if test="flowType != null" >
+            <if test="flowType != null and flowType != ''" >
                 #{flowType,jdbcType=VARCHAR},
             </if>
-            <if test="status != null" >
+            <if test="status != null and status != ''" >
                 #{status,jdbcType=VARCHAR},
             </if>
-            <if test="nodeOrder != null" >
-                #{nodeOrder,jdbcType=VARCHAR},
-            </if>
-            <if test="file != null" >
+            <if test="file != null and file != ''" >
                 #{file,jdbcType=VARCHAR},
             </if>
-            <if test="rejectReason != null" >
+            <if test="rejectReason != null and rejectReason != ''" >
                 #{rejectReason,jdbcType=VARCHAR},
             </if>
-            <if test="sqInfo != null" >
-                #{sqInfo,jdbcType=VARCHAR},
-            </if>
-            <if test="sqReason != null" >
-                #{sqReason,jdbcType=VARCHAR},
-            </if>
-            <if test="user != null" >
+
+            <if test="user != null and user != ''" >
                 #{user,jdbcType=VARCHAR},
-            </if>
-            <if test="dusers != null" >
-                #{dusers,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
 
     <!--查询流程实例信息-->
     <select id="queryFlowInfos" parameterType="java.lang.String" resultType="xxw.po.FlowHistory">
-        select  *  from FLOWINSTANCE
+        select  a.*,b.nodeOrder,b.nodeName  from FLOWINSTANCE a inner JOIN  NODECONFIG b on a.NODE=b.NODEID
         WHERE 1=1
         <if test="flowType !=null">
-            and FLOWTYPE= #{flowType,jdbcType=VARCHAR}
+            and a.FLOWTYPE= #{flowType,jdbcType=VARCHAR}
+        </if>
+        <if test="flowId !=null">
+            and a.FLOWID= #{flowId,jdbcType=VARCHAR}
+        </if>
+
+    </select>
+
+    <!--查询流程历史信息-->
+    <select id="queryFlowHistoryInfo" parameterType="java.lang.String" resultType="xxw.po.FlowHistory">
+        select  *  from FLOWHISTORY
+        WHERE 1=1
+        <if test="flowId !=null">
+            and FLOWID= #{flowId,jdbcType=VARCHAR}
+        </if>
+
+        <if test="node !=null">
+            and NODE= #{node,jdbcType=VARCHAR}
         </if>
     </select>
 

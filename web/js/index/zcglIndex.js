@@ -42,9 +42,20 @@ $(function(){
     $("#FlowFileManager").click(function(){
         $("#InfoList").attr("src","newFileManager.html?random="+Math.floor(Math.random()*100000));
     });
+    $("#FileFlowStart").click(function(){
+        $("#InfoList").attr("src","CreateFlow.html?random="+Math.floor(Math.random()*100000));
+    });
 
- /*   $("#assetsManager").click(function(){
-        $("#InfoList").attr("src","imExAssets.html?random="+Math.floor(Math.random()*100000));
-    });*/
+    $("#FileFlowWork").click(function(){
+        $("#InfoList").attr("src","FileFlowWork.html?random="+Math.floor(Math.random()*100000));
+    });
+    $("#dataStatistic").click(function(){
+        $("#InfoList").attr("src","dataStatistic.html?random="+Math.floor(Math.random()*100000));
+    });
+
+    $("#navbarDropdownMenuLink1").click(function(){
+        $("#InfoList").attr("src","SysMessage.html?random="+Math.floor(Math.random()*100000));
+    });
+
 
 })

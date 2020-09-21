@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xxw.mapper.SysMessageMapper">
+    <select id="queryMessage" parameterType="java.lang.String" resultType="xxw.po.SysMessage">
+        select * from SYSMESSAGE where 1=1
+        <if test="jsuser !=null">
+            and JSUESR= #{jsuer,jdbcType=VARCHAR}
+        </if>
+        <if test="show !=null">
+            and SHOW= #{show,jdbcType=VARCHAR}
+        </if>
+    </select>
+    <insert id="insertSysMessage" parameterType="xxw.po.SysMessage">
+        insert into SYSMESSAGE
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+
+            <if test=" flowId!= null" >
+                "FLOWID",
+            </if>
+            <if test="tsUser != null" >
+                "TSUSER",
+            </if>
+            <if test="jsUser != null" >
+                "JSUSER",
+            </if>
+            <if test="fileName != null" >
+                "FILENAME",
+            </if>
+            <if test="tsDate != null" >
+                "TSDATE",
+            </if>
+            <if test="desc !=null">
+                "DESC",
+            </if>
+            <if test="type !=null">
+                "TYPE",
+            </if>
+            <if test="node !=null">
+                "NODE",
+            </if>
+            <if test="show !=null">
+                "SHOW",
+            </if>
+            <if test="duser !=null">
+                "DUSER",
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="flowId != null" >
+                #{flowId,jdbcType=VARCHAR},
+            </if>
+            <if test="tsUser != null" >
+                #{tsUser,jdbcType=VARCHAR},
+            </if>
+            <if test="jsUser != null" >
+                #{jsUser,jdbcType=VARCHAR},
+            </if>
+            <if test="fileName != null" >
+                #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="tsDate != null" >
+                #{tsDate,jdbcType=VARCHAR},
+            </if>
+            <if test="desc != null" >
+                #{desc,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="node != null" >
+                #{node,jdbcType=VARCHAR},
+            </if>
+            <if test="show != null" >
+                #{show,jdbcType=VARCHAR},
+            </if>
+            <if test="duser != null" >
+                #{duser,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateSysMessage" parameterType="java.lang.String">
+        update SYSMESSAGE SET SHOW= #{show,jdbcType=VARCHAR},DUSER= #{duser,jdbcType=VARCHAR}
+        where FLOWID= #{flowId,jdbcType=VARCHAR} and NODE= #{node,jdbcType=VARCHAR}
+
+    </update>
+</mapper>
