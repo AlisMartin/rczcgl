@@ -1,7 +1,7 @@
 var columns = [];
 var param = {};
 var zcid = "";
-var fileid = "";
+var fileid = "",newmap,editmap;
 require(["esri/map",
     "esri/layers/ArcGISDynamicMapServiceLayer",
     "dojo/dom",
@@ -11,25 +11,47 @@ require(["esri/map",
     "esri/SpatialReference",
     "esri/tasks/query",
     "esri/InfoTemplate",
+    "esri/toolbars/draw",
     "esri/symbols/SimpleMarkerSymbol",
     "esri/symbols/SimpleLineSymbol",
     "esri/symbols/SimpleFillSymbol",
     "esri/Color",
     "esri/layers/GraphicsLayer",
     "esri/graphic",
-    "esri/layers/FeatureLayer",
     "dojo/domReady!"], function (Map, ArcGISDynamicMapServiceLayer, dom, on, Point, QueryTask, SpatialReference, Query, InfoTemplate,
-                                 SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer, Graphic, FeatureLayer) {
-    map = new Map("newmap", {
+                                 Draw, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer, Graphic) {
+    newmap = new Map("newmap", {
+        basemap: "osm",
+        center: [122.376, 37.096],
+        zoom: 12
+    });
+    /*editmap = new Map("editmap", {
         basemap: "osm",  //topo-vector   For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
         center: [122.376, 37.096], // longitude, latitude
         zoom: 12
+    });*/
+
+    //创建点要素
+    var drawTool = document.getElementById("drawTool");
+    $("#drawTool").click(function () {
+        //使用toolbar上的绘图工具
+        var toolBar = new Draw(newmap);
+        toolBar.on("draw-end", drawEndEvent);
+        toolBar.activate(Draw.POINT, {
+            showTooltips: true
+        });
     });
-    map = new Map("editmap", {
-        basemap: "osm",  //topo-vector   For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
-        center: [122.376, 37.096], // longitude, latitude
-        zoom: 12
-    });
+    function drawEndEvent(evt) {
+        //添加图形到地图
+        var symbol;
+        if (evt.geometry.type === "point" || evt.geometry.type === "multipoint") {
+            //symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE,new Color("#FFFCC"),12);
+            symbol = markerSymbol;
+            var markerSymbol = new SimpleMarkerSymbol();
+            markerSymbol.setColor(new Color("#00FFFF"));
+        }
+        newmap.graphics.add(new Graphic(evt.geometry, symbol))
+    }
 });
 $(function () {
     debugger;

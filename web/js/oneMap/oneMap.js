@@ -26,9 +26,8 @@ require(["esri/map",
         center: [122.376, 37.096], // longitude, latitude
         zoom: 12
     });
-    var myinfotemplate = new InfoTemplate("Attributes", "Statsdfsfsdfse Name: ${STATE_NAME}<br>Population: ${Pop2001}");
     var dynamicMapServiceLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/TEST4326/MapServer"
-        , {infotemplate:myinfotemplate});
+        );
     var graphicsLayer = new GraphicsLayer();
     map.addLayer(dynamicMapServiceLayer);
 

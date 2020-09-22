@@ -5,6 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
     <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
     <title></title>
+    <link rel="stylesheet"
+          href="http://118.190.54.143:8090/arcgis_js_v39_api/arcgis_js_api/library/3.9/3.9/js/esri/css/esri.css">
+
     <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
     <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
@@ -15,6 +18,9 @@
     <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
     <script src="third/webuploader/webuploader.nolog.min.js"></script>
+    <script type="text/javascript"
+            src="http://118.190.54.143:8090/arcgis_js_v39_api/arcgis_js_api/library/3.9/3.9/init.js"></script>
+
     <script src="js/assetsConfig/eximAssets.js"></script>
     <style>
         .right {
@@ -66,6 +72,16 @@
         .colorsty {
             background: #efeff6;
         }
+        .map{
+            height: 500px;
+            width: 600px;
+        }
+        #drawTool{
+            position: absolute;
+            bottom: 370px;
+            left: 90px;
+            z-index: 100;
+        }
     </style>
 </head>
 <body class="colorsty">
@@ -95,7 +111,7 @@
                         <span class="glyphicon glyphicon-plus"></span>新增资产
                     </button>
                 </form>
-                <table id="assetsTable" class="table table-hover tablemar">
+                <table id="assetsTable" class="table table-hover tablemar text-nowrap">
                     <caption>资产信息表</caption>
                 </table>
 
@@ -114,7 +130,9 @@
                                         <div class="col-md-6 landAssetsLeft"></div>
                                         <div class="col-md-6 landAssetsRight"></div>
                                     </div>
-                                    <div id="newmap" style="height: 500px"></div>
+                                    <div id="newmap" >
+                                        <button type="button" id="drawTool" >绘制点</button>
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
