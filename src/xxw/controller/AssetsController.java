@@ -68,14 +68,19 @@ public class AssetsController {
     }
     @RequestMapping("/getAssetsInfo")
     @ResponseBody
-    public Map<String,Object> getAssetsInfo(HttpServletRequest request,AssetsConfig assetsConfig){
+//    public Map<String,Object> getAssetsInfo(HttpServletRequest request,AssetsConfig assetsConfig){
+    public Map<String,Object> getAssetsInfo(@RequestBody JSONObject json){
         Map<String,Object> res = new HashMap<>();
-        int offset = Integer.parseInt(request.getParameter("offset"));
-        int limit = Integer.parseInt(request.getParameter("limit"));
-        String gsmc = request.getParameter("gsmc");
+//        int offset = Integer.parseInt(request.getParameter("offset"));
+//        int limit = Integer.parseInt(request.getParameter("limit"));
+//        String gsmc = request.getParameter("gsmc");
+        int offset = Integer.parseInt(json.getString("offset"));
+        int limit = Integer.parseInt(json.getString("limit"));
+        String gsmc = json.getString("gsmc");
+        String zctype = json.getString("zctype");
         int pageNumber = offset==0?1:offset/limit + 1;
         Page page = PageHelper.startPage(pageNumber,limit);
-        List<AssetsInfo> info=assetsMapper.getAssetsInfo(assetsConfig.getZctype());
+        List<AssetsInfo> info=assetsMapper.getAssetsInfo(zctype,StringUtil.formatLike(gsmc));
         PageInfo pageInfo = new PageInfo<>(info);
         if(pageInfo.getList().size()>0){
             res.put("total",pageInfo.getTotal());

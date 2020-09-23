@@ -73,14 +73,18 @@
             background: #efeff6;
         }
         .map{
-            height: 500px;
-            width: 600px;
+
         }
         #drawTool{
             position: absolute;
             bottom: 370px;
             left: 90px;
             z-index: 100;
+        }
+        #newmap{
+            /*position: absolute;*/
+            width: 570px;
+            height: 400px;
         }
     </style>
 </head>
@@ -99,7 +103,7 @@
                     <input type="text" name="zctype" id="zclx" style="display: none;"/>
 
                     <input type="text" class="form-control left" id="gsmc" name="gsmc" placeholder="请输入公司名称" style="width: 13%">
-                    <button type="button" class="btn btn-primary left">查询</button>
+                    <button type="button" class="btn btn-primary left" id="search">查询</button>
 
                     <button type="button" class="btn btn-info right" id="exportAssets" name="exportAssets">
                         <span class="glyphicon glyphicon-folder-open"></span>导出
@@ -135,6 +139,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
+                                    <input type="reset" name="reset" style="display: none;" />
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                                     <button type="button" class="btn btn-primary" id="saveAsset">保存</button>
                                 </div>
