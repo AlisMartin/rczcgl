@@ -39,7 +39,8 @@ public class StringUtil {
         if (isNotEmpty(str)) {
             return "%" + str + "%";
         } else {
-            return "%%";
+//            return "%%";
+            return null;
         }
     }
 }

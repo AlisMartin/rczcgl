@@ -53,12 +53,9 @@
             and ZCTYPE= #{zctype,jdbcType=VARCHAR}
         </if>
         <if test="gsmc !=null">
-            and FIELD2= #{gsmc,jdbcType=VARCHAR}
+            and FIELD2 LIKE #{gsmc,jdbcType=VARCHAR}
         </if>
-        order by FIELD2
-        <!--<if test="gsmc !=null">
-            and ZCTYPE= #{gsmc,jdbcType=VARCHAR}
-        </if>-->
+    
     </select>
     <select id="getAssetsInfoByName" resultType="xxw.po.AssetsInfo">
         select * from ASSETS_INFO where 1=1

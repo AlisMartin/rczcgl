@@ -38,7 +38,7 @@ $(function(){
             paginationNextText:"下一页",
             columns:columns,
             queryParams:function(params){
-                return param;
+                return JSON.stringify(params);
             },
             onLoadSuccess:function(){
             },
@@ -63,7 +63,7 @@ $(function(){
         paginationNextText:"下一页",
         columns:columns,
         queryParams:function(params){
-            return param;
+            return JSON.stringify(params);
         },
         onLoadSuccess:function(){
         },

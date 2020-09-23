@@ -1,7 +1,8 @@
 var columns = [];
 var param = {};
 var zcid = "";
-var fileid = "",newmap,editmap;
+var fileid = "",newmap,editmap,toolBar;
+
 require(["esri/map",
     "esri/layers/ArcGISDynamicMapServiceLayer",
     "dojo/dom",
@@ -20,39 +21,47 @@ require(["esri/map",
     "esri/graphic",
     "dojo/domReady!"], function (Map, ArcGISDynamicMapServiceLayer, dom, on, Point, QueryTask, SpatialReference, Query, InfoTemplate,
                                  Draw, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer, Graphic) {
-    newmap = new Map("newmap", {
-        basemap: "osm",
-        center: [122.376, 37.096],
-        zoom: 12
-    });
-    /*editmap = new Map("editmap", {
-        basemap: "osm",  //topo-vector   For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
-        center: [122.376, 37.096], // longitude, latitude
-        zoom: 12
-    });*/
-
-    //创建点要素
-    var drawTool = document.getElementById("drawTool");
-    $("#drawTool").click(function () {
-        //使用toolbar上的绘图工具
-        var toolBar = new Draw(newmap);
-        toolBar.on("draw-end", drawEndEvent);
-        toolBar.activate(Draw.POINT, {
-            showTooltips: true
+    setTimeout(function(){
+        newmap = new Map("newmap", {
+            basemap: "osm",
+            center: [122.376, 37.096],
+            zoom: 12,
+            autoResize:true
         });
-    });
-    function drawEndEvent(evt) {
-        //添加图形到地图
-        var symbol;
-        if (evt.geometry.type === "point" || evt.geometry.type === "multipoint") {
-            //symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE,new Color("#FFFCC"),12);
-            symbol = markerSymbol;
-            var markerSymbol = new SimpleMarkerSymbol();
-            markerSymbol.setColor(new Color("#00FFFF"));
+        //创建点要素
+        $("#drawTool").click(function () {
+            //使用toolbar上的绘图工具
+            toolBar = new Draw(newmap);
+            toolBar.on("draw-end", drawEndEvent);
+            toolBar.activate("point");
+        });
+        function drawEndEvent(evt) {
+            toolBar.deactivate();
+            //添加图形到地图
+            var symbol;
+            if (evt.geometry.type === "point" || evt.geometry.type === "multipoint") {
+                //symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE,new Color("#FFFCC"),12);
+
+                var markerSymbol = new SimpleMarkerSymbol();
+                markerSymbol.setColor(new Color("#00FFFF"));
+                symbol = markerSymbol;
+            }
+            var graphic = new Graphic(evt.geometry, symbol);
+
+            newmap.graphics.clear();
+            newmap.graphics.add(graphic)
         }
-        newmap.graphics.add(new Graphic(evt.geometry, symbol))
-    }
+    },5000);
+
+    /*editmap = new Map("editmap", {
+     basemap: "osm",  //topo-vector   For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
+     center: [122.376, 37.096], // longitude, latitude
+     zoom: 12
+     });*/
+
+
 });
+
 $(function () {
     debugger;
     var zctype = parent.document.getElementById("InfoList").src.split("?")[1].split("&&")[0];
@@ -69,6 +78,8 @@ $(function () {
     });
     //新增资产
     $("#addAsset").click(function () {
+        //$("#addform").reset();
+        $("input[type=reset]").trigger("click");
         $("#add").modal('show');
     });
     $("#saveAsset").click(function () {
@@ -81,11 +92,11 @@ $(function () {
         insertFile();
     });
     $("#search").click(function () {
-        $('#table').bootstrapTable('refreshOptions', {
+        $('#assetsTable').bootstrapTable('refreshOptions', {
             queryParams: function (params) {
                 params.zctype = param.zctype;
-                params.gsmc = $("#gsmc").val();
-                return params;
+                params.gsmc = decodeURI($("#gsmc").val());
+                return JSON.stringify(params);
             }
         })
     });
@@ -96,7 +107,9 @@ $(function () {
         $('#assetsTable').bootstrapTable('destroy');
         $('#assetsTable').bootstrapTable({
             url: '/rczcgl/assetsconfig/getAssetsInfo.action',
-            method: 'get',
+            method: 'post',
+            //contentType:"application/x-www-form-urlencoded",
+            contentType: "application/json;charset=UTF-8",
             clickToSelect: true,
             //search:true,
             //showSearchButton:true,
@@ -113,9 +126,11 @@ $(function () {
             queryParamsType: "limit",
             queryParams: function (params) {
                 params.zctype = param.zctype;
-                return params;
+                return JSON.stringify(params);
             },
             onLoadSuccess: function () {
+                //newmap.reposition();
+                //newmap.resize();
             },
             onLoadError: function () {
             }
@@ -244,7 +259,9 @@ $(function () {
     getcolumn();
     $('#assetsTable').bootstrapTable({
         url: '/rczcgl/assetsconfig/getAssetsInfo.action',
-        method: 'get',
+        method: 'post',
+        //contentType:"application/x-www-form-urlencoded",
+        contentType: "application/json;charset=UTF-8",
         clickToSelect: true,
         //search:true,
         //showSearchButton:true,
@@ -261,9 +278,11 @@ $(function () {
         queryParamsType: "limit",
         queryParams: function (params) {
             params.zctype = param.zctype;
-            return params;
+            return JSON.stringify(params);
         },
         onLoadSuccess: function () {
+            //newmap.reposition();
+            //newmap.resize();
         },
         onLoadError: function () {
         },
