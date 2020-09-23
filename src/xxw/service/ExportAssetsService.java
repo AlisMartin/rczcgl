@@ -27,7 +27,7 @@ public class ExportAssetsService {
         //获取导出列及列名
         List<AssetsConfig> configlist=assetsMapper.getAssetsConfigInfo(zctype,null);
         //获取导出资产信息
-        List<Map<String,String>> infomap=assetsMapper.getAssetsInfoByMap(zctype);
+        List<Map<String,String>> infomap=assetsMapper.getAssetsInfoByMap(zctype,null);
 
         FileOutputStream fs=null;
         Workbook wb=null;

@@ -1,5 +1,6 @@
 package xxw.controller;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,7 +56,8 @@ public class UserManagerController {
         UUID uuid=UUID.randomUUID();
         String userid=uuid.toString();
         user.setId(userid);
-        String pwd=MD5Util.getMD5Str(password);
+        String pwd=DigestUtils.md5Hex(password.getBytes());
+       // String pwd=MD5Util.getMD5Str(password);
         user.setPassword(pwd);
         user.setCompany(comp);
         user.setDepartment(depart);

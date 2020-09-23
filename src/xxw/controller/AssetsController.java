@@ -75,7 +75,7 @@ public class AssetsController {
         String gsmc = request.getParameter("gsmc");
         int pageNumber = offset==0?1:offset/limit + 1;
         Page page = PageHelper.startPage(pageNumber,limit);
-        List<AssetsInfo> info=assetsMapper.getAssetsInfo(assetsConfig.getZctype());
+        List<AssetsInfo> info=assetsMapper.getAssetsInfo(assetsConfig.getZctype(),gsmc);
         PageInfo pageInfo = new PageInfo<>(info);
         if(pageInfo.getList().size()>0){
             res.put("total",pageInfo.getTotal());
@@ -123,9 +123,9 @@ public class AssetsController {
         insertInfo.put("zcid", uuid.toString());
         int i = assetsMapper.insertAssetsInfo(insertInfo);
         if (i == 1) {
-            return new ResponseObject(1, "³É¹¦", "");
+            return new ResponseObject(1, "ï¿½É¹ï¿½", "");
         } else {
-            return new ResponseObject(0, "Ê§°Ü", "");
+            return new ResponseObject(0, "Ê§ï¿½ï¿½", "");
         }
     }
     @RequestMapping("/editAsset")
@@ -139,9 +139,9 @@ public class AssetsController {
         }
         int i = assetsMapper.updateAssetsInfo(insertInfo);
         if (i == 1) {
-            return new ResponseObject(1, "³É¹¦", "");
+            return new ResponseObject(1, "ï¿½É¹ï¿½", "");
         } else {
-            return new ResponseObject(0, "Ê§°Ü", "");
+            return new ResponseObject(0, "Ê§ï¿½ï¿½", "");
         }
     }
 
@@ -153,7 +153,31 @@ public class AssetsController {
         List<AssetsFile> fileList = assetsMapper.getAssetFileListByZcid(zcid);
         res.put("total",fileList.size());
         res.put("rows",fileList);
-        res.put("msg","²éÑ¯³É¹¦");
+        res.put("msg","ï¿½ï¿½Ñ¯ï¿½É¹ï¿½");
         return res;
+    }
+
+    @RequestMapping("/total")
+    @ResponseBody
+    public  Map<String,Integer> totalAssets(HttpServletRequest request){
+        String zctype=request.getParameter("zctype");
+        String gsmc=request.getParameter("gsmc");
+        Map<String,Integer> mapCount=new HashMap<>();
+        Map<String,Integer> mapCounts=new HashMap<>();
+        List<AssetsConfig> configlist=assetsMapper.getAllAssetsConfigInfo(zctype, null);
+        List<Map<String,String>> assetslist=assetsMapper.getAssetsInfoByMap(zctype,gsmc);
+        for(Map.Entry<String,String> entry:assetslist.get(0).entrySet()) {
+            int count = 0;
+            for (int i = 0; i < assetslist.size(); i++) {
+                for (AssetsConfig assetsConfig : configlist) {
+                    if (assetsConfig.getFieldType().equals("2") && assetsConfig.getField().toUpperCase().equals(entry.getKey())) {
+                        count = count + Integer.parseInt(assetslist.get(i).get(entry.getKey()));
+                        mapCount.put(entry.getKey().toLowerCase(), count);
+                    }
+                }
+            }
+        }
+         mapCounts=mapCount;
+        return mapCount;
     }
 }

@@ -39,6 +39,24 @@ $(function(){
     $("#seaAssets").click(function(){
         $("#InfoList").attr("src","imasset.html?zctype=3&&random="+Math.floor(Math.random()*100000));
     });
+    $("#otherAssets").click(function(){
+        $("#InfoList").attr("src","imasset.html?zctype=4&&random="+Math.floor(Math.random()*100000));
+    });
+
+    $("#landSummary").click(function(){
+        $("#InfoList").attr("src","assetsSummary.html?zctype=1&&random="+Math.floor(Math.random()*100000));
+    });
+    $("#houseSummary").click(function(){
+        $("#InfoList").attr("src","assetsSummary.html?zctype=2&&random="+Math.floor(Math.random()*100000));
+    });
+    $("#seaSummary").click(function(){
+        $("#InfoList").attr("src","assetsSummary.html?zctype=3&&random="+Math.floor(Math.random()*100000));
+    });
+    $("#otherSummary").click(function(){
+        $("#InfoList").attr("src","assetsSummary.html?zctype=4&&random="+Math.floor(Math.random()*100000));
+    });
+
+
     $("#nodeAddUser").click(function(){
         $("#InfoList").attr("src","nodeAddUser.html?random="+Math.floor(Math.random()*100000));
     });

@@ -145,7 +145,7 @@ public class FlowController {
         String filetype=request.getParameter("filetype");
         String com=request.getParameter("com");
         String pos=request.getParameter("pos");
-        if(filetype.equals("请�?�择")||filetype.equals("null")){
+        if(filetype.equals("请�?�择")||filetype.equals("null")){
             filetype=null;
         }
         return new ResponseObject(1,"",flowMapper.selectPathId(com,pos,filetype));
@@ -182,7 +182,7 @@ public class FlowController {
         Date date=new Date();
         String year=sdf.format(date);
         String filetype=request.getParameter("filetype");
-        if(filetype.equals("请�?�择")||filetype.equals("null")){
+        if(filetype.equals("请�?�择")||filetype.equals("null")){
             filetype=null;
         }
         String com=request.getParameter("com");
@@ -275,4 +275,5 @@ public class FlowController {
         sysMessageMapper.updateSysMessage(show,flowId,node,duser);
 
     }
+
 }

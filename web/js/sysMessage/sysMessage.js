@@ -60,7 +60,7 @@ $(function(){
                 events:{
                     'click #sp':function(e,value,row,index){
                         var id=parent.document.getElementById("InfoList");
-                        id.src="/FileFlowWork.html?random="+Math.floor(Math.random()*100000);
+                        id.src="FileFlowWork.html?random="+Math.floor(Math.random()*100000);
                        // id.attr("src","FileFlowWork.html?random="+Math.floor(Math.random()*100000));
                     },
                     'click #downfile':function(e,value,row,index){

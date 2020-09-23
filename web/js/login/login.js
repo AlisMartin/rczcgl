@@ -29,11 +29,7 @@ function login(){
         success: function (data) {
             if(data!=null&&data!=""){
                 $.cookie("user",JSON.stringify(data));
-                if(data.type==1){
-                    window.location.href="/rczcgl/rczcgl.html";
-                }else{
-                    alert("尚未开发OA界面！");
-                }
+                window.location.href="/rczcgl/rczcgl.html";
             }else{
                 alert("用户名或密码错误，请重新输入!");
                 return false;

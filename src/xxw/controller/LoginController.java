@@ -49,11 +49,11 @@ public class LoginController {
         String username=request.getParameter("username");
         String password=request.getParameter("password");
         User user=userMapper.getUser(username,password);
-        String auth="";
+        String auth=null;
         String authType="";
         if(user!=null&&user.getId()!=null){
             Role role=roleMapper.selectRoleByUserId(user.getId());
-            if(role.getRoleId()!=null){
+            if(role!=null&&role.getRoleId()!=null){
                 auth=authMapper.getAuthByRoleId(role.getRoleId());
                 if(auth.indexOf(',')>0){
                     String [] au=auth.split(",");
@@ -67,9 +67,10 @@ public class LoginController {
                 }else{
                     authType=authMapper.getAuthByAuthId(auth);
                 }
+                user.setRole(role.getRole());
+                user.setAuth(authType);
             }
-            user.setRole(role.getRole());
-            user.setAuth(authType);
+
             request.getSession().setAttribute("user",user);
             String eventDesc="用户"+user.getUserName()+"登录系统";
             String eventType="1";
