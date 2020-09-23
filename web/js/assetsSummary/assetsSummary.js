@@ -46,7 +46,8 @@ $(function () {
         $('#assetsTable').bootstrapTable('destroy');
         $('#assetsTable').bootstrapTable({
             url: '/rczcgl/assetsconfig/getAssetsInfo.action',
-            method: 'get',
+            contentType: "application/json;charset=UTF-8",
+            method: 'post',
             clickToSelect: true,
             showFooter:true,
             //search:true,
@@ -65,7 +66,7 @@ $(function () {
             queryParams: function (params) {
                 params.zctype = param.zctype;
                 params.gsmc = param.gsmc;
-                return params;
+                return JSON.stringify(params);
             },
             onLoadSuccess: function () {
             },
@@ -196,7 +197,8 @@ $(function () {
     getcolumn();
     $('#assetsTable').bootstrapTable({
         url: '/rczcgl/assetsconfig/getAssetsInfo.action',
-        method: 'get',
+        contentType: "application/json;charset=UTF-8",
+        method: 'post',
         clickToSelect: true,
         showFooter:true,
         sidePagination: "server",
@@ -209,8 +211,9 @@ $(function () {
         columns: columns,
         queryParamsType : "limit",
         queryParams: function (params) {
+            debugger;
             params.zctype = param.zctype;
-            return params;
+            return JSON.stringify(params);
         },
         onLoadSuccess: function (data) {
             debugger;
@@ -622,8 +625,7 @@ function reloadTable(a){
             if(gsmc!=""&&gsmc!="荣成市经济开发投资有限公司"){
                 params.gsmc = gsmc;
             }
-
-            return params;
+            return JSON.stringify(params);
         }, columns: columns
 
     })
