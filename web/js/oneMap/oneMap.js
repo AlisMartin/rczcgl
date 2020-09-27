@@ -119,7 +119,8 @@ require(["esri/map",
         loadRes(queryType,zctypes);
 
     });
-    /*//on(dom.byId("Btn"),"click",function(e){
+
+    //on(dom.byId("Btn"),"click",function(e){
      $("#search").click(function(){
      //					layer.clear();
      //					map.infoWindow.hide();
@@ -168,7 +169,7 @@ require(["esri/map",
      htmls = htmls + "<tr bgcolor=\"#F0F0F0\">";
      htmls = htmls + "<td class='checkMe'><a href=\"#\" \">" + P.XMC + "</a></td>";
      htmls = htmls + "</tr>";
-     /!*var point = new Point(P.Display_X, P.Display_Y, new SpatialReference({
+     /*var point = new Point(P.Display_X, P.Display_Y, new SpatialReference({
      wkid: 4326
      }));
      var simpleMarkerSymbol = new SimpleMarkerSymbol({
@@ -188,13 +189,13 @@ require(["esri/map",
      });
      var attr = P;
      var graphic = new Graphic(point, simpleMarkerSymbol, attr);
-     layer.add(graphic);*!/
+     layer.add(graphic);*/
      }
      htmls = htmls + "</table>";
      //将属性绑定在divShowResult上面
      dom.byId("divShowResult").innerHTML = htmls;
      }
-     }*/
+     }
 });
 
 function loadRes(queryType,zctypes){

@@ -1,7 +1,9 @@
 var columns = [];
 var param = {};
 var zcid = "";
-var fileid = "",newmap,editmap,toolBar;
+var fileid = "", isreset, newmap, editmap, viewmap,map, toolBar,
+    url = '/rczcgl/assetsconfig/getAssetsInfo.action',
+    gsmc = "荣成市鑫荣建投实业有限公司";
 
 require(["esri/map",
     "esri/layers/ArcGISDynamicMapServiceLayer",
@@ -21,13 +23,19 @@ require(["esri/map",
     "esri/graphic",
     "dojo/domReady!"], function (Map, ArcGISDynamicMapServiceLayer, dom, on, Point, QueryTask, SpatialReference, Query, InfoTemplate,
                                  Draw, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer, Graphic) {
-    setTimeout(function(){
+    setTimeout(function () {
         newmap = new Map("newmap", {
             basemap: "osm",
             center: [122.376, 37.096],
             zoom: 12,
-            autoResize:true
+            autoResize: true
         });
+        viewmap = new Map("viewmap", {
+         basemap: "osm",
+         center: [122.376, 37.096],
+         zoom: 12,
+         autoResize: true
+         });
         //创建点要素
         $("#drawTool").click(function () {
             //使用toolbar上的绘图工具
@@ -40,8 +48,6 @@ require(["esri/map",
             //添加图形到地图
             var symbol;
             if (evt.geometry.type === "point" || evt.geometry.type === "multipoint") {
-                //symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE,new Color("#FFFCC"),12);
-
                 var markerSymbol = new SimpleMarkerSymbol();
                 markerSymbol.setColor(new Color("#00FFFF"));
                 symbol = markerSymbol;
@@ -51,7 +57,56 @@ require(["esri/map",
             newmap.graphics.clear();
             newmap.graphics.add(graphic)
         }
-    },5000);
+
+        map = {
+            addPoint: function (id) {
+                /*var markerSymbol = new SimpleMarkerSymbol();
+                markerSymbol.setColor(new Color("#00FFFF"));
+                var startPt = esri.geometry.Point({
+                    "x": x,
+                    "y": y,
+                    "spatialReference": {"wkid": 4326}
+                });
+                var graphic = new Graphic(startPt, symbol);
+                newmap.graphics.add(graphic);
+*/
+
+                //定义查询对象
+                var queryTask = new QueryTask("http://localhost:6080/arcgis/rest/services/TEST4326/MapServer/0");
+                //定义查询参数对象
+                var query = new Query();
+                //查询条件，类似于sql语句的where子句
+                query.where = "XMC  like '%" + id + "%'";
+                //返回的字段信息：*代表返回全部字段
+                query.outFields = ["*"];
+                //是否返回几何形状
+                query.returnGeometry = true;
+                //执行属性查询
+                queryTask.execute(query, showQueryResult);
+                //属性查询完成之后，用showQueryResult来处理返回的结果
+                function showQueryResult(queryResult) {
+                    //创建线符号
+                    var lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new dojo.Color([255, 0, 0]), 3);
+                    //创建面符号
+                    var fill = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, lineSymbol);
+
+                    if (queryResult.features.length >= 1) {
+                        for (var i = 0; i < queryResult.features.length; i++) {
+                            //获得图形graphic
+                            var graphic = new Graphic(queryResult.features[i].geometry, fill);
+                            //var graphic = queryResult.features[i].geometry;
+                            //赋予相应的符号
+                            //graphic.setSymbol(fill);
+                            //将graphic添加到地图中，从而实现高亮效果
+                            viewmap.graphics.clear();
+                            viewmap.graphics.add(graphic);
+                            viewmap.centerAndZoom(queryResult.features[i].geometry.getExtent().getCenter(),15);
+                        }
+                    }
+                }
+            }
+        };
+    }, 5000);
 
     /*editmap = new Map("editmap", {
      basemap: "osm",  //topo-vector   For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
@@ -60,7 +115,8 @@ require(["esri/map",
      });*/
 
 
-});
+})
+;
 
 $(function () {
     debugger;
@@ -78,7 +134,6 @@ $(function () {
     });
     //新增资产
     $("#addAsset").click(function () {
-        //$("#addform").reset();
         $("input[type=reset]").trigger("click");
         $("#add").modal('show');
     });
@@ -108,13 +163,8 @@ $(function () {
         $('#assetsTable').bootstrapTable({
             url: '/rczcgl/assetsconfig/getAssetsInfo.action',
             method: 'post',
-            //contentType:"application/x-www-form-urlencoded",
             contentType: "application/json;charset=UTF-8",
             clickToSelect: true,
-            //search:true,
-            //showSearchButton:true,
-            //showSearchClearButton:true,
-            //searchAlign:left,
             sidePagination: "server",
             pagination: true,
             pageNumber: 1,
@@ -126,11 +176,10 @@ $(function () {
             queryParamsType: "limit",
             queryParams: function (params) {
                 params.zctype = param.zctype;
+                params.gsmc = gsmc;
                 return JSON.stringify(params);
             },
             onLoadSuccess: function () {
-                //newmap.reposition();
-                //newmap.resize();
             },
             onLoadError: function () {
             }
@@ -260,13 +309,8 @@ $(function () {
     $('#assetsTable').bootstrapTable({
         url: '/rczcgl/assetsconfig/getAssetsInfo.action',
         method: 'post',
-        //contentType:"application/x-www-form-urlencoded",
         contentType: "application/json;charset=UTF-8",
         clickToSelect: true,
-        //search:true,
-        //showSearchButton:true,
-        //showSearchClearButton:true,
-        //searchAlign:"left",
         sidePagination: "server",
         pagination: true,
         pageNumber: 1,
@@ -278,11 +322,10 @@ $(function () {
         queryParamsType: "limit",
         queryParams: function (params) {
             params.zctype = param.zctype;
+            params.gsmc = gsmc;
             return JSON.stringify(params);
         },
         onLoadSuccess: function () {
-            //newmap.reposition();
-            //newmap.resize();
         },
         onLoadError: function () {
         },
@@ -335,7 +378,24 @@ function getcolumn() {
                 obj.field = data[i].field;
                 obj.title = data[i].fieldname;
                 columns.push(obj);
-
+                //插入定位列
+                if (i === 2) {
+                    var pointxy = {
+                        field: 'operateMap',
+                        title: '地图',
+                        width: '80px',
+                        class: 'toolxy',
+                        formatter: '<a href="####" class="btn btn-info" id="pointxy" data-toggle="modal" data-target="#pointmap" title="定位">' +
+                        '<span class="glyphicon glyphicon-map-marker">定位</span></a>',    // 添加按钮
+                        events: {               // 注册按钮事件
+                            'click #pointxy': function (event, value, row, index) {
+                                map.addPoint(row.id);
+                            }
+                        }
+                    };
+                    columns.push(pointxy);
+                }
+                //生成表单
                 var htmlLeft = '',
                     htmlRight = '';
                 if (i % 2 === 0) {
@@ -349,6 +409,7 @@ function getcolumn() {
                 $(".landAssetsRight").append(htmlRight);
             }
             $(".landAssetsLeft").append(' <input type="text" class="form-control" id="zcid" name="zcid" style="display: none"> ');
+            //添加操作列
             var toolCol = {
                 field: 'operate',
                 title: '操作',
@@ -361,14 +422,21 @@ function getcolumn() {
                         zcid = row.zcid;
                     },
                     'click #modUser': function (event, value, row, index) {
-                        showInfo(row);
+                        //showInfo(row);
+                        $("#view").modal('show');
                         loadData(row);
+                        //$("#view").modal('show');
                     },
                     'click #edit': function (event, value, row, index) {
                         loadData(row);
+                        isreset = 0;
                     },
                     'click #filesdown': function (event, value, row, index) {
                         showInfoDown(row);
+                    },
+                    'click #reset': function (event, value, row, index) {
+                        loadData(row);
+                        isreset = 1;
                     }
                 }
             };
@@ -424,8 +492,9 @@ function importAssetsInfo() {
 
 function btnGroup() {   // 自定义方法，添加操作按钮
     // data-target="xxx" 为点击按钮弹出指定名字的模态框
+
     var html =
-        '<a href="####" class="btn btn-info" id="modUser" data-toggle="modal" data-target="#view" ' +
+        '<a href="####" class="btn btn-info" id="modUser"  ' +
         ' title="档案卡">' +
         '<span class="glyphicon glyphicon-info-sign">档案卡</span></a>' +
         '<a href="####" class="btn btn-primary" id="edit" data-toggle="modal" data-target="#editAssert" ' +
@@ -434,8 +503,20 @@ function btnGroup() {   // 自定义方法，添加操作按钮
         '<a href="####" class="btn btn-warning" id="modRole" title="上传附件" style="margin-left:15px">' +
         '<span class="glyphicon glyphicon-upload">上传附件</span></a>' +
         '<a href="####" class="btn btn-info" id="filesdown" data-toggle="modal" data-target="#filedown" style="margin-left:15px" title="下载附件">' +
+        '<span class="glyphicon glyphicon-download">下载附件</span></a>' +
+        '<a href="####" class="btn btn-info" id="reset" data-toggle="modal" data-target="#editAssert" style="margin-left:15px" title="重置资产">' +
+        '<span class="glyphicon glyphicon-edit">重置资产</span></a>';
+    var htmlHistory =
+        '<a href="####" class="btn btn-info" id="modUser"  ' +
+        ' title="档案卡">' +
+        '<span class="glyphicon glyphicon-info-sign">档案卡</span></a>' +
+        '<a href="####" class="btn btn-info" id="filesdown" data-toggle="modal" data-target="#filedown" style="margin-left:15px" title="下载附件">' +
         '<span class="glyphicon glyphicon-download">下载附件</span></a>';
-    return html
+    if(url === '/rczcgl/assetsconfig/getAssetsInfo.action'){
+        return html
+    }else{
+        return htmlHistory
+    }
 }
 
 function addAsset() {
@@ -459,7 +540,15 @@ function addAsset() {
 
 function editAsset() {
     var arr = $("#editform").serializeArray();
-    //arr.push({name: "zctype", value: param.zctype});
+    if (isreset) {
+        for (var i = 0; i < arr.length; i++) {  //遍历数组
+            if (arr[i].name === "zcid") {
+                arr[i].value = "";
+            }
+        }
+        var addtype = {name: "zctype", value: param.zctype};
+        arr.push(addtype);
+    }
     $.ajax({
         type: "post",
         url: "/rczcgl/assetsconfig/editAsset.action",
@@ -491,46 +580,44 @@ function insertFile() {
         }
     })
 }
-function showInfo(row) {
-    $("#fileTable").bootstrapTable('destroy');
-    $('#fileTable').bootstrapTable({
-        url: '/rczcgl/assetsconfig/getAssetFileListByZcid.action',
-        method: 'post',
-        contentType: "application/json;charset=UTF-8",
-        dataType: "json",
-        clickToSelect: true,
-        sidePagination: "client",
-        pagination: true,
-        pageNumber: 1,
-        pageSize: 5,
-        pageList: [5, 10, 20, 50, 100],
-        paginationPreText: "上一页",
-        paginationNextText: "下一页",
-        columns: [{
-            field: 'filename',
-            title: '文件名称'
-        }, {
-            field: 'filepath',
-            title: '文件路径'
-        }],
-        queryParams: function (params) {
-            return JSON.stringify({
-                //limit: params.limit,
-                //offset: params.offset,
-                "zcid": row.zcid
-            });
-        },
-        onLoadSuccess: function () {
-            //$("#view").modal('show');
-        },
-        onLoadError: function () {
-        },
-        onClickCell: function (field, value, row, $element) {
-        },
-        onCheck: function (row, $element) {
-        }
-    })
-}
+/*function showInfo(row) {
+ $("#fileTable").bootstrapTable('destroy');
+ $('#fileTable').bootstrapTable({
+ url: '/rczcgl/assetsconfig/getAssetFileListByZcid.action',
+ method: 'post',
+ contentType: "application/json;charset=UTF-8",
+ dataType: "json",
+ clickToSelect: true,
+ sidePagination: "client",
+ pagination: true,
+ pageNumber: 1,
+ pageSize: 5,
+ pageList: [5, 10, 20, 50, 100],
+ paginationPreText: "上一页",
+ paginationNextText: "下一页",
+ columns: [{
+ field: 'filename',
+ title: '文件名称'
+ }, {
+ field: 'filepath',
+ title: '文件路径'
+ }],
+ queryParams: function (params) {
+ return JSON.stringify({
+ "zcid": row.zcid
+ });
+ },
+ onLoadSuccess: function () {
+ $("#view").modal('show');
+ },
+ onLoadError: function () {
+ },
+ onClickCell: function (field, value, row, $element) {
+ },
+ onCheck: function (row, $element) {
+ }
+ })
+ }*/
 function showInfoDown(row) {
     $("#filedownlist").bootstrapTable('destroy');
     $('#filedownlist').bootstrapTable({
@@ -555,13 +642,10 @@ function showInfoDown(row) {
         ],
         queryParams: function (params) {
             return JSON.stringify({
-                //limit: params.limit,
-                //offset: params.offset,
                 "zcid": row.zcid
             });
         },
         onLoadSuccess: function () {
-            //$("#view").modal('show');
         },
         onLoadError: function () {
         },
@@ -573,13 +657,11 @@ function showInfoDown(row) {
 }
 
 function loadData(row) {
-    //var obj = eval("("+jsonStr+")");
     var obj = row;
     var key, value, tagName, type, arr;
     for (x in obj) {
         key = x;
         value = obj[x];
-
         $("[name='" + key + "'],[name='" + key + "[]']").each(function () {
             tagName = $(this)[0].tagName;
             type = $(this).attr('type');
@@ -603,4 +685,30 @@ function loadData(row) {
 
         });
     }
+}
+
+
+function reloadTable(a){
+    debugger;
+    //var gsmc= a.innerText;
+
+    getcolumn();
+    var classq = a.className;
+    if(classq === "getAssetsInfo"){
+        url= '/rczcgl/assetsconfig/getAssetsInfo.action';
+    }else if(classq === "getAssetsHistoryInfo"){
+        url= '/rczcgl/assetsconfig/getAssetsHistoryInfo.action';
+    }else{
+        gsmc = a.innerText;
+    }
+    $('#assetsTable').bootstrapTable('refreshOptions', {
+        url: url,
+        queryParams: function (params) {
+            params.zctype = param.zctype;
+            if(gsmc!=""&&gsmc!="荣成市经济开发投资有限公司"){
+                params.gsmc = gsmc;
+            }
+            return JSON.stringify(params);
+        }
+    })
 }
