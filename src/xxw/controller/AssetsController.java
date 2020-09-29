@@ -1,10 +1,14 @@
 package xxw.controller;
 
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import xxw.po.*;
@@ -18,15 +22,13 @@ import xxw.mapper.AssetsMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by lp on 2020/8/7.
  */
 @Controller
+@Component
 @RequestMapping("/assetsconfig")
 public class AssetsController {
     @Autowired
@@ -196,7 +198,7 @@ public class AssetsController {
 
     @RequestMapping("/total")
     @ResponseBody
-    public  Map<String,Integer> totalAssets(HttpServletRequest request){
+    public Map<String,Integer> totalAssets(HttpServletRequest request){
         String zctype=request.getParameter("zctype");
         String gsmc=request.getParameter("gsmc");
         Map<String,Integer> mapCount=new HashMap<>();
@@ -220,5 +222,19 @@ public class AssetsController {
             return mapCount;
         }
 
+    }
+
+    /**
+     * 每天22点30启动任务
+     */
+    @Scheduled(cron = "0 30 02 ? * *")
+    public void test1() {
+        List<AssetsInfo> configlist = assetsMapper.getAssetsInfo(null, null);
+        for (AssetsInfo assetsInfo : configlist) {
+            long betweenDay = DateUtil.between(new Date(), assetsInfo.getStopday(), DateUnit.DAY);
+            int dayorder = (int)betweenDay - Integer.parseInt(assetsInfo.getDays());
+            assetsInfo.setDayorder(dayorder);
+        }
+//        System.out.println("job1 开始执行..."+(new Date()).toString());
     }
 }
