@@ -55,7 +55,15 @@
         <if test="gsmc !=null">
             and FIELD2 LIKE #{gsmc,jdbcType=VARCHAR}
         </if>
-    
+    </select>
+    <select id="getAssetsHistoryInfo" resultType="xxw.po.AssetsInfoHistory">
+        select * from ASSETS_INFO_HISTORY where 1=1
+        <if test="zctype !=null">
+            and ZCTYPE= #{zctype,jdbcType=VARCHAR}
+        </if>
+        <if test="gsmc !=null">
+            and FIELD2 LIKE #{gsmc,jdbcType=VARCHAR}
+        </if>
     </select>
     <select id="getAssetsInfoByName" resultType="xxw.po.AssetsInfo">
         select * from ASSETS_INFO where 1=1
@@ -108,6 +116,20 @@
 
     <insert id="insertAssetsInfo">
         insert into ASSETS_INFO(
+        id,
+        <foreach collection="assetsMap" item="value" index="key" separator=",">
+            ${key}
+        </foreach>
+        )
+        values(
+        ASSETSINFOSEQ.nextval,
+        <foreach collection="assetsMap" item="value" index="key" separator=",">
+            #{value}
+        </foreach>
+        )
+    </insert>
+    <insert id="insertAssetsInfoHistory">
+        insert into ASSETS_INFO_HISTORY(
         id,
         <foreach collection="assetsMap" item="value" index="key" separator=",">
             ${key}

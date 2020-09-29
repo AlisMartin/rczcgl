@@ -86,6 +86,26 @@ public class AssetsController {
             return null;
         }
     }
+    @RequestMapping("/getAssetsHistoryInfo")
+    @ResponseBody
+    public Map<String,Object> getAssetsHistoryInfo(@RequestBody JSONObject json){
+        Map<String,Object> res = new HashMap<>();
+        int offset = Integer.parseInt(json.getString("offset"));
+        int limit = Integer.parseInt(json.getString("limit"));
+        String gsmc = json.getString("gsmc");
+        String zctype = json.getString("zctype");
+        int pageNumber = offset==0?1:offset/limit + 1;
+        Page page = PageHelper.startPage(pageNumber,limit);
+        List<AssetsInfoHistory> info=assetsMapper.getAssetsHistoryInfo(zctype,StringUtil.formatLike(gsmc));
+        PageInfo pageInfo = new PageInfo<>(info);
+        if(pageInfo.getList().size()>0){
+            res.put("total",pageInfo.getTotal());
+            res.put("rows",pageInfo.getList());
+            return  res;
+        }else{
+            return null;
+        }
+    }
     @RequestMapping("/getAssetsInfoByName")
     @ResponseBody
     public Map<String,Object> findAssetsInfoByName(@RequestBody JSONObject json){
@@ -124,9 +144,9 @@ public class AssetsController {
         insertInfo.put("zcid", uuid.toString());
         int i = assetsMapper.insertAssetsInfo(insertInfo);
         if (i == 1) {
-            return new ResponseObject(1, "�ɹ�", "");
+            return new ResponseObject(1, "成功", "");
         } else {
-            return new ResponseObject(0, "ʧ��", "");
+            return new ResponseObject(0, "失败", "");
         }
     }
     @RequestMapping("/editAsset")
@@ -138,11 +158,18 @@ public class AssetsController {
                 insertInfo.put(assetVO.getName(), assetVO.getValue());
             }
         }
-        int i = assetsMapper.updateAssetsInfo(insertInfo);
+        int i;
+        if (StringUtil.isEmpty(insertInfo.get("zcid"))){
+            UUID uuid = UUID.randomUUID();
+            insertInfo.put("zcid",uuid.toString());
+            i = assetsMapper.insertAssetsInfoHistory(insertInfo);
+        }else {
+            i = assetsMapper.updateAssetsInfo(insertInfo);
+        }
         if (i == 1) {
-            return new ResponseObject(1, "�ɹ�", "");
+            return new ResponseObject(1, "成功", "");
         } else {
-            return new ResponseObject(0, "ʧ��", "");
+            return new ResponseObject(0, "失败", "");
         }
     }
 
@@ -154,7 +181,7 @@ public class AssetsController {
         List<AssetsFile> fileList = assetsMapper.getAssetFileListByZcid(zcid);
         res.put("total",fileList.size());
         res.put("rows",fileList);
-        res.put("msg","��ѯ�ɹ�");
+        res.put("msg","成功");
         return res;
     }
 
