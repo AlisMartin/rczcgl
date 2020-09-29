@@ -16,7 +16,7 @@
             and "ORDER"= #{order,jdbcType=VARCHAR}
         </if>
         and SHOW='1'
-        order by ID,FIELD
+        ORDER BY "TO_NUMBER"("ORDER")
     </select>
     <select id="getAllAssetsConfigInfo" resultType="xxw.po.AssetsConfig">
         select * from ASSETS_CONFIG where 1=1
@@ -26,7 +26,7 @@
         <if test="order !=null">
             and "ORDER"= #{order,jdbcType=VARCHAR}
         </if>
-        order by ID,FIELD
+        ORDER BY "TO_NUMBER"("ORDER")
     </select>
     <select id="getFieldByTypeAndName" resultType="String">
         select FIELD from ASSETS_CONFIG where FIELDNAME= '公司名称'
