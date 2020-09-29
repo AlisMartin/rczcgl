@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xxw.mapper.FinanceMapper">
+    <select id="getFinance" parameterType="java.lang.String" resultType="xxw.po.Finance">
+        select * from FINANCE
+    </select>
+
+    <insert id="insertFinance">
+        insert into FINANCE(
+        id,
+        <foreach collection="assetsMap" item="value" index="key" separator=",">
+            ${key}
+        </foreach>
+        )
+        values(
+        ASSETSINFOSEQ.nextval,
+        <foreach collection="assetsMap" item="value" index="key" separator=",">
+            #{value}
+        </foreach>
+        )
+    </insert>
+    <update id="updateFinance" parameterType="java.util.Map">
+        update FINANCE SET
+        <foreach collection="assetsMap" item="value" index="key" separator=",">
+            ${key} = #{value}
+        </foreach>
+        where zcid = #{assetsMap.zcid}
+    </update>
+</mapper>

@@ -4,6 +4,9 @@ $(function(){
     $("#oneMap").click(function(){
         $("#InfoList").attr("src","oneMap.html?random="+Math.floor(Math.random()*100000));
     });
+    $("#financeManager").click(function(){
+        $("#InfoList").attr("src","financeManager.html?random="+Math.floor(Math.random()*100000));
+    });
     $("#userManager").click(function(){
         $("#InfoList").attr("src","newUserManager.html?random="+Math.floor(Math.random()*100000));
     });

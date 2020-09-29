@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import xxw.po.*;
 import xxw.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import xxw.mapper.AssetsMapper;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -141,6 +144,12 @@ public class AssetsController {
             }
         }
         UUID uuid = UUID.randomUUID();
+        //获取session
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        HttpSession session   =   request.getSession();
+        User user = (User)session.getAttribute("user");
+        //todo
+        //插入资产的公司id
         insertInfo.put("zcid", uuid.toString());
         int i = assetsMapper.insertAssetsInfo(insertInfo);
         if (i == 1) {

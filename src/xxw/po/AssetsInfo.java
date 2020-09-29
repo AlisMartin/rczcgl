@@ -37,6 +37,11 @@ public class AssetsInfo {
     private String field28;
     private String field29;
     private String field30;
+    private String companyid;
+    private String days;
+    private String stopday;
+    private String financeid;
+
 
     public String getId() {
         return id;
@@ -303,4 +308,35 @@ public class AssetsInfo {
     }
 
 
+    public String getCompanyid() {
+        return companyid;
+    }
+
+    public void setCompanyid(String companyid) {
+        this.companyid = companyid;
+    }
+
+    public String getDays() {
+        return days;
+    }
+
+    public void setDays(String days) {
+        this.days = days;
+    }
+
+    public String getStopday() {
+        return stopday;
+    }
+
+    public void setStopday(String stopday) {
+        this.stopday = stopday;
+    }
+
+    public String getFinanceid() {
+        return financeid;
+    }
+
+    public void setFinanceid(String financeid) {
+        this.financeid = financeid;
+    }
 }

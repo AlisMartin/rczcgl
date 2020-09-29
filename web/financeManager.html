@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
+    <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
+    <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+    <script src="js/financeManager/financeManager.js"></script>
+    <style>
+        .checkboxstyle{
+            width:100%;
+            display: block;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+        .colorsty{
+            background: #efeff6;
+        }
+        .tablemar{
+            margin-top: 1%;
+        }
+        .fonts{
+            font-size: 15px;
+            background-color: #f1f1f1 !important;
+        }
+    </style>
+</head>
+<body class="colorsty">
+<div class="container-fluid" id="ifrmheight">
+    <ol class="breadcrumb fonts">
+        <li><a href="#">资产管理</a></li>
+        <li class="active">融资管理</li>
+    </ol>
+    <div style="height: 100%;margin-top: -6%">
+        <div class="panel panel-default" style="height: 80%;z-index: 1000;margin-top: 8%;width: 96%;margin-left: 2%">
+            <div class="panel-body">
+                <div style="float: right">
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addUser" id="add">
+                        <span class="glyphicon glyphicon-plus"></span>添加
+                    </button>
+                    <button type="button" class="btn btn-warning"  id="editUser" >
+                        <span class="glyphicon glyphicon-pencil"></span>修改
+                    </button>
+                </div>
+                <table id="userTable" class="table tablemar">
+                </table>
+                <div class="modal" tabindex="-1" id="addUser" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">添加用户</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="addform">
+                                <div class="modal-body" id="financeform">
+
+                                    <!--<div class="form-group">
+                                        <label for="finance_days">融资银行</label>
+                                        <input type="text" class="form-control" id="finance_bank" name="finance_bank">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="finance_days">融资金额</label>
+                                        <input type="text" class="form-control" id="finance_money" name="finance_money">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="finance_days">融资期限</label>
+                                        <input type="text" class="form-control" id="finance_days" name="finance_days">
+                                    </div>-->
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" id="saveUser">保存</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('ifrmheight').style.height=parent.window.document.getElementById('chartheight').scrollHeight*0.883+"px";
+    </script>
+</div>
+</body>
+</html>

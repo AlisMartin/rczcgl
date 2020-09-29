@@ -1,9 +1,10 @@
 var columns = [];
 var param = {};
 var zcid = "";
-var fileid = "", isreset, newmap, editmap, viewmap,map, toolBar,
+var fileid = "", isreset, newmap, editmap, viewmap, map, toolBar,
+    financeid = "",
     url = '/rczcgl/assetsconfig/getAssetsInfo.action',
-    gsmc = "荣成市鑫荣建投实业有限公司";
+    gsmc = "1";
 
 require(["esri/map",
     "esri/layers/ArcGISDynamicMapServiceLayer",
@@ -31,11 +32,11 @@ require(["esri/map",
             autoResize: true
         });
         viewmap = new Map("viewmap", {
-         basemap: "osm",
-         center: [122.376, 37.096],
-         zoom: 12,
-         autoResize: true
-         });
+            basemap: "osm",
+            center: [122.376, 37.096],
+            zoom: 12,
+            autoResize: true
+        });
         //创建点要素
         $("#drawTool").click(function () {
             //使用toolbar上的绘图工具
@@ -61,15 +62,15 @@ require(["esri/map",
         map = {
             addPoint: function (id) {
                 /*var markerSymbol = new SimpleMarkerSymbol();
-                markerSymbol.setColor(new Color("#00FFFF"));
-                var startPt = esri.geometry.Point({
-                    "x": x,
-                    "y": y,
-                    "spatialReference": {"wkid": 4326}
-                });
-                var graphic = new Graphic(startPt, symbol);
-                newmap.graphics.add(graphic);
-*/
+                 markerSymbol.setColor(new Color("#00FFFF"));
+                 var startPt = esri.geometry.Point({
+                 "x": x,
+                 "y": y,
+                 "spatialReference": {"wkid": 4326}
+                 });
+                 var graphic = new Graphic(startPt, symbol);
+                 newmap.graphics.add(graphic);
+                 */
 
                 //定义查询对象
                 var queryTask = new QueryTask("http://localhost:6080/arcgis/rest/services/TEST4326/MapServer/0");
@@ -100,7 +101,7 @@ require(["esri/map",
                             //将graphic添加到地图中，从而实现高亮效果
                             viewmap.graphics.clear();
                             viewmap.graphics.add(graphic);
-                            viewmap.centerAndZoom(queryResult.features[i].geometry.getExtent().getCenter(),15);
+                            viewmap.centerAndZoom(queryResult.features[i].geometry.getExtent().getCenter(), 15);
                         }
                     }
                 }
@@ -119,7 +120,7 @@ require(["esri/map",
 ;
 
 $(function () {
-    debugger;
+    getCompanys();
     var zctype = parent.document.getElementById("InfoList").src.split("?")[1].split("&&")[0];
     zctype = zctype.substring(zctype.length - 1, zctype.length);
     param.zctype = zctype;
@@ -145,6 +146,16 @@ $(function () {
     });
     $("#savefile").click(function () {
         insertFile();
+    });
+    $(".selectFinance").click(function () {
+        //选择融资
+        showFinanceList();
+    });
+    $("#saveFinance").click(function () {
+        //保存融资
+        //financeid
+        $('#editform #financeid').val(financeid);
+        $("#financeList").modal('hide');
     });
     $("#search").click(function () {
         $('#assetsTable').bootstrapTable('refreshOptions', {
@@ -332,24 +343,24 @@ $(function () {
         onClickCell: function (field, value, row, $element) {
         },
         onCheck: function (row, $element) {
-            debugger;
-            var userId = row.id;
-            $.ajax({
-                type: "post",
-                url: "/rczcgl/user/getRoleByUserId.action",
-                sync: false,
-                data: {"userid": userId},
-                success: function (data) {
-                    debugger;
-                    $("#roleTable").bootstrapTable('uncheckAll');
-                    if (data != "" && data != null) {
-                        $("#roleTable").bootstrapTable('checkBy', {field: 'roleId', values: [data]});
-                    }
-                },
-                error: function () {
-                    alert("关联失败！")
-                }
-            })
+            /*debugger;
+             var userId = row.id;
+             $.ajax({
+             type: "post",
+             url: "/rczcgl/user/getRoleByUserId.action",
+             sync: false,
+             data: {"userid": userId},
+             success: function (data) {
+             debugger;
+             $("#roleTable").bootstrapTable('uncheckAll');
+             if (data != "" && data != null) {
+             $("#roleTable").bootstrapTable('checkBy', {field: 'roleId', values: [data]});
+             }
+             },
+             error: function () {
+             alert("关联失败！")
+             }
+             })*/
         }
     })
 });
@@ -365,7 +376,7 @@ function getcolumn() {
         data: param,
         success: function (data) {
             for (var i = 0; i < data.length; i++) {
-                if (data[i].zctype == '1') {
+                /*if (data[i].zctype == '1') {
                     data[i].zctype = "土地资产";
                 }
                 if (data[i].zctype == '2') {
@@ -373,6 +384,22 @@ function getcolumn() {
                 }
                 if (data[i].zctype == '3') {
                     data[i].zctype = "海域资产";
+                }*/
+                switch (data[i].zctype) {
+                    case '1':
+                        data[i].zctype = "土地资产";
+                        break;
+                    case '2':
+                        data[i].zctype = "房屋资产";
+                        break;
+                    case '3':
+                        data[i].zctype = "海域资产";
+                        break;
+                    case '4':
+                        data[i].zctype = "其他资产";
+                        break;
+                    default :
+                        break;
                 }
                 var obj = {};
                 obj.field = data[i].field;
@@ -408,7 +435,8 @@ function getcolumn() {
                 $(".landAssetsLeft").append(htmlLeft);
                 $(".landAssetsRight").append(htmlRight);
             }
-            $(".landAssetsLeft").append(' <input type="text" class="form-control" id="zcid" name="zcid" style="display: none"> ');
+            $(".landAssetsLeft").append(' <input type="text" class="form-control" id="zcid" name="zcid" style="display: none">' +
+                '<input type="text" class="form-control" id="financeid" name="financeid" style="display: none"> ');
             //添加操作列
             var toolCol = {
                 field: 'operate',
@@ -512,9 +540,9 @@ function btnGroup() {   // 自定义方法，添加操作按钮
         '<span class="glyphicon glyphicon-info-sign">档案卡</span></a>' +
         '<a href="####" class="btn btn-info" id="filesdown" data-toggle="modal" data-target="#filedown" style="margin-left:15px" title="下载附件">' +
         '<span class="glyphicon glyphicon-download">下载附件</span></a>';
-    if(url === '/rczcgl/assetsconfig/getAssetsInfo.action'){
+    if (url === '/rczcgl/assetsconfig/getAssetsInfo.action') {
         return html
-    }else{
+    } else {
         return htmlHistory
     }
 }
@@ -618,6 +646,60 @@ function insertFile() {
  }
  })
  }*/
+function showFinanceList(row) {
+    $("#financeTable").bootstrapTable('destroy');
+    var columns = [];
+    $.ajax({
+        type: "post",
+        url: "/rczcgl/assetsconfig/getAllConfigInfo.action",
+        async: false,
+        data: {zctype: 5},
+        success: function (data) {
+            var htmlLeft = '';
+            columns.push({checkbox: true});
+            for (var i = 0; i < data.length; i++) {
+                var obj = {};
+                obj.field = data[i].field;
+                obj.title = data[i].fieldname;
+                columns.push(obj);
+            }
+        },
+        error: function () {
+        }
+    });
+    $('#financeTable').bootstrapTable({
+        url: '/rczcgl/finance/getFinanceList.action',
+        method: 'post',
+        contentType: "application/json;charset=UTF-8",
+        clickToSelect: true,
+        singleSelect: true,//单行选择单行,设置为true将禁止多选
+        sidePagination: "server",
+        pagination: true,
+        pageNumber: 1,
+        pageSize: 5,
+        pageList: [5, 10, 20, 50, 100],
+        paginationPreText: "上一页",
+        paginationNextText: "下一页",
+        columns: columns,
+        queryParamsType: "limit",
+        queryParams: function (params) {
+            return JSON.stringify(params);
+        },
+
+        onCheck: function (row, $element) {
+            //var row = $("#financeTable").bootstrapTable('getSelections');
+            financeid = row.zcid;
+        },
+        onUncheck: function (row, $element) {
+            financeid = "";
+        },
+        onLoadSuccess: function () {
+        },
+        onLoadError: function () {
+            //showTips("数据加载失败!");
+        }
+    })
+}
 function showInfoDown(row) {
     $("#filedownlist").bootstrapTable('destroy');
     $('#filedownlist').bootstrapTable({
@@ -688,27 +770,53 @@ function loadData(row) {
 }
 
 
-function reloadTable(a){
+function reloadTable(a) {
     debugger;
     //var gsmc= a.innerText;
 
-    getcolumn();
+    //getcolumn();
     var classq = a.className;
-    if(classq === "getAssetsInfo"){
-        url= '/rczcgl/assetsconfig/getAssetsInfo.action';
-    }else if(classq === "getAssetsHistoryInfo"){
-        url= '/rczcgl/assetsconfig/getAssetsHistoryInfo.action';
-    }else{
-        gsmc = a.innerText;
+    if (classq === "getAssetsInfo") {
+        url = '/rczcgl/assetsconfig/getAssetsInfo.action';
+    } else if (classq === "getAssetsHistoryInfo") {
+        url = '/rczcgl/assetsconfig/getAssetsHistoryInfo.action';
+    } else {
+        gsmc = classq;
     }
     $('#assetsTable').bootstrapTable('refreshOptions', {
         url: url,
         queryParams: function (params) {
             params.zctype = param.zctype;
-            if(gsmc!=""&&gsmc!="荣成市经济开发投资有限公司"){
-                params.gsmc = gsmc;
-            }
+            params.gsmc = gsmc;
             return JSON.stringify(params);
+        },
+        //columns: columns
+    })
+}
+
+
+function getCompanys() {
+    $.ajax({
+        type: "post",
+        url: "/rczcgl/depart/getDepart.action",
+        data: {'depart': "company"},
+        async: false,
+        success: function (res) {
+            var data = res.data;
+            var htmlLeft = '';
+            for (var i = 0; i < data.length; i++) {
+                //生成表单
+                if (i === 0) {
+                    htmlLeft = htmlLeft +
+                        '<li class="active"><a class="' + data[i].id + '" data-toggle="tab" onclick="reloadTable(this)">' + data[i].nodeName + '</a></li>';
+                } else {
+                    htmlLeft = htmlLeft +
+                        '<li><a class="' + data[i].id + '" data-toggle="tab" onclick="reloadTable(this)">' + data[i].nodeName + '</a></li>';
+                }
+            }
+            $("#myTab1").append(htmlLeft);
+        },
+        error: function () {
         }
     })
 }
