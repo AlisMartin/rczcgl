@@ -9,5 +9,8 @@
         <if test="fileId !=null">
             and FILEID= #{fileId,jdbcType=VARCHAR}
         </if>
+        <if test="pathId !=null">
+            and PATHID= #{pathId,jdbcType=VARCHAR}
+        </if>
     </select>
 </mapper>

@@ -1,5 +1,6 @@
 $(function(){
     debugger;
+    getMessage();
     $("#oneMap").click(function(){
         $("#InfoList").attr("src","oneMap.html?random="+Math.floor(Math.random()*100000));
     });
@@ -79,4 +80,36 @@ $(function(){
     });
 
 
+
 })
+//5分钟查询一次消息
+function getMessage(){
+    debugger;
+    var user= $.cookie('user');
+    var userobj=eval('('+user+')');
+    setTimeout(getMessage,1000*60*5);
+    $.ajax({
+        type:"post",
+        url:"/rczcgl/flow/queryMessage.action",
+        data:{'show':1,'jsuser':userobj.id},
+        success:function(responsedata){
+            debugger;
+            var obj=responsedata;
+            if(obj.length>0){
+                $(".imsg-bubble").css('display','block');
+                $(".imsg-bubble").empty();
+                $(".imsg-bubble").text(obj.length+"");
+            }else{
+                $(".imsg-bubble").css('display','none');
+                $(".imsg-bubble").empty();
+                $(".imsg-bubble").text(0);
+            }
+
+
+
+        },
+        error:function(){
+            alert("添加失败！请稍后重试！");
+        }
+    })
+}

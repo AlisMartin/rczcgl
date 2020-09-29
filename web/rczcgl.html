@@ -30,6 +30,10 @@
     <!-- sparkline js -->
     <script src="assets/vendor/charts/sparkline/jquery.sparkline.js"></script>
     <script src="js/index/zcglIndex.js"></script>
+    <style>
+        .imsg-bubble{width: 35px;height: 18px;font-size: 12px;background: orangered;border-radius: 10px;position: absolute;right: 0;top: -3px;
+            line-height: 18px;text-align: center;display: none;}
+    </style>
 </head>
 
 <body>
@@ -50,7 +54,8 @@
                 <ul class="navbar-nav ml-auto navbar-right-top">
                     <li class="nav-item dropdown notification">
                        <!-- <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span class="indicator"></span></a>-->
-                        <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1"  aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span class="indicator"></span></a>
+
+                        <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1"  aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <div class="imsg-bubble">0</div><!--<span class="indicator"></span>--></a>
                         <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                             <li>
                                 <div class="notification-title"> 消息</div>
@@ -248,9 +253,9 @@
                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-9" aria-controls="submenu-9"><i class="fas fa-f fa-folder"></i> 系统管理 </a>
                             <div id="submenu-9" class="collapse submenu" style="">
                                 <ul class="nav flex-column">
-                                  <!--  <li class="nav-item">
-                                        <a class="nav-link" href="#" id="departManager">流程节点人员</a>
-                                    </li>-->
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#" id="departManager">组织机构管理</a>
+                                    </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#" id="userManager">用户管理</a>
                                     </li>

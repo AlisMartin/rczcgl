@@ -63,7 +63,7 @@ public class UserManagerController {
         user.setDepartment(depart);
         user.setPosition(positionname);
         int i=userMapper.addUser(user);
-        departMapper.insertNode(userid,userName,userid,position,level,"user");
+        departMapper.insertNode(userid,userName,userid,position,level,"user",null);
         return i;
     }
     @RequestMapping("/editUser")

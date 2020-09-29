@@ -9,10 +9,42 @@ public class SysMessage {
     private String tsUser;
     private String jsUser;
     private String fileName;
+
+    private String tsId;
+    private String jsId;
+    private String dId;
+
+
+    private String fileId;
     private String tsDate;
     private String desc;
     private String type;
     private String duser;
+
+
+    public String getTsId() {
+        return tsId;
+    }
+
+    public void setTsId(String tsId) {
+        this.tsId = tsId;
+    }
+
+    public String getJsId() {
+        return jsId;
+    }
+
+    public void setJsId(String jsId) {
+        this.jsId = jsId;
+    }
+
+    public String getdId() {
+        return dId;
+    }
+
+    public void setdId(String dId) {
+        this.dId = dId;
+    }
 
     public String getShow() {
         return show;
@@ -34,7 +66,13 @@ public class SysMessage {
 
     private String node;
 
+    public String getFileId() {
+        return fileId;
+    }
 
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
+    }
     public String getFlowId() {
         return flowId;
     }
@@ -66,6 +104,8 @@ public class SysMessage {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+
+
 
     public String getTsDate() {
         return tsDate;

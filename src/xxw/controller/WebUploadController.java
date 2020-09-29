@@ -36,7 +36,16 @@ public class WebUploadController {
     public ResponseObject upload(HttpServletRequest request,MultipartFile file, String chunks,String chunk,String name,String zcid)throws IOException{
         ResponseObject responseObject = new ResponseObject();
         try{
-            String tempPath = request.getRealPath("/") + "assetsfile/"+zcid+"/";
+            String xdPath;
+            String tempPath;
+            if("".equals(zcid)||zcid==null){
+                xdPath="filemanager/upload/";
+                tempPath= request.getRealPath("/") + "filemanager/upload/";
+            }else{
+                xdPath="assetsfile/"+zcid+"/";
+                tempPath = request.getRealPath("/") + "assetsfile/"+zcid+"/";
+            }
+
             if(file!=null){
                 if((null==chunks&&null==chunk)||("").equals(chunks)&&("").equals(chunk)){
 
@@ -45,14 +54,11 @@ public class WebUploadController {
                         parentFile.mkdirs();
                     }
                     File destTempFile=new File(parentFile+"/"+name);
-               /*     if(!destTempFile.exists()){
-                        destTempFile.createNewFile();
-                    }*/
                     FileUtils.copyInputStreamToFile(file.getInputStream(),destTempFile);
                     destTempFile.createNewFile();
                     UUID uid=UUID.randomUUID();
                     String id=uid.toString();
-                    flowMapper.insertManagerFile(id,name,"assetsfile/"+zcid+"/",null,null,null);
+                    flowMapper.insertManagerFile(id,name,xdPath,null,null,null);
                     responseObject.setCode(1);
                     responseObject.setData(id);
                     responseObject.setMessage("上传完毕");
@@ -87,9 +93,14 @@ public class WebUploadController {
                             FileUtils.copyFile(partFile,destTempfos);
                             destTempfos.close();
                         }
+                        UUID uid=UUID.randomUUID();
+                        String id=uid.toString();
+                        flowMapper.insertManagerFile(id,name,xdPath,null,null,null);
+                        responseObject.setData(id);
                         FileUtils.deleteDirectory(parentFileDir);
                     }
                 }
+
                 responseObject.setCode(1);
                 responseObject.setMessage("上传完毕");
                 return responseObject;

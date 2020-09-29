@@ -1,3 +1,6 @@
+var user= $.cookie('user');
+var userobj=eval('('+user+')');
+var userid=userobj.id;
 $(function(){
 
     $('#sysMessageTable').bootstrapTable({
@@ -64,11 +67,17 @@ $(function(){
                        // id.attr("src","FileFlowWork.html?random="+Math.floor(Math.random()*100000));
                     },
                     'click #downfile':function(e,value,row,index){
-                        queryFileByFileName(row.fileName);
+                        queryFileByFileName(row.fileId);
                     }
                 }
             }
         ],
+        queryParams: function (params) {
+            debugger;
+            params.jsuser = userid;
+            param.show="1";
+            return param;
+        },
         onLoadSuccess:function(){
         },
         onLoadError:function(){
@@ -82,18 +91,20 @@ function queryFileByFileName(a){
         type:"post",
         url:"/rczcgl/flow/queryFileInfo.action",
         async:false,
-        data:{'fileName':a},
+        data:{'fileId':a},
         success:function(responsedata){
             debugger;
             var obj=responsedata.data;
-            if(obj!=null){
-                var path=obj.filePath;
-                var downloadA=document.createElement("a");
-                downloadA.setAttribute("href","/rczcgl/"+path+"/"+a);
-                downloadA.setAttribute("target","_blank");
-                downloadA.setAttribute("download",a);
-                downloadA.click();
-                downloadA.remove();
+            if(obj.length>0){
+                for(var i=0;i<obj.length;i++){
+                    var downloadA=document.createElement("a");
+                    downloadA.setAttribute("href","/rczcgl/"+obj[i].filePath+"/"+obj[i].fileName);
+                    downloadA.setAttribute("target","_blank");
+                    downloadA.setAttribute("download",obj[i].fileName);
+                    downloadA.click();
+                    downloadA.remove();
+
+                }
 
             }
 

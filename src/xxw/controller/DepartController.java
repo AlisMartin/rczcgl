@@ -12,10 +12,7 @@ import xxw.po.DepartTree;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by lp on 2020/9/3.
@@ -58,6 +55,7 @@ public class DepartController {
                 //if(departTree.getDepart())
                 map.put("nodes",new Object[]{});
                 map.put("depart",departTree.getDepart());
+                map.put("px",departTree.getPx());
                 childList.add(map);
             }
         }
@@ -73,7 +71,54 @@ public class DepartController {
     public ResponseObject getDepartByDepart(HttpServletRequest request){
         String depart=request.getParameter("depart");
         String pnodeId=request.getParameter("pnodeId");
-        List<DepartTree> list=departMapper.getDepart(depart,pnodeId);
-        return new ResponseObject(1,"",list);
+        String pxs=request.getParameter("px");
+        if(pxs!=null){
+            int px=Integer.parseInt(pxs);
+            List<DepartTree> list=departMapper.getDepart(depart,pnodeId,px);
+            return new ResponseObject(1,"",list);
+        }else{
+            List<DepartTree> list=departMapper.getDepart(depart,pnodeId,null);
+            return new ResponseObject(1,"",list);
+        }
+
+
     }
+
+    @RequestMapping("/insertNode")
+    @ResponseBody
+    public ResponseObject insertNode(HttpServletRequest request){
+        String name=request.getParameter("name");
+
+        String depart=request.getParameter("depart");
+        String parentId=request.getParameter("parentId");
+        UUID uuid= UUID.randomUUID();
+        String id=uuid.toString();
+        String pxs=request.getParameter("px");
+        if(pxs!=null){
+            int px=Integer.parseInt(pxs);
+            departMapper.insertNode(id,name,id,parentId,null,depart,px);
+        }else{
+            departMapper.insertNode(id,name,id,parentId,null,depart,null);
+        }
+
+        return new ResponseObject(1,"",null);
+    }
+    @RequestMapping("/updateNode")
+    @ResponseBody
+    public ResponseObject updateNode(HttpServletRequest request){
+        int i=0;
+        String name=request.getParameter("name");
+        String id=request.getParameter("id");
+        String pxs=request.getParameter("px");
+        String depart=request.getParameter("depart");
+        if(pxs!=null){
+            int px=Integer.parseInt(pxs);
+            i=departMapper.updateNode(name,id,px,depart);
+        }else{
+            i=departMapper.updateNode(name,id,null,depart);
+        }
+
+        return new ResponseObject(i,"",null);
+    }
+
 }

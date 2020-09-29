@@ -31,7 +31,7 @@ public interface FlowMapper {
 
     List<String> selectType(@Param("com")String com,@Param("pos")String pos);
 
-    List<Map<String,String>>selectFile(@Param("com")String com,@Param("pos")String pos,@Param("type")String type,@Param("fileDate")String fileDate);
+    List<Map<String,String>>selectFile(@Param("com")String com,@Param("pos")String pos,@Param("type")String type,@Param("fileDate")String fileDate,@Param("pathId")String pathId);
 
     List<Map<String,String>>selectPathId(@Param("com")String com,@Param("pos")String pos,@Param("type")String type);
 

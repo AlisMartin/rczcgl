@@ -6,32 +6,49 @@
     <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
     <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
+    <link rel="stylesheet" href="third/datetimepicker/bootstrap-datetimepicker.css">
+    <link href="third/webuploader/webuploader.css" rel="stylesheet" type="text/css" />
     <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
     <script src="third/jquery.cookie.js"></script>
     <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
     <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+    <script src="third/datetimepicker/moment-with-locales.min.js"></script>
+    <script src="third/datetimepicker/bootstrap-datetimepicker.js"></script>
+    <script src="third/datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script src="third/webuploader/webuploader.nolog.min.js"></script>
     <script src="js/common/common.js"></script>
     <script src="js/Flow/createFlow.js"></script>
     <style>
+        .yc{
+            display: none;
+        }
         .tableborder{
             border: 0;
         }
         .font{
             text-align: center;
         }
-        .uploadbtn{
-            margin-top: 10%;
-            margin-left: 45%;
-            width: 150px;
+        .formwid{
+            width:100%;
         }
-        .ifraheight{
-            height: 585px;
-            background-color: #f1f1f1;
-        }
-        .rowheight{
-            height: 100%;
+        .checkboxstyle{
+            display: block;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
         }
         .fonts{
             font-size: 15px;
@@ -69,11 +86,12 @@
                             <div class="modal-header">
                                 <h5 class="modal-title">文件处理签条</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
+                                   <!-- <span aria-hidden="true">&times;</span>-->
                                 </button>
                             </div>
                             <form id="addFlowForm">
                                 <div class="modal-body">
+                                    <input type="hidden" id="userId" name="userId">
                                     <input type="hidden" id="user" name="user">
                                     <input type="hidden" name="sqInfo"id="jsusers"/>
                                     <table class="table table-bordered" id="flowtable">
@@ -81,7 +99,10 @@
                                         <tbody>
                                         <tr>
                                             <td>发起人</td>
-                                            <td><input type="text" name="fqr" id="fqr" class="tableborder"/></td>
+                                            <td>
+                                                <input type="text"  id="fqr" name="fqrName"  class="tableborder"/>
+                                                <input type="hidden" name="fqr" id="fqrid" />
+                                            </td>
                                             <td>发起时间</td>
                                             <td><input type="text"  id="startDate" name="startDate" class="tableborder"></td>
                                         </tr>
@@ -93,17 +114,39 @@
                                         </tr>
                                      <tr>
                                             <td rowspan="2" class="font">收文时间</td>
-                                            <td rowspan="2" class="font"><input type="text" id="swsj" class="tableborder" name="swsj"/> </td>
+                                            <td rowspan="2" class="font">
+                                                <div class='input-group date' id='datetimepicker2'>
+                                                    <input type='text' class="form-control" id="swsj" />
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+
+                                                <!--<input type="text" id="swsj" class="tableborder" name="swsj"/> -->
+                                            </td>
                                             <td>是否督办</td>
-                                            <td><input type="text" id="sfdb" class="tableborder" name="sfdb"/></td>
+                                            <td>
+                                                <select id="sfdb" class="checkboxstyle">
+                                                    <option value="是">是</option>
+                                                    <option value="否">否</option>
+                                                </select>
+                                               <!-- <input type="text" id="sfdb" class="tableborder" name="sfdb"/>-->
+                                            </td>
                                      </tr>
                                         <tr>
-                                            <td>督办时限</td>
+                                            <td>督办时限（天）</td>
                                             <td><input type="text" id="dbsx" class="tableborder" name="dbsx"/></td>
                                         </tr>
                                         <tr>
                                             <td >文件名称</td>
-                                            <td colspan="3"><input type="text" id="wjmc" class="tableborder" name="wjmc"/> </td>
+                                            <td colspan="3">
+                                                <input type="text" id="wjdiv" name="wjmc" readonly="readonly" class="tableborder"/>
+                                              <!--  <div id="wjdiv" name="wjmc"></div>-->
+                                                <input type="hidden" id="wjid" name="file"/>
+                                                <a href="#" id="wjkup">从文件库选择</a>
+                                                <a href="#" id="localup">从本地选择</a>
+                                                <input type="text" id="wjmc" class="tableborder" />
+                                            </td>
                                         </tr>
                                         <tr></tr>
                                         <tr>
@@ -121,8 +164,8 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" id="saveConfig">发起</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-
+                                    <button type="button" class="btn btn-secondary" id="closeAddFlow">取消</button>
+                                   <!-- <button type="reset" style="display: block" id="clearform"></button>-->
                                 </div>
                             </form>
                         </div>
@@ -150,6 +193,173 @@
                     </div>
                 </div>
             </div>
+
+                <div class="modal" tabindex="-1" role="dialog" id="filedataup">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">选择文件</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label for="yjml" class="col-sm-2 control-label">一级目录</label>
+                                        <div class="col-sm-10">
+                                            <select class="checkboxstyle formwid" id="yjml">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ejml" class="col-sm-2 control-label">二级目录</label>
+                                        <div class="col-sm-10">
+                                            <select class="checkboxstyle formwid" id="ejml">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group yc" id="sjmldiv">
+                                        <label for="sjml" class="col-sm-2 control-label">三级目录</label>
+                                        <div class="col-sm-10">
+                                            <select class="checkboxstyle formwid" id="sjml">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="wj" class="col-sm-2 control-label">文件</label>
+                                        <div class="col-sm-10">
+                                            <select class="checkboxstyle formwid" id="wj">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-primary" id="saveml">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal" tabindex="-1" id="fileup" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">上传文件</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div id="uploader" class="wu-example">
+                                <div id="fileList" class="uploader-list"></div>
+                                <div id="picker" class="formys">选择文件</div>
+                                <div id="uparea" style="border:1px dashed #f1f1f1;height: 100px;margin-top: 3%">
+                                    <div id="fontregion" style="margin-top: 10%;margin-left: 44%;font-size: 30px;color:#f1f1f1"><span>文件上传区域</span></div>
+                                    <div id="fileInfo" class="fileinfo uploader-list"></div>
+                                </div>
+
+                                <div>
+                                    <button id="ctlBtn" type="button" class="btn btn-info formys" style="margin-top: 5%">开始上传</button>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closemodal">关闭</button>
+                                <button type="button" class="btn btn-primary" id="savefile">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal" tabindex="-1" id="queryFlow" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">文件处理签条</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="queryFlowForm" class="form-horizontal" role="form">
+                                <div class="modal-body">
+                                    <input type="hidden" id="cuser" name="user">
+                                    <table class="table table-bordered" id="cflowtable">
+                                        <thead><th colspan="4" class="tableborder">文件处理签条</th></thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>发起人</td>
+                                            <td>
+                                                <input type="text" name="fqr" id="cfqr" class="tableborder" disabled="disabled"/>
+                                            </td>
+                                            <td>发起时间</td>
+                                            <td><input type="text"  id="cstartDate" name="startDate" class="tableborder"  disabled="disabled"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>来文机关</td>
+                                            <td><input type="text" id="clwjg" class="tableborder" name="lwjg"  disabled="disabled"/></td>
+                                            <td>收文文号</td>
+                                            <td><input type="text" id="cswwh" class="tableborder" name="swwh"  disabled="disabled"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="2" class="font">收文时间</td>
+                                            <td rowspan="2" class="font"><input type="text" id="cswsj" class="tableborder" name="swsj"  disabled="disabled"/> </td>
+                                            <td>是否督办</td>
+                                            <td>
+                                                <input type="text" id="csfdb" class="tableborder" name="sfdb"  disabled="disabled"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>督办时限（天）</td>
+                                            <td><input type="text" id="cdbsx" class="tableborder" name="dbsx"  disabled="disabled"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td >文件名称</td>
+                                            <td colspan="3"><input type="text" id="cwjmc" class="tableborder" name="wjmc"  disabled="disabled"/> <!--<a  id="filedown">下载</a>--> </td>
+                                        </tr>
+                                        <tr></tr>
+                                        <tr>
+                                            <td class="font">办文意见</td>
+                                            <td colspan="3"><input type="text" id="cbwyj" class="tableborder" name="bwyj"  disabled="disabled"/> </td>
+                                        </tr>
+                                        <tr></tr>
+                                        <tr>
+                                            <td class="font">领导批示</td>
+                                            <td colspan="3"><input type="text" id="cldps" class="tableborder" name="ldps"  disabled="disabled"/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font" colspan="2">阅者签名</td>
+                                            <td class="font" colspan="2">阅批意见</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"><input type="text" id="cqm1" /> </td>
+                                            <td colspan="2"><input type="text" id="cyj1" /> </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"><input type="text" id="cqm2" /> </td>
+                                            <td colspan="2"><input type="text" id="cyj2" /> </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="form-group" id="cthdiv" style="display: none">
+                                        <label  class="col-sm-2 control-label">退回原因</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="cthyy"/>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="cnode"/>
+                                    <input type="hidden" id="cflowId"/>
+                                    <div>
+
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
         </div>
     </div>
     </div>

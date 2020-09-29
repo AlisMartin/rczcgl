@@ -4,7 +4,7 @@
     <select id="queryMessage" parameterType="java.lang.String" resultType="xxw.po.SysMessage">
         select * from SYSMESSAGE where 1=1
         <if test="jsuser !=null">
-            and JSUESR= #{jsuer,jdbcType=VARCHAR}
+            and instr(','||JSID||',',concat(concat(',',#{jsuser}),','))>0
         </if>
         <if test="show !=null">
             and SHOW= #{show,jdbcType=VARCHAR}
@@ -44,6 +44,18 @@
             <if test="duser !=null">
                 "DUSER",
             </if>
+            <if test="fileId !=null">
+                "FILEID",
+            </if>
+            <if test="tsId !=null">
+                "TSID",
+            </if>
+            <if test="jsId !=null">
+                "JSID",
+            </if>
+            <if test="dId !=null">
+                "DID",
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -76,6 +88,18 @@
             </if>
             <if test="duser != null" >
                 #{duser,jdbcType=VARCHAR},
+            </if>
+            <if test="fileId != null" >
+                #{fileId,jdbcType=VARCHAR},
+            </if>
+            <if test="tsId !=null">
+                #{tsId,jdbcType=VARCHAR},
+            </if>
+            <if test="jsId !=null">
+                #{jsId,jdbcType=VARCHAR},
+            </if>
+            <if test="dId !=null">
+                #{dId,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>

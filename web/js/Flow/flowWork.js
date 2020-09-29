@@ -18,25 +18,23 @@ $(function(){
 
     $("#saveConfig").click(function(){
         debugger;
-        var qm;
-        if(spinfo.node=="2"){
-            qm=$("#qm1").val();
+        var qm=$("#qm").val();
             if(qm=="") {
                 alert("请签名！");
                 return false;
             }
-        }
-        if(spinfo.node=="3"){
-            qm=$("#qm2").val();
-            if(qm=="") {
-                alert("请签名！");
-                return false;
-            }
-        }
         creatFlowHistory();
         updateFlowInstance();
         updateMessage(spinfo);
+        $("#addFlow").modal('hide');
 
+    })
+//文件下载
+    $("#filedown").click(function(){
+        queryFileByFileName(spinfo.file);
+    })
+    $("#qfiledown").click(function(){
+        queryFileByFileName(spinfo.file);
     })
 
     $('#flowWorkTable').bootstrapTable({
@@ -60,7 +58,7 @@ $(function(){
                 title:'流程编号'
             },
             {
-                field:'fqr',
+                field:'fqrName',
                 title:'发起人'
             },
             {
@@ -69,7 +67,7 @@ $(function(){
             },
             {
                 title:"待办人",
-                field:'dusers'
+                field:'dName'
             },
             {
                 title:"审批状态",
@@ -157,6 +155,7 @@ function initmodalinfo(a){
     $("#flowId").val(a.flowId);
 }
 
+//更新流程实例
 function updateFlowInstance(){
     debugger;
     var checked= $("input[type=radio]:checked").val();
@@ -165,14 +164,15 @@ function updateFlowInstance(){
         param.status="1";
     }else if(checked=="通过"&&spinfo.node=="3"){
         param.status="3";
+        param.endDate=getNowDate();
     }else{
         param.status="2";
         param.rejectReason=$("#thyy").val();
+        param.endDate=getNowDate();
     }
     param.flowId=$("#flowId").val();
     param.node=$("#node").val();
-    param.startDate=getNowDate();
-
+    //param.startDate=getNowDate();
     $.ajax({
         type:"post",
         url:"/rczcgl/flow/updateFLow.action",
@@ -185,6 +185,7 @@ function updateFlowInstance(){
     })
 }
 
+//创建流程历史
 function creatFlowHistory(){
     debugger;
     var param={};
@@ -202,6 +203,8 @@ function creatFlowHistory(){
     var user= $.cookie('user');
     var userobj=eval('('+user+')');
     param.user=userobj.userName;
+    param.yzqm=$("#qm").val();
+    param.yzyj=$("#yj").val();
     $.ajax({
         type:"post",
         url:"/rczcgl/flow/createFLowHistory.action",
@@ -216,10 +219,12 @@ function creatFlowHistory(){
 function spFile(row){
     debugger;
     initmodalinfo(row);
-    queryFileByFileName(row.wjmc);
+    //queryFileByFileName(row.file);
     $("#addFlow").modal('show');
 }
 
+
+//查看发起信息
 function queryInfo(a){
     debugger;
    // var a=spinfo;
@@ -241,21 +246,34 @@ function queryInfo(a){
         $("#cthdiv").css('display','block');
         $("#thyy").val(a.rejectReason);
     }
+    var node=parseInt(a.node);
+    if(node>=2){
+        getqm(spinfo);
+    }
 }
 
 function queryFileByFileName(a){
+    debugger;
+    var fileid= a.substring(0, a.length-1);
     $.ajax({
         type:"post",
         url:"/rczcgl/flow/queryFileInfo.action",
         async:false,
-        data:{'fileName':a},
+        data:{'fileId':fileid},
         success:function(responsedata){
             debugger;
             var obj=responsedata.data;
-            if(obj!=null){
-                var path=obj.filePath;
-                $("#filedown").attr("target","_blank")
-                $("#filedown").attr("href","/rczcgl/"+path+"/"+a);
+            if(obj.length>0){
+                for(var i=0;i<obj.length;i++){
+                    var downloadA=document.createElement("a");
+                    downloadA.setAttribute("href","/rczcgl/"+obj[i].filePath+"/"+obj[i].fileName);
+                    downloadA.setAttribute("target","_blank");
+                    downloadA.setAttribute("download",obj[i].fileName);
+                    downloadA.click();
+                    downloadA.remove();
+
+                }
+
             }
 
         },
@@ -290,6 +308,7 @@ function insertMassage(flowinfo,info){
     var nowdate=getNowDate();
     var param={};
     param.tsUser=userobj.userName;
+    param.tsId=userobj.id;
     param.tsDate=nowdate;
     if(info.status=="2"){
         param.desc="退回";
@@ -303,6 +322,7 @@ function insertMassage(flowinfo,info){
     }
 
     param.fileName=$("#wjmc").val();
+    param.fileId=flowinfo.file;
     param.node=parseInt(flowinfo.node)+1;
     param.show="1";
     if(param.node==4){
@@ -334,6 +354,7 @@ function updateMessage(spinfo){
     param.node=spinfo.node;
     param.show="0";
     param.duser=userobj.userName;
+    param.dId=userobj.id;
     param.node=spinfo.node;
 
     $.ajax({
@@ -342,6 +363,36 @@ function updateMessage(spinfo){
         async:false,
         data:param,
         success:function(data){
+        },
+        error:function(){
+            alert("系统错误！");
+        }
+    })
+}
+
+//查询签名
+function getqm(a){
+    debugger;
+    var param={};
+    param.flowId= a.flowId;
+    param.node= a.node;
+    var node=parseInt(a.node);
+    $.ajax({
+        type:"post",
+        url:"/rczcgl/flow/getQm.action",
+        async:false,
+        data:param,
+        success:function(data){
+            for(var i=0;i<data.length;i++){
+                if(data[i].node=="2"){
+                    $("#cqm1").val(data[i].yzqm);
+                    $("#cyj1").val(data[i].yzyj);
+                }
+                if(data[i].node=="3"){
+                    $("#cqm2").val(data[i].yzqm);
+                    $("#cyj2").val(data[i].yzyj);
+                }
+            }
         },
         error:function(){
             alert("系统错误！");

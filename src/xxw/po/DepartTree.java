@@ -20,6 +20,16 @@ public class DepartTree {
 
     private String depart;
 
+    public Integer getPx() {
+        return px;
+    }
+
+    public void setPx(Integer px) {
+        this.px = px;
+    }
+
+    private Integer px;
+
     public String getId() {
         return id;
     }

@@ -31,8 +31,37 @@ public class FlowHistory {
     private String wjmc;
     private String bwyj;
     private String ldps;
-    private String qm;
-    private String pyyj;
+    private String yzqm;
+    private String yzyj;
+
+
+    private String userId;
+    private String fqrName;
+    private String dName;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getFqrName() {
+        return fqrName;
+    }
+
+    public void setFqrName(String fqrName) {
+        this.fqrName = fqrName;
+    }
+
+    public String getdName() {
+        return dName;
+    }
+
+    public void setdName(String dName) {
+        this.dName = dName;
+    }
 
     public String getShow() {
         return show;
@@ -233,20 +262,20 @@ public class FlowHistory {
         this.ldps = ldps;
     }
 
-    public String getQm() {
-        return qm;
+    public String getYzqm() {
+        return yzqm;
     }
 
-    public void setQm(String qm) {
-        this.qm = qm;
+    public void setYzqm(String yzqm) {
+        this.yzqm = yzqm;
     }
 
-    public String getPyyj() {
-        return pyyj;
+    public String getYzyj() {
+        return yzyj;
     }
 
-    public void setPyyj(String pyyj) {
-        this.pyyj = pyyj;
+    public void setYzyj(String yzyj) {
+        this.yzyj = yzyj;
     }
 
 }

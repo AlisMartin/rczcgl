@@ -138,6 +138,9 @@
             <if test="sqInfo != null" >
                 "SQINFO",
             </if>
+            <if test="file != null" >
+                "FILE",
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -193,6 +196,9 @@
             <if test="sqInfo != null" >
                 #{sqInfo,jdbcType=VARCHAR},
             </if>
+            <if test="file != null" >
+                #{file,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
 
@@ -208,14 +214,14 @@
         <if test="endDate != null" >
             ENDDATE= #{endDate,jdbcType=VARCHAR},
         </if>
+        <if test="rejectReason != null" >
+            REJECTREASON= #{rejectReason,jdbcType=VARCHAR},
+        </if>
         <if test="dusers != null" >
             DUSERS= #{dusers,jdbcType=VARCHAR},
         </if>
         <if test="status != null" >
             STATUS= #{status,jdbcType=VARCHAR}
-        </if>
-        <if test="rejectReason != null" >
-            REJECTREASON= #{rejectReason,jdbcType=VARCHAR}
         </if>
         where FLOWID=#{flowId,jdbcType=VARCHAR}
     </update>
@@ -274,6 +280,21 @@
             <if test="user != null and user != ''" >
                 "USER",
             </if>
+            <if test="yzqm != null and yzqm != ''" >
+                "YZQM",
+            </if>
+            <if test="yzyj != null and yzyj != ''" >
+                "YZYJ",
+            </if>
+            <if test="userId != null and userId != ''" >
+                "USERID",
+            </if>
+            <if test="fqrName != null and fqrName != ''" >
+                "FQRNAME",
+            </if>
+            <if test="dName != null and fqrName != ''" >
+                "DNAME",
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             #{id,jdbcType=VARCHAR},
@@ -306,6 +327,21 @@
 
             <if test="user != null and user != ''" >
                 #{user,jdbcType=VARCHAR},
+            </if>
+            <if test="yzqm != null and yzqm != ''" >
+                #{yzqm,jdbcType=VARCHAR},
+            </if>
+            <if test="yzyj != null and yzyj != ''" >
+                #{yzyj,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null and userId != ''" >
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="fqrName != null and fqrName != ''" >
+                #{fqrName,jdbcType=VARCHAR},
+            </if>
+            <if test="dName != null and fqrName != ''" >
+                #{dName,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -368,6 +404,9 @@
         </if>
         <if test="fileDate !=null">
             and b.FILEDATE= #{fileDate,jdbcType=VARCHAR}
+        </if>
+        <if test="pathId !=null">
+            and b.PATHID= #{pathId,jdbcType=VARCHAR}
         </if>
     </select>
     <select id="selectPathId" parameterType="java.lang.String" resultType="java.util.HashMap">
