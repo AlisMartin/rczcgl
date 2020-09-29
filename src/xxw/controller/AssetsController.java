@@ -167,18 +167,22 @@ public class AssetsController {
         Map<String,Integer> mapCounts=new HashMap<>();
         List<AssetsConfig> configlist=assetsMapper.getAllAssetsConfigInfo(zctype, null);
         List<Map<String,String>> assetslist=assetsMapper.getAssetsInfoByMap(zctype,gsmc);
-        for(Map.Entry<String,String> entry:assetslist.get(0).entrySet()) {
-            int count = 0;
-            for (int i = 0; i < assetslist.size(); i++) {
-                for (AssetsConfig assetsConfig : configlist) {
-                    if (assetsConfig.getFieldType().equals("2") && assetsConfig.getField().toUpperCase().equals(entry.getKey())) {
-                        count = count + Integer.parseInt(assetslist.get(i).get(entry.getKey()));
-                        mapCount.put(entry.getKey().toLowerCase(), count);
+        if(assetslist.size()<1){
+            return null;
+        }else{
+            for(Map.Entry<String,String> entry:assetslist.get(0).entrySet()) {
+                int count = 0;
+                for (int i = 0; i < assetslist.size(); i++) {
+                    for (AssetsConfig assetsConfig : configlist) {
+                        if (assetsConfig.getFieldType().equals("2") && assetsConfig.getField().toUpperCase().equals(entry.getKey())) {
+                            count = count + Integer.parseInt(assetslist.get(i).get(entry.getKey()));
+                            mapCount.put(entry.getKey().toLowerCase(), count);
+                        }
                     }
                 }
             }
+            return mapCount;
         }
-         mapCounts=mapCount;
-        return mapCount;
+
     }
 }
