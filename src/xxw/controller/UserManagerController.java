@@ -36,53 +36,25 @@ public class UserManagerController {
     }
     @RequestMapping("/addUser")
     @ResponseBody
-    public int addUser(HttpServletRequest request){
-        String userName= request.getParameter("userName");
-        String tel =request.getParameter("tel");
-        String email =request.getParameter("email");
-        String type =request.getParameter("type");
-        String password =request.getParameter("password");
-        String comp = request.getParameter("company");
-        String depart = request.getParameter("department");
-        String position = request.getParameter("position");
-        String positionname = request.getParameter("positionname");
-        //String pnodeId = request.getParameter("pnodeId");
-        String level = request.getParameter("level");
-        User user =new User();
-        user.setUserName(userName);
-        user.setTel(tel);
-        user.setEmail(email);
-        user.setType(type);
+    public int addUser(HttpServletRequest request,User user){
+
         UUID uuid=UUID.randomUUID();
         String userid=uuid.toString();
         user.setId(userid);
-        String pwd=DigestUtils.md5Hex(password.getBytes());
+        String pwd=DigestUtils.md5Hex(user.getPassword().getBytes());
        // String pwd=MD5Util.getMD5Str(password);
         user.setPassword(pwd);
-        user.setCompany(comp);
-        user.setDepartment(depart);
-        user.setPosition(positionname);
         int i=userMapper.addUser(user);
-        departMapper.insertNode(userid,userName,userid,position,level,"user",null);
+        departMapper.insertNode(userid,user.getUserName(),userid,user.getPosId(),null,"user",null);
         return i;
     }
     @RequestMapping("/editUser")
     @ResponseBody
-    public int editUser(HttpServletRequest request){
-        String userName= request.getParameter("userName");
-        String tel =request.getParameter("tel");
-        String email =request.getParameter("email");
-        String type =request.getParameter("type");
-        String password =request.getParameter("password");
-        String userid=request.getParameter("id");
-        User user =new User();
-        user.setUserName(userName);
-        user.setTel(tel);
-        user.setEmail(email);
-        user.setType(type);
-        user.setId(userid);
-        String pwd=MD5Util.getMD5Str(password);
-        user.setPassword(pwd);
+    public int editUser(HttpServletRequest request,User user){
+        if(user.getPassword().length()<32){
+            String pwd=MD5Util.getMD5Str(user.getPassword());
+            user.setPassword(pwd);
+        }
         int i=userMapper.editUser(user);
         return i;
     }

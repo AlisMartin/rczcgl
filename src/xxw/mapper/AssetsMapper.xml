@@ -44,7 +44,7 @@
             and ZCTYPE= #{zctype,jdbcType=VARCHAR}
         </if>
         <if test="gsmc !=null">
-            and FIELD2= #{gsmc,jdbcType=VARCHAR}
+            and COMPANYID= #{gsmc,jdbcType=VARCHAR}
         </if>
     </select>
     <select id="getAssetsInfo" resultType="xxw.po.AssetsInfo">
@@ -53,7 +53,7 @@
             and ZCTYPE= #{zctype,jdbcType=VARCHAR}
         </if>
         <if test="gsmc !=null">
-            and COMPANYID LIKE #{gsmc,jdbcType=VARCHAR}
+            and COMPANYID = #{gsmc,jdbcType=VARCHAR}
         </if>
     </select>
     <select id="getAssetsHistoryInfo" resultType="xxw.po.AssetsInfoHistory">
@@ -62,7 +62,7 @@
             and ZCTYPE= #{zctype,jdbcType=VARCHAR}
         </if>
         <if test="gsmc !=null">
-            and COMPANYID LIKE #{gsmc,jdbcType=VARCHAR}
+            and COMPANYID = #{gsmc,jdbcType=VARCHAR}
         </if>
     </select>
     <select id="getAssetsInfoByName" resultType="xxw.po.AssetsInfo">

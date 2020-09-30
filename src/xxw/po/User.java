@@ -33,6 +33,37 @@ public class User {
 
     private String position;
 
+    private String comId;
+
+    private String departId;
+
+    private String posId;
+
+    public String getComId() {
+        return comId;
+    }
+
+    public void setComId(String comId) {
+        this.comId = comId;
+    }
+
+    public String getDepartId() {
+        return departId;
+    }
+
+    public void setDepartId(String departId) {
+        this.departId = departId;
+    }
+
+    public String getPosId() {
+        return posId;
+    }
+
+    public void setPosId(String posId) {
+        this.posId = posId;
+    }
+
+
     public String getTel() {
         return tel;
     }

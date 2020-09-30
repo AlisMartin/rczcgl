@@ -79,7 +79,7 @@ public class AssetsController {
         String zctype = json.getString("zctype");
         int pageNumber = offset==0?1:offset/limit + 1;
         Page page = PageHelper.startPage(pageNumber,limit);
-        List<AssetsInfo> info=assetsMapper.getAssetsInfo(zctype,StringUtil.formatLike(gsmc));
+        List<AssetsInfo> info=assetsMapper.getAssetsInfo(zctype,gsmc);
         PageInfo pageInfo = new PageInfo<>(info);
         if(pageInfo.getList().size()>0){
             res.put("total",pageInfo.getTotal());
@@ -99,7 +99,7 @@ public class AssetsController {
         String zctype = json.getString("zctype");
         int pageNumber = offset==0?1:offset/limit + 1;
         Page page = PageHelper.startPage(pageNumber,limit);
-        List<AssetsInfoHistory> info=assetsMapper.getAssetsHistoryInfo(zctype,StringUtil.formatLike(gsmc));
+        List<AssetsInfoHistory> info=assetsMapper.getAssetsHistoryInfo(zctype,gsmc);
         PageInfo pageInfo = new PageInfo<>(info);
         if(pageInfo.getList().size()>0){
             res.put("total",pageInfo.getTotal());

@@ -102,6 +102,7 @@
         <if test="px !=null">
             and PX= #{px,jdbcType=DECIMAL}
         </if>
+        order BY  PX
     </select>
 
 </mapper>

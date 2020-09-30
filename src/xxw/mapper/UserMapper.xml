@@ -68,6 +68,15 @@
             <if test="position !=null">
                 POSITION ,
             </if>
+            <if test="comId !=null">
+                COMID ,
+            </if>
+            <if test="posId !=null">
+                POSID ,
+            </if>
+            <if test="departId !=null">
+                DEPARTID ,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id !=null">
@@ -103,6 +112,15 @@
             <if test="position !=null">
                 #{position,jdbcType=VARCHAR},
             </if>
+            <if test="comId !=null">
+                #{comId,jdbcType=VARCHAR},
+            </if>
+            <if test="posId !=null">
+                #{posId,jdbcType=VARCHAR},
+            </if>
+            <if test="departId !=null">
+                #{departId,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
     <update id="editUser" parameterType="xxw.po.User">
@@ -123,6 +141,24 @@
         <if test="type != null">
             TYPE = #{type,jdbcType=VARCHAR},
         </if>
+            <if test="company != null">
+                COMPANY = #{company,jdbcType=VARCHAR},
+            </if>
+            <if test="department != null">
+                DEPARTMENT = #{department,jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                POSITION = #{position,jdbcType=VARCHAR},
+            </if>
+            <if test="comId != null">
+                COMID = #{comId,jdbcType=VARCHAR},
+            </if>
+            <if test="departId != null">
+                DEPARTID = #{departId,jdbcType=VARCHAR},
+            </if>
+            <if test="posId != null">
+                POSID = #{posId,jdbcType=VARCHAR},
+            </if>
         </trim>
         where ID= #{id,jdbcType=VARCHAR}
     </update>

@@ -79,38 +79,38 @@
 
                                     <div class="form-group">
                                         <label for="userName">用户名</label>
-                                        <input type="text" class="form-control" id="userName">
+                                        <input type="text" class="form-control" name="userName" id="userName">
                                     </div>
                                     <div class="form-group">
                                         <label for="tel">电话</label>
-                                        <input type="text" class="form-control" id="tel">
+                                        <input type="text" class="form-control" name="tel" id="tel">
                                     </div>
                                     <div class="form-group">
                                         <label for="email">邮箱</label>
-                                        <input type="text" class="form-control" id="email">
+                                        <input type="text" class="form-control" name="email" id="email">
                                     </div>
                                     <div class="form-group">
                                         <label for="password">密码</label>
-                                        <input type="password" class="form-control" id="password">
+                                        <input type="password" class="form-control" name="password" id="password">
                                     </div>
                                     <div class="form-group">
                                         <label for="password">所属公司</label>
-                                        <select class="checkboxstyle" id="company">
+                                        <select class="checkboxstyle" id="company" name="company">
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="password">所属部门</label>
-                                        <select class="checkboxstyle" id="department">
+                                        <select class="checkboxstyle" id="department" name="department">
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="password">职位</label>
-                                        <select class="checkboxstyle" id="position">
+                                        <label for="position">职位</label>
+                                        <select class="checkboxstyle" id="position" name="position">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeSave">关闭</button>
                                     <button type="button" class="btn btn-primary" id="saveUser">保存</button>
                                 </div>
                             </form>
@@ -126,7 +126,7 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div class="modal-body">
+                         <!--   <div class="modal-body">
 
                                 <div class="form-group">
                                     <label for="userName">用户名</label>
@@ -151,6 +151,41 @@
                                 <div class="form-group">
                                     <input type="hidden" class="form-control" id="userid1">
                                 </div>
+                            </div>-->
+                            <div class="modal-body">
+
+                                <div class="form-group">
+                                    <label for="userName">用户名</label>
+                                    <input type="text" class="form-control" name="userName" id="euserName">
+                                </div>
+                                <div class="form-group">
+                                    <label for="tel">电话</label>
+                                    <input type="text" class="form-control" name="tel" id="etel">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">邮箱</label>
+                                    <input type="text" class="form-control" name="email" id="eemail">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">密码</label>
+                                    <input type="password" class="form-control" name="password" id="epassword">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">所属公司</label>
+                                    <select class="checkboxstyle" id="ecompany" name="company">
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">所属部门</label>
+                                    <select class="checkboxstyle" id="edepartment" name="department">
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="position">职位</label>
+                                    <select class="checkboxstyle" id="eposition" name="position">
+                                    </select>
+                                </div>
+                                <input type="hidden"  name="eid" id="eid">
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
