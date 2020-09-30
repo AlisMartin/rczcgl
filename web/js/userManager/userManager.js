@@ -24,7 +24,9 @@ $(function(){
     initCompany();
    // initPosition();
    // initDepartMent();
-
+    $("#closeSave").click(function(){
+        $("#addform")[0].reset();
+    })
 
     $("#company").change(function(){
         debugger;
@@ -39,6 +41,27 @@ $(function(){
                 $("#department").append("<option value='请选择'>请选择</option>");
                 for(var i=0;i<data.length;i++){
                     $("#department").append("<option value="+ data[i].nodeId+">"+ data[i].nodeName+"</option>");
+                }
+            },
+            error:function(data){
+            }
+        })
+
+    })
+
+    $("#ecompany").change(function(){
+        debugger;
+        var comp=$("#ecompany").val();
+        $.ajax({
+            type:"post",
+            url:"/rczcgl/depart/getDepart.action",
+            data:{"depart":"department","pnodeId":comp},
+            success:function(response){
+                $("#edepartment").empty();
+                var data=response.data;
+                $("#edepartment").append("<option value='请选择'>请选择</option>");
+                for(var i=0;i<data.length;i++){
+                    $("#edepartment").append("<option value="+ data[i].nodeId+">"+ data[i].nodeName+"</option>");
                 }
             },
             error:function(data){
@@ -67,6 +90,26 @@ $(function(){
 
     })
 
+    $("#edepartment").change(function(){
+        var depart=$("#edepartment").val();
+        $.ajax({
+            type:"post",
+            url:"/rczcgl/depart/getDepart.action",
+            data:{"depart":"position","pnodeId":depart},
+            success:function(response){
+                $("#eposition").empty();
+                var data=response.data;
+                $("#eposition").append("<option value='请选择'>请选择</option>");
+                for(var i=0;i<data.length;i++){
+                    $("#eposition").append("<option value="+ data[i].nodeId+">"+ data[i].nodeName+"</option>");
+                }
+            },
+            error:function(data){
+            }
+        })
+
+    })
+
     $("#saveUser").click(function(){
         addUser();
     })
@@ -75,10 +118,25 @@ $(function(){
         editUser();
     })
     $("#saveeditUser").click(function(){
+        var userName=$("#euserName").val();
+        var tel=$("#etel").val();
+        var email=$("#eemail").val();
+        //var type=$("#type").val();
+        var password=$("#epassword").val();
+        var company=$("#ecompany option:selected").text();
+        var comId=$("#ecompany option:selected").val();
+        var department=$("#edepartment option:selected").text();
+        var departId=$("#edepartment option:selected").val();
+        var posId=$("#eposition").val();
+        var positionname=$("#eposition option:selected").text();
+        if(company==""||company=="请选择"||department==""||department=="请选择"||positionname=="请选择"||positionname==""){
+            alert("必须选择所属公司、部门、职位!");
+            return false;
+        }
         $.ajax({
             type:"post",
             url:"/rczcgl/user/editUser.action",
-            data:{"userName": $("#userName1").val(),"tel":$("#tel1").val(),"email":$("#email1").val(),"type":$("#type1").val(),"password":$("#password1").val(),"id":$("#userid1").val()},
+            data:{"userName": userName,"tel":tel,"email":email,"company":company,"comId":comId,"department":department,"departId":departId,"position":positionname,"posId":posId,"password":password,"id":$("#eid").val()},
             success:function(data){
                 if(data==1){
                     alert("修改成功！");
@@ -154,6 +212,18 @@ $(function(){
                 title:'邮箱'
             },
             {
+                field:'company',
+                title:'所属公司'
+            },
+            {
+                field:'department',
+                title:'所属部门'
+            },
+            {
+                field:'position',
+                title:'职务'
+            }
+      /*      {
                 field:'type',
                 title:'用户类型',
                 formatter:function(value,row,index){
@@ -166,7 +236,7 @@ $(function(){
                     }
 
                 }
-            }
+            }*/
         ],
         onLoadSuccess:function(){
         },
@@ -183,8 +253,10 @@ function addUser(){
     //var type=$("#type").val();
     var password=$("#password").val();
     var company=$("#company option:selected").text();
+    var comId=$("#company option:selected").val();
     var department=$("#department option:selected").text();
-    var position=$("#position").val();
+    var departId=$("#department option:selected").val();
+    var posId=$("#position").val();
     var positionname=$("#position option:selected").text();
     if(company==""||company=="请选择"||department==""||department=="请选择"||positionname=="请选择"||positionname==""){
         alert("必须选择所属公司、部门、职位!");
@@ -192,7 +264,7 @@ function addUser(){
     }
     var level;
     for(var i=0;i<positionarr.length;i++){
-        if(position==positionarr[i].nodeId){
+        if(posId==positionarr[i].nodeId){
             level=parseInt(positionarr[i].level)+1;
         }
     }
@@ -200,7 +272,7 @@ function addUser(){
     $.ajax({
         type:"post",
         url:"/rczcgl/user/addUser.action",
-        data:{"userName":userName,"tel":tel,"email":email,"password":password,"company":company,"department":department,"position":position,"positionname":positionname,"level":level},
+        data:{"userName":userName,"comId":comId,"departId":departId,"tel":tel,"email":email,"password":password,"company":company,"department":department,"posId":posId,"position":positionname,"level":level},
         success:function(data){
             if(data==1){
                 alert("添加成功！");
@@ -228,15 +300,38 @@ function editUser(){
         alert("请先选择需要修改的用户！");
         return false;
     }
-    $("#userName1").val(row[0].userName);
+
+        $("#editmodal").find("input").each(function(){
+            var id=this.id;
+            for(var i in row[0]){
+                if (id.indexOf(i)>-1){
+                    $("#"+id).val(row[0][i]);
+                }
+            }
+        })
+    $("#editmodal").find("select").each(function(){
+        var id=this.id;
+        for(var i in row[0]){
+            if (id.indexOf(i)>-1){
+                if(id=="ecompany"){
+                    $("#"+id).val(row[0]['comId']);
+                   // $("#"+id).find("option[text='"+ row[0][i]+"']").attr("selected",true);
+                }else{
+                    $("#"+id).append("<option value="+ i+">"+ row[0][i]+"</option>");
+                }
+               // $("#company").append("<option value="+ data[i].nodeId+">"+ data[i].nodeName+"</option>");
+
+            }
+        }
+    })
+    $("#eid").val(row[0].id);
+   /* $("#userName1").val(row[0].userName);
     $("#tel1").val(row[0].tel);
     $("#email1").val(row[0].email);
     $("#type1").val(row[0].type);
     $("#password1").val(row[0].password);
-    $("#userid1").val(row[0].id);
+    $("#userid1").val(row[0].id);*/
     $("#editmodal").modal('show');
-
-
 }
 function deleteUser(){
     var row=$("#userTable").bootstrapTable('getSelections');
@@ -245,8 +340,6 @@ function deleteUser(){
         return false;
     }
     $("#deletemodal").modal('show');
-
-
 }
 
 function initCompany(){
@@ -254,12 +347,15 @@ function initCompany(){
     $.ajax({
         type:"post",
         url:"/rczcgl/depart/getDepart.action",
+        async:false,
         data:{"depart":"company"},
         success:function(response){
             var data=response.data;
             $("#company").append("<option value='请选择'>请选择</option>");
+            $("#ecompany").append("<option value='请选择'>请选择</option>");
             for(var i=0;i<data.length;i++){
                 $("#company").append("<option value="+ data[i].nodeId+">"+ data[i].nodeName+"</option>");
+                $("#ecompany").append("<option value="+ data[i].nodeId+">"+ data[i].nodeName+"</option>");
             }
         },
         error:function(data){

@@ -50,12 +50,24 @@ public class AssetsController {
     public List<AssetsConfig> getAllConfigList(HttpServletRequest request){
         String zctype=request.getParameter("zctype");
         String order=request.getParameter("order");
-        List<AssetsConfig> info=assetsMapper.getAllAssetsConfigInfo(zctype,order);
-        if(info.size()>0){
-            return  info;
+        if(zctype.indexOf(",")>-1){
+            List<AssetsConfig> info1=assetsMapper.getAllAssetsConfigInfo(zctype.split(",")[0],order);
+            List<AssetsConfig> info2=assetsMapper.getAllAssetsConfigInfo(zctype.split(",")[1],order);
+            info1.addAll(info2);
+            if(info1.size()>0){
+                return  info1;
+            }else{
+                return null;
+            }
         }else{
-            return null;
+            List<AssetsConfig> info=assetsMapper.getAllAssetsConfigInfo(zctype,order);
+            if(info.size()>0){
+                return  info;
+            }else{
+                return null;
+            }
         }
+
     }
     @RequestMapping("/insertConfig")
     @ResponseBody
@@ -68,7 +80,7 @@ public class AssetsController {
     @ResponseBody
     public int updateConfig(HttpServletRequest request,AssetsConfig assetsConfig){
         int i=0;
-        i=assetsMapper.updateConfig(assetsConfig);
+        i = assetsMapper.updateConfig(assetsConfig);
         return i;
     }
     @RequestMapping("/getAssetsInfo")
@@ -82,6 +94,27 @@ public class AssetsController {
         int pageNumber = offset==0?1:offset/limit + 1;
         Page page = PageHelper.startPage(pageNumber,limit);
         List<AssetsInfo> info=assetsMapper.getAssetsInfo(zctype,gsmc);
+        PageInfo pageInfo = new PageInfo<>(info);
+        if(pageInfo.getList().size()>0){
+            res.put("total",pageInfo.getTotal());
+            res.put("rows",pageInfo.getList());
+            return  res;
+        }else{
+            return null;
+        }
+    }
+
+    @RequestMapping("/getSumAssetsInfo")
+    @ResponseBody
+    public Map<String,Object> getSumAssetsInfo(@RequestBody JSONObject json){
+        Map<String,Object> res = new HashMap<>();
+        int offset = Integer.parseInt(json.getString("offset"));
+        int limit = Integer.parseInt(json.getString("limit"));
+        String gsmc = json.getString("gsmc");
+        String zctype = json.getString("zctype");
+        int pageNumber = offset==0?1:offset/limit + 1;
+        Page page = PageHelper.startPage(pageNumber,limit);
+        List<AssetsInfo> info=assetsMapper.getSumAssetsInfo(zctype,gsmc);
         PageInfo pageInfo = new PageInfo<>(info);
         if(pageInfo.getList().size()>0){
             res.put("total",pageInfo.getTotal());
@@ -148,7 +181,7 @@ public class AssetsController {
         UUID uuid = UUID.randomUUID();
         //获取session
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        HttpSession session   =   request.getSession();
+        HttpSession session =   request.getSession();
         User user = (User)session.getAttribute("user");
         //todo
         //插入资产的公司id
@@ -200,9 +233,8 @@ public class AssetsController {
     @ResponseBody
     public Map<String,Integer> totalAssets(HttpServletRequest request){
         String zctype=request.getParameter("zctype");
-        String gsmc=request.getParameter("gsmc");
+        String gsmc = request.getParameter("gsmc");
         Map<String,Integer> mapCount=new HashMap<>();
-        Map<String,Integer> mapCounts=new HashMap<>();
         List<AssetsConfig> configlist=assetsMapper.getAllAssetsConfigInfo(zctype, null);
         List<Map<String,String>> assetslist=assetsMapper.getAssetsInfoByMap(zctype,gsmc);
         if(assetslist.size()<1){

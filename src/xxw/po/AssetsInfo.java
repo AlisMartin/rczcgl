@@ -44,8 +44,24 @@ public class AssetsInfo {
     private Date stopday;
     private String financeid;
     private Integer dayorder;
+    private String fcfield1;
+    private String fcfield2;
 
+    public String getFcfield1() {
+        return fcfield1;
+    }
 
+    public void setFcfield1(String fcfield1) {
+        this.fcfield1 = fcfield1;
+    }
+
+    public String getFcfield2() {
+        return fcfield2;
+    }
+
+    public void setFcfield2(String fcfield2) {
+        this.fcfield2 = fcfield2;
+    }
     public String getId() {
         return id;
     }
