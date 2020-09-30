@@ -149,7 +149,8 @@ $(function () {
     });
     $(".selectFinance").click(function () {
         //选择融资
-        showFinanceList();
+        var financeid = $('#editform #financeid').val();
+        showFinanceList(id);
     });
     $("#saveFinance").click(function () {
         //保存融资
@@ -376,15 +377,6 @@ function getcolumn() {
         data: param,
         success: function (data) {
             for (var i = 0; i < data.length; i++) {
-                /*if (data[i].zctype == '1') {
-                    data[i].zctype = "土地资产";
-                }
-                if (data[i].zctype == '2') {
-                    data[i].zctype = "房屋资产";
-                }
-                if (data[i].zctype == '3') {
-                    data[i].zctype = "海域资产";
-                }*/
                 switch (data[i].zctype) {
                     case '1':
                         data[i].zctype = "土地资产";
@@ -397,6 +389,19 @@ function getcolumn() {
                         break;
                     case '4':
                         data[i].zctype = "其他资产";
+                        break;
+                    default :
+                        break;
+                }
+                switch (data[i].fieldType) {
+                    case '1':
+                        data[i].fieldType = "text";
+                        break;
+                    case '2':
+                        data[i].fieldType = "number";
+                        break;
+                    case '3':
+                        data[i].fieldType = "date";
                         break;
                     default :
                         break;
@@ -424,17 +429,21 @@ function getcolumn() {
                 }
                 //生成表单
                 var htmlLeft = '',
-                    htmlRight = '';
+                    htmlRight = '',
+                    html = '<div class="form-group"> <label for="' + data[i].field + '">' + data[i].fieldname + '</label>' +
+                        '<input class="form-control" id="' + data[i].field + '" name="' + data[i].field + '" type="' + data[i].fieldType + '" "> </div>';
                 if (i % 2 === 0) {
-                    htmlLeft = htmlLeft + '<div class="form-group"> <label for="' + data[i].field + '">' + data[i].fieldname + '</label>' +
-                        '<input type="text" class="form-control" id="' + data[i].field + '" name="' + data[i].field + '"> </div>'
+                    htmlLeft = htmlLeft + html
                 } else {
-                    htmlRight = htmlRight + '<div class="form-group"> <label for="' + data[i].field + '">' + data[i].fieldname + '</label>' +
-                        '<input type="text" class="form-control" id="' + data[i].field + '" name="' + data[i].field + '"> </div>'
+                    htmlRight = htmlRight + html
                 }
                 $(".landAssetsLeft").append(htmlLeft);
                 $(".landAssetsRight").append(htmlRight);
             }
+            $(".landAssetsLeft").append('<div class="form-group"> <label for="days">报警时间</label>' +
+                '<input class="form-control" id="days" name="days" type="number" "> </div>');
+            $(".landAssetsRight").append('<div class="form-group"> <label for="stopday">截止日期</label>' +
+                '<input class="form-control" id="stopday" name="stopday" type="date" "> </div>');
             $(".landAssetsLeft").append(' <input type="text" class="form-control" id="zcid" name="zcid" style="display: none">' +
                 '<input type="text" class="form-control" id="financeid" name="financeid" style="display: none"> ');
             //添加操作列
@@ -646,7 +655,7 @@ function insertFile() {
  }
  })
  }*/
-function showFinanceList(row) {
+function showFinanceList(id) {
     $("#financeTable").bootstrapTable('destroy');
     var columns = [];
     $.ajax({
@@ -694,6 +703,7 @@ function showFinanceList(row) {
             financeid = "";
         },
         onLoadSuccess: function () {
+            $('#financeTable').bootstrapTable("checkBy",{field: 'zcid', values:[id]});
         },
         onLoadError: function () {
             //showTips("数据加载失败!");

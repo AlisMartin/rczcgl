@@ -27,6 +27,7 @@ public interface AssetsMapper {
     int insertAssetsInfo(@Param("assetsMap")Map<String,String> assetsMap);
     int insertAssetsInfoHistory(@Param("assetsMap")Map<String,String> assetsMap);
     int updateAssetsInfo(@Param("assetsMap")Map<String,String> assetsMap);
+    int updateAssetsInfoDays(@Param("list")List<AssetsInfo> assetsList);
     int updateConfig(AssetsConfig assetsConfig);
     List<AssetsFile> getAssetFileListByZcid(@Param("zcid")String zcid);
 
