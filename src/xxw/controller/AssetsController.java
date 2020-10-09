@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import xxw.po.*;
+import xxw.util.DateUtils;
 import xxw.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,13 +36,13 @@ public class AssetsController {
     AssetsMapper assetsMapper;
     @RequestMapping("/getConfigInfo")
     @ResponseBody
-    public List<AssetsConfig> getConfigList(HttpServletRequest request){
-        String zctype=request.getParameter("zctype");
-        String order=request.getParameter("order");
-        List<AssetsConfig> info=assetsMapper.getAssetsConfigInfo(zctype,order);
-        if(info.size()>0){
-            return  info;
-        }else{
+    public List<AssetsConfig> getConfigList(HttpServletRequest request) {
+        String zctype = request.getParameter("zctype");
+        String order = request.getParameter("order");
+        List<AssetsConfig> info = assetsMapper.getAssetsConfigInfo(zctype, order);
+        if (info.size() > 0) {
+            return info;
+        } else {
             return null;
         }
     }
@@ -71,22 +72,24 @@ public class AssetsController {
     }
     @RequestMapping("/insertConfig")
     @ResponseBody
-    public int insertAssetsConfig(HttpServletRequest request,AssetsConfig assetsConfig){
-        int i=0;
-        i=assetsMapper.insertConfig(assetsConfig);
+    public int insertAssetsConfig(HttpServletRequest request, AssetsConfig assetsConfig) {
+        int i = 0;
+        i = assetsMapper.insertConfig(assetsConfig);
         return i;
     }
+
     @RequestMapping("/updateConfig")
     @ResponseBody
     public int updateConfig(HttpServletRequest request,AssetsConfig assetsConfig){
         int i=0;
-        i = assetsMapper.updateConfig(assetsConfig);
+        i=assetsMapper.updateConfig(assetsConfig);
         return i;
     }
+
     @RequestMapping("/getAssetsInfo")
     @ResponseBody
-    public Map<String,Object> getAssetsInfo(@RequestBody JSONObject json){
-        Map<String,Object> res = new HashMap<>();
+    public Map<String, Object> getAssetsInfo(@RequestBody JSONObject json) {
+        Map<String, Object> res = new HashMap<>();
         int offset = Integer.parseInt(json.getString("offset"));
         int limit = Integer.parseInt(json.getString("limit"));
         String gsmc = json.getString("gsmc");
@@ -95,11 +98,11 @@ public class AssetsController {
         Page page = PageHelper.startPage(pageNumber,limit);
         List<AssetsInfo> info=assetsMapper.getAssetsInfo(zctype,gsmc);
         PageInfo pageInfo = new PageInfo<>(info);
-        if(pageInfo.getList().size()>0){
-            res.put("total",pageInfo.getTotal());
-            res.put("rows",pageInfo.getList());
-            return  res;
-        }else{
+        if (pageInfo.getList().size() > 0) {
+            res.put("total", pageInfo.getTotal());
+            res.put("rows", pageInfo.getList());
+            return res;
+        } else {
             return null;
         }
     }
@@ -126,8 +129,8 @@ public class AssetsController {
     }
     @RequestMapping("/getAssetsHistoryInfo")
     @ResponseBody
-    public Map<String,Object> getAssetsHistoryInfo(@RequestBody JSONObject json){
-        Map<String,Object> res = new HashMap<>();
+    public Map<String, Object> getAssetsHistoryInfo(@RequestBody JSONObject json) {
+        Map<String, Object> res = new HashMap<>();
         int offset = Integer.parseInt(json.getString("offset"));
         int limit = Integer.parseInt(json.getString("limit"));
         String gsmc = json.getString("gsmc");
@@ -136,38 +139,40 @@ public class AssetsController {
         Page page = PageHelper.startPage(pageNumber,limit);
         List<AssetsInfoHistory> info=assetsMapper.getAssetsHistoryInfo(zctype,gsmc);
         PageInfo pageInfo = new PageInfo<>(info);
-        if(pageInfo.getList().size()>0){
-            res.put("total",pageInfo.getTotal());
-            res.put("rows",pageInfo.getList());
-            return  res;
-        }else{
+        if (pageInfo.getList().size() > 0) {
+            res.put("total", pageInfo.getTotal());
+            res.put("rows", pageInfo.getList());
+            return res;
+        } else {
             return null;
         }
     }
+
     @RequestMapping("/getAssetsInfoByName")
     @ResponseBody
-    public Map<String,Object> findAssetsInfoByName(@RequestBody JSONObject json){
-        Map<String,Object> res = new HashMap<>();
+    public Map<String, Object> findAssetsInfoByName(@RequestBody JSONObject json) {
+        Map<String, Object> res = new HashMap<>();
         JSONArray zctypes = json.getJSONArray("zctypes");
         String name = json.getString("name");
-        List<String> info=assetsMapper.getFieldByTypeAndName(zctypes);
+        List<String> info = assetsMapper.getFieldByTypeAndName(zctypes);
 
-        String field1,field2,field3,field4;
-        field1=info.get(0);
-        field2=info.size()>1?info.get(1):null;
-        field3=info.size()>1?info.get(2):null;
-        field4=info.size()>1?info.get(3):null;
-        List<AssetsInfo> infoList=assetsMapper.getAssetsInfoByName(StringUtil.formatLike(name),field1,field2,field3,field4);
-        if (infoList.size()>0){
-            res.put("total",infoList.size());
-            res.put("rows",infoList);
-            return  res;
-        }else{
-            res.put("code",0);
-            res.put("data",null);
-            return  res;
+        String field1, field2, field3, field4;
+        field1 = info.get(0);
+        field2 = info.size() > 1 ? info.get(1) : null;
+        field3 = info.size() > 1 ? info.get(2) : null;
+        field4 = info.size() > 1 ? info.get(3) : null;
+        List<AssetsInfo> infoList = assetsMapper.getAssetsInfoByName(StringUtil.formatLike(name), field1, field2, field3, field4);
+        if (infoList.size() > 0) {
+            res.put("total", infoList.size());
+            res.put("rows", infoList);
+            return res;
+        } else {
+            res.put("code", 0);
+            res.put("data", null);
+            return res;
         }
     }
+
     @RequestMapping("/addAssetsByType")
     @ResponseBody
     public ResponseObject addAssetsByType(@RequestBody List<AssetVO> dto) {
@@ -193,6 +198,7 @@ public class AssetsController {
             return new ResponseObject(0, "失败", "");
         }
     }
+
     @RequestMapping("/editAsset")
     @ResponseBody
     public ResponseObject editAsset(@RequestBody List<AssetVO> dto) {
@@ -203,11 +209,13 @@ public class AssetsController {
             }
         }
         int i;
-        if (StringUtil.isEmpty(insertInfo.get("zcid"))){
+        if (StringUtil.isEmpty(insertInfo.get("zcid"))) {
             UUID uuid = UUID.randomUUID();
-            insertInfo.put("zcid",uuid.toString());
+            insertInfo.put("zcid", uuid.toString());
+            //todo
+            //先从资产表吧老的存到历史表，再把新的编辑进去
             i = assetsMapper.insertAssetsInfoHistory(insertInfo);
-        }else {
+        } else {
             i = assetsMapper.updateAssetsInfo(insertInfo);
         }
         if (i == 1) {
@@ -219,13 +227,13 @@ public class AssetsController {
 
     @RequestMapping("/getAssetFileListByZcid")
     @ResponseBody
-    public Map<String,Object> getAssetFileListByZcid(@RequestBody JSONObject json) {
-        Map<String,Object> res = new HashMap<>();
+    public Map<String, Object> getAssetFileListByZcid(@RequestBody JSONObject json) {
+        Map<String, Object> res = new HashMap<>();
         String zcid = json.getString("zcid");
         List<AssetsFile> fileList = assetsMapper.getAssetFileListByZcid(zcid);
-        res.put("total",fileList.size());
-        res.put("rows",fileList);
-        res.put("msg","成功");
+        res.put("total", fileList.size());
+        res.put("rows", fileList);
+        res.put("msg", "成功");
         return res;
     }
 
@@ -233,7 +241,7 @@ public class AssetsController {
     @ResponseBody
     public Map<String,Integer> totalAssets(HttpServletRequest request){
         String zctype=request.getParameter("zctype");
-        String gsmc = request.getParameter("gsmc");
+        String gsmc=request.getParameter("gsmc");
         Map<String,Integer> mapCount=new HashMap<>();
         List<AssetsConfig> configlist=assetsMapper.getAllAssetsConfigInfo(zctype, null);
         //融资统计
@@ -285,16 +293,36 @@ public class AssetsController {
     }
 
     /**
-     * 每天22点30启动任务
+     * 每天02点30启动任务
      */
-    @Scheduled(cron = "0 30 02 ? * *")
+    @Scheduled(cron = "0/25 * *  * * ? ")   //每5秒执行一次
+//    @Scheduled(cron = "0 30 02 ? * *")
     public void test1() {
         List<AssetsInfo> configlist = assetsMapper.getAssetsInfo(null, null);
+        List<AssetsInfo> reslist = new ArrayList<>();
+        Date date1 = new Date();
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date1);
+        // 将时分秒,毫秒域清零
+        cal1.set(Calendar.HOUR_OF_DAY, 0);
+        cal1.set(Calendar.MINUTE, 0);
+        cal1.set(Calendar.SECOND, 0);
+        cal1.set(Calendar.MILLISECOND, 0);
+        date1 = cal1.getTime();
+
         for (AssetsInfo assetsInfo : configlist) {
-            long betweenDay = DateUtil.between(new Date(), assetsInfo.getStopday(), DateUnit.DAY);
-            int dayorder = (int)betweenDay - Integer.parseInt(assetsInfo.getDays());
-            assetsInfo.setDayorder(dayorder);
+            if (assetsInfo.getDays() != null && assetsInfo.getStopday() != null) {
+                Date date2 = assetsInfo.getStopday();
+                Integer days = Integer.parseInt(assetsInfo.getDays());
+                int betweenDay = DateUtils.daysBetween(date1, date2);
+                int dayorder = betweenDay - days;
+                if (dayorder <= 0) {
+                    assetsInfo.setDayorder(betweenDay);
+                    reslist.add(assetsInfo);
+                }
+            }
         }
-//        System.out.println("job1 开始执行..."+(new Date()).toString());
+        int res = assetsMapper.updateAssetsInfoDays(reslist);
+        System.out.println("定时任务。。。计算到期时间" + (new Date()).toString() + "结果：" + res);
     }
 }

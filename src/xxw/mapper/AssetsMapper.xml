@@ -65,6 +65,7 @@
         <if test="gsmc !=null">
             and COMPANYID = #{gsmc,jdbcType=VARCHAR}
         </if>
+        order by DAYORDER
     </select>
     <select id="getSumAssetsInfo" resultType="xxw.po.AssetsInfo">
         select a.*,b.fcfield1,b.fcfield2 from ASSETS_INFO a LEFT  JOIN FINANCE b on a.FINANCEID=b.ZCID where 1=1
@@ -168,5 +169,18 @@
             ${key} = #{value}
         </foreach>
         where zcid = #{assetsMap.zcid}
+    </update>
+    <update id="updateAssetsInfoDays"  parameterType="java.util.List">
+        BEGIN
+        <foreach collection="list" item="item"  separator="">
+            update ASSETS_INFO
+            <set>
+                <if test="item.dayorder != null">
+                    dayorder = #{item.dayorder},
+                </if>
+            </set>
+            where zcid = #{item.zcid};
+        </foreach>
+        END;
     </update>
 </mapper>
