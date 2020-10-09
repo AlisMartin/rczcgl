@@ -321,10 +321,11 @@ public class FlowController {
 
     @RequestMapping("/queryMessage")
     @ResponseBody
-    public List<SysMessage> queryMessage(HttpServletRequest request){
-
-        String jsuser=request.getParameter("jsuser");
-        String show=request.getParameter("show");
+    public List<SysMessage> queryMessage(HttpServletRequest request,@RequestBody JSONObject json){
+        String jsuser = json.getString("jsuser");
+        String show = json.getString("show");
+        /*String jsuser=request.getParameter("jsuser");
+        String show=request.getParameter("show");*/
         return sysMessageMapper.queryMessage(jsuser,show);
 
     }

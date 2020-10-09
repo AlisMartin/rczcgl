@@ -85,18 +85,21 @@ $(function(){
 
 
 })
-//5·ÖÖÓ²éÑ¯Ò»´ÎÏûÏ¢
+//5åˆ†é’ŸæŸ¥è¯¢ä¸€æ¬¡æ¶ˆæ¯
 function getMessage(){
     debugger;
     var user= $.cookie('user');
     var userobj=eval('('+user+')');
     setTimeout(getMessage,1000*60*5);
+    var param={};
+    param.show='1';
+    param.jsuser=userobj.id;
     $.ajax({
         type:"post",
         url:"/rczcgl/flow/queryMessage.action",
-        data:{'show':1,'jsuser':userobj.id},
+        data:JSON.stringify(param),
+        contentType: "application/json;charset=UTF-8",
         success:function(responsedata){
-            debugger;
             var obj=responsedata;
             if(obj.length>0){
                 $(".imsg-bubble").css('display','block');
@@ -112,7 +115,7 @@ function getMessage(){
 
         },
         error:function(){
-            alert("Ìí¼ÓÊ§°Ü£¡ÇëÉÔºóÖØÊÔ£¡");
+            alert("æ·»åŠ å¤±è´¥ï¼è¯·ç¨åé‡è¯•ï¼");
         }
     })
 }

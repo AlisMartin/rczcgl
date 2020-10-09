@@ -103,7 +103,6 @@ $(function () {
             return JSON.stringify(params);
         },
         onLoadSuccess: function (data) {
-            debugger;
             var field,index,fcfield,fcindex;
             //合并
             for(var i=0;i<data.rows.length;i++){
@@ -147,6 +146,7 @@ $(function () {
 });
 
 function getcolumn() {
+    debugger;
     columns = [];
     var type=param.zctype+",5";
     $.ajax({
@@ -155,6 +155,7 @@ function getcolumn() {
         async: false,
         data: {'zctype':type},
         success: function (data) {
+
             configdata=data;
             gettotal(data[0].zctype,param.gsmc);
             for (var i = 0; i < data.length; i++) {
@@ -276,7 +277,6 @@ function mergeCells(data, fieldName, colspan, target) {
 }
 
 function mergeFcCells(data, fieldName, colspan, target) {
-    debugger;
     var pdName='financeid';
     if (data.length == 0) {
         alert("不能传入空数据");
@@ -301,6 +301,7 @@ function mergeFcCells(data, fieldName, colspan, target) {
 }
 
 function gettotal(zctype,gs){
+    debugger;
     var param={};
     if(zctype!=null&&zctype!=""){
         param.zctype=zctype;

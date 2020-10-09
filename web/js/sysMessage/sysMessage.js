@@ -75,8 +75,8 @@ $(function(){
         queryParams: function (params) {
             debugger;
             params.jsuser = userid;
-            param.show="1";
-            return param;
+            params.show="1";
+            return params;
         },
         onLoadSuccess:function(){
         },

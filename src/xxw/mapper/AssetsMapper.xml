@@ -47,6 +47,16 @@
             and COMPANYID= #{gsmc,jdbcType=VARCHAR}
         </if>
     </select>
+
+    <select id="getAllAssetsInfoByMap" resultType="map">
+        select * from ASSETS_INFO a LEFT JOIN  FINANCE b on a.FINANCEID=b.ZCID where 1=1
+        <if test="zctype !=null">
+            and ZCTYPE= #{zctype,jdbcType=VARCHAR}
+        </if>
+        <if test="gsmc !=null">
+            and COMPANYID= #{gsmc,jdbcType=VARCHAR}
+        </if>
+    </select>
     <select id="getAssetsInfo" resultType="xxw.po.AssetsInfo">
         select * from ASSETS_INFO where 1=1
         <if test="zctype !=null">

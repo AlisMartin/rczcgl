@@ -236,17 +236,45 @@ public class AssetsController {
         String gsmc = request.getParameter("gsmc");
         Map<String,Integer> mapCount=new HashMap<>();
         List<AssetsConfig> configlist=assetsMapper.getAllAssetsConfigInfo(zctype, null);
-        List<Map<String,String>> assetslist=assetsMapper.getAssetsInfoByMap(zctype,gsmc);
+        //融资统计
+        List<AssetsConfig> rzconfiglist=assetsMapper.getAllAssetsConfigInfo("5", null);
+        configlist.addAll(rzconfiglist);
+        List<Map<String,String>> assetslist=assetsMapper.getAllAssetsInfoByMap(zctype, gsmc);
         if(assetslist.size()<1){
             return null;
         }else{
-            for(Map.Entry<String,String> entry:assetslist.get(0).entrySet()) {
+            int maxentry=assetslist.get(0).size();
+            int entryi=0;
+            for(int i=0;i<assetslist.size();i++){
+                if(assetslist.get(i).size()>maxentry){
+                    maxentry=assetslist.get(i).size();
+                    entryi=i;
+                }
+            }
+            List<String> financeId=new ArrayList<>();
+            for(Map.Entry<String,String> entry:assetslist.get(entryi).entrySet()) {
                 int count = 0;
                 for (int i = 0; i < assetslist.size(); i++) {
                     for (AssetsConfig assetsConfig : configlist) {
                         if (assetsConfig.getFieldType().equals("2") && assetsConfig.getField().toUpperCase().equals(entry.getKey())) {
-                            count = count + Integer.parseInt(assetslist.get(i).get(entry.getKey()));
-                            mapCount.put(entry.getKey().toLowerCase(), count);
+                            if(assetslist.get(i).containsKey(entry.getKey())){
+                                if(assetslist.get(i).containsKey("FINANCEID")&&entry.getKey().indexOf("FCFIELD")>-1){
+                                    if(financeId.size()==0){
+                                        count = count + Integer.parseInt(assetslist.get(i).get(entry.getKey()));
+                                        mapCount.put(entry.getKey().toLowerCase(), count);
+                                        financeId.add(assetslist.get(i).get("FINANCEID"));
+                                    }else{
+                                       if(!financeId.contains(assetslist.get(i).get("FINANCEID"))){
+                                           count = count + Integer.parseInt(assetslist.get(i).get(entry.getKey()));
+                                           mapCount.put(entry.getKey().toLowerCase(), count);
+                                           financeId.add(assetslist.get(i).get("FINANCEID"));
+                                       }
+                                    }
+                                }else {
+                                    count = count + Integer.parseInt(assetslist.get(i).get(entry.getKey()));
+                                    mapCount.put(entry.getKey().toLowerCase(), count);
+                                }
+                            }
                         }
                     }
                 }

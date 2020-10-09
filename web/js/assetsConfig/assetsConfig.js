@@ -10,6 +10,14 @@ var seaassets={
     zctype:'3',
     zcinfo:[]
 }
+var otherassets={
+    zctype:'4',
+    zcinfo:[]
+}
+var finance={
+    zctype:'5',
+    zcinfo:[]
+}
 $(function(){
     //getconfiglist();
     $('#configTable').bootstrapTable({
@@ -40,8 +48,12 @@ $(function(){
                         return "土地资产";
                     }else if(value=='2'){
                         return "房屋资产";
-                    }else if(value='3'){
+                    }else if(value=='3'){
                         return "海域资产";
+                    }else if(value=='4'){
+                        return "其他资产";
+                    }else if(value=='5'){
+                        return "融资信息";
                     }
                 }
             },
@@ -158,6 +170,8 @@ function getconfiglist(){
             landassets.zcinfo=[];
             houseassets.zcinfo=[];
             seaassets.zcinfo=[];
+            otherassets.zcinfo=[];
+            finance.zcinfo=[];
             var dataarray=[];
             for(var i=0;i<data.length;i++){
                 if(data[i].show=="1"){
@@ -171,6 +185,12 @@ function getconfiglist(){
                 }
                 if(data[i].zctype=="3"){
                     seaassets.zcinfo.push(data[i]);
+                }
+                if(data[i].zctype=="4"){
+                    otherassets.zcinfo.push(data[i]);
+                }
+                if(data[i].zctype=="5"){
+                    finance.zcinfo.push(data[i]);
                 }
             }
             $("#configTable").bootstrapTable('load',dataarray);
@@ -198,6 +218,12 @@ function insertConfig(){
             break;
         case '3':
             fieldlength = fieldlength+(seaassets.zcinfo.length+1);
+            break;
+        case '4':
+            fieldlength = fieldlength+(otherassets.zcinfo.length+1);
+            break;
+        case '5':
+            fieldlength = "fc"+fieldlength+(finance.zcinfo.length+1);
     }
     if(flag){
         $.ajax({
@@ -212,6 +238,8 @@ function insertConfig(){
                     landassets.zcinfo=[];
                     houseassets.zcinfo=[];
                     seaassets.zcinfo=[];
+                    otherassets.zcinfo=[];
+                    finance.zcinfo=[];
                     $("#addConfig").modal('hide');
                     $("#configTable").bootstrapTable('refresh');
                 }

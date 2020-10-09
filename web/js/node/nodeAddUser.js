@@ -51,7 +51,7 @@ $(function(){
                 if(userIds.indexOf(",")>-1){
                     var idarray=userIds.split(",");
                     for(var i=0;i<idarray.length;i++){
-                        var a=parseInt(darray[i]);
+                        var a=parseInt(idarray[i]);
                         $('#Tree').treeview('checkNode', [ a, { silent: true } ]);
                         $('#Tree').treeview('revealNode', [ a, { silent: true } ]);
                     }
