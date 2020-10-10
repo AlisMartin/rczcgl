@@ -43,6 +43,7 @@ public class AssetsInfo {
     private String days;
     private Date stopday;
     private String financeid;
+    private String layerid;
     private Integer dayorder;
     private String fcfield1;
     private String fcfield2;
@@ -365,5 +366,13 @@ public class AssetsInfo {
 
     public void setStopday(Date stopday) {
         this.stopday = stopday;
+    }
+
+    public String getLayerid() {
+        return layerid;
+    }
+
+    public void setLayerid(String layerid) {
+        this.layerid = layerid;
     }
 }

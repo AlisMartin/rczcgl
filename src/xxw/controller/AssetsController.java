@@ -1,4 +1,5 @@
 package xxw.controller;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
@@ -31,6 +32,7 @@ import java.util.*;
 public class AssetsController {
     @Autowired
     AssetsMapper assetsMapper;
+
     @RequestMapping("/getConfigInfo")
     @ResponseBody
     public List<AssetsConfig> getConfigList(HttpServletRequest request) {
@@ -43,6 +45,7 @@ public class AssetsController {
             return null;
         }
     }
+
     @RequestMapping("/getAllConfigInfo")
     @ResponseBody
     public List<AssetsConfig> getAllConfigList(HttpServletRequest request){
@@ -67,6 +70,7 @@ public class AssetsController {
         }
 
     }
+
     @RequestMapping("/insertConfig")
     @ResponseBody
     public int insertAssetsConfig(HttpServletRequest request, AssetsConfig assetsConfig) {
@@ -168,15 +172,25 @@ public class AssetsController {
         Map<String, Object> res = new HashMap<>();
         JSONArray zctypes = json.getJSONArray("zctypes");
         String name = json.getString("name");
-        List<String> info = assetsMapper.getFieldByTypeAndName(zctypes);
+        List<AssetsConfig> assetsInfos = assetsMapper.getFieldByTypeAndName(zctypes);
 
-        String field1, field2, field3, field4;
-        field1 = info.get(0);
-        field2 = info.size() > 1 ? info.get(1) : null;
-        field3 = info.size() > 1 ? info.get(2) : null;
-        field4 = info.size() > 1 ? info.get(3) : null;
+        String field1 = null, field2 = null, field3 = null, field4 = null;
+        for (AssetsConfig info : assetsInfos) {
+            if (zctypes.contains("1") && "1".equals(info.getZctype())){
+                field1 = info.getField();
+            }
+            if (zctypes.contains("2") && "2".equals(info.getZctype())){
+                field1 = info.getField();
+            }
+            if (zctypes.contains("3") && "3".equals(info.getZctype())){
+                field1 = info.getField();
+            }
+            if (zctypes.contains("4") && "4".equals(info.getZctype())){
+                field1 = info.getField();
+            }
+        }
         List<AssetsInfo> infoList = assetsMapper.getAssetsInfoByName(StringUtil.formatLike(name), field1, field2, field3, field4);
-        if (infoList.size() > 0) {
+        if (assetsInfos.size() > 0 && infoList.size() > 0) {
             res.put("total", infoList.size());
             res.put("rows", infoList);
             return res;
@@ -330,10 +344,10 @@ public class AssetsController {
                 Integer days = Integer.parseInt(assetsInfo.getDays());
                 int betweenDay = DateUtils.daysBetween(date1, date2);
                 int dayorder = betweenDay - days;
-                if (dayorder <= 0) {
+//                if (dayorder <= 0) {
                     assetsInfo.setDayorder(betweenDay);
                     reslist.add(assetsInfo);
-                }
+//                }
             }
         }
         int res = assetsMapper.updateAssetsInfoDays(reslist);

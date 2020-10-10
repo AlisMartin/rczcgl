@@ -195,6 +195,7 @@ $(function () {
                 return JSON.stringify(params);
             },
             onLoadSuccess: function () {
+                setColor("assetsTable");
             },
             onLoadError: function () {
             }
@@ -341,6 +342,7 @@ $(function () {
             return JSON.stringify(params);
         },
         onLoadSuccess: function () {
+            setColor("assetsTable");
         },
         onLoadError: function () {
         },
@@ -371,7 +373,22 @@ $(function () {
 
 function getcolumn() {
     debugger;
-    columns = [];
+    var objyu = {
+        visible : true,
+        class : "dayorder",
+        field : "dayorder",
+        title : "是否预警"};
+    //obj.field = "yujing";
+    //obj.title = "是否预警";
+    columns = [{
+        visible : true,
+        class : "dayorder",
+        field : "dayorder",
+        title : "是否预警"},
+        {visible : true,
+        class : "dayorder",
+        field : "days",
+        title : "预警天数"}];
     var zctype = $("#zctype").val();
     $.ajax({
         type: "post",
@@ -835,4 +852,32 @@ function getCompanys() {
         error: function () {
         }
     })
+}
+
+/**
+ * 给表格的指定单元格值的行上色<br/>
+ * 示例：setColor1('table_datalist', 'Waiting approval' , 'orange')
+ * @returns
+ */
+function setColor(tableId){
+    /*$('#'+tableId+' tr').each(function(){ // 获取指定ID的表格中的所有 TR 对象，然后用 each 遍历 这些 TR
+        var tdText = $(this).find('td').eq(2).text(); // 获取当前这一行的 TR对象，然后查找这行的 TD 对象，当发现 TD 是 第2个 对象时，获取 这个 TD 的 文本值
+        if( tdText == findValue ){
+            $(this).attr('style','color:'+colorValue ); // 给当前行 的文本 上色
+        }
+    });*/
+    var tableId = document.getElementById(tableId);
+
+    for(var i = 1;i < tableId.rows.length;i++) {
+        var row = tableId.rows[i].cells[0].innerHTML;
+        var days = tableId.rows[i].cells[1].innerHTML;
+        if(!isNaN(row)){
+            row = parseInt(row);
+            if(row <= 0){
+                tableId.rows[i].setAttribute("style","background: #d9534f;");
+            }else if(row < days){
+                tableId.rows[i].setAttribute("style","background: #dc5d599c;");
+            }
+        }
+    }
 }

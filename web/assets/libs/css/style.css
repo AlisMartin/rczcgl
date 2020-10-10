@@ -890,7 +890,8 @@ Background Color / Color
 }
 
 .bg-dark {
-    background-color: #2e2f39 !important;
+    /*background-color: #2e2f39 !important;*/
+    background-color: #ffffff !important;
 }
 
 .bg-primary-light {
@@ -1717,7 +1718,8 @@ Left Navigation Sidebar
     padding-left: 12px;
     padding-right: 12px;
     /* margin-top: 5px; */
-    background: #24274a;
+    /*background: #24274a;*/
+    background: #00000013;
 }
 
 .nav-left-sidebar .submenu .nav .nav-item .nav-link {
@@ -1762,7 +1764,8 @@ Leftsidebar - Primary
 ------------------------- */
 
 .sidebar-primary {
-    background-color: #414da7;
+    /*background-color: #414da7;*/
+    background-color: #4e73df;
 }
 
 .sidebar-primary .nav-divider {
@@ -1776,19 +1779,22 @@ Leftsidebar - Primary
 .sidebar-primary.nav-left-sidebar .navbar-nav .nav-item {}
 
 .sidebar-primary.nav-left-sidebar .navbar-nav .nav-link {
-    color: #8991d4;
+    /*color: #8991d4;*/
+    color: #ffffffcc;
 }
 
 .sidebar-primary.nav-left-sidebar .navbar-nav .nav-link:focus,
 .sidebar-primary.nav-left-sidebar .navbar-nav .nav-link:hover {
     color: #fff;
-    background-color: #5761c2;
+    /*background-color: #5761c2;*/
+    background-color: #3DC3D5;
     border-radius: 2px;
 }
 
 .sidebar-primary.nav-left-sidebar .navbar-nav .nav-link:focus,
 .sidebar-primary.nav-left-sidebar .navbar-nav .nav-link.active {
-    background-color: #5761c2;
+    /*background-color: #5761c2;*/
+    background-color: #3DC3D5;
     color: #fff;
     border-radius: 2px;
 }
