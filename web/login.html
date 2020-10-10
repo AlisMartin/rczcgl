@@ -18,25 +18,29 @@
 <body>
 <div class="mainpage">
     <div class="_ab login">
-        <div class="_ab loginTitle"></div>
+        <div class="_ab loginTitle">
+
+            <h1 style=""><img src='images/login/logorong.png' style="height: 65px;width: 90px;margin-bottom: 15px;" />荣成市资产管理信息系统</h1>
+        </div>
         <!--<div class="_ab loginBgCity"></div>-->
         <div class="_ab loginMain">
+            <img src='images/login/us_img1.jpg' style="position: absolute;height: 360px;width: 360px;border-radius: 7px;" />
             <form class="loginForm">
-                <div class="lblInput">用户名</div>
+                <div class="lblInput" style="margin-top: 15px;">用户名</div>
                 <div class="usernameDiv" >
                     <div class="_ab login-logo userlg"></div>
                     <input type="text" id="username" placeholder="用户名" required value="admin" />
                     <img id="usernameImg" src='images/login/error.png' style="display:none;" />
                 </div>
-                <div class="lblInput">密码</div>
+                <div class="lblInput" style="margin-top: 15px;">密码</div>
                 <div class="passwordDiv" >
                     <div class="_ab login-logo pswlg"></div>
                     <input type="password" id="userpassword" placeholder="密码" required oncopy="return false" onpaste="return false"/>
                     <img id="passwordImg" src='images/login/error.png' style="display:none;" />
                 </div>
                 <div class="savePasswordDiv">
-                    <input name="rememberMe" id="rememberMe" type="checkbox" checked="checked"/>
-                    <label for="rememberMe" class="rememberMe-lbl">记住密码</label>
+                    <!--<input name="rememberMe" id="rememberMe" type="checkbox" checked="checked"/>-->
+                    <!--<label for="rememberMe" class="rememberMe-lbl">记住密码</label>-->
                     <div class="loading" style="display: none;">正在验证用户信息...<span class="logingif"/></div>
                 </div>
                 <div class="btnDiv">

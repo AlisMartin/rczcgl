@@ -19,17 +19,19 @@ require(["esri/map",
     "esri/layers/GraphicsLayer",
     "esri/graphic",
     "esri/layers/FeatureLayer",
+    "esri/layers/ArcGISTiledMapServiceLayer",
     "dojo/domReady!"], function (Map, ArcGISDynamicMapServiceLayer, dom, on, Point, QueryTask, SpatialReference, Query, InfoTemplate,
-                                 SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer, Graphic, FeatureLayer) {
+                                 SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer, Graphic, FeatureLayer, ArcGISTiledMapServiceLayer) {
     map = new Map("map", {
-        basemap: "osm",  //topo-vector   For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
+        //basemap: "osm",  //topo-vector   For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
         center: [122.376, 37.096], // longitude, latitude
         zoom: 12
     });
-    var dynamicMapServiceLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/TEST4326/MapServer"
-        );
+    var dynamicMapServiceLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/TEST4326/MapServer");
+    var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/MyMapService/MapServer");
     var graphicsLayer = new GraphicsLayer();
     map.addLayer(dynamicMapServiceLayer);
+    map.addLayer(layer);
 
     //对checkbox数组进行变量把选中的id添加到visible
     $("input[name='ckb']:checkbox").click(function() {
@@ -63,7 +65,7 @@ require(["esri/map",
         query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
         query.returnGeometry = true;
         //实例化查询对象
-        var queryTask = new QueryTask("http://localhost:6080/arcgis/rest/services/TEST/MapServer/0");
+        var queryTask = new QueryTask("http://localhost:6080/arcgis/rest/services/TEST4326/MapServer/0");
         //进行查询
         queryTask.execute(query,showFindResult)
 
@@ -131,7 +133,7 @@ require(["esri/map",
      //					map.infoWindow.hide();
      //					$(".checkMe,#mc").remove();
      //定义查询对象
-     var queryTask = new QueryTask("http://localhost:6080/arcgis/rest/services/TEST/MapServer/0");
+     var queryTask = new QueryTask("http://localhost:6080/arcgis/rest/services/TEST4326/MapServer/0");
      //定义查询参数对象
      var query = new Query();
      //查询条件，类似于sql语句的where子句

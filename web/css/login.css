@@ -25,9 +25,17 @@ div{
     background: url('../images/login/loginBG.jpg') center;}
 
 .login{width:1024px; height:700px;margin:auto;top: 50%;left: 50%;margin: -350px 0 0 -512px; }
-.loginTitle{width:770px; height:116px; background:url('../images/login/title.png') no-repeat;left: 165px;;top: 60px; }
+.loginTitle{width:770px; height:116px; letter-spacing: 3px;
+    font-size: 25px;
+    top: 140px;
+    color: white;
+    left: 170px; }/*background:url('../images/login/title.png') no-repeat;left: 165px;*/
 /*.loginBgCity{width: 1070px;height: 500px;background: url('../images/login/loginBG.jpg');left: -40px;top: 260px;}*/
-.loginMain{width:720px; height:360px; background:url('../images/login/loginPanel.jpg');border-radius: 7px; left: 148px;top: 236px;  }
+.loginMain{width:720px; height:360px;
+    background:url('../images/login/loginPanel.jpg');
+    border-radius: 7px;
+    left: 148px;
+    top: 236px;  }
 .loginBtm{bottom: 0; height: 40px; text-align: center; width: 100%; background:url("../images/login/loginbtm.png") repeat-x; color: #282828;
     line-height: 40px;font-size: 13px;
     cursor: default;
