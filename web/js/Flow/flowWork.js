@@ -1,7 +1,12 @@
 var spinfo;
 var user= $.cookie('user');
 var userobj=eval('('+user+')');
+var node;
 $(function(){
+
+
+    //查询流程节点配置
+    getFlowConfig();
 
     $(".sp").click(function(){
         debugger;
@@ -41,7 +46,7 @@ $(function(){
     $('#flowWorkTable').bootstrapTable({
         url:'/rczcgl/flow/queryFlowInfos.action',
         method:'post',
-        data:[],
+        contentType: "application/json;charset=UTF-8",
         clickToSelect:true,
         sidePagination:"client",
         pagination:true,
@@ -113,9 +118,15 @@ $(function(){
                 },
                 events:{
                     'click #sp':function(e,value,row,index){
-                        spinfo={};
-                        spinfo=row;
-                        spFile(row);
+                        debugger;
+                        if(pdFlow(userobj.id,row.node)){
+                            spinfo={};
+                            spinfo=row;
+                            spFile(row);
+                        }else{
+                            alert("当前用户无权限审批！");
+                        }
+
                     },
                     'click #ck':function(e,value,row,index){
                         spinfo={};
@@ -126,8 +137,12 @@ $(function(){
             }
         ],
         queryParams: function (params) {
-            params.fqr = userobj.id;
-            return params;
+            debugger;
+            if(!(userobj.auth.indexOf("8")>-1)){
+                params.duser = userobj.id;
+            }
+
+            return  JSON.stringify(params);;
         },
         onLoadSuccess:function(){
         },
@@ -404,3 +419,5 @@ function getqm(a){
         }
     })
 }
+
+

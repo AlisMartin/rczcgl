@@ -19,28 +19,12 @@ $(function(){
                 checkbox:true
             },
             {
-                field:'id',
-                title:'ID'
-            },
-            {
                 field:'roleId',
                 title:'角色ID'
             },
             {
                 field:'role',
-                title:'角色',
-                formatter:function(value,row,index){
-                    if(value=='1'){
-                        return "超级管理员"
-                    }else if(value=='2'){
-                        return "普通管理员"
-                    }else if(value='3'){
-                        return "普通用户";
-                    }else{
-                        return "游客"
-                    }
-                }
-
+                title:'角色'
             }
         ],
         onLoadSuccess:function(){

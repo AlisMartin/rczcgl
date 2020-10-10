@@ -1,4 +1,4 @@
-//ÅĞ¶ÏÊÇ·ñÔÚÇ°Ãæ¼Ó0
+//åˆ¤æ–­æ˜¯å¦åœ¨å‰é¢åŠ 0
 function getNow(s) {
     return s < 10 ? '0' + s: s;
 }
@@ -6,15 +6,43 @@ function getNow(s) {
 function getNowDate(){
     var myDate = new Date();
 
-    var year=myDate.getFullYear();        //»ñÈ¡µ±Ç°Äê
-    var month=myDate.getMonth()+1;   //»ñÈ¡µ±Ç°ÔÂ
-    var date=myDate.getDate();            //»ñÈ¡µ±Ç°ÈÕ
+    var year=myDate.getFullYear();        //è·å–å½“å‰å¹´
+    var month=myDate.getMonth()+1;   //è·å–å½“å‰æœˆ
+    var date=myDate.getDate();            //è·å–å½“å‰æ—¥
 
 
-    var h=myDate.getHours();              //»ñÈ¡µ±Ç°Ğ¡Ê±Êı(0-23)
-    var m=myDate.getMinutes();          //»ñÈ¡µ±Ç°·ÖÖÓÊı(0-59)
+    var h=myDate.getHours();              //è·å–å½“å‰å°æ—¶æ•°(0-23)
+    var m=myDate.getMinutes();          //è·å–å½“å‰åˆ†é’Ÿæ•°(0-59)
     var s=myDate.getSeconds();
 
     var now=year+'-'+getNow(month)+"-"+getNow(date)+" "+getNow(h)+':'+getNow(m)+":"+getNow(s);
     return now;
+}
+
+//æŸ¥è¯¢æµç¨‹é…ç½®
+function getFlowConfig(){
+    debugger;
+    $.ajax({
+        type:"post",
+        url:"/rczcgl/flow/getNodeInfo.action",
+        async:false,
+        success:function(data){
+            node=data;
+        },
+        error:function(){
+            alert("ç³»ç»Ÿé”™è¯¯ï¼");
+        }
+    })
+}
+//åˆ¤æ–­æ˜¯å¦æœ‰æƒé™å‘æ–‡æˆ–å®¡æ‰¹
+function pdFlow(userid,nodeId){
+    debugger;
+    var flag=false;
+    for(var i=0;i<node.length;i++){
+        if(node[i].nodeId==nodeId&&node[i].userId.indexOf(userid)>-1){
+            flag=true;
+            break;
+        }
+    }
+    return flag;
 }

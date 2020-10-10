@@ -2,8 +2,11 @@ var spinfo={};
 var date=getNowDate();
 var user= $.cookie('user');
 var userobj=eval('('+user+')');
+//节点信息
+var node;
 $(function(){
-
+    //获取节点配置信息
+    getFlowConfig();
     //加载时间控件
     $('#datetimepicker2').datetimepicker({
         startDate:date,
@@ -26,8 +29,13 @@ $(function(){
 
 //发起流程
     $("#fqlc").click(function(){
-        initmodalinfo();
-        $("#addFlow").modal('show');
+        if(pdFlow(userobj.id,"1")){
+            initmodalinfo();
+            $("#addFlow").modal('show');
+        }else{
+            alert("当前用户无权限发起流程！");
+        }
+
     })
 //设置文件上传
     $("#wjkup").click(function(){
@@ -291,7 +299,7 @@ $(function(){
     $('#flowInstanceTable').bootstrapTable({
         url:'/rczcgl/flow/queryFlowInfos.action',
         method:'post',
-        data:[],
+        contentType: "application/json;charset=UTF-8",
         clickToSelect:true,
         sidePagination:"client",
         pagination:true,
@@ -370,8 +378,10 @@ $(function(){
             }
         ],
         queryParams: function (params) {
-            params.fqr = userobj.id;
-            return params;
+            if(!(userobj.auth.indexOf("8")>-1)){
+                params.fqr = userobj.id;
+            }
+            return  JSON.stringify(params);
         },
         onLoadSuccess:function(){
         },

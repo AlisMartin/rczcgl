@@ -116,12 +116,13 @@ public class FlowController {
 
     @RequestMapping("/queryFlowInfos")
     @ResponseBody
-    public List<FlowHistory> queryFlowInfos(HttpServletRequest request){
+    public List<FlowHistory> queryFlowInfos(HttpServletRequest request,@RequestBody JSONObject json){
         //flowMapper.createFlowHistory(flowHistory);
-        String flowType=request.getParameter("flowType");
-        String flowId=request.getParameter("flowId");
-        String fqr=request.getParameter("fqr");
-        List<FlowHistory> flowInfoList=flowMapper.queryFlowInfos(flowType,flowId,fqr);
+        String flowType=json.getString("flowType");
+        String flowId=json.getString("flowId");
+        String fqr=json.getString("fqr");
+        String duser=json.getString("duser");
+        List<FlowHistory> flowInfoList=flowMapper.queryFlowInfos(flowType,flowId,fqr,duser);
         for(FlowHistory info:flowInfoList){
             if(!"".equals(info.getUser())&&info.getUser()!=null){
                 String cluser=getUserNames(info.getUser());

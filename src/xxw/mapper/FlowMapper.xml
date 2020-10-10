@@ -359,6 +359,9 @@
         <if test="fqr !=null">
             and a.FQR= #{fqr,jdbcType=VARCHAR}
         </if>
+        <if test="duser !=null">
+            and instr(','||a.DUSERS||',',concat(concat(',',#{duser}),','))>0
+        </if>
 
     </select>
 

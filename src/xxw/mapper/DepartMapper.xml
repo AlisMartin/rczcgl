@@ -85,6 +85,7 @@
         <if test="parentNodeId !=null">
             and PARENTNODEID= #{parentNodeId,jdbcType=VARCHAR}
         </if>
+        order by company,department,position,user
     </select>
 
     <select id="getMaxLevel" resultType="java.lang.String">

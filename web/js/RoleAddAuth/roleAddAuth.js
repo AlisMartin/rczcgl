@@ -72,28 +72,12 @@ $(function(){
                 checkbox:true
             },
             {
-                field:'id',
-                title:'ID'
-            },
-            {
                 field:'roleId',
                 title:'角色ID'
             },
             {
                 field:'role',
-                title:'角色',
-                formatter:function(value,row,index){
-                    if(value=='1'){
-                        return "超级管理员"
-                    }else if(value=='2'){
-                        return "普通管理员"
-                    }else if(value='3'){
-                        return "普通用户";
-                    }else{
-                        return "游客"
-                    }
-                }
-
+                title:'角色'
             }
         ],
         onLoadSuccess:function(){
@@ -107,8 +91,7 @@ $(function(){
             $.ajax({
                 type:"post",
                 url:"/rczcgl/role/selectAuthByRole.action",
-                sync:false,
-                dataType:'json',
+                async:false,
                 data:{"roleId":roleId},
                 success:function(data){
                     debugger;
@@ -134,13 +117,13 @@ $(function(){
         url:'/rczcgl/auth/getAllauths.action',
         method:'post',
         clickToSelect:true,
-        sidePagination:"client",
-        pagination:true,
-        pageNumber:1,
-        pageSize:5,
-        pageList:[5,10,20,50,100],
-        paginationPreText:"上一页",
-        paginationNextText:"下一页",
+        //sidePagination:"client",
+       // pagination:true,
+        //pageNumber:1,
+        //pageSize:5,
+        //pageList:[5,10,20,50,100],
+        //paginationPreText:"上一页",
+        //paginationNextText:"下一页",
         columns:[
             {
                 checkbox:true
