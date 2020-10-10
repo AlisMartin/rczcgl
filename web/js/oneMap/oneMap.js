@@ -37,12 +37,15 @@ require(["esri/map",
         dynamicMapServiceLayer.setVisibleLayers(visible);
     });
     function getLayersId(){
-        var visible = [-1];
+        var visible = [];
         $("input[name='ckb']:checkbox").each(function() {
             if($(this).is(":checked")) {
                 visible.push($(this).attr("value"));
             }
         });
+        if(visible.length == 0){
+            visible = [-1];
+        }
         return visible;
     }
 
@@ -68,6 +71,8 @@ require(["esri/map",
     function showFindResult(queryResult) {
         if (queryResult.features == 0) {
             //alert("没有该元素");
+            map.graphics.clear();
+            map.infoWindow.hide();
             return;
         }
         for (var i = 0; i < queryResult.features.length; i++) {
@@ -96,11 +101,11 @@ require(["esri/map",
         }
     }
 
-    var zctypes = [1,2];
+    var zctypes = getLayersId();
 
     $("#search").click(function () {
         var queryType = $("#searchCon").val();
-        var zctypes = [1,2];
+        var zctypes = getLayersId();
         /*$.ajax({
             async:false,
             type: "post",
@@ -121,7 +126,7 @@ require(["esri/map",
     });
 
     //on(dom.byId("Btn"),"click",function(e){
-     $("#search").click(function(){
+     $("#search没有了").click(function(){
      //					layer.clear();
      //					map.infoWindow.hide();
      //					$(".checkMe,#mc").remove();
@@ -206,6 +211,8 @@ function loadRes(queryType,zctypes){
         clickToSelect:true,
         sidePagination:"client",
         contentType: "application/json;charset=UTF-8",
+        //contentType: "application/json",
+
         dataType: "json",
         pagination:true,
         pageNumber:1,
@@ -227,15 +234,18 @@ function loadRes(queryType,zctypes){
                     }
                 }
             },
-            {field:'field1', title:'资产名称'}
+            {field:'field2', title:'资产名称'}
             //{field:"fieldname", title:'资产信息项'}
         ],
         queryParams:function(params){
-            return JSON.stringify({
+            /*return JSON.stringify({
                 //limit: params.limit,
                 //offset: params.offset,
                 "name": queryType,
-                "zctypes": zctypes});
+                "zctypes": zctypes});*/
+            params.name = queryType;
+            params.zctypes = zctypes;
+            return JSON.stringify(params);
         },
         onLoadSuccess:function(){
         },

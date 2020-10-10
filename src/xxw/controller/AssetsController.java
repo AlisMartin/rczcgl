@@ -155,15 +155,25 @@ public class AssetsController {
         Map<String, Object> res = new HashMap<>();
         JSONArray zctypes = json.getJSONArray("zctypes");
         String name = json.getString("name");
-        List<String> info = assetsMapper.getFieldByTypeAndName(zctypes);
+        List<AssetsConfig> assetsInfos = assetsMapper.getFieldByTypeAndName(zctypes);
 
-        String field1, field2, field3, field4;
-        field1 = info.get(0);
-        field2 = info.size() > 1 ? info.get(1) : null;
-        field3 = info.size() > 1 ? info.get(2) : null;
-        field4 = info.size() > 1 ? info.get(3) : null;
+        String field1 = null, field2 = null, field3 = null, field4 = null;
+        for (AssetsConfig info : assetsInfos) {
+            if (zctypes.contains("1") && "1".equals(info.getZctype())){
+                field1 = info.getField();
+            }
+            if (zctypes.contains("2") && "2".equals(info.getZctype())){
+                field1 = info.getField();
+            }
+            if (zctypes.contains("3") && "3".equals(info.getZctype())){
+                field1 = info.getField();
+            }
+            if (zctypes.contains("4") && "4".equals(info.getZctype())){
+                field1 = info.getField();
+            }
+        }
         List<AssetsInfo> infoList = assetsMapper.getAssetsInfoByName(StringUtil.formatLike(name), field1, field2, field3, field4);
-        if (infoList.size() > 0) {
+        if (assetsInfos.size() > 0 && infoList.size() > 0) {
             res.put("total", infoList.size());
             res.put("rows", infoList);
             return res;
@@ -268,8 +278,8 @@ public class AssetsController {
     /**
      * 每天02点30启动任务
      */
-    @Scheduled(cron = "0/25 * *  * * ? ")   //每5秒执行一次
-//    @Scheduled(cron = "0 30 02 ? * *")
+//    @Scheduled(cron = "0/25 * *  * * ? ")   //每5秒执行一次
+    @Scheduled(cron = "0 30 02 ? * *")
     public void test1() {
         List<AssetsInfo> configlist = assetsMapper.getAssetsInfo(null, null);
         List<AssetsInfo> reslist = new ArrayList<>();
@@ -289,10 +299,10 @@ public class AssetsController {
                 Integer days = Integer.parseInt(assetsInfo.getDays());
                 int betweenDay = DateUtils.daysBetween(date1, date2);
                 int dayorder = betweenDay - days;
-                if (dayorder <= 0) {
+//                if (dayorder <= 0) {
                     assetsInfo.setDayorder(betweenDay);
                     reslist.add(assetsInfo);
-                }
+//                }
             }
         }
         int res = assetsMapper.updateAssetsInfoDays(reslist);
