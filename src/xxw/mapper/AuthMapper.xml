@@ -5,6 +5,7 @@
         <id column="ID" property="id" jdbcType="VARCHAR" />
         <result column="AUTH_ID" property="authId" jdbcType="VARCHAR"/>
         <result column="AUTH_TYPE" property="authType" jdbcType="VARCHAR"/>
+        <result column="AUTH_NAME" property="authName" jdbcType="VARCHAR"/>
     </resultMap>
     <select id="getAllAuth" resultMap="AuthResultMap">
         select * from AUTHORITY

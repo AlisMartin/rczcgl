@@ -1,5 +1,7 @@
 var spinfo={};
 var date=getNowDate();
+var user= $.cookie('user');
+var userobj=eval('('+user+')');
 $(function(){
 
     //加载时间控件
@@ -367,6 +369,10 @@ $(function(){
                 }
             }
         ],
+        queryParams: function (params) {
+            params.fqr = userobj.id;
+            return params;
+        },
         onLoadSuccess:function(){
         },
         onLoadError:function(){

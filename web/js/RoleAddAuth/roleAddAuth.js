@@ -154,20 +154,8 @@ $(function(){
                 title:'权限ID'
             },
             {
-                field:'authType',
-                title:'权限',
-                formatter:function(value,row,index){
-                    debugger;
-                    if(value=='1'){
-                        return "用户管理"
-                    }else if(value=='2'){
-                        return "导出资料"
-                    }else if(value=='3'){
-                        return "导入文件";
-                    }else{
-                        return "浏览"
-                    }
-                }
+                field:'authName',
+                title:'权限'
 
             }
         ],

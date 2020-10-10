@@ -356,6 +356,9 @@
         <if test="flowId !=null">
             and a.FLOWID= #{flowId,jdbcType=VARCHAR}
         </if>
+        <if test="fqr !=null">
+            and a.FQR= #{fqr,jdbcType=VARCHAR}
+        </if>
 
     </select>
 

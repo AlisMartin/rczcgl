@@ -10,6 +10,9 @@ public class Auth {
 
     private String authType;
 
+    private String authName;
+
+
     public String getId() {
         return id;
     }
@@ -34,4 +37,11 @@ public class Auth {
         this.authType = authType;
     }
 
+    public String getAuthName() {
+        return authName;
+    }
+
+    public void setAuthName(String authName) {
+        this.authName = authName;
+    }
 }

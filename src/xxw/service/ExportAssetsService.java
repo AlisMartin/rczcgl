@@ -100,6 +100,162 @@ public class ExportAssetsService {
         }
     }
 
+    public void exportSumAssetsInfo(String zctype,String path,String name,String comId){
+        //获取导出列及列名
+        List<AssetsConfig> configlist=assetsMapper.getAssetsConfigInfo(zctype,null);
+        List<AssetsConfig> rzconfiglist=assetsMapper.getAssetsConfigInfo("5",null);
+        configlist.addAll(rzconfiglist);
+        //获取导出资产信息
+        List<Map<String,String>> infomap=assetsMapper.getSumAssetsInfoByMap(zctype,comId);
+
+        FileOutputStream fs=null;
+        Workbook wb=null;
+        try {
+            fs = new FileOutputStream(path + File.separator + name);
+
+            wb = new SXSSFWorkbook();
+            Sheet sheet = wb.createSheet("sheet1");
+
+            CellStyle headStyle = customCellStyle(wb, "head");
+            CellStyle conStyle = customCellStyle(wb, "con");
+
+            String[] HeadFields = new String[configlist.size()];
+            String[] KeyFields =  new String[configlist.size()];
+            for(int i=0;i<configlist.size();i++){
+                HeadFields[i]=configlist.get(i).getFieldname();
+                KeyFields[i]=configlist.get(i).getField().toUpperCase();
+            }
+
+
+            //表头部分
+            Row vr = sheet.createRow(0);
+            vr.setHeight((short) (400));
+            Cell cellHead = null;
+            int cacheitems = 100;
+            int num = 0;
+            for (int i = 0; i < HeadFields.length; i++) {
+                cellHead = vr.createCell(i);
+                cellHead.setCellValue(HeadFields[i]);
+                cellHead.setCellStyle(headStyle);
+                sheet.setColumnWidth(i, cellHead.getStringCellValue().getBytes().length * 300);
+            }
+            //内容部分
+            Row row = null;
+            Cell cellKey = null;
+            for (int i = 0; i < infomap.size(); i++) {
+                if (num % cacheitems == 0) {
+                    ((SXSSFSheet) sheet).flushRows();
+                }
+                row = sheet.createRow(i + 1);
+                row.setHeight((short) 300);
+                // Map<String, Object> regionMap = BasicInfoList.get(i);
+                for (int j = 0; j < KeyFields.length; j++) {
+                    cellKey = row.createCell(j);
+                    cellKey.setCellValue(infomap.get(i).get(KeyFields[j]));
+                    cellKey.setCellStyle(conStyle);
+                }
+            }
+
+            wb.write(fs);
+            wb.close();
+            fs.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }finally {
+            if(fs!=null) {
+                try {
+                    fs.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(wb!=null){
+                try {
+                    wb.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    //导出资产汇总信息
+    public void exportSummaryInfo(String zctype,String path,String name){
+        //获取导出列及列名
+        List<AssetsConfig> configlist=assetsMapper.getAssetsConfigInfo(zctype,null);
+        //获取导出资产信息
+        List<Map<String,String>> infomap=assetsMapper.getAssetsInfoByMap(zctype,null);
+
+        FileOutputStream fs=null;
+        Workbook wb=null;
+        try {
+            fs = new FileOutputStream(path + File.separator + name);
+
+            wb = new SXSSFWorkbook();
+            Sheet sheet = wb.createSheet("sheet1");
+
+            CellStyle headStyle = customCellStyle(wb, "head");
+            CellStyle conStyle = customCellStyle(wb, "con");
+
+            String[] HeadFields = new String[configlist.size()];
+            String[] KeyFields =  new String[configlist.size()];
+            for(int i=0;i<configlist.size();i++){
+                HeadFields[i]=configlist.get(i).getFieldname();
+                KeyFields[i]=configlist.get(i).getField().toUpperCase();
+            }
+
+
+            //表头部分
+            Row vr = sheet.createRow(0);
+            vr.setHeight((short) (400));
+            Cell cellHead = null;
+            int cacheitems = 100;
+            int num = 0;
+            for (int i = 0; i < HeadFields.length; i++) {
+                cellHead = vr.createCell(i);
+                cellHead.setCellValue(HeadFields[i]);
+                cellHead.setCellStyle(headStyle);
+                sheet.setColumnWidth(i, cellHead.getStringCellValue().getBytes().length * 300);
+            }
+            //内容部分
+            Row row = null;
+            Cell cellKey = null;
+            for (int i = 0; i < infomap.size(); i++) {
+                if (num % cacheitems == 0) {
+                    ((SXSSFSheet) sheet).flushRows();
+                }
+                row = sheet.createRow(i + 1);
+                row.setHeight((short) 300);
+                // Map<String, Object> regionMap = BasicInfoList.get(i);
+                for (int j = 0; j < KeyFields.length; j++) {
+                    cellKey = row.createCell(j);
+                    cellKey.setCellValue(infomap.get(i).get(KeyFields[j]));
+                    cellKey.setCellStyle(conStyle);
+                }
+            }
+
+            wb.write(fs);
+            wb.close();
+            fs.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }finally {
+            if(fs!=null) {
+                try {
+                    fs.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(wb!=null){
+                try {
+                    wb.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
         public List<Map<String,String>> importAssetsInfo(MultipartFile file,String zctype){
             int num=1;
             //获取导出列及列名

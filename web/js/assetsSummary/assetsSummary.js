@@ -4,83 +4,18 @@ var param = {};
 var zcid = "";
 var fileid = "";
 var countobj={};
+var user= $.cookie('user');
+var userobj=eval('('+user+')');
 $(function () {
     getCompanys();
     var zctype = parent.document.getElementById("InfoList").src.split("?")[1].split("&&")[0];
     zctype = zctype.substring(zctype.length - 1, zctype.length);
     param.zctype = zctype;
-    //导入
-    $("#importAssets").click(function () {
-        $("#assetsFile").click();
-    });
+    param.gsmc=userobj.comId;
     //导出
-    $("#exportAssets").click(function () {
-        exportAssetsInfo();
+    $("#exportSummary").click(function () {
+        exportSummary();
     });
-    //新增资产
-    $("#addAsset").click(function () {
-        $("#add").modal('show');
-    });
-    $("#saveAsset").click(function () {
-        addAsset();
-    });
-    $("#editAsset").click(function () {
-        editAsset();
-    });
-    $("#savefile").click(function () {
-        insertFile();
-    });
-    $("#search").click(function () {
-        $('#table').bootstrapTable('refreshOptions', {
-            queryParams: function (params) {
-                params.zctype = param.zctype;
-                params.gsmc = $("#gsmc").val();
-                return params;
-            }
-        })
-    });
-
-    $("#zctype").change(function () {
-        param.zctype = $('#zctype').val();
-        getcolumn();
-        $('#assetsTable').bootstrapTable('destroy');
-        $('#assetsTable').bootstrapTable({
-            url: '/rczcgl/assetsconfig/getSumAssetsInfo.action',
-            contentType: "application/json;charset=UTF-8",
-            method: 'post',
-            clickToSelect: true,
-            showFooter:true,
-            //search:true,
-            //showSearchButton:true,
-            //showSearchClearButton:true,
-            //searchAlign:left,
-            sidePagination: "server",
-            pagination: true,
-            pageNumber: 1,
-            pageSize: 5,
-            pageList: [5, 10, 20, 50, 100],
-            paginationPreText: "上一页",
-            paginationNextText: "下一页",
-            columns: columns,
-            queryParamsType : "limit",
-            queryParams: function (params) {
-                params.zctype = param.zctype;
-                params.gsmc = param.gsmc;
-                return JSON.stringify(params);
-            },
-            onLoadSuccess: function () {
-            },
-            onLoadError: function () {
-            }
-        })
-    });
-
-
-
-
-
-
-
     //获取动态列
     getcolumn();
     $('#assetsTable').bootstrapTable({
@@ -100,6 +35,9 @@ $(function () {
         queryParamsType : "limit",
         queryParams: function (params) {
             params.zctype = param.zctype;
+            if(userobj.comId!==null){
+                params.gsmc=userobj.comId;
+            }
             return JSON.stringify(params);
         },
         onLoadSuccess: function (data) {
@@ -363,9 +301,33 @@ function getCompanys() {
                         '<li><a class="' + data[i].id + '" data-toggle="tab" onclick="reloadTable(this)">' + data[i].nodeName + '</a></li>';
 
             }
-            $("#myTab").append(htmlLeft);
+            if(userobj.auth.indexOf("9")>-1||userobj.auth.indexOf("8")>-1){
+                $("#myTab").append(htmlLeft);
+            }
+
         },
         error: function () {
         }
     })
+}
+
+//导出
+function exportSummary(){
+    debugger;
+    var userinfo=userobj;
+/*    $.ajax({
+        type: "post",
+        url: "/rczcgl/export/exportSummary.action",
+        data: {'depart': "company"},
+        async: false,
+        success: function (data) {
+            var downloadA = document.createElement("a");
+            downloadA.setAttribute("href", data.data);
+            downloadA.setAttribute("target", "_blank");
+            downloadA.click();
+            downloadA.remove();
+        },
+        error: function () {
+        }
+    })*/
 }

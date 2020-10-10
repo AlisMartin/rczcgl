@@ -1,7 +1,4 @@
 package xxw.controller;
-
-import cn.hutool.core.date.DateUnit;
-import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
@@ -144,6 +141,23 @@ public class AssetsController {
             res.put("rows", pageInfo.getList());
             return res;
         } else {
+            return null;
+        }
+    }
+
+    @RequestMapping("/getAllSumAssetsInfo")
+    @ResponseBody
+    public Map<String,Object> getAllSumAssetsInfo(@RequestBody JSONObject json){
+        Map<String,Object> res = new HashMap<>();
+        String gsmc = json.getString("gsmc");
+        String zctype = json.getString("zctype");
+        List<AssetsInfo> info=assetsMapper.getSumAssetsInfo(zctype,gsmc);
+        PageInfo pageInfo = new PageInfo<>(info);
+        if(pageInfo.getList().size()>0){
+            res.put("total",pageInfo.getTotal());
+            res.put("rows",pageInfo.getList());
+            return  res;
+        }else{
             return null;
         }
     }
@@ -295,8 +309,8 @@ public class AssetsController {
     /**
      * 每天02点30启动任务
      */
-    @Scheduled(cron = "0/25 * *  * * ? ")   //每5秒执行一次
-//    @Scheduled(cron = "0 30 02 ? * *")
+   // @Scheduled(cron = "0/25 * *  * * ? ")   //每5秒执行一次
+    @Scheduled(cron = "0 30 02 ? * *")
     public void test1() {
         List<AssetsInfo> configlist = assetsMapper.getAssetsInfo(null, null);
         List<AssetsInfo> reslist = new ArrayList<>();

@@ -1,10 +1,13 @@
+var user= $.cookie('user');
+var userobj=eval('('+user+')');
 var columns = [];
 var param = {};
 var zcid = "";
 var fileid = "", isreset, newmap, editmap, viewmap, map, toolBar,
     financeid = "",
     url = '/rczcgl/assetsconfig/getAssetsInfo.action',
-    gsmc = "1";
+   // gsmc = "1"
+    gsmc=userobj.comId;
 
 require(["esri/map",
     "esri/layers/ArcGISDynamicMapServiceLayer",
@@ -824,7 +827,10 @@ function getCompanys() {
                         '<li><a class="' + data[i].id + '" data-toggle="tab" onclick="reloadTable(this)">' + data[i].nodeName + '</a></li>';
                 }
             }
-            $("#myTab1").append(htmlLeft);
+            if(userobj.auth.indexOf("9")>-1||userobj.auth.indexOf("8")>-1){
+                $("#myTab1").append(htmlLeft);
+            }
+           /* $("#myTab1").append(htmlLeft);*/
         },
         error: function () {
         }

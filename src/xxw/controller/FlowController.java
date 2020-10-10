@@ -120,7 +120,8 @@ public class FlowController {
         //flowMapper.createFlowHistory(flowHistory);
         String flowType=request.getParameter("flowType");
         String flowId=request.getParameter("flowId");
-        List<FlowHistory> flowInfoList=flowMapper.queryFlowInfos(flowType,flowId);
+        String fqr=request.getParameter("fqr");
+        List<FlowHistory> flowInfoList=flowMapper.queryFlowInfos(flowType,flowId,fqr);
         for(FlowHistory info:flowInfoList){
             if(!"".equals(info.getUser())&&info.getUser()!=null){
                 String cluser=getUserNames(info.getUser());

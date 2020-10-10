@@ -31,5 +31,6 @@ public interface AssetsMapper {
     int updateAssetsInfoDays(@Param("list")List<AssetsInfo> assetsList);
     int updateConfig(AssetsConfig assetsConfig);
     List<AssetsFile> getAssetFileListByZcid(@Param("zcid")String zcid);
+    List<Map<String,String>> getSumAssetsInfoByMap(@Param("zctype")String zctype,@Param("gsmc")String gsmc);
 
 }

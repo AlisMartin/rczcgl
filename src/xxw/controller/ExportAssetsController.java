@@ -69,6 +69,51 @@ public class ExportAssetsController {
         return new ResponseObject(1,"","exportAssetsInfo/"+filename);
     }
 
+    @RequestMapping("/exportSummary")
+    @ResponseBody
+    public ResponseObject  exportSummary(HttpServletRequest request,HttpServletResponse response,AssetsParam assetsParam){
+        //response.setContentType("text/html;charset=utf-8"); //如果是json数据,需要设置为("text/javascript;charset=utf-8");
+        String comId=request.getParameter("comId");
+        String zctype=request.getParameter("zctype");
+
+        response.setCharacterEncoding("utf-8");
+        String assetsType="";
+        String filename="";
+        if(zctype.equals("1")){
+            filename="土地资产";
+            assetsType="土地资产";
+        }else if(zctype.equals("2")){
+            filename="房屋资产";
+            assetsType="房屋资产";
+        }else if(zctype.equals("3")){
+            filename="海域资产";
+            assetsType="海域资产";
+        }else if(zctype.equals("4")){
+            filename="其他资产";
+            assetsType="其他资产";
+        }
+        String tempPath = request.getRealPath("/") + "exportSummaryInfo";
+        File filePathTemp = new File(tempPath);
+        if (!filePathTemp.isDirectory()) {
+            filePathTemp.mkdirs();
+        }
+
+        long nameTime = System.currentTimeMillis();
+        filename=filename+"汇总信息报表"+nameTime+".xls";
+        exportAssetsService.exportSumAssetsInfo(assetsParam.getZctype(), tempPath, filename, comId);
+
+        //记录日志
+        String desc="导出"+assetsType+"汇总信息报表";
+        Date date =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(date);
+        User user=(User)request.getSession().getAttribute("user");
+
+        logController.insertLogs("1",realdate,desc,user.getId(),user.getUserName());
+        //return "exportAssetsInfo/"+filename;
+        return new ResponseObject(1,"","exportSummaryInfo/"+filename);
+    }
+
     @RequestMapping("/importAssets")
     @ResponseBody
     public ResponseObject importAssets(HttpServletRequest request,MultipartFile file,String zctype){

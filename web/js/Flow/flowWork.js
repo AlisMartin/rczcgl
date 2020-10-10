@@ -1,5 +1,6 @@
 var spinfo;
-
+var user= $.cookie('user');
+var userobj=eval('('+user+')');
 $(function(){
 
     $(".sp").click(function(){
@@ -124,6 +125,10 @@ $(function(){
                 }
             }
         ],
+        queryParams: function (params) {
+            params.fqr = userobj.id;
+            return params;
+        },
         onLoadSuccess:function(){
         },
 
