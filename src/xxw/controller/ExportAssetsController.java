@@ -108,7 +108,7 @@ public class ExportAssetsController {
 
         long nameTime = System.currentTimeMillis();
         filename=filename+"汇总信息报表"+nameTime+".xls";
-        exportAssetsService.exportSumAssetsInfo(zctype, tempPath, filename, comId);
+        exportAssetsService.exportSummaryAssetsInfo(zctype, tempPath, filename, comId);
 
         //记录日志
         String desc="导出"+assetsType+"汇总信息报表";
