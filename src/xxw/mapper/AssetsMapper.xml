@@ -48,6 +48,13 @@
             and COMPANYID= #{gsmc,jdbcType=VARCHAR}
         </if>
     </select>
+    <select id="getAssetsCom" resultType="java.lang.String">
+        select COMPANYID from ASSETS_INFO where 1=1
+        <if test="zctype !=null">
+            and ZCTYPE= #{zctype,jdbcType=VARCHAR}
+        </if>
+        GROUP BY COMPANYID
+    </select>
 
     <select id="getSumAssetsInfoByMap" resultType="map">
         select * from ASSETS_INFO a LEFT JOIN  FINANCE b on a.FINANCEID=b.ZCID where 1=1

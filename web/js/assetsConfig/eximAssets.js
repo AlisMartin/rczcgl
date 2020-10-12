@@ -513,7 +513,7 @@ function exportAssetsInfo() {
         data: param,
         success: function (data) {
             var downloadA = document.createElement("a");
-            downloadA.setAttribute("href", data.data);
+            downloadA.setAttribute("href", encodeURI(data.data, "utf-8"));
             downloadA.setAttribute("target", "_blank");
             downloadA.click();
             downloadA.remove();

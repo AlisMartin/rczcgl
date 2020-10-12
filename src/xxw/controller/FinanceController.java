@@ -9,11 +9,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import xxw.mapper.FinanceMapper;
 import xxw.po.AssetVO;
 import xxw.po.Finance;
+import xxw.po.User;
 import xxw.util.StringUtil;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +62,12 @@ public class FinanceController {
         }
         int i;
         if (StringUtil.isEmpty(insertInfo.get("zcid"))){
+            //ªÒ»°session
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            HttpSession session =   request.getSession();
+            User user = (User)session.getAttribute("user");
+            insertInfo.put("companyid", user.getComId());
+
             UUID uuid = UUID.randomUUID();
             insertInfo.put("zcid",uuid.toString());
             i = financeMapper.insertFinance(insertInfo);

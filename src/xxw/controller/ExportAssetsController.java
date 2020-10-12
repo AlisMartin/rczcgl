@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import xxw.mapper.AssetsMapper;
 import xxw.po.AssetsParam;
@@ -12,6 +14,7 @@ import xxw.service.ExportAssetsService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -55,14 +58,19 @@ public class ExportAssetsController {
 
         long nameTime = System.currentTimeMillis();
         filename=filename+"信息报表"+nameTime+".xls";
-        exportAssetsService.exportAssetsInfo(assetsParam.getZctype(),tempPath,filename);
+        //获取session
+//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        HttpSession session =   request.getSession();
+        User user = (User)session.getAttribute("user");
+
+        exportAssetsService.exportAssetsInfo(assetsParam.getZctype(),tempPath,filename,user);
 
         //记录日志
         String desc="导出"+assetsType+"信息报表";
         Date date =new Date();
         SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String realdate= dateFormat.format(date);
-        User user=(User)request.getSession().getAttribute("user");
+//        User user=(User)request.getSession().getAttribute("user");
 
         logController.insertLogs("1",realdate,desc,user.getId(),user.getUserName());
         //return "exportAssetsInfo/"+filename;
@@ -119,12 +127,10 @@ public class ExportAssetsController {
     public ResponseObject importAssets(HttpServletRequest request,MultipartFile file,String zctype){
         int i=0;
         List<Map<String,String>> listdata=new ArrayList<>();
-
         listdata=exportAssetsService.importAssetsInfo(file,zctype);
         for(int z=0;z<listdata.size();z++){
             i=assetsMapper.insertAssetsInfo(listdata.get(z));
         }
-
         return  new ResponseObject(i,"","");
     }
 }

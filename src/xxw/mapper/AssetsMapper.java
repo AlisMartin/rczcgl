@@ -23,6 +23,7 @@ public interface AssetsMapper {
     List<AssetsConfig> getFieldByTypeAndName(@Param("zctypes")JSONArray zctypes);
     List<AssetsInfo> getAssetsInfoByName(@Param("name")String name,@Param("field1")String field1,@Param("field2")String field2,@Param("field3")String field3,@Param("field4")String field4);
     List<Map<String,String>> getAssetsInfoByMap(@Param("zctype")String zctype,@Param("gsmc")String gsmc);
+    List<String> getAssetsCom(@Param("zctype")String zctype);
     List<Map<String,String>> getAllAssetsInfoByMap(@Param("zctype")String zctype,@Param("gsmc")String gsmc);
     int insertConfig(AssetsConfig assetsConfig);
     int insertAssetsInfo(@Param("assetsMap")Map<String,String> assetsMap);

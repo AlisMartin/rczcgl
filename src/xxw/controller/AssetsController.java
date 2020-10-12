@@ -216,8 +216,8 @@ public class AssetsController {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpSession session =   request.getSession();
         User user = (User)session.getAttribute("user");
-        //todo
         //插入资产的公司id
+        insertInfo.put("companyid", user.getComId());
         insertInfo.put("zcid", uuid.toString());
         int i = assetsMapper.insertAssetsInfo(insertInfo);
         if (i == 1) {
