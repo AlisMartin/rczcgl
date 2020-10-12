@@ -314,20 +314,25 @@ function getCompanys() {
 //导出
 function exportSummary(){
     debugger;
-    var userinfo=userobj;
-/*    $.ajax({
+    var data={};
+    data.zctype=param.zctype;
+    if(userobj.auth.indexOf("8")<=-1){
+        data.gsmc=param.gsmc;
+    }
+   $.ajax({
         type: "post",
         url: "/rczcgl/export/exportSummary.action",
-        data: {'depart': "company"},
+        data:data,
         async: false,
-        success: function (data) {
+        success: function (datas) {
             var downloadA = document.createElement("a");
-            downloadA.setAttribute("href", data.data);
+            downloadA.setAttribute("href", datas.data);
             downloadA.setAttribute("target", "_blank");
             downloadA.click();
             downloadA.remove();
         },
         error: function () {
         }
-    })*/
+    })
+
 }

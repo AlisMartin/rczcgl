@@ -44,26 +44,61 @@ $(function(){
         },
         onCheck:function(row,$element){
             debugger;
-            $('#Tree').treeview('uncheckAll', { silent: true });
-            $('#Tree').treeview('expandNode', [ 0, { levels: 2, silent: true } ]);
-            var userIds=row.treeid;
+            $("#userTable").bootstrapTable('uncheckAll');
+           /* $('#Tree').treeview('uncheckAll', { silent: true });
+            $('#Tree').treeview('expandNode', [ 0, { levels: 2, silent: true } ]);*/
+            var userIds=row.userId;
             if(userIds!=null&&userIds!=""){
                 if(userIds.indexOf(",")>-1){
                     var idarray=userIds.split(",");
-                    for(var i=0;i<idarray.length;i++){
-                        var a=parseInt(idarray[i]);
-                        $('#Tree').treeview('checkNode', [ a, { silent: true } ]);
-                        $('#Tree').treeview('revealNode', [ a, { silent: true } ]);
-                    }
+                    $("#userTable").bootstrapTable('checkBy',{field:'id',values:idarray});
                 }else{
-                    $('#Tree').treeview('checkNode', [ parseInt(userIds), { silent: true } ]);
-                    $('#Tree').treeview('revealNode', [ parseInt(userIds), { silent: true } ]);
+                    $("#userTable").bootstrapTable('checkBy',{field:'id',values:[userIds]});
                 }
             }
 
 
         }
     });
+
+    $('#userTable').bootstrapTable({
+        url:'/rczcgl/user/selectAllUser.action',
+        method:'post',
+        clickToSelect:true,
+       /* sidePagination:"client",
+        pagination:true,
+        pageNumber:1,
+        pageSize:5,
+        pageList:[5,10,20,50,100],
+        paginationPreText:"上一页",
+        paginationNextText:"下一页",*/
+        columns:[
+            {
+                checkbox:true
+            },
+            {
+                field:'userName',
+                title:'用户名'
+            },
+            {
+                field:'company',
+                title:'所属公司'
+            },
+            {
+                field:'department',
+                title:'所属部门'
+            },
+            {
+                field:'position',
+                title:'职务'
+            }
+        ],
+        onLoadSuccess:function(){
+        },
+        onLoadError:function(){
+            showTips("数据加载失败!");
+        }
+    })
 
     $('#Tree').on('nodeChecked',function(event, data) {
         debugger;
@@ -78,8 +113,9 @@ $(function(){
     $("#saveGl").click(function(){
         debugger;
         var param={};
-        var users=$('#Tree').treeview('getChecked');
+        //var users=$('#Tree').treeview('getChecked');
         var nodes=$("#nodeTable").bootstrapTable('getSelections');
+        var users=$("#userTable").bootstrapTable('getSelections');
         param.nodeId=nodes[0].nodeId;
         param.flowType=nodes[0].flowtype;
         if(users.length>0){
@@ -87,12 +123,12 @@ $(function(){
             var treeids="";
             for(var i=0;i<users.length;i++){
                 ids=ids+users[i].id+",";
-                treeids=treeids+users[i].nodeId+",";
+                //treeids=treeids+users[i].nodeId+",";
             }
             ids=ids.substring(0,ids.length-1);
-            treeids=treeids.substring(0,treeids.length-1);
+           // treeids=treeids.substring(0,treeids.length-1);
             param.id=ids;
-            param.treeid=treeids;
+           // param.treeid=treeids;
         }
         if(users.length<1){
             alert("请选择具体人员！");

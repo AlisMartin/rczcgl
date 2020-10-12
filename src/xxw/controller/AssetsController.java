@@ -267,10 +267,10 @@ public class AssetsController {
 
     @RequestMapping("/total")
     @ResponseBody
-    public Map<String,Integer> totalAssets(HttpServletRequest request){
+    public Map<String,Float> totalAssets(HttpServletRequest request){
         String zctype=request.getParameter("zctype");
         String gsmc=request.getParameter("gsmc");
-        Map<String,Integer> mapCount=new HashMap<>();
+        Map<String,Float> mapCount=new HashMap<>();
         List<AssetsConfig> configlist=assetsMapper.getAllAssetsConfigInfo(zctype, null);
         //融资统计
         List<AssetsConfig> rzconfiglist=assetsMapper.getAllAssetsConfigInfo("5", null);
@@ -289,25 +289,25 @@ public class AssetsController {
             }
             List<String> financeId=new ArrayList<>();
             for(Map.Entry<String,String> entry:assetslist.get(entryi).entrySet()) {
-                int count = 0;
+                Float count = (float)0;
                 for (int i = 0; i < assetslist.size(); i++) {
                     for (AssetsConfig assetsConfig : configlist) {
                         if (assetsConfig.getFieldType().equals("2") && assetsConfig.getField().toUpperCase().equals(entry.getKey())) {
                             if(assetslist.get(i).containsKey(entry.getKey())){
                                 if(assetslist.get(i).containsKey("FINANCEID")&&entry.getKey().indexOf("FCFIELD")>-1){
                                     if(financeId.size()==0){
-                                        count = count + Integer.parseInt(assetslist.get(i).get(entry.getKey()));
+                                        count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
                                         mapCount.put(entry.getKey().toLowerCase(), count);
                                         financeId.add(assetslist.get(i).get("FINANCEID"));
                                     }else{
                                        if(!financeId.contains(assetslist.get(i).get("FINANCEID"))){
-                                           count = count + Integer.parseInt(assetslist.get(i).get(entry.getKey()));
+                                           count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
                                            mapCount.put(entry.getKey().toLowerCase(), count);
                                            financeId.add(assetslist.get(i).get("FINANCEID"));
                                        }
                                     }
                                 }else {
-                                    count = count + Integer.parseInt(assetslist.get(i).get(entry.getKey()));
+                                    count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
                                     mapCount.put(entry.getKey().toLowerCase(), count);
                                 }
                             }

@@ -57,6 +57,7 @@
         <if test="gsmc !=null">
             and a.COMPANYID= #{gsmc,jdbcType=VARCHAR}
         </if>
+        order by COMPANYID,FINANCEID
     </select>
 
     <select id="getAllAssetsInfoByMap" resultType="map">
@@ -194,4 +195,11 @@
         </foreach>
         END;
     </update>
+    <select id="getComIds" parameterType="java.lang.String" resultType="java.lang.String">
+        select COMPANYID from ASSETS_INFO where 1=1
+        <if test="zctype != null">
+         AND   ZCTYPE= #{zctype,jdbcType=VARCHAR}
+        </if>
+        GROUP BY COMPANYID
+    </select>
 </mapper>

@@ -71,11 +71,11 @@ public class ExportAssetsController {
 
     @RequestMapping("/exportSummary")
     @ResponseBody
-    public ResponseObject  exportSummary(HttpServletRequest request,HttpServletResponse response,AssetsParam assetsParam){
+    public ResponseObject  exportSummary(HttpServletRequest request,HttpServletResponse response){
         //response.setContentType("text/html;charset=utf-8"); //如果是json数据,需要设置为("text/javascript;charset=utf-8");
-        String comId=request.getParameter("comId");
+        //String comId=request.getParameter("comId");
         String zctype=request.getParameter("zctype");
-
+        String comId=request.getParameter("gsmc");
         response.setCharacterEncoding("utf-8");
         String assetsType="";
         String filename="";
@@ -100,7 +100,7 @@ public class ExportAssetsController {
 
         long nameTime = System.currentTimeMillis();
         filename=filename+"汇总信息报表"+nameTime+".xls";
-        exportAssetsService.exportSumAssetsInfo(assetsParam.getZctype(), tempPath, filename, comId);
+        exportAssetsService.exportSumAssetsInfo(zctype, tempPath, filename, comId);
 
         //记录日志
         String desc="导出"+assetsType+"汇总信息报表";

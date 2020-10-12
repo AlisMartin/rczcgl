@@ -33,4 +33,6 @@ public interface AssetsMapper {
     List<AssetsFile> getAssetFileListByZcid(@Param("zcid")String zcid);
     List<Map<String,String>> getSumAssetsInfoByMap(@Param("zctype")String zctype,@Param("gsmc")String gsmc);
 
+    List<String> getComIds(@Param("zctype")String zctype);
+
 }

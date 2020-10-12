@@ -1,8 +1,8 @@
 package xxw.service;
 
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.Region;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.stereotype.Service;
@@ -24,9 +24,9 @@ public class ExportAssetsService {
     @Resource
     AssetsMapper assetsMapper;
     public void exportAssetsInfo(String zctype,String path,String name){
-        //ªÒ»°µº≥ˆ¡–º∞¡–√˚
+        //Ëé∑ÂèñÂØºÂá∫ÂàóÂèäÂàóÂêç
         List<AssetsConfig> configlist=assetsMapper.getAssetsConfigInfo(zctype,null);
-        //ªÒ»°µº≥ˆ◊ ≤˙–≈œ¢
+        //Ëé∑ÂèñÂØºÂá∫ËµÑ‰∫ß‰ø°ÊÅØ
         List<Map<String,String>> infomap=assetsMapper.getAssetsInfoByMap(zctype,null);
 
         FileOutputStream fs=null;
@@ -48,7 +48,7 @@ public class ExportAssetsService {
             }
 
 
-            //±ÌÕ∑≤ø∑÷
+            //Ë°®Â§¥ÈÉ®ÂàÜ
             Row vr = sheet.createRow(0);
             vr.setHeight((short) (400));
             Cell cellHead = null;
@@ -60,7 +60,7 @@ public class ExportAssetsService {
                 cellHead.setCellStyle(headStyle);
                 sheet.setColumnWidth(i, cellHead.getStringCellValue().getBytes().length * 300);
             }
-            //ƒ⁄»›≤ø∑÷
+            //ÂÜÖÂÆπÈÉ®ÂàÜ
             Row row = null;
             Cell cellKey = null;
             for (int i = 0; i < infomap.size(); i++) {
@@ -69,14 +69,13 @@ public class ExportAssetsService {
                 }
                 row = sheet.createRow(i + 1);
                 row.setHeight((short) 300);
-               // Map<String, Object> regionMap = BasicInfoList.get(i);
+                // Map<String, Object> regionMap = BasicInfoList.get(i);
                 for (int j = 0; j < KeyFields.length; j++) {
                     cellKey = row.createCell(j);
                     cellKey.setCellValue(infomap.get(i).get(KeyFields[j]));
                     cellKey.setCellStyle(conStyle);
                 }
             }
-
             wb.write(fs);
             wb.close();
             fs.close();
@@ -99,212 +98,371 @@ public class ExportAssetsService {
             }
         }
     }
-
+    //ÂØºÂá∫ËµÑ‰∫ßÊ±áÊÄª‰ø°ÊÅØ
     public void exportSumAssetsInfo(String zctype,String path,String name,String comId){
-        //ªÒ»°µº≥ˆ¡–º∞¡–√˚
+        //Ëé∑ÂèñÂØºÂá∫ÂàóÂèäÂàóÂêç
+        Map<String,Float> totalmap=new HashMap<>();
+        List<Map<String,String>> infomap=new ArrayList<>();
         List<AssetsConfig> configlist=assetsMapper.getAssetsConfigInfo(zctype,null);
         List<AssetsConfig> rzconfiglist=assetsMapper.getAssetsConfigInfo("5",null);
         configlist.addAll(rzconfiglist);
-        //ªÒ»°µº≥ˆ◊ ≤˙–≈œ¢
-        List<Map<String,String>> infomap=assetsMapper.getSumAssetsInfoByMap(zctype,comId);
+
 
         FileOutputStream fs=null;
         Workbook wb=null;
         try {
             fs = new FileOutputStream(path + File.separator + name);
-
             wb = new SXSSFWorkbook();
-            Sheet sheet = wb.createSheet("sheet1");
-
-            CellStyle headStyle = customCellStyle(wb, "head");
-            CellStyle conStyle = customCellStyle(wb, "con");
+            Sheet sheet;
+            String comName="";
 
             String[] HeadFields = new String[configlist.size()];
             String[] KeyFields =  new String[configlist.size()];
             for(int i=0;i<configlist.size();i++){
                 HeadFields[i]=configlist.get(i).getFieldname();
                 KeyFields[i]=configlist.get(i).getField().toUpperCase();
-            }
-
-
-            //±ÌÕ∑≤ø∑÷
-            Row vr = sheet.createRow(0);
-            vr.setHeight((short) (400));
-            Cell cellHead = null;
-            int cacheitems = 100;
-            int num = 0;
-            for (int i = 0; i < HeadFields.length; i++) {
-                cellHead = vr.createCell(i);
-                cellHead.setCellValue(HeadFields[i]);
-                cellHead.setCellStyle(headStyle);
-                sheet.setColumnWidth(i, cellHead.getStringCellValue().getBytes().length * 300);
-            }
-            //ƒ⁄»›≤ø∑÷
-            Row row = null;
-            Cell cellKey = null;
-            for (int i = 0; i < infomap.size(); i++) {
-                if (num % cacheitems == 0) {
-                    ((SXSSFSheet) sheet).flushRows();
-                }
-                row = sheet.createRow(i + 1);
-                row.setHeight((short) 300);
-                // Map<String, Object> regionMap = BasicInfoList.get(i);
-                for (int j = 0; j < KeyFields.length; j++) {
-                    cellKey = row.createCell(j);
-                    cellKey.setCellValue(infomap.get(i).get(KeyFields[j]));
-                    cellKey.setCellStyle(conStyle);
+                if(configlist.get(i).getFieldname().indexOf("ÂÖ¨Âè∏")>-1){
+                    comName=configlist.get(i).getField();
                 }
             }
 
-            wb.write(fs);
-            wb.close();
-            fs.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }finally {
-            if(fs!=null) {
-                try {
-                    fs.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if(wb!=null){
-                try {
-                    wb.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-    //µº≥ˆ◊ ≤˙ª„◊‹–≈œ¢
-    public void exportSummaryInfo(String zctype,String path,String name){
-        //ªÒ»°µº≥ˆ¡–º∞¡–√˚
-        List<AssetsConfig> configlist=assetsMapper.getAssetsConfigInfo(zctype,null);
-        //ªÒ»°µº≥ˆ◊ ≤˙–≈œ¢
-        List<Map<String,String>> infomap=assetsMapper.getAssetsInfoByMap(zctype,null);
+            if(comId==null){
+                List<String> comIds=new ArrayList<>();
+                comIds.add("all");
+                comIds.addAll(assetsMapper.getComIds(zctype));
 
-        FileOutputStream fs=null;
-        Workbook wb=null;
-        try {
-            fs = new FileOutputStream(path + File.separator + name);
-
-            wb = new SXSSFWorkbook();
-            Sheet sheet = wb.createSheet("sheet1");
-
-            CellStyle headStyle = customCellStyle(wb, "head");
-            CellStyle conStyle = customCellStyle(wb, "con");
-
-            String[] HeadFields = new String[configlist.size()];
-            String[] KeyFields =  new String[configlist.size()];
-            for(int i=0;i<configlist.size();i++){
-                HeadFields[i]=configlist.get(i).getFieldname();
-                KeyFields[i]=configlist.get(i).getField().toUpperCase();
-            }
+                for(String companyId:comIds){
+                    if(companyId.equals("all")){
+                        companyId=null;
+                    }
+                    totalmap= this.totalAssets(zctype, companyId);
+                    //Ëé∑ÂèñÂØºÂá∫ËµÑ‰∫ß‰ø°ÊÅØ
+                    infomap=assetsMapper.getSumAssetsInfoByMap(zctype,companyId);
+                    if (companyId == null) {
+                        sheet = wb.createSheet("ÊâÄÊúâÂÖ¨Âè∏Ê±áÊÄª");
+                    }else{
+                        sheet=wb.createSheet(infomap.get(0).get(comName.toUpperCase()));
+                    }
 
 
-            //±ÌÕ∑≤ø∑÷
-            Row vr = sheet.createRow(0);
-            vr.setHeight((short) (400));
-            Cell cellHead = null;
-            int cacheitems = 100;
-            int num = 0;
-            for (int i = 0; i < HeadFields.length; i++) {
-                cellHead = vr.createCell(i);
-                cellHead.setCellValue(HeadFields[i]);
-                cellHead.setCellStyle(headStyle);
-                sheet.setColumnWidth(i, cellHead.getStringCellValue().getBytes().length * 300);
-            }
-            //ƒ⁄»›≤ø∑÷
-            Row row = null;
-            Cell cellKey = null;
-            for (int i = 0; i < infomap.size(); i++) {
-                if (num % cacheitems == 0) {
-                    ((SXSSFSheet) sheet).flushRows();
-                }
-                row = sheet.createRow(i + 1);
-                row.setHeight((short) 300);
-                // Map<String, Object> regionMap = BasicInfoList.get(i);
-                for (int j = 0; j < KeyFields.length; j++) {
-                    cellKey = row.createCell(j);
-                    cellKey.setCellValue(infomap.get(i).get(KeyFields[j]));
-                    cellKey.setCellStyle(conStyle);
-                }
-            }
 
-            wb.write(fs);
-            wb.close();
-            fs.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }finally {
-            if(fs!=null) {
-                try {
-                    fs.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if(wb!=null){
-                try {
-                    wb.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+                    CellStyle headStyle = customCellStyle(wb, "head");
+                    CellStyle conStyle = customCellStyle(wb, "con");
 
-        public List<Map<String,String>> importAssetsInfo(MultipartFile file,String zctype){
-            int num=1;
-            //ªÒ»°µº≥ˆ¡–º∞¡–√˚
-            List<AssetsConfig> configlist=assetsMapper.getAssetsConfigInfo(zctype,null);
-            List<Map<String,String>> maplist=new ArrayList<Map<String,String>>();
-            try {
-               // POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
-                //HSSFWorkbook hw =new HSSFWorkbook(fs);
-                Workbook hw=WorkbookFactory.create(file.getInputStream());
 
-                //ªÒ»°µ⁄“ª∏ˆsheet“≥
-                Sheet sheet = hw.getSheetAt(0);
-                //◊‹–– ˝
-                int rowNum=sheet.getLastRowNum();
-                //µ⁄“ªÃı ˝æ›––(¡–√˚)
-                Row datafirstrow = sheet.getRow(0);
-                //◊‹¡– ˝
-                int colNum=datafirstrow.getPhysicalNumberOfCells();
-
-                String []cloarray=new String [colNum];
-                int y = 0;
-                while(y<colNum){
-                    String cellvalue=getCellFormatValue(datafirstrow.getCell((short)y));
-                    for(int z=0;z<configlist.size();z++){
-                        if(cellvalue.equals(configlist.get(z).getFieldname())){
-                            cloarray [y]=configlist.get(z).getField();
+                    //Ë°®Â§¥ÈÉ®ÂàÜ
+                    Row vr = sheet.createRow(0);
+                    vr.setHeight((short) (400));
+                    Cell cellHead = null;
+                    int cacheitems = 100;
+                    int num = 0;
+                    for (int i = 0; i < HeadFields.length; i++) {
+                        cellHead = vr.createCell(i);
+                        cellHead.setCellValue(HeadFields[i]);
+                        cellHead.setCellStyle(headStyle);
+                        sheet.setColumnWidth(i, cellHead.getStringCellValue().getBytes().length * 300);
+                    }
+                    //ÂÜÖÂÆπÈÉ®ÂàÜ
+                    Row row = null;
+                    Cell cellKey = null;
+                    for (int i = 0; i < infomap.size(); i++) {
+                        if (num % cacheitems == 0) {
+                            ((SXSSFSheet) sheet).flushRows();
+                        }
+                        row = sheet.createRow(i + 1);
+                        row.setHeight((short) 300);
+                        // Map<String, Object> regionMap = BasicInfoList.get(i);
+                        for (int j = 0; j < KeyFields.length; j++) {
+                            cellKey = row.createCell(j);
+                            cellKey.setCellValue(infomap.get(i).get(KeyFields[j]));
+                            cellKey.setCellStyle(conStyle);
                         }
                     }
-                    y++;
+
+                    //ÂêàËÆ°ÈÉ®ÂàÜ
+                    row = sheet.createRow(infomap.size()+1);
+                    row.setHeight((short) 300);
+                    for (int j = 0; j < KeyFields.length; j++) {
+                        cellKey = row.createCell(j);
+                        cellKey.setCellStyle(conStyle);
+                        if(j==0){
+                            cellKey.setCellValue("ÊÄªËÆ°Ôºö");
+                        }else{
+                            if(totalmap.containsKey(KeyFields[j].toLowerCase())){
+                                cellKey.setCellValue(totalmap.get(KeyFields[j].toLowerCase()));
+                            }
+                        }
+                    }
+
+
+
+                    //ÂêàÂπ∂ÂçïÂÖÉÊ†º
+                    for(int x=0;x<configlist.size();x++){
+                        //‰ªéÊï∞ÊçÆË°åÂºÄÂßã
+                        String pdname="ÂÖ¨Âè∏";
+                        if(new String(configlist.get(x).getFieldname().getBytes(),"utf-8").indexOf(new String(pdname.getBytes(),"utf-8"))>-1) {
+                            int xtrow=1;
+                            int xtcol=0;
+                            int nums=0;
+                            xtcol = x;
+                            for (int y = 0; y < infomap.size(); y++) {
+                                nums++;
+                                if(y==(infomap.size()-1)){
+                                    break;
+                                }
+                                if (!infomap.get(y).get(configlist.get(x).getField().toUpperCase()).equals(infomap.get(y + 1).get(configlist.get(x).getField().toUpperCase()))) {
+                                    if(nums>1){
+                                        sheet.addMergedRegion(new CellRangeAddress(xtrow, (xtrow + nums - 1), x, x));// Âà∞rowToË°åcolumnToÁöÑÂå∫Âüü
+                                    }
+
+                                    nums = 0;
+                                    xtrow = y + 1+1;
+                                }else if(infomap.get(y).get(configlist.get(x).getField().toUpperCase()).equals(infomap.get(y + 1).get(configlist.get(x).getField().toUpperCase()))&&y==(infomap.size()-2)){
+                                        sheet.addMergedRegion(new CellRangeAddress(xtrow, (xtrow + nums), x, x));
+
+                                }
+                            }
+                        }else if(configlist.get(x).getField().indexOf("fcfield")>-1){
+                            int xtrow=1;
+                            int xtcol=0;
+                            int nums=0;
+                            String value="";
+                            xtcol = x;
+                            for(int y=0;y<infomap.size();y++){
+                                nums++;
+                                if(infomap.get(y).containsKey("FINANCEID")){
+                                    if(!value.equals(infomap.get(y).get("FINANCEID"))){
+                                        value=infomap.get(y).get("FINANCEID");
+                                        if(nums>2){
+                                            sheet.addMergedRegion(new CellRangeAddress(xtrow, (xtrow + nums - 2), x, x));
+                                        }
+                                        if(y!=0){
+                                            nums=0;
+                                        }
+
+                                    }else{
+                                        if(!("".equals(value))&&y==(infomap.size()-1)){
+                                            if(nums>1){
+                                                sheet.addMergedRegion(new CellRangeAddress(xtrow, (xtrow + nums - 1), x, x));
+                                            }
+                                        }
+                                    }
+                                    if("".equals(value)) {
+                                        nums=0;
+                                        value = infomap.get(y).get("FINANCEID");
+                                        xtrow = y + 1;
+                                    }
+                                }else{
+                                    if(!("".equals(value))){
+                                        if(nums>2){
+                                            sheet.addMergedRegion(new CellRangeAddress(xtrow, (xtrow + nums - 2), x, x));
+                                        }
+                                    }
+                                    nums=0;
+                                    value="";
+                                }
+                            }
+                        }
+                    }
+                }
+            }else{
+                totalmap= this.totalAssets(zctype, comId);
+                //Ëé∑ÂèñÂØºÂá∫ËµÑ‰∫ß‰ø°ÊÅØ
+                infomap=assetsMapper.getSumAssetsInfoByMap(zctype,comId);
+
+                sheet = wb.createSheet(infomap.get(0).get(comName.toUpperCase()));
+                CellStyle headStyle = customCellStyle(wb, "head");
+                CellStyle conStyle = customCellStyle(wb, "con");
+
+
+                //Ë°®Â§¥ÈÉ®ÂàÜ
+                Row vr = sheet.createRow(0);
+                vr.setHeight((short) (400));
+                Cell cellHead = null;
+                int cacheitems = 100;
+                int num = 0;
+                for (int i = 0; i < HeadFields.length; i++) {
+                    cellHead = vr.createCell(i);
+                    cellHead.setCellValue(HeadFields[i]);
+                    cellHead.setCellStyle(headStyle);
+                    sheet.setColumnWidth(i, cellHead.getStringCellValue().getBytes().length * 300);
+                }
+                //ÂÜÖÂÆπÈÉ®ÂàÜ
+                Row row = null;
+                Cell cellKey = null;
+                for (int i = 0; i < infomap.size(); i++) {
+                    if (num % cacheitems == 0) {
+                        ((SXSSFSheet) sheet).flushRows();
+                    }
+                    row = sheet.createRow(i + 1);
+                    row.setHeight((short) 300);
+                    // Map<String, Object> regionMap = BasicInfoList.get(i);
+                    for (int j = 0; j < KeyFields.length; j++) {
+                        cellKey = row.createCell(j);
+                        cellKey.setCellValue(infomap.get(i).get(KeyFields[j]));
+                        cellKey.setCellStyle(conStyle);
+                    }
                 }
 
-                for(int i=1;i<=sheet.getLastRowNum();i++){
-                    Map<String,String> datamap= new HashMap<String,String>();
-                    Row row = sheet.getRow(i);
-                    int j=0;
-                    while (j<colNum){
-                        datamap.put(cloarray[j],getCellFormatValue(row.getCell((short) j)));
-                        j++;
+                //ÂêàËÆ°ÈÉ®ÂàÜ
+                row = sheet.createRow(infomap.size()+1);
+                row.setHeight((short) 300);
+                for (int j = 0; j < KeyFields.length; j++) {
+                    cellKey = row.createCell(j);
+                    cellKey.setCellStyle(conStyle);
+                    if(j==0){
+                        cellKey.setCellValue("ÊÄªËÆ°Ôºö");
+                    }else{
+                        if(totalmap.containsKey(KeyFields[j].toLowerCase())){
+                            cellKey.setCellValue(totalmap.get(KeyFields[j].toLowerCase()));
+                        }
                     }
-                    datamap.put("zctype",zctype);
-                    String uuid = UUID.randomUUID().toString();
-                    datamap.put("zcid",uuid);
-                    maplist.add(datamap);
                 }
-            }catch(Exception e){
-                e.printStackTrace();
+
+
+
+                //ÂêàÂπ∂ÂçïÂÖÉÊ†º
+                for(int x=0;x<configlist.size();x++){
+                    //‰ªéÊï∞ÊçÆË°åÂºÄÂßã
+                    String pdname="ÂÖ¨Âè∏";
+                    if(new String(configlist.get(x).getFieldname().getBytes(),"utf-8").indexOf(new String(pdname.getBytes(),"utf-8"))>-1) {
+                        int xtrow=1;
+                        int xtcol=0;
+                        int nums=0;
+                        xtcol = x;
+                        for (int y = 0; y < infomap.size(); y++) {
+                            nums++;
+                            if(y==(infomap.size()-1)){
+                                break;
+                            }
+                            if (!infomap.get(y).get(configlist.get(x).getField().toUpperCase()).equals(infomap.get(y + 1).get(configlist.get(x).getField().toUpperCase()))) {
+                                if(nums>1){
+                                    sheet.addMergedRegion(new CellRangeAddress(xtrow, (xtrow + nums - 1), x, x));// Âà∞rowToË°åcolumnToÁöÑÂå∫Âüü
+                                }
+
+                                nums = 0;
+                                xtrow = y + 1+1;
+                            }else if(infomap.get(y).get(configlist.get(x).getField().toUpperCase()).equals(infomap.get(y + 1).get(configlist.get(x).getField().toUpperCase()))&&y==(infomap.size()-2)){
+                                    sheet.addMergedRegion(new CellRangeAddress(xtrow, (xtrow + nums), x, x));
+
+                            }
+                        }
+                    }else if(configlist.get(x).getField().indexOf("fcfield")>-1){
+                        int xtrow=1;
+                        int xtcol=0;
+                        int nums=0;
+                        String value="";
+                        xtcol = x;
+                        for(int y=0;y<infomap.size();y++){
+                            nums++;
+                            if(infomap.get(y).containsKey("FINANCEID")){
+                                if(!value.equals(infomap.get(y).get("FINANCEID"))){
+                                    value=infomap.get(y).get("FINANCEID");
+                                    if(nums>1){
+                                        sheet.addMergedRegion(new CellRangeAddress(xtrow, (xtrow + nums - 2), x, x));
+                                    }
+                                    if(y!=0){
+                                        nums=0;
+                                    }
+
+                                }else{
+                                    if(!("".equals(value))&&y==(infomap.size()-1)){
+                                        if(nums>2){
+                                            sheet.addMergedRegion(new CellRangeAddress(xtrow, (xtrow + nums - 2), x, x));
+                                        }
+                                    }
+                                }
+                                if("".equals(value)) {
+                                    nums=0;
+                                    value = infomap.get(y).get("FINANCEID");
+                                    xtrow = y + 1;
+                                }
+                            }else{
+                                if(!("".equals(value))){
+                                    if(nums>1){
+                                        sheet.addMergedRegion(new CellRangeAddress(xtrow, (xtrow + nums - 2), x, x));
+                                    }
+                                }
+                                nums=0;
+                                value="";
+                            }
+                        }
+                    }
+                }
             }
-            return maplist;
+
+            wb.write(fs);
+            wb.close();
+            fs.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }finally {
+            if(fs!=null) {
+                try {
+                    fs.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(wb!=null){
+                try {
+                    wb.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+    }
+//ÂØºÂÖ•ËµÑ‰∫ß‰ø°ÊÅØ
+    public List<Map<String,String>> importAssetsInfo(MultipartFile file,String zctype){
+        int num=1;
+        //Ëé∑ÂèñÂØºÂá∫ÂàóÂèäÂàóÂêç
+        List<AssetsConfig> configlist=assetsMapper.getAssetsConfigInfo(zctype,null);
+        List<Map<String,String>> maplist=new ArrayList<Map<String,String>>();
+        try {
+            // POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
+            //HSSFWorkbook hw =new HSSFWorkbook(fs);
+            Workbook hw=WorkbookFactory.create(file.getInputStream());
+
+            //Ëé∑ÂèñÁ¨¨‰∏Ä‰∏™sheetÈ°µ
+            Sheet sheet = hw.getSheetAt(0);
+            //ÊÄªË°åÊï∞
+            int rowNum=sheet.getLastRowNum();
+            //Á¨¨‰∏ÄÊù°Êï∞ÊçÆË°å(ÂàóÂêç)
+            Row datafirstrow = sheet.getRow(0);
+            //ÊÄªÂàóÊï∞
+            int colNum=datafirstrow.getPhysicalNumberOfCells();
+
+            String []cloarray=new String [colNum];
+            int y = 0;
+            while(y<colNum){
+                String cellvalue=getCellFormatValue(datafirstrow.getCell((short)y));
+                for(int z=0;z<configlist.size();z++){
+                    if(cellvalue.equals(configlist.get(z).getFieldname())){
+                        cloarray [y]=configlist.get(z).getField();
+                    }
+                }
+                y++;
+            }
+
+            for(int i=1;i<=sheet.getLastRowNum();i++){
+                Map<String,String> datamap= new HashMap<String,String>();
+                Row row = sheet.getRow(i);
+                int j=0;
+                while (j<colNum){
+                    datamap.put(cloarray[j],getCellFormatValue(row.getCell((short) j)));
+                    j++;
+                }
+                datamap.put("zctype",zctype);
+                String uuid = UUID.randomUUID().toString();
+                datamap.put("zcid",uuid);
+                maplist.add(datamap);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return maplist;
+    }
     public String getCellFormatValue(Cell cell){
         String cellvalue="";
         if(cell!=null){
@@ -316,9 +474,9 @@ public class ExportAssetsService {
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                         cellvalue = sdf.format(date);
                     }
-                    // »Áπ˚ «¥ø ˝◊÷
+                    // Â¶ÇÊûúÊòØÁ∫ØÊï∞Â≠ó
                     else {
-                        // »°µ√µ±«∞Cellµƒ ˝÷µ
+                        // ÂèñÂæóÂΩìÂâçCellÁöÑÊï∞ÂÄº
                         cellvalue = String.valueOf(cell.getNumericCellValue());
                     }
                     break;
@@ -326,8 +484,8 @@ public class ExportAssetsService {
                 case Cell.CELL_TYPE_STRING:
                     cellvalue = cell.getRichStringCellValue().getString();
                     break;
-                    default:
-                        cellvalue="";
+                default:
+                    cellvalue="";
             }
         }else{
             cellvalue="";
@@ -335,11 +493,11 @@ public class ExportAssetsService {
         return  cellvalue;
     }
     /**
-     * ªÒ»°…Ë÷√µ•‘™∏Ò—˘ Ω
+     * Ëé∑ÂèñËÆæÁΩÆÂçïÂÖÉÊ†ºÊ†∑Âºè
      *
-     * @param wb  π§◊˜≤æ∂‘œÛ
-     * @param poi “™…Ë÷√µƒ«¯”Ú£¨£®±ÌÕ∑ªÚ’ﬂƒ⁄»›£©
-     * @return µ•‘™∏Ò—˘ Ω∂‘œÛ
+     * @param wb  Â∑•‰ΩúÁ∞øÂØπË±°
+     * @param poi Ë¶ÅËÆæÁΩÆÁöÑÂå∫ÂüüÔºåÔºàË°®Â§¥ÊàñËÄÖÂÜÖÂÆπÔºâ
+     * @return ÂçïÂÖÉÊ†ºÊ†∑ÂºèÂØπË±°
      */
     private CellStyle customCellStyle(Workbook wb, String poi) {
         CellStyle style = wb.createCellStyle();
@@ -366,5 +524,56 @@ public class ExportAssetsService {
             style = conStyle;
         }
         return style;
+    }
+    //Ê±áÊÄªËÆ°ÁÆóÊÄªÊï∞
+    public Map<String,Float> totalAssets(String zctype,String gsmc){
+        Map<String,Float> mapCount=new HashMap<>();
+        List<AssetsConfig> configlist=assetsMapper.getAllAssetsConfigInfo(zctype, null);
+        //ËûçËµÑÁªüËÆ°
+        List<AssetsConfig> rzconfiglist=assetsMapper.getAllAssetsConfigInfo("5", null);
+        configlist.addAll(rzconfiglist);
+        List<Map<String,String>> assetslist=assetsMapper.getAllAssetsInfoByMap(zctype, gsmc);
+        if(assetslist.size()<1){
+            return null;
+        }else{
+            int maxentry=assetslist.get(0).size();
+            int entryi=0;
+            for(int i=0;i<assetslist.size();i++){
+                if(assetslist.get(i).size()>maxentry){
+                    maxentry=assetslist.get(i).size();
+                    entryi=i;
+                }
+            }
+            List<String> financeId=new ArrayList<>();
+            for(Map.Entry<String,String> entry:assetslist.get(entryi).entrySet()) {
+                Float count = (float)0;
+                for (int i = 0; i < assetslist.size(); i++) {
+                    for (AssetsConfig assetsConfig : configlist) {
+                        if (assetsConfig.getFieldType().equals("2") && assetsConfig.getField().toUpperCase().equals(entry.getKey())) {
+                            if(assetslist.get(i).containsKey(entry.getKey())){
+                                if(assetslist.get(i).containsKey("FINANCEID")&&entry.getKey().indexOf("FCFIELD")>-1){
+                                    if(financeId.size()==0){
+                                        count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
+                                        mapCount.put(entry.getKey().toLowerCase(), count);
+                                        financeId.add(assetslist.get(i).get("FINANCEID"));
+                                    }else{
+                                        if(!financeId.contains(assetslist.get(i).get("FINANCEID"))){
+                                            count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
+                                            mapCount.put(entry.getKey().toLowerCase(), count);
+                                            financeId.add(assetslist.get(i).get("FINANCEID"));
+                                        }
+                                    }
+                                }else {
+                                    count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
+                                    mapCount.put(entry.getKey().toLowerCase(), count);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return mapCount;
+        }
+
     }
 }
