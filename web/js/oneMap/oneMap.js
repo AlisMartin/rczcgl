@@ -27,11 +27,15 @@ require(["esri/map",
         center: [122.376, 37.096], // longitude, latitude
         zoom: 12
     });
+    imagerymap = new TDTImageryLayer();
+    annolayer = new TDTAnnoLayer();//天地图-注记图
+    map.addLayer(imagerymap);//天地图影像图
+    map.addLayer(annolayer);
     var dynamicMapServiceLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/TEST4326/MapServer");
     var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/MyMapService/MapServer");
     var graphicsLayer = new GraphicsLayer();
     map.addLayer(dynamicMapServiceLayer);
-    map.addLayer(layer);
+    //map.addLayer(layer);
 
     //对checkbox数组进行变量把选中的id添加到visible
     $("input[name='ckb']:checkbox").click(function() {
