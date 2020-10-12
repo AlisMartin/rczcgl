@@ -1,15 +1,24 @@
 package xxw.service;
 
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.Region;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import xxw.mapper.AssetsMapper;
+import xxw.mapper.DepartMapper;
 import xxw.po.AssetsConfig;
+import xxw.po.DepartTree;
+import xxw.po.User;
+
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,73 +32,94 @@ import java.util.*;
 public class ExportAssetsService {
     @Resource
     AssetsMapper assetsMapper;
-    public void exportAssetsInfo(String zctype,String path,String name){
+    @Resource
+    DepartMapper departmapper;
+
+    public void exportAssetsInfo(String zctype, String path, String name, User user) {
         //获取导出列及列名
-        List<AssetsConfig> configlist=assetsMapper.getAssetsConfigInfo(zctype,null);
+        List<AssetsConfig> configlist = assetsMapper.getAssetsConfigInfo(zctype, null);
         //获取导出资产信息
-        List<Map<String,String>> infomap=assetsMapper.getAssetsInfoByMap(zctype,null);
+        List<Map<String, String>> infomap = new ArrayList<>();
+        List<String> comlist = new ArrayList<>();
+        if ("8".equals(user.getAuth())) {
+            infomap = assetsMapper.getAssetsInfoByMap(zctype, null);
+            comlist = assetsMapper.getAssetsCom(zctype);
+        } else {
+            infomap = assetsMapper.getAssetsInfoByMap(zctype, user.getComId());
+            comlist.add(user.getComId());
+        }
 
-        FileOutputStream fs=null;
-        Workbook wb=null;
+        FileOutputStream fs = null;
+        Workbook wb = null;
+        wb = new SXSSFWorkbook();
         try {
-            fs = new FileOutputStream(path + File.separator + name);
+            for (String s : comlist) {
+                DepartTree departtree = departmapper.getCom(s, "company");
+                fs = new FileOutputStream(path + File.separator + name);
 
-            wb = new SXSSFWorkbook();
-            Sheet sheet = wb.createSheet("sheet1");
+//            Sheet sheet = wb.createSheet("sheet1");
+                Sheet sheet = wb.createSheet(departtree.getNodeName());
 
-            CellStyle headStyle = customCellStyle(wb, "head");
-            CellStyle conStyle = customCellStyle(wb, "con");
+                CellStyle headStyle = customCellStyle(wb, "head");
+                CellStyle conStyle = customCellStyle(wb, "con");
 
-            String[] HeadFields = new String[configlist.size()];
-            String[] KeyFields =  new String[configlist.size()];
-            for(int i=0;i<configlist.size();i++){
-                HeadFields[i]=configlist.get(i).getFieldname();
-                KeyFields[i]=configlist.get(i).getField().toUpperCase();
-            }
-
-
-            //表头部分
-            Row vr = sheet.createRow(0);
-            vr.setHeight((short) (400));
-            Cell cellHead = null;
-            int cacheitems = 100;
-            int num = 0;
-            for (int i = 0; i < HeadFields.length; i++) {
-                cellHead = vr.createCell(i);
-                cellHead.setCellValue(HeadFields[i]);
-                cellHead.setCellStyle(headStyle);
-                sheet.setColumnWidth(i, cellHead.getStringCellValue().getBytes().length * 300);
-            }
-            //内容部分
-            Row row = null;
-            Cell cellKey = null;
-            for (int i = 0; i < infomap.size(); i++) {
-                if (num % cacheitems == 0) {
-                    ((SXSSFSheet) sheet).flushRows();
+                String[] HeadFields = new String[configlist.size()];
+                String[] KeyFields = new String[configlist.size()];
+                for (int i = 0; i < configlist.size(); i++) {
+                    HeadFields[i] = configlist.get(i).getFieldname();
+                    KeyFields[i] = configlist.get(i).getField().toUpperCase();
                 }
-                row = sheet.createRow(i + 1);
-                row.setHeight((short) 300);
-                // Map<String, Object> regionMap = BasicInfoList.get(i);
-                for (int j = 0; j < KeyFields.length; j++) {
-                    cellKey = row.createCell(j);
-                    cellKey.setCellValue(infomap.get(i).get(KeyFields[j]));
-                    cellKey.setCellStyle(conStyle);
+
+
+                //表头部分
+                Row vr = sheet.createRow(0);
+                vr.setHeight((short) (400));
+                Cell cellHead = null;
+                int cacheitems = 100;
+                int num = 0;
+                for (int i = 0; i < HeadFields.length; i++) {
+                    cellHead = vr.createCell(i);
+                    cellHead.setCellValue(HeadFields[i]);
+                    cellHead.setCellStyle(headStyle);
+                    sheet.setColumnWidth(i, cellHead.getStringCellValue().getBytes().length * 300);
+                }
+                //内容部分
+                Row row = null;
+                Cell cellKey = null;
+                int rowNum = 0;
+                for (int i = 0; i < infomap.size(); i++) {
+                    if (!s.equals(infomap.get(i).get("COMPANYID"))) {
+                        continue;
+                    }
+                    if (num % cacheitems == 0) {
+                        ((SXSSFSheet) sheet).flushRows();
+                    }
+                    rowNum += 1;
+                    row = sheet.createRow(rowNum);
+                    row.setHeight((short) 300);
+                    // Map<String, Object> regionMap = BasicInfoList.get(i);
+                    for (int j = 0; j < KeyFields.length; j++) {
+                        cellKey = row.createCell(j);
+                        cellKey.setCellValue(infomap.get(i).get(KeyFields[j]));
+                        cellKey.setCellStyle(conStyle);
+                    }
                 }
             }
+
             wb.write(fs);
             wb.close();
             fs.close();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
-        }finally {
-            if(fs!=null) {
+        } finally {
+            if (fs != null) {
                 try {
                     fs.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            if(wb!=null){
+            if (wb != null) {
                 try {
                     wb.close();
                 } catch (IOException e) {
@@ -98,8 +128,10 @@ public class ExportAssetsService {
             }
         }
     }
+
+
     //导出资产汇总信息
-    public void exportSumAssetsInfo(String zctype,String path,String name,String comId){
+    public void exportSummaryAssetsInfo(String zctype,String path,String name,String comId){
         //获取导出列及列名
         Map<String,Float> totalmap=new HashMap<>();
         List<Map<String,String>> infomap=new ArrayList<>();
@@ -218,7 +250,7 @@ public class ExportAssetsService {
                                     nums = 0;
                                     xtrow = y + 1+1;
                                 }else if(infomap.get(y).get(configlist.get(x).getField().toUpperCase()).equals(infomap.get(y + 1).get(configlist.get(x).getField().toUpperCase()))&&y==(infomap.size()-2)){
-                                        sheet.addMergedRegion(new CellRangeAddress(xtrow, (xtrow + nums), x, x));
+                                    sheet.addMergedRegion(new CellRangeAddress(xtrow, (xtrow + nums), x, x));
 
                                 }
                             }
@@ -343,7 +375,7 @@ public class ExportAssetsService {
                                 nums = 0;
                                 xtrow = y + 1+1;
                             }else if(infomap.get(y).get(configlist.get(x).getField().toUpperCase()).equals(infomap.get(y + 1).get(configlist.get(x).getField().toUpperCase()))&&y==(infomap.size()-2)){
-                                    sheet.addMergedRegion(new CellRangeAddress(xtrow, (xtrow + nums), x, x));
+                                sheet.addMergedRegion(new CellRangeAddress(xtrow, (xtrow + nums), x, x));
 
                             }
                         }
@@ -413,62 +445,72 @@ public class ExportAssetsService {
             }
         }
     }
-//导入资产信息
-    public List<Map<String,String>> importAssetsInfo(MultipartFile file,String zctype){
-        int num=1;
+
+    public List<Map<String, String>> importAssetsInfo(MultipartFile file, String zctype) {
+        int num = 1;
         //获取导出列及列名
-        List<AssetsConfig> configlist=assetsMapper.getAssetsConfigInfo(zctype,null);
-        List<Map<String,String>> maplist=new ArrayList<Map<String,String>>();
+        List<AssetsConfig> configlist = assetsMapper.getAssetsConfigInfo(zctype, null);
+        AssetsConfig assetsConfig = new AssetsConfig();
+        assetsConfig.setField("layerid");
+        assetsConfig.setFieldname("要素ID");
+        configlist.add(assetsConfig);
+        List<Map<String, String>> maplist = new ArrayList<Map<String, String>>();
         try {
             // POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
             //HSSFWorkbook hw =new HSSFWorkbook(fs);
-            Workbook hw=WorkbookFactory.create(file.getInputStream());
+            Workbook hw = WorkbookFactory.create(file.getInputStream());
 
             //获取第一个sheet页
             Sheet sheet = hw.getSheetAt(0);
             //总行数
-            int rowNum=sheet.getLastRowNum();
+            int rowNum = sheet.getLastRowNum();
             //第一条数据行(列名)
             Row datafirstrow = sheet.getRow(0);
             //总列数
-            int colNum=datafirstrow.getPhysicalNumberOfCells();
+            int colNum = datafirstrow.getPhysicalNumberOfCells();
 
-            String []cloarray=new String [colNum];
+            String[] cloarray = new String[colNum];
             int y = 0;
-            while(y<colNum){
-                String cellvalue=getCellFormatValue(datafirstrow.getCell((short)y));
-                for(int z=0;z<configlist.size();z++){
-                    if(cellvalue.equals(configlist.get(z).getFieldname())){
-                        cloarray [y]=configlist.get(z).getField();
+            while (y < colNum) {
+                String cellvalue = getCellFormatValue(datafirstrow.getCell((short) y));
+                for (int z = 0; z < configlist.size(); z++) {
+                    if (cellvalue.equals(configlist.get(z).getFieldname())) {
+                        cloarray[y] = configlist.get(z).getField();
                     }
                 }
                 y++;
             }
 
-            for(int i=1;i<=sheet.getLastRowNum();i++){
-                Map<String,String> datamap= new HashMap<String,String>();
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                Map<String, String> datamap = new HashMap<String, String>();
                 Row row = sheet.getRow(i);
-                int j=0;
-                while (j<colNum){
-                    datamap.put(cloarray[j],getCellFormatValue(row.getCell((short) j)));
+                int j = 0;
+                while (j < colNum) {
+                    datamap.put(cloarray[j], getCellFormatValue(row.getCell((short) j)));
                     j++;
                 }
-                datamap.put("zctype",zctype);
+                //获取session
+                HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+                HttpSession session = request.getSession();
+                User user = (User) session.getAttribute("user");
+                datamap.put("companyid", user.getComId());
+                datamap.put("zctype", zctype);
                 String uuid = UUID.randomUUID().toString();
-                datamap.put("zcid",uuid);
+                datamap.put("zcid", uuid);
                 maplist.add(datamap);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return maplist;
     }
-    public String getCellFormatValue(Cell cell){
-        String cellvalue="";
-        if(cell!=null){
-            switch (cell.getCellType()){
+
+    public String getCellFormatValue(Cell cell) {
+        String cellvalue = "";
+        if (cell != null) {
+            switch (cell.getCellType()) {
                 case Cell.CELL_TYPE_NUMERIC:
-                case Cell.CELL_TYPE_FORMULA:{
+                case Cell.CELL_TYPE_FORMULA: {
                     if (DateUtil.isCellDateFormatted(cell)) {
                         Date date = cell.getDateCellValue();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -485,13 +527,14 @@ public class ExportAssetsService {
                     cellvalue = cell.getRichStringCellValue().getString();
                     break;
                 default:
-                    cellvalue="";
+                    cellvalue = "";
             }
-        }else{
-            cellvalue="";
+        } else {
+            cellvalue = "";
         }
-        return  cellvalue;
+        return cellvalue;
     }
+
     /**
      * 获取设置单元格样式
      *
