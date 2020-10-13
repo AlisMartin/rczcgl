@@ -209,4 +209,10 @@
         </if>
         GROUP BY COMPANYID
     </select>
+    <select id="selectAssetsInfo" resultType="map">
+        select * from ASSETS_INFO where 1=1
+        <if test="zcid !=null">
+            and ZCID= #{zcid,jdbcType=VARCHAR}
+        </if>
+    </select>
 </mapper>

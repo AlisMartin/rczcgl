@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -237,12 +238,15 @@ public class AssetsController {
             }
         }
         int i;
-        if (StringUtil.isEmpty(insertInfo.get("zcid"))) {
+        if (StringUtil.isNotEmpty(insertInfo.get("zctype"))) {
             UUID uuid = UUID.randomUUID();
-            insertInfo.put("zcid", uuid.toString());
-            //todo
+            String zcid = insertInfo.get("zcid");
+            Map<String,String> assetsInfo = assetsMapper.selectAssetsInfo(zcid);
+            assetsInfo.remove("ID");
+            assetsInfo.put("ZCID", uuid.toString());
+            i = assetsMapper.insertAssetsInfoHistory(assetsInfo);
             //先从资产表吧老的存到历史表，再把新的编辑进去
-            i = assetsMapper.insertAssetsInfoHistory(insertInfo);
+            int a = assetsMapper.updateAssetsInfo(insertInfo);
         } else {
             i = assetsMapper.updateAssetsInfo(insertInfo);
         }

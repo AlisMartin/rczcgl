@@ -598,11 +598,11 @@ function addAsset() {
 function editAsset() {
     var arr = $("#editform").serializeArray();
     if (isreset) {
-        for (var i = 0; i < arr.length; i++) {  //遍历数组
+        /*for (var i = 0; i < arr.length; i++) {  //遍历数组
             if (arr[i].name === "zcid") {
                 arr[i].value = "";
             }
-        }
+        }*/
         var addtype = {name: "zctype", value: param.zctype};
         arr.push(addtype);
     }
@@ -833,6 +833,7 @@ function getCompanys() {
         async: false,
         success: function (res) {
             var data = res.data;
+            gsmc = data[0].id;
             var htmlLeft = '';
             for (var i = 0; i < data.length; i++) {
                 //生成表单

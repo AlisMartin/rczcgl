@@ -1,5 +1,7 @@
 package xxw.po;
 
+import java.util.Date;
+
 /**
  * Created by wrh on 2020/9/25.
  */
@@ -37,6 +39,12 @@ public class AssetsInfoHistory {
     private String field28;
     private String field29;
     private String field30;
+    private String companyid;
+    private String days;
+    private Date stopday;
+    private String financeid;
+    private String layerid;
+    private Integer dayorder;
 
     public String getId() {
         return id;
@@ -302,4 +310,51 @@ public class AssetsInfoHistory {
         this.field30 = field30;
     }
 
+    public String getCompanyid() {
+        return companyid;
+    }
+
+    public void setCompanyid(String companyid) {
+        this.companyid = companyid;
+    }
+
+    public String getDays() {
+        return days;
+    }
+
+    public void setDays(String days) {
+        this.days = days;
+    }
+
+    public Date getStopday() {
+        return stopday;
+    }
+
+    public void setStopday(Date stopday) {
+        this.stopday = stopday;
+    }
+
+    public String getFinanceid() {
+        return financeid;
+    }
+
+    public void setFinanceid(String financeid) {
+        this.financeid = financeid;
+    }
+
+    public String getLayerid() {
+        return layerid;
+    }
+
+    public void setLayerid(String layerid) {
+        this.layerid = layerid;
+    }
+
+    public Integer getDayorder() {
+        return dayorder;
+    }
+
+    public void setDayorder(Integer dayorder) {
+        this.dayorder = dayorder;
+    }
 }

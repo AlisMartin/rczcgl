@@ -23,19 +23,22 @@ require(["esri/map",
     "dojo/domReady!"], function (Map, ArcGISDynamicMapServiceLayer, dom, on, Point, QueryTask, SpatialReference, Query, InfoTemplate,
                                  SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer, Graphic, FeatureLayer, ArcGISTiledMapServiceLayer) {
     map = new Map("map", {
-        //basemap: "osm",  //topo-vector   For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
+        //basemap: "osm",
         center: [122.376, 37.096], // longitude, latitude
         zoom: 12
     });
     imagerymap = new TDTImageryLayer();
     annolayer = new TDTAnnoLayer();//天地图-注记图
-    map.addLayer(imagerymap);//天地图影像图
-    map.addLayer(annolayer);
+
     var dynamicMapServiceLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/TEST4326/MapServer");
-    var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/MyMapService/MapServer");
+    //var layer = new ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/NGS_Topo_US_2D/MapServer");
+    var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/RongJwd/MapServer");
     var graphicsLayer = new GraphicsLayer();
+
+    map.addLayer(layer);
     map.addLayer(dynamicMapServiceLayer);
-    //map.addLayer(layer);
+    //map.addLayer(imagerymap);//天地图影像图
+    //map.addLayer(annolayer);
 
     //对checkbox数组进行变量把选中的id添加到visible
     $("input[name='ckb']:checkbox").click(function() {
