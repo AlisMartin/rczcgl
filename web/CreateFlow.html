@@ -21,6 +21,9 @@
     <script src="js/common/common.js"></script>
     <script src="js/Flow/createFlow.js"></script>
     <style>
+        .fleft{
+            float: left;
+        }
         .yc{
             display: none;
         }
@@ -140,11 +143,11 @@
                                         <tr>
                                             <td >文件名称</td>
                                             <td colspan="3">
-                                                <input type="text" id="wjdiv" name="wjmc" readonly="readonly" class="tableborder"/>
                                               <!--  <div id="wjdiv" name="wjmc"></div>-->
                                                 <input type="hidden" id="wjid" name="file"/>
                                                 <a href="#" id="wjkup">从文件库选择</a>
                                                 <a href="#" id="localup">从本地选择</a>
+                                                <input type="text" id="wjdiv" name="wjmc" readonly="readonly" class="tableborder"/>
                                                 <input type="text" id="wjmc" class="tableborder" />
                                             </td>
                                         </tr>
@@ -158,9 +161,13 @@
                                             <td class="font">领导批示</td>
                                             <td colspan="3"><input type="text" id="ldps" class="tableborder" name="ldps"/> </td>
                                         </tr>
+                                        <tr>
+                                            <td class="font">文件接收人</td>
+                                            <td colspan="3"><a href="#" id="openFileModal" class="fleft">请选择</a> <input type="text" disabled="disabled" id="jsusername" class="tableborder fleft"/></td>
+                                        </tr>
                                         </tbody>
                                     </table>
-                                    <button type="button" class="btn btn-primary" id="openFileModal">选择文件接收人员</button>
+                                 <!--   <button type="button" class="btn btn-primary fleft" id="openFileModal">选择文件接收人员</button>-->
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" id="saveConfig">发起</button>
@@ -183,8 +190,10 @@
                             </div>
 
                                 <div class="modal-body">
-                                    <tree id="departtree"></tree>
 
+                                   <!-- <tree id="departtree"></tree>-->
+
+                                    <table class="table tablemar" id="userTable"></table>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" id="saveUsers">确定</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
@@ -331,12 +340,12 @@
                                             <td class="font" colspan="2">阅批意见</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2"><input type="text" id="cqm1" /> </td>
-                                            <td colspan="2"><input type="text" id="cyj1" /> </td>
+                                            <td colspan="2"><input type="text" id="cqm1" class="tableborder fleft"/><a href="#" id="ckqm1" class="fleft" style="display: none">查看</a> </td>
+                                            <td colspan="2"><input type="text" id="cyj1" class="tableborder" /> </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2"><input type="text" id="cqm2" /> </td>
-                                            <td colspan="2"><input type="text" id="cyj2" /> </td>
+                                            <td colspan="2"><input type="text" id="cqm2" class="tableborder fleft"/> <a href="#" id="ckqm2" class="fleft" style="display: none">查看</a></td>
+                                            <td colspan="2"><input type="text" id="cyj2" class="tableborder"/> </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -357,6 +366,19 @@
 
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal" tabindex="-1" id="qmPicModal" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content" style="width: 302px;height: 454px">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <img id="qmImg" style="width: 300px;height: 400px"/>
                         </div>
                     </div>
                 </div>

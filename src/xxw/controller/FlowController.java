@@ -162,7 +162,7 @@ public class FlowController {
         String filetype=request.getParameter("filetype");
         String com=request.getParameter("com");
         String pos=request.getParameter("pos");
-        if(filetype.equals("请�?�择")||filetype.equals("null")){
+        if(filetype.equals("请选择")||filetype.equals("null")){
             filetype=null;
         }
         return new ResponseObject(1,"",flowMapper.selectPathId(com,pos,filetype));
@@ -200,7 +200,7 @@ public class FlowController {
         Date date=new Date();
         String year=sdf.format(date);
         String filetype=request.getParameter("filetype");
-        if(filetype.equals("请�?�择")||filetype.equals("null")){
+        if(filetype.equals("请选择")||filetype.equals("null")){
             filetype=null;
         }
         String com=request.getParameter("com");
@@ -251,6 +251,14 @@ public class FlowController {
             filelist.add(fileInfo);
         }
 
+        return new ResponseObject(1,"",filelist);
+    }
+
+    @RequestMapping("/queryQmPic")
+    @ResponseBody
+    public ResponseObject queryQmPic(HttpServletRequest request){
+        String filePath=request.getParameter("filePath");
+        List<FileInfo>  filelist=fileMapper.queryQmPicByParam(filePath);
         return new ResponseObject(1,"",filelist);
     }
 
@@ -349,5 +357,6 @@ public class FlowController {
         String node=request.getParameter("node");
         return flowMapper.queryFlowHistoryInfo(flowId,null);
     }
+
 
 }

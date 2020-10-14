@@ -3,6 +3,8 @@ var userobj=eval('('+user+')');
 $(function(){
     debugger;
     var auth=userobj.auth;
+    $("#loginUserName").text(userobj.userName);
+    $("#loginRoleName").text(userobj.role);
     if(auth==null){
         alert("当前用户未设置权限，请使用管理员账号配置用户权限！");
     }
@@ -164,12 +166,6 @@ $(function(){
         });
 
     }
-
-
-
-
-
-
 
 
 

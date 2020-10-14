@@ -16,6 +16,22 @@ $(function(){
         autoclose:true
     });
 
+    //查看签名图片
+    $("#ckqm1").click(function(){
+        $("#qmPicModal").modal('show');
+        var sign=$("#cqm1").val();
+        $("#qmImg").attr("src","/rczcgl/signPic/"+sign+".jpg");
+    })
+    $("#ckqm2").click(function(){
+        $("#qmPicModal").modal('show');
+        var sign=$("#cqm2").val();
+        $("#qmImg").attr("src","/rczcgl/signPic/"+sign+".jpg");
+    })
+
+    $('#queryFlow').on('hide.bs.modal', function () {
+        $("#ckqm1").css('display','none');
+        $("#ckqm2").css('display','none');
+    });
 
     $('#departtree').on('nodeChecked',function(event, data) {
         debugger;
@@ -251,17 +267,22 @@ $(function(){
     });
     $("#saveUsers").click(function(){
         debugger;
-        var data=$('#departtree').treeview('getChecked');
+        var data=$("#userTable").bootstrapTable('getSelections');
+        /*var data=$('#departtree').treeview('getChecked');*/
         if(data.length<=0){
             alert("请选择文件接收人员！");
             return;
         }
         var users="";
+        var usernames="";
         for(var i=0;i<data.length;i++){
             users=users+data[i].id+",";
+            usernames=usernames+data[i].userName+",";
         }
         users=users.substring(0,users.length-1);
+        usernames=usernames.substring(0,usernames.length-1);
         $("#jsusers").val(users);
+        $("#jsusername").val(usernames);
     })
 
     $("#saveConfig").click(function(){
@@ -327,6 +348,15 @@ $(function(){
             {
                 title:"待办人",
                 field:'dName'
+            },
+            {
+                title:"文件接收人",
+                field:'sqInfo',
+                formatter:function(value,row,index){
+                    debugger;
+                    var names= getUserById(value);
+                    return   names;
+                }
             },
             {
                 title:"审批状态",
@@ -424,7 +454,7 @@ function insertFlowInstance(){
 }
 
 function initDepartTree(){
-    $.ajax({
+/*    $.ajax({
         type:"post",
         url:"/rczcgl/depart/getnodes.action",
         dataType:"json",
@@ -443,6 +473,44 @@ function initDepartTree(){
         },
         error:function(){
             alert("系统错误！");
+        }
+    })*/
+    $('#userTable').bootstrapTable({
+        url:'/rczcgl/user/selectAllUser.action',
+        method:'post',
+        clickToSelect:true,
+        /* sidePagination:"client",
+         pagination:true,
+         pageNumber:1,
+         pageSize:5,
+         pageList:[5,10,20,50,100],
+         paginationPreText:"上一页",
+         paginationNextText:"下一页",*/
+        columns:[
+            {
+                checkbox:true
+            },
+            {
+                field:'userName',
+                title:'用户名'
+            },
+            {
+                field:'company',
+                title:'所属公司'
+            },
+            {
+                field:'department',
+                title:'所属部门'
+            },
+            {
+                field:'position',
+                title:'职务'
+            }
+        ],
+        onLoadSuccess:function(){
+        },
+        onLoadError:function(){
+            showTips("数据加载失败!");
         }
     })
 }
@@ -572,9 +640,8 @@ function getManagerFiles(param){
 
 function queryInfo(a){
     debugger;
-    // var a=spinfo;
     $("#queryFlow").modal('show');
-    $("#cfqr").val(a.fqr);
+    $("#cfqr").val(a.fqrName);
     $("#cstartDate").val(a.startDate);
     $("#clwjg").val(a.lwjg);
     $("#cswwh").val(a.swwh);
@@ -595,6 +662,14 @@ function queryInfo(a){
     if(node>=2){
         getqm(spinfo);
     }
+    var qm1=$("#cqm1").val();
+    var qm2=$("#cqm2").val();
+    if(qm1!=""&&qm1!=null){
+        $("#ckqm1").css('display','block');
+    }
+    if(qm2!=""&&qm2!=null){
+        $("#ckqm2").css('display','block');
+    }
 }
 
 //查询签名
@@ -611,11 +686,20 @@ function getqm(a){
         success:function(data){
             for(var i=0;i<data.length;i++){
                 if(data[i].node=="2"){
-                    $("#cqm1").val(data[i].yzqm);
+                    if(data[i].yzqm.indexOf(".")>-1){
+                        $("#cqm1").val(data[i].yzqm.split(".")[0]);
+                    }else{
+                        $("#cqm1").val(data[i].yzqm);
+                    }
+
                     $("#cyj1").val(data[i].yzyj);
                 }
                 if(data[i].node=="3"){
-                    $("#cqm2").val(data[i].yzqm);
+                    if(data[i].yzqm.indexOf(".")>-1){
+                        $("#cqm2").val(data[i].yzqm.split(".")[0]);
+                    }else{
+                        $("#cqm2").val(data[i].yzqm);
+                    }
                     $("#cyj2").val(data[i].yzyj);
                 }
             }

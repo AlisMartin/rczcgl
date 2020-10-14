@@ -6,12 +6,14 @@
     <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
     <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
+    <link rel="stylesheet" href="third/bootstrap-select/css/bootstrap-select.min.css">
     <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
     <script src="third/jquery.cookie.js"></script>
     <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
     <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+    <script src="third/bootstrap-select/js/bootstrap-select.min.js"></script>
     <script src="js/common/common.js"></script>
     <script src="js/dataStatistic/dataStatistic.js"></script>
     <script src="third/echarts.min.js"></script>
@@ -41,17 +43,18 @@
                         <div class="panel-heading">统计条件设置</div>
                         <div class="panel-body">
                             <form class="form" role="form">
-                                <div class="form-group">
+                               <!-- <div class="form-group">
                                     <label for="sjDate">数据年份</label>
                                        <select id="sjDate" class="form-control">
                                            <option value="2018">2018</option>
                                            <option value="2019">2019</option>
                                            <option value="2020">2020</option>
                                        </select>
-                                </div>
-                                <div class="form-group">
+                                </div>-->
+                              <div class="form-group">
                                     <label for="zclx">资产类型</label>
                                         <select id="zclx" class="form-control">
+                                            <option value="5">全部</option>
                                             <option value="1">土地</option>
                                             <option value="2">房屋</option>
                                             <option value="3">海域</option>
@@ -60,10 +63,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="tjsx">统计属性</label>
-                                        <select id="tjsx" class="form-control">
-                                            <option value="1">资产汇总</option>
-                                            <option value="2">房屋出租</option>
-                                            <option value="3">融资期限</option>
+                                        <select id="tjsx" class="selectpicker" multiple>
+                                            <option value="1">房屋出租金额</option>
+                                            <option value="2">融资金额</option>
                                         </select>
                                 </div>
                                         <button type="button" class="btn btn-default">统计分析</button>
@@ -73,12 +75,12 @@
                 </div>
                 <div class="col-md-9 height">
                     <div class="row" style="height: 48%">
-                        <div class="col-md-6 height"><div id="zxechart" style="width: 100%;height: 100%"></div></div>
                         <div class="col-md-6 height"><div id="zzechart" style="width: 100%;height: 100%"></div></div>
+                        <div class="col-md-6 height"><div id="sxechart" style="width: 100%;height: 100%"></div></div>
                     </div>
                     <div class="row" style="height: 48%">
-                        <div class="col-md-6 height"><div id="sxechart"  style="width: 100%;height: 100%"></div></div>
-                        <div class="col-md-6 height"><div id="sdechart"  style="width: 100%;height: 100%"></div></div>
+                        <div class="col-md-6 height"><div id="zzechart1"  style="width: 100%;height: 100%"></div></div>
+                        <div class="col-md-6 height"><div id="sxechart1"  style="width: 100%;height: 100%"></div></div>
                     </div>
                 </div>
             </div>

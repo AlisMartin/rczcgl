@@ -1,94 +1,123 @@
+var sjdata;
 $(function(){
-    initsdechart();
+    $("#tjsx").selectpicker('val', ['1','2']);
+    getdata();
+   // initsdechart();
     initsxechart();
-    initzxechart();
+    initsxechart1();
+    initzzechart1();
     initzzechart();
+    //initzxechart();
+    //initzzechart();
+    $("#zclx").change(function(){
+        getdata();
+        // initsdechart();
+        initsxechart();
+        initsxechart1();
+        initzzechart1();
+        initzzechart();
+    })
 })
+
 function initzzechart(){
+    var name=[];
+    var value=[];
+    for(var i=0;i<sjdata.zj.length;i++){
+        name.push(sjdata.zj[i].name);
+        value.push(sjdata.zj[i].value);
+    }
     var myChart = echarts.init(document.getElementById('zzechart'));
-    var option = {
-        title:{
-            text:'各类资产汇总'
+  var  option = {
+      title: {
+          text: '各公司房租汇总',
+          // subtext: '纯属虚构',
+          left: 'center'
+      },
+      tooltip: {
+          trigger: 'item',
+          formatter: '{b} : {c} '
+      },
+        xAxis: {
+            type: 'category',
+            data: name
         },
-        legend: {},
-        tooltip: {},
-        dataset: {
-            dimensions: ['product', '2018', '2019', '2020'],
-            source: [
-                {product: '土地资产', '2018': 43.3, '2019': 85.8, '2020': 93.7},
-                {product: '房屋资产', '2018': 83.1, '2019': 73.4, '2020': 55.1},
-                {product: '海域资产', '2018': 86.4, '2019': 65.2, '2020': 82.5},
-                {product: '其他资产', '2018': 72.4, '2019': 53.9, '2020': 39.1}
-            ]
-        },
-        xAxis: {type: 'category'},
         yAxis: {
-            name:'单位（万元）'
+            type: 'value'
         },
-        // Declare several bar series, each will be mapped
-        // to a column of dataset.source by default.
-        series: [
-            {type: 'bar'},
-            {type: 'bar'},
-            {type: 'bar'}
-        ]
+        series: [{
+            data: value,
+            type: 'bar',
+            showBackground: true,
+            backgroundStyle: {
+                color: 'rgba(220, 220, 220, 0.8)'
+            }
+        }]
     };
+
     myChart.setOption(option);
 }
-function initzxechart(){
-    var myChart = echarts.init(document.getElementById('zxechart'));
-    var option = {
-        title:{
-            text:'土地资产汇总'
+
+function initzzechart1(){
+    var name=[];
+    var value=[];
+    for(var i=0;i<sjdata.rzje.length;i++){
+        name.push(sjdata.rzje[i].name);
+        value.push(sjdata.rzje[i].value);
+    }
+    var myChart = echarts.init(document.getElementById('zzechart1'));
+    var  option = {
+        title: {
+            text: '各公司融资金额汇总',
+            // subtext: '纯属虚构',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: '{b} : {c} '
         },
         xAxis: {
             type: 'category',
-            boundaryGap: false,
-            data: ['2014', '2015', '2016', '2017', '2018', '2019', '2020']
+            data: name
         },
         yAxis: {
-            type: 'value',
-            name:'单位（万元）'
+            type: 'value'
         },
         series: [{
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
-            type: 'line',
-            areaStyle: {}
+            data: value,
+            type: 'bar',
+            showBackground: true,
+            backgroundStyle: {
+                color: 'rgba(220, 220, 220, 0.8)'
+            }
         }]
     };
+
     myChart.setOption(option);
 }
 function initsxechart(){
     var myChart = echarts.init(document.getElementById('sxechart'));
-    var data = genData(50);
-
     var option = {
         title: {
-            text: '各类资产统计',
+            text: '各公司房租汇总',
            // subtext: '纯属虚构',
             left: 'center'
         },
         tooltip: {
             trigger: 'item',
-            formatter: '{a} <br/>{b} : {c} ({d}%)'
+            formatter: '{b} : {c} ({d}%)'
         },
-        legend: {
+    /*    legend: {
             orient: 'vertical',
             left: 'left',
             data: ['土地', '房屋', '海域', '其他']
-        },
+        },*/
         series: [
             {
-                name: '访问来源',
+              //  name: '访问来源',
                 type: 'pie',
                 radius: '55%',
                 center: ['50%', '60%'],
-                data: [
-                    {value: 335, name: '土地'},
-                    {value: 310, name: '海域'},
-                    {value: 234, name: '房屋'},
-                    {value: 135, name: '土地'}
-                ],
+                data:sjdata.zj,
                 emphasis: {
                     itemStyle: {
                         shadowBlur: 10,
@@ -103,6 +132,45 @@ function initsxechart(){
 
     myChart.setOption(option);
 }
+function initsxechart1(){
+    var myChart = echarts.init(document.getElementById('sxechart1'));
+    var option = {
+        title: {
+            text: '各公司融资金额汇总',
+            // subtext: '纯属虚构',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: '{b} : {c} ({d}%)'
+        },
+    /*    legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: ['土地', '房屋', '海域', '其他']
+        },*/
+        series: [
+            {
+              //  name: '访问来源',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '60%'],
+                data:sjdata.rzje,
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+
+    myChart.setOption(option);
+}
+
 function initsdechart(){
     var myChart = echarts.init(document.getElementById('sdechart'));
     var option;
@@ -205,4 +273,41 @@ function genData(count) {
         selected: selected
     };
 
+}
+function getcomIds(){
+    var comids;
+    $.ajax({
+        type:"post",
+        url:"/rczcgl/statistic/getComIds.action",
+        async:false,
+        success:function(resData){
+            comids=resData.data;
+        }
+    })
+    return comids;
+}
+
+function getdata(){
+    debugger;
+    var param={};
+    var tjvalue=$("#tjsx").val();
+    var zclx=$("#zclx").val();
+    var sxs="";
+    for(var i=0;i<tjvalue.length;i++){
+        sxs=sxs+tjvalue[i]+",";
+    }
+    param.sx=sxs;
+    if(zclx!=null&&zclx!=""&&zclx!="5"){
+        param.zctype=zclx;
+    }
+    //
+    $.ajax({
+        type:"post",
+        url:"/rczcgl/statistic/getTj.action",
+        data:param,
+        async:false,
+        success:function(resData){
+            sjdata=resData.data;
+        }
+    })
 }

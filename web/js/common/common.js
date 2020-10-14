@@ -46,3 +46,22 @@ function pdFlow(userid,nodeId){
     }
     return flag;
 }
+
+//根据id获取用户名
+function getUserById(userid){
+    debugger;
+    var names;
+    $.ajax({
+        type:"post",
+        url:"/rczcgl/user/getUsersById.action",
+        async:false,
+        data:{ids:userid},
+        success:function(datas){
+            names=datas.data;
+        },
+        error:function(){
+            alert("系统错误！");
+        }
+    })
+    return names;
+}

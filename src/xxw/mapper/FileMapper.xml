@@ -13,4 +13,10 @@
             and PATHID= #{pathId,jdbcType=VARCHAR}
         </if>
     </select>
+    <select id="queryQmPicByParam" parameterType="java.lang.String" resultType="xxw.po.FileInfo">
+        select * from ASSETS_FILE where 1=1
+        <if test="filePath !=null">
+            and FILEPATH= #{filePath,jdbcType=VARCHAR}
+        </if>
+    </select>
 </mapper>

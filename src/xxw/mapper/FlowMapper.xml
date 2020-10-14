@@ -362,7 +362,7 @@
         <if test="duser !=null">
             and instr(','||a.DUSERS||',',concat(concat(',',#{duser}),','))>0
         </if>
-
+        order by STARTDATE DESC
     </select>
 
     <!--查询流程历史信息-->

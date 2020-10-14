@@ -4,6 +4,9 @@ package xxw.util;
  * Created by wrh on 2020/9/14.
  */
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * 字符串工具类
  *
@@ -43,4 +46,11 @@ public class StringUtil {
             return null;
         }
     }
-}
+    /**
+     * 判断是否为数字
+     */
+    public static boolean isNumber(String str) {
+        String reg = "^[0-9]+(.[0-9]+)?$";
+        return str.matches(reg);
+    }
+    }

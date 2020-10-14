@@ -15,11 +15,31 @@
     <script src="js/common/common.js"></script>
     <script src="js/Flow/flowWork.js"></script>
     <style>
+        .fleft{
+            float: left;
+        }
         .tableborder{
             border: 0;
         }
         .font{
             text-align: center;
+        }
+        .checkboxstyle{
+            display: block;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
         }
         .uploadbtn{
             margin-top: 10%;
@@ -118,8 +138,13 @@
                                             <td class="font" colspan="2">阅批意见</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2"><input type="text" id="qm" name="yzqm"  /> </td>
-                                            <td colspan="2"><input type="text" id="yj" name="yzyj" /> </td>
+                                            <td colspan="2">
+                                                <select id="qmPic" class="checkboxstyle fleft" >
+                                                </select>
+                                                <a href='#' id='openPicModal' style="display: none" class="fleft">查看</a>
+                                                <input type="hidden" id="qm" name="yzqm" class="tableborder"  />
+                                            </td>
+                                            <td colspan="2"><input type="text" id="yj" name="yzyj" class="tableborder"/> </td>
                                         </tr>
                                   <!--      <tr>
                                             <td colspan="2"><input type="text" id="qm2" /> </td>
@@ -212,12 +237,12 @@
                                             <td class="font" colspan="2">阅批意见</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2"><input type="text" id="cqm1" /> </td>
-                                            <td colspan="2"><input type="text" id="cyj1" /> </td>
+                                            <td colspan="2"><input type="text" id="cqm1" class="tableborder fleft" /> <a href="#" id="ckqm1" class="fleft" style="display: none">查看</a> </td>
+                                            <td colspan="2"><input type="text" id="cyj1" class="tableborder" />  </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2"><input type="text" id="cqm2" /> </td>
-                                            <td colspan="2"><input type="text" id="cyj2" /> </td>
+                                            <td colspan="2"><input type="text" id="cqm2" class="tableborder fleft" /> <a href="#" id="ckqm2" class="fleft" style="display: none">查看</a> </td>
+                                            <td colspan="2"><input type="text" id="cyj2" class="tableborder" /> </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -238,6 +263,19 @@
 
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal" tabindex="-1" id="qmPicModal" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content" style="width: 302px;height: 454px">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <img id="qmImg" style="width: 300px;height: 400px"/>
                         </div>
                     </div>
                 </div>

@@ -116,4 +116,23 @@ public class UserManagerController {
         return czrole;
 
     }
+
+    @RequestMapping("/getUsersById")
+    @ResponseBody
+    public ResponseObject getUserById(HttpServletRequest request){
+            String ids=request.getParameter("ids");
+            String names="";
+            if(ids.indexOf(",")>-1){
+                String  idarray []=ids.split(",");
+                for(int i=0;i<idarray.length;i++){
+                    User user=userMapper.queryUser(null,null,idarray[i]);
+                    names=names+user.getUserName()+",";
+                }
+            }else{
+                User user=userMapper.queryUser(null,null,ids);
+                names=user.getUserName();
+            }
+        return  new ResponseObject(1,"",names);
+
+    }
 }

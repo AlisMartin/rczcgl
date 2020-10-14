@@ -19,6 +19,35 @@ $(function(){
         }
     })
 
+    $("#qmPic").change(function(){
+        qmPicChange();
+    })
+    $("#openPicModal").click(function(){
+        $("#qmPicModal").modal('show');
+        var sign=$("#qmPic").val();
+        $("#qmImg").attr("src","/rczcgl/signPic/"+sign);
+    })
+
+    $("#ckqm1").click(function(){
+        $("#qmPicModal").modal('show');
+        var sign=$("#cqm1").val();
+        $("#qmImg").attr("src","/rczcgl/signPic/"+sign+".jpg");
+    })
+    $("#ckqm2").click(function(){
+        $("#qmPicModal").modal('show');
+        var sign=$("#cqm2").val();
+        $("#qmImg").attr("src","/rczcgl/signPic/"+sign+".jpg");
+    })
+
+
+    $('#addFlow').on('hide.bs.modal', function () {
+        $("#openPicModal").css('display','none');
+    });
+
+    $('#queryFlow').on('hide.bs.modal', function () {
+        $("#ckqm1").css('display','none');
+        $("#ckqm2").css('display','none');
+    });
 
 
 
@@ -74,6 +103,15 @@ $(function(){
             {
                 title:"待办人",
                 field:'dName'
+            },
+            {
+                title:"文件接收人",
+                field:'sqInfo',
+                formatter:function(value,row,index){
+                    debugger;
+                    var names= getUserById(value);
+                    return   names;
+                }
             },
             {
                 title:"审批状态",
@@ -161,7 +199,8 @@ $(function(){
 function initmodalinfo(a){
     debugger;
     //var a=spinfo;
-    $("#fqr").val(a.fqr);
+    getQmPic();
+    $("#fqr").val(a.fqrName);
     $("#startDate").val(a.startDate);
     $("#lwjg").val(a.lwjg);
     $("#swwh").val(a.swwh);
@@ -173,6 +212,44 @@ function initmodalinfo(a){
     $("#ldps").val(a.ldps);
     $("#node").val(a.node);
     $("#flowId").val(a.flowId);
+}
+
+//查询所有签名图片初始化签名下拉框
+function getQmPic(){
+    debugger;
+    $.ajax({
+        type:"post",
+        url:"/rczcgl/flow/getComIds.action",
+        async:false,
+        data:{
+            filePath:"signPic"
+        },
+        success:function(resData){
+           var picList=resData.data;
+            $("#qmPic").empty();
+            $("#qmPic").append("<option value='请选择'>请选择</option>")
+            for(var i=0;i<picList.length;i++){
+                $("#qmPic").append("<option value="+picList[i].fileName+">"+picList[i].fileName.split(".")[0]+"</option>")
+            }
+        }
+    })
+}
+//选择签名后追加可查看
+function qmPicChange(){
+    debugger;
+    var qmPic=$("#qmPic").val();
+    if(qmPic=="请选择"){
+        alert("请选择签名!");
+        return;
+    }
+    if(qmPic.split(".")[0]==userobj.userName){
+        $("#openPicModal").css('display','block');
+        $("#qm").val($("#qmPic").val());
+    }else{
+        $("#openPicModal").css('display','none');
+        alert("请选择正确的签名！");
+        return;
+    }
 }
 
 //更新流程实例
@@ -249,7 +326,7 @@ function queryInfo(a){
     debugger;
    // var a=spinfo;
     $("#queryFlow").modal('show');
-    $("#cfqr").val(a.fqr);
+    $("#cfqr").val(a.fqrName);
     $("#cstartDate").val(a.startDate);
     $("#clwjg").val(a.lwjg);
     $("#cswwh").val(a.swwh);
@@ -269,6 +346,14 @@ function queryInfo(a){
     var node=parseInt(a.node);
     if(node>=2){
         getqm(spinfo);
+    }
+    var qm1=$("#cqm1").val();
+    var qm2=$("#cqm2").val();
+    if(qm1!=""&&qm1!=null){
+        $("#ckqm1").css('display','block');
+    }
+    if(qm2!=""&&qm2!=null){
+        $("#ckqm2").css('display','block');
     }
 }
 
@@ -405,11 +490,20 @@ function getqm(a){
         success:function(data){
             for(var i=0;i<data.length;i++){
                 if(data[i].node=="2"){
-                    $("#cqm1").val(data[i].yzqm);
+                    if(data[i].yzqm.indexOf(".")>-1){
+                        $("#cqm1").val(data[i].yzqm.split(".")[0]);
+                    }else{
+                        $("#cqm1").val(data[i].yzqm);
+                    }
+
                     $("#cyj1").val(data[i].yzyj);
                 }
                 if(data[i].node=="3"){
-                    $("#cqm2").val(data[i].yzqm);
+                    if(data[i].yzqm.indexOf(".")>-1){
+                        $("#cqm2").val(data[i].yzqm.split(".")[0]);
+                    }else{
+                        $("#cqm2").val(data[i].yzqm);
+                    }
                     $("#cyj2").val(data[i].yzyj);
                 }
             }
