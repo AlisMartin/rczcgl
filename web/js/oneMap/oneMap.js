@@ -22,23 +22,31 @@ require(["esri/map",
     "esri/layers/ArcGISTiledMapServiceLayer",
     "dojo/domReady!"], function (Map, ArcGISDynamicMapServiceLayer, dom, on, Point, QueryTask, SpatialReference, Query, InfoTemplate,
                                  SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer, Graphic, FeatureLayer, ArcGISTiledMapServiceLayer) {
-    map = new Map("map", {
-        //basemap: "osm",
-        center: [122.376, 37.096], // longitude, latitude
-        zoom: 12
+    var initExtent = new esri.geometry.Extent({
+        "xmin": 122.1102905273437, "ymin": 36.74652099609376,
+        "xmax": 122.71179199218744, "ymax": 37.45513916015626,
+        "spatialReference": {"wkid": 4326}
     });
-    imagerymap = new TDTImageryLayer();
-    annolayer = new TDTAnnoLayer();//天地图-注记图
+    map = new Map("map", {
+        showInfoWindowOnClick: true, showLabels: true,
+        displayGraphicsOnPan: false, logo: false,
+        extent: initExtent,
+        maxZoom:10,//最大缩放等级
+        minZoom: 1//最小缩放等级
+        //center: [122.376, 37.096], // longitude, latitude
+        //zoom: 12
+    });
 
     var dynamicMapServiceLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/TEST4326/MapServer");
     //var layer = new ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/NGS_Topo_US_2D/MapServer");
     var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/RongJwd/MapServer");
+    var shandongIm = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
+    var shandongLayer = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省电子地图/MapServer");
     var graphicsLayer = new GraphicsLayer();
-
     map.addLayer(layer);
+
+    map.addLayer(shandongLayer);
     map.addLayer(dynamicMapServiceLayer);
-    //map.addLayer(imagerymap);//天地图影像图
-    //map.addLayer(annolayer);
 
     //对checkbox数组进行变量把选中的id添加到visible
     $("input[name='ckb']:checkbox").click(function() {

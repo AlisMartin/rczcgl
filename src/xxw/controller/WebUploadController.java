@@ -3,6 +3,7 @@ package xxw.controller;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,8 @@ import java.util.UUID;
 public class WebUploadController {
     @Autowired
     private FlowMapper flowMapper;
+    @Value("${FileUrl}")
+    private String fileUrl;
 
     @RequestMapping("/fileupload")
     @ResponseBody
@@ -38,24 +41,34 @@ public class WebUploadController {
         try{
             String xdPath;
             String tempPath;
-            if("".equals(zcid)||zcid==null){
+            String otherPath;
+             if("".equals(zcid)||zcid==null){
                 xdPath="filemanager/upload/";
-                tempPath= request.getRealPath("/") + "filemanager/upload/";
+                tempPath= request.getSession().getServletContext().getRealPath("/") + "filemanager/upload/";
+                 otherPath = fileUrl + "filemanager/upload/";
             }else{
                 xdPath="assetsfile/"+zcid+"/";
-                tempPath = request.getRealPath("/") + "assetsfile/"+zcid+"/";
+                tempPath = request.getSession().getServletContext().getRealPath("/") + "assetsfile/"+zcid+"/";
+                otherPath = fileUrl + "assetsfile/"+zcid+"/";
             }
 
             if(file!=null){
                 if((null==chunks&&null==chunk)||("").equals(chunks)&&("").equals(chunk)){
 
                     File parentFile=new File(tempPath);
+                    File otherFile=new File(otherPath);
                     if(!parentFile.exists()){
                         parentFile.mkdirs();
                     }
+                    if(!otherFile.exists()){
+                        otherFile.mkdirs();
+                    }
                     File destTempFile=new File(parentFile+"/"+name);
+                    File otherTempFile=new File(otherFile+"/"+name);
                     FileUtils.copyInputStreamToFile(file.getInputStream(),destTempFile);
                     destTempFile.createNewFile();
+                    FileUtils.copyInputStreamToFile(file.getInputStream(),otherTempFile);
+                    otherTempFile.createNewFile();
                     UUID uid=UUID.randomUUID();
                     String id=uid.toString();
                     flowMapper.insertManagerFile(id,name,xdPath,null,null,null);

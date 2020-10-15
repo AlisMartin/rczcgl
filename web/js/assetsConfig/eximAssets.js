@@ -1,45 +1,69 @@
-var user= $.cookie('user');
-var userobj=eval('('+user+')');
+var user = $.cookie('user');
+var userobj = eval('(' + user + ')');
 var columns = [];
 var param = {};
 var zcid = "";
 var fileid = "", isreset, newmap, editmap, viewmap, map, toolBar,
     financeid = "",
     url = '/rczcgl/assetsconfig/getAssetsInfo.action',
-   // gsmc = "1"
-    gsmc=userobj.comId;
+    gsmc = userobj.comId;
 
-require(["esri/map",
-    "esri/layers/ArcGISDynamicMapServiceLayer",
-    "dojo/dom",
-    "dojo/on",
-    "esri/geometry/Point",
-    "esri/tasks/QueryTask",
-    "esri/SpatialReference",
-    "esri/tasks/query",
-    "esri/InfoTemplate",
-    "esri/toolbars/draw",
-    "esri/symbols/SimpleMarkerSymbol",
-    "esri/symbols/SimpleLineSymbol",
-    "esri/symbols/SimpleFillSymbol",
-    "esri/Color",
-    "esri/layers/GraphicsLayer",
-    "esri/graphic",
-    "dojo/domReady!"], function (Map, ArcGISDynamicMapServiceLayer, dom, on, Point, QueryTask, SpatialReference, Query, InfoTemplate,
-                                 Draw, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer, Graphic) {
-    setTimeout(function () {
-        newmap = new Map("newmap", {
-            basemap: "osm",
-            center: [122.376, 37.096],
-            zoom: 12,
-            autoResize: true
+
+$(function () {
+
+    require(["esri/map",
+        "esri/layers/ArcGISDynamicMapServiceLayer",
+        "dojo/dom",
+        "dojo/on",
+        "esri/geometry/Point",
+        "esri/tasks/QueryTask",
+        "esri/SpatialReference",
+        "esri/tasks/query",
+        "esri/InfoTemplate",
+        "esri/toolbars/draw",
+        "esri/symbols/SimpleMarkerSymbol",
+        "esri/symbols/SimpleLineSymbol",
+        "esri/symbols/SimpleFillSymbol",
+        "esri/Color",
+        "esri/layers/GraphicsLayer",
+        "esri/layers/ArcGISTiledMapServiceLayer",
+        "esri/graphic",
+        "dojo/domReady!"], function (Map, ArcGISDynamicMapServiceLayer, dom, on, Point, QueryTask, SpatialReference, Query, InfoTemplate,
+                                     Draw, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer, ArcGISTiledMapServiceLayer, Graphic) {
+        //setTimeout(function () {
+        var initExtent = new esri.geometry.Extent({
+            "xmin": 122.1102905273437, "ymin": 36.74652099609376,
+            "xmax": 122.71179199218744, "ymax": 37.45513916015626,
+            "spatialReference": {"wkid": 4326}
         });
+        console.log(document.getElementById("viewmap"));
+
         viewmap = new Map("viewmap", {
-            basemap: "osm",
-            center: [122.376, 37.096],
-            zoom: 12,
+            showInfoWindowOnClick: true, showLabels: true,
+            displayGraphicsOnPan: false, logo: false,
+            extent: initExtent,
+            maxZoom: 10,//最大缩放等级
+            minZoom: 1,//最小缩放等级
             autoResize: true
         });
+        console.log(document.getElementById("newmap"));
+        newmap = new Map("newmap", {
+            showInfoWindowOnClick: true, showLabels: true,
+            displayGraphicsOnPan: false, logo: false,
+            extent: initExtent,
+            maxZoom: 10,//最大缩放等级
+            minZoom: 1,//最小缩放等级
+            autoResize: true
+        });
+        var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/RongJwd/MapServer");
+        var shandongIm = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
+        var shandongIm1 = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
+
+        //newmap.addLayer(layer);
+        newmap.addLayer(shandongIm1);
+        //viewmap.addLayer(layer);
+        viewmap.addLayer(shandongIm);
+
         //创建点要素
         $("#drawTool").click(function () {
             //使用toolbar上的绘图工具
@@ -64,16 +88,6 @@ require(["esri/map",
 
         map = {
             addPoint: function (id) {
-                /*var markerSymbol = new SimpleMarkerSymbol();
-                 markerSymbol.setColor(new Color("#00FFFF"));
-                 var startPt = esri.geometry.Point({
-                 "x": x,
-                 "y": y,
-                 "spatialReference": {"wkid": 4326}
-                 });
-                 var graphic = new Graphic(startPt, symbol);
-                 newmap.graphics.add(graphic);
-                 */
 
                 //定义查询对象
                 var queryTask = new QueryTask("http://localhost:6080/arcgis/rest/services/TEST4326/MapServer/0");
@@ -93,14 +107,10 @@ require(["esri/map",
                     var lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new dojo.Color([255, 0, 0]), 3);
                     //创建面符号
                     var fill = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, lineSymbol);
-
                     if (queryResult.features.length >= 1) {
                         for (var i = 0; i < queryResult.features.length; i++) {
                             //获得图形graphic
                             var graphic = new Graphic(queryResult.features[i].geometry, fill);
-                            //var graphic = queryResult.features[i].geometry;
-                            //赋予相应的符号
-                            //graphic.setSymbol(fill);
                             //将graphic添加到地图中，从而实现高亮效果
                             viewmap.graphics.clear();
                             viewmap.graphics.add(graphic);
@@ -110,19 +120,10 @@ require(["esri/map",
                 }
             }
         };
-    }, 5000);
-
-    /*editmap = new Map("editmap", {
-     basemap: "osm",  //topo-vector   For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
-     center: [122.376, 37.096], // longitude, latitude
-     zoom: 12
-     });*/
+        //}, 5000);
+    });
 
 
-})
-;
-
-$(function () {
     getCompanys();
     var zctype = parent.document.getElementById("InfoList").src.split("?")[1].split("&&")[0];
     zctype = zctype.substring(zctype.length - 1, zctype.length);
@@ -141,6 +142,11 @@ $(function () {
         $("input[type=reset]").trigger("click");
         $("#add").modal('show');
     });
+    $("#add").on('shown.bs.modal', function () {
+        //newmap.autoResize;
+        newmap.resize();
+        newmap.reposition();
+    });
     $("#saveAsset").click(function () {
         addAsset();
     });
@@ -153,13 +159,17 @@ $(function () {
     $(".selectFinance").click(function () {
         //选择融资
         var financeid = $('#editform #financeid').val();
-        showFinanceList(id);
+        showFinanceList(financeid);
     });
     $("#saveFinance").click(function () {
         //保存融资
         //financeid
         $('#editform #financeid').val(financeid);
         $("#financeList").modal('hide');
+
+    });
+    $('#financeList').on('hidden.bs.modal', function () {
+        $(".colorsty").addClass("modal-open");
     });
     $("#search").click(function () {
         $('#assetsTable').bootstrapTable('refreshOptions', {
@@ -374,21 +384,25 @@ $(function () {
 function getcolumn() {
     debugger;
     var objyu = {
-        visible : true,
-        class : "dayorder",
-        field : "dayorder",
-        title : "是否预警"};
+        visible: true,
+        class: "dayorder",
+        field: "dayorder",
+        title: "是否预警"
+    };
     //obj.field = "yujing";
     //obj.title = "是否预警";
     columns = [{
-        visible : true,
-        class : "dayorder",
-        field : "dayorder",
-        title : "是否预警"},
-        {visible : true,
-        class : "dayorder",
-        field : "days",
-        title : "预警天数"}];
+        visible: true,
+        class: "dayorder",
+        field: "dayorder",
+        title: "是否预警"
+    },
+        {
+            visible: true,
+            class: "dayorder",
+            field: "days",
+            title: "预警天数"
+        }];
     var zctype = $("#zctype").val();
     $.ajax({
         type: "post",
@@ -548,7 +562,7 @@ function importAssetsInfo() {
 }
 
 function btnGroup() {   // 自定义方法，添加操作按钮
-    // data-target="xxx" 为点击按钮弹出指定名字的模态框
+                        // data-target="xxx" 为点击按钮弹出指定名字的模态框
 
     var html =
         '<a href="####" class="btn btn-info" id="modUser"  ' +
@@ -598,11 +612,6 @@ function addAsset() {
 function editAsset() {
     var arr = $("#editform").serializeArray();
     if (isreset) {
-        /*for (var i = 0; i < arr.length; i++) {  //遍历数组
-            if (arr[i].name === "zcid") {
-                arr[i].value = "";
-            }
-        }*/
         var addtype = {name: "zctype", value: param.zctype};
         arr.push(addtype);
     }
@@ -637,44 +646,6 @@ function insertFile() {
         }
     })
 }
-/*function showInfo(row) {
- $("#fileTable").bootstrapTable('destroy');
- $('#fileTable').bootstrapTable({
- url: '/rczcgl/assetsconfig/getAssetFileListByZcid.action',
- method: 'post',
- contentType: "application/json;charset=UTF-8",
- dataType: "json",
- clickToSelect: true,
- sidePagination: "client",
- pagination: true,
- pageNumber: 1,
- pageSize: 5,
- pageList: [5, 10, 20, 50, 100],
- paginationPreText: "上一页",
- paginationNextText: "下一页",
- columns: [{
- field: 'filename',
- title: '文件名称'
- }, {
- field: 'filepath',
- title: '文件路径'
- }],
- queryParams: function (params) {
- return JSON.stringify({
- "zcid": row.zcid
- });
- },
- onLoadSuccess: function () {
- $("#view").modal('show');
- },
- onLoadError: function () {
- },
- onClickCell: function (field, value, row, $element) {
- },
- onCheck: function (row, $element) {
- }
- })
- }*/
 function showFinanceList(id) {
     $("#financeTable").bootstrapTable('destroy');
     var columns = [];
@@ -723,7 +694,7 @@ function showFinanceList(id) {
             financeid = "";
         },
         onLoadSuccess: function () {
-            $('#financeTable').bootstrapTable("checkBy",{field: 'zcid', values:[id]});
+            $('#financeTable').bootstrapTable("checkBy", {field: 'zcid', values: [id]});
         },
         onLoadError: function () {
             //showTips("数据加载失败!");
@@ -802,9 +773,6 @@ function loadData(row) {
 
 function reloadTable(a) {
     debugger;
-    //var gsmc= a.innerText;
-
-    //getcolumn();
     var classq = a.className;
     if (classq === "getAssetsInfo") {
         url = '/rczcgl/assetsconfig/getAssetsInfo.action';
@@ -820,7 +788,6 @@ function reloadTable(a) {
             params.gsmc = gsmc;
             return JSON.stringify(params);
         },
-        //columns: columns
     })
 }
 
@@ -845,10 +812,10 @@ function getCompanys() {
                         '<li><a class="' + data[i].id + '" data-toggle="tab" onclick="reloadTable(this)">' + data[i].nodeName + '</a></li>';
                 }
             }
-            if(userobj.auth.indexOf("9")>-1||userobj.auth.indexOf("8")>-1){
+            if (userobj.auth.indexOf("9") > -1 || userobj.auth.indexOf("8") > -1) {
                 $("#myTab1").append(htmlLeft);
             }
-           /* $("#myTab1").append(htmlLeft);*/
+            /* $("#myTab1").append(htmlLeft);*/
         },
         error: function () {
         }
@@ -860,24 +827,18 @@ function getCompanys() {
  * 示例：setColor1('table_datalist', 'Waiting approval' , 'orange')
  * @returns
  */
-function setColor(tableId){
-    /*$('#'+tableId+' tr').each(function(){ // 获取指定ID的表格中的所有 TR 对象，然后用 each 遍历 这些 TR
-        var tdText = $(this).find('td').eq(2).text(); // 获取当前这一行的 TR对象，然后查找这行的 TD 对象，当发现 TD 是 第2个 对象时，获取 这个 TD 的 文本值
-        if( tdText == findValue ){
-            $(this).attr('style','color:'+colorValue ); // 给当前行 的文本 上色
-        }
-    });*/
+function setColor(tableId) {
     var tableId = document.getElementById(tableId);
 
-    for(var i = 1;i < tableId.rows.length;i++) {
+    for (var i = 1; i < tableId.rows.length; i++) {
         var row = tableId.rows[i].cells[0].innerHTML;
         var days = tableId.rows[i].cells[1].innerHTML;
-        if(!isNaN(row)){
+        if (!isNaN(row)) {
             row = parseInt(row);
-            if(row <= 0){
-                tableId.rows[i].setAttribute("style","background: #d9534f;");
-            }else if(row < days){
-                tableId.rows[i].setAttribute("style","background: #dc5d599c;");
+            if (row <= 0) {
+                tableId.rows[i].setAttribute("style", "background: #d9534f;");
+            } else if (row < days) {
+                tableId.rows[i].setAttribute("style", "background: #dc5d599c;");
             }
         }
     }
