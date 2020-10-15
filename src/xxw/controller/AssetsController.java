@@ -36,10 +36,10 @@ public class AssetsController {
 
     @RequestMapping("/getConfigInfo")
     @ResponseBody
-    public List<AssetsConfig> getConfigList(HttpServletRequest request) {
-        String zctype = request.getParameter("zctype");
-        String order = request.getParameter("order");
-        List<AssetsConfig> info = assetsMapper.getAssetsConfigInfo(zctype, order);
+    public List<AssetsConfig> getConfigList(HttpServletRequest request,@RequestBody JSONObject json) {
+        String zctype = json.getString("zctype");
+       // String order = json.getString("order");
+        List<AssetsConfig> info = assetsMapper.getAssetsConfigInfo(zctype, null);
         if (info.size() > 0) {
             return info;
         } else {
@@ -52,7 +52,7 @@ public class AssetsController {
     public List<AssetsConfig> getAllConfigList(HttpServletRequest request){
         String zctype=request.getParameter("zctype");
         String order=request.getParameter("order");
-        if(zctype.indexOf(",")>-1){
+        if(zctype!=null&&zctype.indexOf(",")>-1){
             List<AssetsConfig> info1=assetsMapper.getAllAssetsConfigInfo(zctype.split(",")[0],order);
             List<AssetsConfig> info2=assetsMapper.getAllAssetsConfigInfo(zctype.split(",")[1],order);
             info1.addAll(info2);

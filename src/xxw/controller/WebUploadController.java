@@ -150,30 +150,48 @@ public class WebUploadController {
                 filePath="filemanager/"+year+"/"+com+"/"+pos+"/"+filetype;
             }
             String tempPath = request.getRealPath("/") + filePath;
+            String bfPath= fileUrl+filePath;
             if(file!=null){
                 if((null==chunks&&null==chunk)||("").equals(chunks)&&("").equals(chunk)){
 
                     File parentFile=new File(tempPath);
+                    File bfparentFile=new File(bfPath);
                     if(!parentFile.exists()){
                         parentFile.mkdirs();
                     }
+                    if(!bfparentFile.exists()){
+                        bfparentFile.mkdirs();
+                    }
                     File destTempFile=new File(parentFile+"/"+name);
+                    File bfdestTempFile=new File(bfparentFile+"/"+name);
                /*     if(!destTempFile.exists()){
                         destTempFile.createNewFile();
                     }*/
                     FileUtils.copyInputStreamToFile(file.getInputStream(),destTempFile);
                     destTempFile.createNewFile();
+                    FileUtils.copyInputStreamToFile(file.getInputStream(),bfdestTempFile);
+                    bfdestTempFile.createNewFile();
                     return "上传完毕";
                 }
                 String tempFileDir=tempPath+"\\part\\"+File.separator+name;
+                String bftempFileDir=bfPath+"\\part\\"+File.separator+name;
                 File parentFileDir=new File(tempFileDir);
                 if(!parentFileDir.exists()){
                     parentFileDir.mkdirs();
+                }
+                File bfparentFileDir=new File(bftempFileDir);
+                if(!bfparentFileDir.exists()){
+                    bfparentFileDir.mkdirs();
                 }
                 File f=new File(tempFileDir+File.separator+name+"_"+chunk+".part");
                 if(!f.exists()){
                     FileUtils.copyInputStreamToFile(file.getInputStream(), f);
                     f.createNewFile();
+                }
+                File bff=new File(bftempFileDir+File.separator+name+"_"+chunk+".part");
+                if(!bff.exists()){
+                    FileUtils.copyInputStreamToFile(file.getInputStream(), bff);
+                    bff.createNewFile();
                 }
                 boolean uploadDone=true;
                 for(int i=0;i<Integer.parseInt(chunks);i++){
@@ -186,13 +204,19 @@ public class WebUploadController {
                 if(uploadDone){
                     synchronized (this){
                         File destTempFile=new File(tempPath,name);
+                        File bfdestTempFile=new File(bfPath,name);
                         for(int i=0;i<Integer.parseInt(chunks);i++){
                             File partFile=new File(tempFileDir,name+"_"+i+".part");
+                            File bfpartFile=new File(bftempFileDir,name+"_"+i+".part");
                             FileOutputStream destTempfos=new FileOutputStream(destTempFile,true);
                             FileUtils.copyFile(partFile,destTempfos);
                             destTempfos.close();
+                            FileOutputStream bfdestTempfos=new FileOutputStream(bfdestTempFile,true);
+                            FileUtils.copyFile(bfpartFile,bfdestTempfos);
+                            bfdestTempfos.close();
                         }
                         FileUtils.deleteDirectory(parentFileDir);
+                        FileUtils.deleteDirectory(bfparentFileDir);
                     }
                 }
                 return "上传完毕";

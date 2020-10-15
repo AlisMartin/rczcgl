@@ -1,4 +1,4 @@
-var filePathId;
+
 $(function(){
     initonefiled();
     $("#fileone").change(function(){
@@ -45,8 +45,8 @@ $(function(){
     })
 
     $("#savefile").click(function(){
-        selectPathId();
-        insertFile();
+        var pathId=selectPathId();
+        insertFile(pathId);
     })
 
     $('#fileTable').bootstrapTable({
@@ -414,9 +414,12 @@ function initthreefiled(com,pos){
             debugger;
             var data=resonsedata.data;
             $("#fileThree").append("<option value=''>请选择</option>");
-            for(var i=0;i<data.length;i++) {
-                $("#fileThree").append("<option value=" + data[i] + ">" + data[i] + "</option>");
+            if(data[0]!=null){
+                for(var i=0;i<data.length;i++) {
+                    $("#fileThree").append("<option value=" + data[i] + ">" + data[i] + "</option>");
+                }
             }
+
         },
         error:function(){
         }
@@ -433,9 +436,12 @@ function initmodalthreefiled(com,pos){
             debugger;
             var data=resonsedata.data;
             $("#sjml").append("<option value=''>请选择</option>");
-            for(var i=0;i<data.length;i++) {
-                $("#sjml").append("<option value=" + data[i] + ">" + data[i] + "</option>");
+            if(data[0]!=null){
+                for(var i=0;i<data.length;i++) {
+                    $("#sjml").append("<option value=" + data[i] + ">" + data[i] + "</option>");
+                }
             }
+
         },
         error:function(){
         }
@@ -447,32 +453,42 @@ function selectPathId(){
     var com=$("#fileone").val();
     var pos=$("#fileTwo").val();
     var type=$("#fileThree").val();
+    var param={};
     if(com==""||pos==""){
         alert("请选择文件目录！");
         return;
     }
-    filePathId="";
+    if(com!=null&&com!=""){
+        param.com=com;
+    }
+    if(pos!=null&&pos!=""){
+        param.pos=pos;
+    }
+    if(type!=null&&type!=""){
+        param.filetype=type;
+    }
+    var filePathId;
     $.ajax({
         type:"post",
         url:"/rczcgl/flow/queryPathId.action",
         async:false,
-        data:{'filetype':type,'com':com,'pos':pos},
+        data:param,
         success:function(resonsedata){
             debugger;
             var data=resonsedata.data;
             if(data.length==1){
                 filePathId=data[0].PATHID;
             }else{
-                alert("请选择完整的文件目录！");
-                return false;
+                filePathId=null;
             }
         },
         error:function(){
         }
     })
+    return filePathId;
 }
 
-function insertFile(){
+function insertFile(filePathId){
     debugger;
     var com=$("#fileone").val();
     var pos=$("#fileTwo").val();

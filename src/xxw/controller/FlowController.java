@@ -162,9 +162,6 @@ public class FlowController {
         String filetype=request.getParameter("filetype");
         String com=request.getParameter("com");
         String pos=request.getParameter("pos");
-        if(filetype.equals("请选择")||filetype.equals("null")){
-            filetype=null;
-        }
         return new ResponseObject(1,"",flowMapper.selectPathId(com,pos,filetype));
 
     }
@@ -177,12 +174,7 @@ public class FlowController {
         String pos=request.getParameter("pos");
         String fileDate=request.getParameter("fileDate");
         String pathId=request.getParameter("pathId");
-/*
-        if(!filetype.isEmpty()&&!filetype.equals("��ѡ��")&&!filetype.equals("null")){
-            filetype=null;
-        }*/
         return flowMapper.selectFile(com,pos,filetype,fileDate,pathId);
-
     }
 
     @RequestMapping("/insertFile")

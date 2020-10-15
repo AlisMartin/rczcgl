@@ -1,28 +1,10 @@
-var landassets={
-    zctype:'1',
-    zcinfo:[]
-}
-var houseassets={
-    zctype:'2',
-    zcinfo:[]
-}
-var seaassets={
-    zctype:'3',
-    zcinfo:[]
-}
-var otherassets={
-    zctype:'4',
-    zcinfo:[]
-}
-var finance={
-    zctype:'5',
-    zcinfo:[]
-}
+
 $(function(){
     //getconfiglist();
     $('#configTable').bootstrapTable({
         url:'/rczcgl/assetsconfig/getConfigInfo.action',
         method:'post',
+        contentType: "application/json;charset=UTF-8",
         clickToSelect:true,
         singleSelect: true,
         sidePagination:"client",
@@ -71,6 +53,11 @@ $(function(){
                 title:'顺序'
             }
         ],
+        queryParams:function(params){
+            var zctype=$("#zclx").val();
+            params.zctype=zctype;
+            return JSON.stringify(params);
+        },
         onLoadSuccess:function(){
         },
         onLoadError:function(){
@@ -167,30 +154,10 @@ function getconfiglist(){
         data:param,
         success:function(data){
             debugger;
-            landassets.zcinfo=[];
-            houseassets.zcinfo=[];
-            seaassets.zcinfo=[];
-            otherassets.zcinfo=[];
-            finance.zcinfo=[];
             var dataarray=[];
             for(var i=0;i<data.length;i++){
                 if(data[i].show=="1"){
                     dataarray.push(data[i]);
-                }
-                if(data[i].zctype=="1"){
-                    landassets.zcinfo.push(data[i]);
-                }
-                if(data[i].zctype=="2"){
-                    houseassets.zcinfo.push(data[i]);
-                }
-                if(data[i].zctype=="3"){
-                    seaassets.zcinfo.push(data[i]);
-                }
-                if(data[i].zctype=="4"){
-                    otherassets.zcinfo.push(data[i]);
-                }
-                if(data[i].zctype=="5"){
-                    finance.zcinfo.push(data[i]);
                 }
             }
             $("#configTable").bootstrapTable('load',dataarray);
@@ -211,19 +178,19 @@ function insertConfig(){
 
     switch (zctype){
         case '1':
-            fieldlength = fieldlength+(landassets.zcinfo.length+1);
+            fieldlength = fieldlength+(getconfiglength()+1);
             break;
         case '2':
-            fieldlength = fieldlength+(houseassets.zcinfo.length+1);
+            fieldlength = fieldlength+(getconfiglength()+1);
             break;
         case '3':
-            fieldlength = fieldlength+(seaassets.zcinfo.length+1);
+            fieldlength = fieldlength+(getconfiglength()+1);
             break;
         case '4':
-            fieldlength = fieldlength+(otherassets.zcinfo.length+1);
+            fieldlength = fieldlength+(getconfiglength()+1);
             break;
         case '5':
-            fieldlength = "fc"+fieldlength+(finance.zcinfo.length+1);
+            fieldlength = "fc"+fieldlength+(getconfiglength()+1);
     }
     if(flag){
         $.ajax({
@@ -235,11 +202,6 @@ function insertConfig(){
                 debugger;
                 if(data=='1'){
                     alert("添加成功！");
-                    landassets.zcinfo=[];
-                    houseassets.zcinfo=[];
-                    seaassets.zcinfo=[];
-                    otherassets.zcinfo=[];
-                    finance.zcinfo=[];
                     $("#addConfig").modal('hide');
                     $("#configTable").bootstrapTable('refresh');
                 }
@@ -276,4 +238,22 @@ function queryOrder(zctype,order){
         }
     })
     return flag;
+}
+
+function getconfiglength(){
+    debugger;
+    var zctype=$("#zctype").val();
+    var length=0;
+    $.ajax({
+        type:"post",
+        url:"/rczcgl/assetsconfig/getAllConfigInfo.action",
+        data:{zctype:zctype},
+        async:false,
+        success:function(data){
+            length=data.length;
+        },
+        error:function(){
+        }
+    })
+    return length;
 }
