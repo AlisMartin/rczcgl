@@ -3,7 +3,7 @@ var userobj = eval('(' + user + ')');
 var columns = [];
 var param = {};
 var zcid = "";
-var fileid = "", isreset, newmap, editmap, viewmap, map, toolBar,
+var fileid = "", isreset, newmap, editmap, viewmap, map, toolBar, X, Y,
     financeid = "",
     url = '/rczcgl/assetsconfig/getAssetsInfo.action',
     gsmc = userobj.comId;
@@ -36,7 +36,7 @@ $(function () {
             "xmax": 122.71179199218744, "ymax": 37.45513916015626,
             "spatialReference": {"wkid": 4326}
         });
-        console.log(document.getElementById("viewmap"));
+        //console.log(document.getElementById("viewmap"));
 
         viewmap = new Map("viewmap", {
             showInfoWindowOnClick: true, showLabels: true,
@@ -46,8 +46,16 @@ $(function () {
             minZoom: 1,//最小缩放等级
             autoResize: true
         });
-        console.log(document.getElementById("newmap"));
+        //console.log(document.getElementById("newmap"));
         newmap = new Map("newmap", {
+            showInfoWindowOnClick: true, showLabels: true,
+            displayGraphicsOnPan: false, logo: false,
+            extent: initExtent,
+            maxZoom: 10,//最大缩放等级
+            minZoom: 1,//最小缩放等级
+            autoResize: true
+        });
+        editmap = new Map("editmap", {
             showInfoWindowOnClick: true, showLabels: true,
             displayGraphicsOnPan: false, logo: false,
             extent: initExtent,
@@ -58,7 +66,8 @@ $(function () {
         var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/RongJwd/MapServer");
         var shandongIm = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
         var shandongIm1 = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
-
+        var shandongIm2 = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
+        editmap.addLayer(shandongIm2);
         //newmap.addLayer(layer);
         newmap.addLayer(shandongIm1);
         //viewmap.addLayer(layer);
@@ -70,6 +79,10 @@ $(function () {
             toolBar = new Draw(newmap);
             toolBar.on("draw-end", drawEndEvent);
             toolBar.activate("point");
+
+            toolBaredit = new Draw(editmap);
+            toolBaredit.on("draw-end", drawEndEvent1);
+            toolBaredit.activate("point");
         });
         function drawEndEvent(evt) {
             toolBar.deactivate();
@@ -81,9 +94,25 @@ $(function () {
                 symbol = markerSymbol;
             }
             var graphic = new Graphic(evt.geometry, symbol);
-
+            $("#" + X).val(evt.geometry.x);
+            $("#" + Y).val(evt.geometry.y);
             newmap.graphics.clear();
             newmap.graphics.add(graphic)
+        }
+        function drawEndEvent1(evt) {
+            toolBaredit.deactivate();
+            //添加图形到地图
+            var symbol;
+            if (evt.geometry.type === "point" || evt.geometry.type === "multipoint") {
+                var markerSymbol = new SimpleMarkerSymbol();
+                markerSymbol.setColor(new Color("#00FFFF"));
+                symbol = markerSymbol;
+            }
+            var graphic = new Graphic(evt.geometry, symbol);
+            $("#" + X).val(evt.geometry.x);
+            $("#" + Y).val(evt.geometry.y);
+            editmap.graphics.clear();
+            editmap.graphics.add(graphic)
         }
 
         map = {
@@ -141,9 +170,23 @@ $(function () {
     $("#addAsset").click(function () {
         $("input[type=reset]").trigger("click");
         $("#add").modal('show');
+        newmap.graphics.clear();
+    });
+    $("#editAssert").on('shown.bs.modal', function () {
+        editmap.graphics.clear();
+        if(param.zctype != 2){
+            $("#editmap").hide();
+        }else{
+            $("#editmap").show();
+        }
     });
     $("#add").on('shown.bs.modal', function () {
         //newmap.autoResize;
+        if(param.zctype != 2){
+            $("#newmap").hide();
+        }else{
+            $("#newmap").show();
+        }
         newmap.resize();
         newmap.reposition();
     });
@@ -411,6 +454,13 @@ function getcolumn() {
         data: param,
         success: function (data) {
             for (var i = 0; i < data.length; i++) {
+
+                if(data[i].fieldname == "X坐标"){
+                    X = data[i].field
+                }
+                if(data[i].fieldname == "Y坐标"){
+                    Y = data[i].field
+                }
                 switch (data[i].zctype) {
                     case '1':
                         data[i].zctype = "土地资产";
@@ -601,7 +651,7 @@ function addAsset() {
         datatype: "json",
         success: function (res) {
             $('#assetsTable').bootstrapTable('refresh');
-            $("#add").modal('hide');
+            $("#editAssert").modal('hide');
         },
         error: function (res) {
             alert("系统错误，请稍后重试！");

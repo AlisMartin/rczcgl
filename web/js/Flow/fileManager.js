@@ -217,12 +217,14 @@ $(function(){
         var type=$("#sjml").val();
         var param={};
         if(com=="null"||com=="请选择"||com==""||com==null){
-            com=null;
+            alert("请选择一级目录！");
+            return;
         }else{
             param.com=com;
         }
         if(pos=="null"||pos=="请选择"||pos==""||pos==null){
-            pos=null;
+            alert("请选择二级目录！");
+            return;
         }else{
             param.pos=pos;
         }
