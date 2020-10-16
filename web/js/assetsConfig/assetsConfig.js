@@ -19,10 +19,6 @@ $(function(){
                 checkbox:true
             },
             {
-                field:'id',
-                title:'ID'
-            },
-            {
                 field:'zctype',
                 title:'资产类型',
                 formatter:function(value,row,index){

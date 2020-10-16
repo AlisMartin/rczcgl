@@ -293,7 +293,7 @@ $(function(){
         if(type=="null"||type=="请选择"||type==""||type==null){
             type=null;
         }else{
-            param.type=type
+            param.filetype=type
         }
         $.ajax({
             type:"post",

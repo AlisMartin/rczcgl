@@ -185,7 +185,6 @@ $(function(){
 })
 //5分钟查询一次消息
 function getMessage(){
-    debugger;
     var user= $.cookie('user');
     var userobj=eval('('+user+')');
     setTimeout(getMessage,1000*60*5);

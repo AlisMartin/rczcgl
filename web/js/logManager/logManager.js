@@ -23,10 +23,6 @@ $(function(){
                 }
             },
             {
-                field:'id',
-                title:'ID'
-            },
-            {
                 field:'userName',
                 title:'操作用户'
             },
