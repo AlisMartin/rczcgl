@@ -161,7 +161,7 @@ body {
     font-weight: normal;
     font-size: 14px;
     color: #71748d;
-    background-color: #efeff6;
+    /*background-color: #efeff6;*/
     -webkit-font-smoothing: antialiased;
 }
 
@@ -891,7 +891,10 @@ Background Color / Color
 
 .bg-dark {
     /*background-color: #2e2f39 !important;*/
+    height: 80px;
     background-color: #ffffff !important;
+    /*background-image: url("../images/login/drag-indicator.png");*/
+    background-image: url('/rczcgl/assets/images/banner.jpg');
 }
 
 .bg-primary-light {
@@ -1223,8 +1226,8 @@ Top Header
 .dashboard-header {}
 
 .dashboard-header .navbar {
-    padding: 0px;
-    border-bottom: 1px solid #e6e6f2;
+    /*padding: 0px;*/
+    border-bottom: 1px solid #146cac;
     -webkit-box-shadow: 0px 0px 28px 0px rgba(82, 63, 105, 0.13);
     box-shadow: 0px 0px 28px 0px rgba(82, 63, 105, 0.13);
     -webkit-transition: all 0.3s ease;
@@ -6983,3 +6986,17 @@ Media Query
 
 /* Custom, iPhone Retina */
 @media only screen and (max-width:320px) {}
+
+
+/*
+ * 自己加地hulb
+ */
+.fonts{
+    margin-top: 30px;
+}
+.colorsty{
+    background: #ffffff!important;
+}
+.panel{
+    border: none !important;
+}
