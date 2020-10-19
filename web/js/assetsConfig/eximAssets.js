@@ -21,6 +21,7 @@ $(function () {
         "esri/tasks/query",
         "esri/InfoTemplate",
         "esri/toolbars/draw",
+        "esri/toolbars/edit",
         "esri/symbols/SimpleMarkerSymbol",
         "esri/symbols/SimpleLineSymbol",
         "esri/symbols/SimpleFillSymbol",
@@ -28,8 +29,14 @@ $(function () {
         "esri/layers/GraphicsLayer",
         "esri/layers/ArcGISTiledMapServiceLayer",
         "esri/graphic",
+        "esri/layers/FeatureLayer",
+        "esri/dijit/editing/TemplatePicker",
+        "dojo/_base/array",
+        "dojo/_base/event",
+        "dojo/_base/lang",
         "dojo/domReady!"], function (Map, ArcGISDynamicMapServiceLayer, dom, on, Point, QueryTask, SpatialReference, Query, InfoTemplate,
-                                     Draw, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer, ArcGISTiledMapServiceLayer, Graphic) {
+                                     Draw, Edit, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer,
+                                     ArcGISTiledMapServiceLayer, Graphic, FeatureLayer, TemplatePicker, arrayUtil, event, lang) {
         //setTimeout(function () {
         var initExtent = new esri.geometry.Extent({
             "xmin": 122.1102905273437, "ymin": 36.74652099609376,
@@ -63,27 +70,37 @@ $(function () {
             minZoom: 1,//最小缩放等级
             autoResize: true
         });
+
         var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/RongJwd/MapServer");
         var shandongIm = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
         var shandongIm1 = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
         var shandongIm2 = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
         editmap.addLayer(shandongIm2);
         //newmap.addLayer(layer);
-        newmap.addLayer(shandongIm1);
+        //  newmap.addLayer(shandongIm1);
         //viewmap.addLayer(layer);
         viewmap.addLayer(shandongIm);
 
-        //创建点要素
-        $("#drawTool").click(function () {
-            //使用toolbar上的绘图工具
-            toolBar = new Draw(newmap);
-            toolBar.on("draw-end", drawEndEvent);
-            toolBar.activate("point");
-
-            toolBaredit = new Draw(editmap);
-            toolBaredit.on("draw-end", drawEndEvent1);
-            toolBaredit.activate("point");
+        var PointLayer = new FeatureLayer("http://localhost:6080/arcgis/rest/services/testPOINT/FeatureServer/0", {
+            mode: FeatureLayer.MODE_SNAPSHOT,
+            outFields: ["*"]
         });
+
+        newmap.addLayer(PointLayer);
+
+        // newmap.on("layers-add-result", initEditing);
+
+        //创建点要素
+        /*$("#drawTool").click(function () {
+         //使用toolbar上的绘图工具
+         toolBar = new Draw(newmap);
+         toolBar.on("draw-end", drawEndEvent);
+         toolBar.activate("point");
+
+         toolBaredit = new Draw(editmap);
+         toolBaredit.on("draw-end", drawEndEvent1);
+         toolBaredit.activate("point");
+         });*/
         function drawEndEvent(evt) {
             toolBar.deactivate();
             //添加图形到地图
@@ -99,6 +116,7 @@ $(function () {
             newmap.graphics.clear();
             newmap.graphics.add(graphic)
         }
+
         function drawEndEvent1(evt) {
             toolBaredit.deactivate();
             //添加图形到地图
@@ -116,6 +134,66 @@ $(function () {
         }
 
         map = {
+            initEditing: function (evt) {
+                var currentLayer = PointLayer;
+                var editToolbar = new Edit(newmap);
+                editToolbar.on("deactivate", function (evt) {
+                    currentLayer.applyEdits(null, [evt.graphic], null);
+                });
+                var editingEnabled = false;
+                PointLayer.on("dbl-click", function (evt) {
+                    event.stop(evt);
+                    if (editingEnabled === false) {
+                        editingEnabled = true;
+                        editToolbar.activate(Edit.EDIT_VERTICES, evt.graphic);
+                    } else {
+                        currentLayer = this;
+                        editToolbar.deactivate();
+                        editingEnabled = false;
+                    }
+                });
+
+                PointLayer.on("click", function (evt) {
+                    event.stop(evt);
+                    if (evt.ctrlKey === true || evt.metaKey === true) {  //delete feature if ctrl key is depressed
+                        PointLayer.applyEdits(null, null, [evt.graphic]);
+                        currentLayer = this;
+                        editToolbar.deactivate();
+                        editingEnabled = false;
+                    }
+                });
+
+                $("#drawTool").click(function () {
+                    drawToolbar.activate(Draw.POINT);
+                });
+                /*var templatePicker = new TemplatePicker({
+                 featureLayers: [PointLayer],
+                 rows: "auto",
+                 columns: 2,
+                 grouping: true,
+                 style: "height: auto; overflow: auto;"
+                 }, "templatePickerDiv");
+
+                 templatePicker.startup();*/
+
+                var drawToolbar = new Draw(newmap);
+
+                var selectedTemplate;
+                /*templatePicker.on("selection-change", function() {
+                 if( templatePicker.getSelected() ) {
+                 selectedTemplate = templatePicker.getSelected();
+                 }
+                 drawToolbar.activate(Draw.POINT);
+                 });*/
+
+                drawToolbar.on("draw-end", function (evt) {
+                    drawToolbar.deactivate();
+                    editToolbar.deactivate();
+                    var newAttributes = lang.mixin({}, selectedTemplate.template.prototype.attributes);
+                    var newGraphic = new Graphic(evt.geometry, null, newAttributes);
+                    selectedTemplate.featureLayer.applyEdits([newGraphic], null, null);
+                });
+            },
             addPoint: function (id) {
 
                 //定义查询对象
@@ -174,21 +252,22 @@ $(function () {
     });
     $("#editAssert").on('shown.bs.modal', function () {
         editmap.graphics.clear();
-        if(param.zctype != 2){
+        if (param.zctype != 2) {
             $("#editmap").hide();
-        }else{
+        } else {
             $("#editmap").show();
         }
     });
     $("#add").on('shown.bs.modal', function () {
         //newmap.autoResize;
-        if(param.zctype != 2){
+        if (param.zctype != 2) {
             $("#newmap").hide();
-        }else{
+        } else {
             $("#newmap").show();
         }
         newmap.resize();
         newmap.reposition();
+        map.initEditing();
     });
     $("#saveAsset").click(function () {
         addAsset();
@@ -455,10 +534,10 @@ function getcolumn() {
         success: function (data) {
             for (var i = 0; i < data.length; i++) {
 
-                if(data[i].fieldname == "X坐标"){
+                if (data[i].fieldname == "X坐标") {
                     X = data[i].field
                 }
-                if(data[i].fieldname == "Y坐标"){
+                if (data[i].fieldname == "Y坐标") {
                     Y = data[i].field
                 }
                 switch (data[i].zctype) {
@@ -612,7 +691,7 @@ function importAssetsInfo() {
 }
 
 function btnGroup() {   // 自定义方法，添加操作按钮
-                        // data-target="xxx" 为点击按钮弹出指定名字的模态框
+    // data-target="xxx" 为点击按钮弹出指定名字的模态框
 
     var html =
         '<a href="####" class="btn btn-info" id="modUser"  ' +
@@ -823,11 +902,17 @@ function loadData(row) {
 
 function reloadTable(a) {
     debugger;
+    //$('#importAssets').toggle();
+    //$('#addAsset').toggle();
     var classq = a.className;
     if (classq === "getAssetsInfo") {
         url = '/rczcgl/assetsconfig/getAssetsInfo.action';
+        $('#importAssets').show();
+        $('#addAsset').show();
     } else if (classq === "getAssetsHistoryInfo") {
         url = '/rczcgl/assetsconfig/getAssetsHistoryInfo.action';
+        $('#importAssets').hide();
+        $('#addAsset').hide();
     } else {
         gsmc = classq;
     }

@@ -1,6 +1,10 @@
 var userid;
 $(function(){
     debugger;
+    //if ($(".usertable").length) {
+    //    $('#userTable').slimScroll({
+    //    });
+    //}
     //getusernode();
     initDepartTree();
    // $('#Tree').treeview('revealNode', [ 9, { silent: true } ]);

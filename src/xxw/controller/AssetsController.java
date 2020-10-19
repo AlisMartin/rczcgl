@@ -22,6 +22,7 @@ import xxw.mapper.AssetsMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -351,7 +352,15 @@ public class AssetsController {
 
         for (AssetsInfo assetsInfo : configlist) {
             if (assetsInfo.getDays() != null && assetsInfo.getStopday() != null) {
-                Date date2 = assetsInfo.getStopday();
+                String stopday = assetsInfo.getStopday();
+                Date date2;
+                try{
+                    date2 = new SimpleDateFormat("yyyy-MM-dd").parse(stopday);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    continue;
+                }
+
                 Integer days = Integer.parseInt(assetsInfo.getDays());
                 int betweenDay = DateUtils.daysBetween(date1, date2);
                 int dayorder = betweenDay - days;

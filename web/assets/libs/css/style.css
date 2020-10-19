@@ -157,6 +157,7 @@
 
 body {
     font-family: 'Circular Std Book';
+    overflow: hidden;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;

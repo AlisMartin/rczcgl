@@ -123,7 +123,7 @@ function getcolumn() {
                 //生成表单
                 htmlLeft = htmlLeft + '<div class="form-group">'+
                     '<label for="finance_days">' + data[i].fieldname + '</label>'+
-                    '<input type="text" class="form-control" id="' + data[i].field + '" name="' + data[i].field + '">'+
+                    '<input type="text" class="form-control" id="' + data[i].field + '" name="' + data[i].field + '" type="' + data[i].fieldType + '">'+
                     '</div>';
             }
             $("#financeform").append(' <input type="text" class="form-control" id="zcid" name="zcid" style="display: none"> ');

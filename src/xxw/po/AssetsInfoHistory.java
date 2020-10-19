@@ -41,7 +41,7 @@ public class AssetsInfoHistory {
     private String field30;
     private String companyid;
     private String days;
-    private Date stopday;
+    private String stopday;
     private String financeid;
     private String layerid;
     private Integer dayorder;
@@ -326,14 +326,6 @@ public class AssetsInfoHistory {
         this.days = days;
     }
 
-    public Date getStopday() {
-        return stopday;
-    }
-
-    public void setStopday(Date stopday) {
-        this.stopday = stopday;
-    }
-
     public String getFinanceid() {
         return financeid;
     }
@@ -356,5 +348,13 @@ public class AssetsInfoHistory {
 
     public void setDayorder(Integer dayorder) {
         this.dayorder = dayorder;
+    }
+
+    public String getStopday() {
+        return stopday;
+    }
+
+    public void setStopday(String stopday) {
+        this.stopday = stopday;
     }
 }
