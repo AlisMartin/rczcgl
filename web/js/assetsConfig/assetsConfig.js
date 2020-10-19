@@ -1,6 +1,12 @@
 
 $(function(){
-    //getconfiglist();
+    $("#zclx").change(function(){
+        getconfiglist();
+    })
+
+    $('#addConfig').on('hide.bs.modal', function () {
+        $("#addform")[0].reset();
+    })
     $('#configTable').bootstrapTable({
         url:'/rczcgl/assetsconfig/getConfigInfo.action',
         method:'post',
@@ -36,11 +42,6 @@ $(function(){
                 }
             },
             {
-                field:'field',
-                title:'资产对应项',
-                hidden:true
-            },
-            {
                 field:"fieldname",
                 title:'资产信息项'
             },
@@ -58,13 +59,15 @@ $(function(){
         },
         onLoadError:function(){
         }
-    })
+    });
+    $(".bootstrap-table.bootstrap3").css('height',"100%");
+    $(".fixed-table-container").css('height',"85%");
     $("#saveConfig").click(function(){
         insertConfig();
     })
-    $("#queryconfig").click(function(){
+/*    $("#queryconfig").click(function(){
         getconfiglist();
-    })
+    })*/
     $("#xgconfig").click(function(){
         debugger;
         var rowdata=$("#configTable").bootstrapTable('getSelections');
@@ -81,28 +84,31 @@ $(function(){
     })
 
     $("#deleteconfig").click(function(){
-        var rowdata=$("#configTable").bootstrapTable('getSelections');
-        if(rowdata.length<=0){
-            alert("请选择要删除的配置项！");
-            return;
-        }else{
-            var param={};
-            param.show="0";
-            param.id=rowdata[0].id
-            $.ajax({
-                type:"post",
-                url:"/rczcgl/assetsconfig/updateConfig.action",
-                sync:false,
-                data:param,
-                success:function(data){
-                    debugger;
-                    alert("删除成功！");
-                    $("#configTable").bootstrapTable('refresh');
-                },
-                error:function(){
-                }
-            })
+        if(confirm("确定要删除吗？")){
+            var rowdata=$("#configTable").bootstrapTable('getSelections');
+            if(rowdata.length<=0){
+                alert("请选择要删除的配置项！");
+                return;
+            }else{
+                var param={};
+                param.show="0";
+                param.id=rowdata[0].id
+                $.ajax({
+                    type:"post",
+                    url:"/rczcgl/assetsconfig/updateConfig.action",
+                    sync:false,
+                    data:param,
+                    success:function(data){
+                        debugger;
+                        alert("删除成功！");
+                        $("#configTable").bootstrapTable('refresh');
+                    },
+                    error:function(){
+                    }
+                })
+            }
         }
+
     })
 
     $("#bcconfig").click(function(){

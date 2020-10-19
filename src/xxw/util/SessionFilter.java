@@ -25,7 +25,7 @@ public class SessionFilter extends OncePerRequestFilter {
 
         String pageUrl = request.getHeader("REFERER");
         // 不过滤的uri
-        //String[] notFilter = new String[] { "login.html","/js/","/css/","/images/","/user",".ico"};
+        String[] notFilter = new String[] { "login.html","/js/","/css/","/images/","/user",".ico"};
         // 过滤的uri
         String[] filter = new String[] {".html",".action"};
 
@@ -34,25 +34,25 @@ public class SessionFilter extends OncePerRequestFilter {
         //System.out.println("收到请求：" + uri);
 
         // 是否过滤
-        /*boolean doFilter = true;
+        boolean doFilter = true;
         for (String s : notFilter) {
             if (uri.indexOf(s) != -1) {
                 // 如果uri中包含不过滤的uri，则不进行过滤
                 doFilter = false;
                 break;
             }
-        }*/
+        }
 
         HttpSession session = request.getSession();
 
-        boolean doFilter = true;
+        //boolean doFilter = true;
 //        System.out.println("页面地址" + pageUrl);
 //        if((pageUrl != null && pageUrl.contains("#/")) ||uri.contains("#/")) { //改厕的移动页面，不过滤
 //            System.out.println("不过滤");
 //            doFilter = false;
 //            loginPage = "#/Login";
 //        }else
-        /*if(!uri.contains("login") && !uri.contains("login/userLogin.action")
+        if(!uri.contains("login") && !uri.contains("login/userLogin.action")
                 && !uri.contains("user/remUserCheck.action") && !uri.contains("user/userCheck.action")
                 && !uri.contains("user/logout.action")&& !uri.contains("user/getLoginCheck.action")){
             for (String s : filter) {
@@ -63,7 +63,7 @@ public class SessionFilter extends OncePerRequestFilter {
                 }
             }
         }
-*/
+
 //        for (String s : filter) {
 //            if (uri.contains(s) && !uri.contains("login") && !uri.contains("/user")) {
 //                // 如果uri中包含不过滤的uri，则不进行过滤

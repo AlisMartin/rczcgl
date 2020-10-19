@@ -10,19 +10,15 @@ $(function(){
         clickToSelect:true,
         singleSelect: true,
         sidePagination:"client",
-        pagination:true,
-        pageNumber:1,
-        pageSize:5,
-        pageList:[5,10,20,50,100],
-        paginationPreText:"上一页",
-        paginationNextText:"下一页",
+      //  pagination:true,
+       // pageNumber:1,
+       // pageSize:5,
+        //pageList:[5,10,20,50,100],
+        //paginationPreText:"上一页",
+        //paginationNextText:"下一页",
         columns:[
             {
                 checkbox:true
-            },
-            {
-                field:'id',
-                title:'ID'
             },
             {
                 field:'flowName',
@@ -45,6 +41,11 @@ $(function(){
         onCheck:function(row,$element){
             debugger;
             $("#userTable").bootstrapTable('uncheckAll');
+            if(row.nodeId=="4"){
+                alert("结束节点无需配置人员！");
+                $("#nodeTable").bootstrapTable('uncheckAll');
+                return;
+            }
            /* $('#Tree').treeview('uncheckAll', { silent: true });
             $('#Tree').treeview('expandNode', [ 0, { levels: 2, silent: true } ]);*/
             var userIds=row.userId;
@@ -112,51 +113,94 @@ $(function(){
 
     $("#saveGl").click(function(){
         debugger;
-        var param={};
-        //var users=$('#Tree').treeview('getChecked');
-        var nodes=$("#nodeTable").bootstrapTable('getSelections');
-        var users=$("#userTable").bootstrapTable('getSelections');
-        param.nodeId=nodes[0].nodeId;
-        param.flowType=nodes[0].flowtype;
-        if(users.length>0){
-            var ids="";
-            var treeids="";
-            for(var i=0;i<users.length;i++){
-                ids=ids+users[i].id+",";
-                //treeids=treeids+users[i].nodeId+",";
+        if(confirm("是否保存关联关系？")){
+            var param={};
+            //var users=$('#Tree').treeview('getChecked');
+            var nodes=$("#nodeTable").bootstrapTable('getSelections');
+            var users=$("#userTable").bootstrapTable('getSelections');
+            param.nodeId=nodes[0].nodeId;
+            if(param.nodeId=="4"){
+                alert("结束节点无需关联人员！");
+                $("#nodeTable").bootstrapTable('uncheckAll');
+                $("#userTable").bootstrapTable('uncheckAll');
+                return false;
             }
-            ids=ids.substring(0,ids.length-1);
-           // treeids=treeids.substring(0,treeids.length-1);
-            param.id=ids;
-           // param.treeid=treeids;
-        }
-        if(users.length<1){
-            alert("请选择具体人员！");
-            return false;
-        }
-        if(nodes.length<1){
-            alert("请选择节点！");
-            return false;
-        }
-        $.ajax({
-            type:"post",
-            url:"/rczcgl/flow/upNode.action",
-            data:param,
-            async:false,
-            success:function(data){
-                alert("关联成功！");
-                $("#nodeTable").bootstrapTable('refresh');
-            },
-            error:function(){
-                alert("系统错误！");
+            param.flowType=nodes[0].flowtype;
+            if(users.length>0){
+                var ids="";
+                var treeids="";
+                for(var i=0;i<users.length;i++){
+                    ids=ids+users[i].id+",";
+                    //treeids=treeids+users[i].nodeId+",";
+                }
+                ids=ids.substring(0,ids.length-1);
+                // treeids=treeids.substring(0,treeids.length-1);
+                param.id=ids;
+                // param.treeid=treeids;
             }
-        })
+            if(users.length<1){
+                alert("请选择具体人员！");
+                return false;
+            }
+            if(nodes.length<1){
+                alert("请选择节点！");
+                return false;
+            }
+            $.ajax({
+                type:"post",
+                url:"/rczcgl/flow/upNode.action",
+                data:param,
+                async:false,
+                success:function(data){
+                    alert("关联成功！");
+                    $("#nodeTable").bootstrapTable('refresh');
+                },
+                error:function(){
+                    alert("系统错误！");
+                }
+            })
+
+        }
 
     })
 
     $("#clearGl").click(function(){
-        $("#nodeTable").bootstrapTable('uncheckAll');
-        $('#Tree').treeview('uncheckAll', { silent: true });
+        if(confirm("确定要清除关联关系吗？")){
+            var param={};
+            //var users=$('#Tree').treeview('getChecked');
+            var nodes=$("#nodeTable").bootstrapTable('getSelections');
+            var users=$("#userTable").bootstrapTable('getSelections');
+            param.nodeId=nodes[0].nodeId;
+            param.flowType=nodes[0].flowtype;
+            if(users.length>0){
+                param.id="";
+                // param.treeid=treeids;
+            }
+            if(users.length<1){
+                alert("此节点没有配置人员无需取消关联！");
+                return false;
+            }
+            if(nodes.length<1){
+                alert("请选择节点！");
+                return false;
+            }
+            $.ajax({
+                type:"post",
+                url:"/rczcgl/flow/upNode.action",
+                data:param,
+                async:false,
+                success:function(data){
+                    alert("取消关联成功！");
+                    $("#nodeTable").bootstrapTable('refresh');
+                },
+                error:function(){
+                    alert("系统错误！");
+                }
+            })
+            $("#nodeTable").bootstrapTable('uncheckAll');
+            $("#userTable").bootstrapTable('uncheckAll');
+        }
+
     })
 
 })

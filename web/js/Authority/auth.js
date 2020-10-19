@@ -16,14 +16,6 @@ $(function(){
                 checkbox:true
             },
             {
-                field:'id',
-                title:'ID'
-            },
-            {
-                field:'authId',
-                title:'权限ID'
-            },
-            {
                 field:'authName',
                 title:'权限'
 
@@ -33,5 +25,6 @@ $(function(){
         },
         onLoadError:function(){
         }
-    })
+    });
+    $(".fixed-table-pagination").css('margin-top',"18%");
 })

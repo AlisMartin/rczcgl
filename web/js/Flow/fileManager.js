@@ -55,8 +55,8 @@ $(function(){
         sidePagination:"client",
         pagination:true,
         pageNumber:1,
-        pageSize:5,
-        pageList:[5,10,20,50,100],
+        pageSize:10,
+        pageList:[10,20,50,100],
         paginationPreText:"上一页",
         paginationNextText:"下一页",
         columns:[
@@ -81,7 +81,25 @@ $(function(){
             },
             {
                 field:'FILENAME',
-                title:'文件'
+                title:'文件',
+                formatter:function(value,row){
+                    var a=value;
+                    if(a.indexOf(".")>-1){
+                        a= a.split(".")[0];
+                    }
+                    return a;
+                }
+            },
+            {
+                field:'FILENAME',
+                title:'类型',
+                formatter:function(value,row){
+                    var a=value;
+                    if(a.indexOf(".")>-1){
+                        a= a.split(".")[1];
+                    }
+                    return a;
+                }
             }
         ],
         onLoadSuccess:function(){
@@ -89,6 +107,9 @@ $(function(){
         onLoadError:function(){
         }
     })
+
+    $(".bootstrap-table.bootstrap3").css('height',"100%");
+    $(".fixed-table-container").css('height',"85%");
 
     //上传
     $("#fileup").on('shown.bs.modal',function(){
@@ -309,6 +330,26 @@ $(function(){
         })
         });
 
+    //重置文件查询
+    $("#resetquery").click(function(){
+        debugger;
+        $("#fileone").val("");
+        $("#fileTwo").empty();
+        $("#fileThree").empty();
+        $.ajax({
+            type:"post",
+            url:"/rczcgl/flow/queryManagerFileList.action",
+            async:false,
+            //data:param,
+            success:function(responsedata){
+                debugger;
+                $("#fileTable").bootstrapTable('load',responsedata);
+            },
+            error:function(){
+            }
+        })
+    });
+
 
     $('#fileup').on('hide.bs.modal',function(){
        // $("#uparea").append('<div id="fontregion" style="margin-top: 10%;margin-left: 44%;font-size: 30px;color:#f1f1f1"><span>文件上传区域</span></div>');
@@ -320,6 +361,7 @@ $(function(){
         if(uploader!=null){
             uploader.destroy();
         }
+        $("#fileTable").bootstrapTable('refresh');
 
     })
 
@@ -508,7 +550,7 @@ function insertFile(filePathId){
         success:function(resonsedata){
             debugger;
             alert("保存成功");
-            $("#wjsc").modal('hide');
+            $("#fileup").modal('hide');
         },
         error:function(){
         }

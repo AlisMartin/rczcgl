@@ -38,7 +38,7 @@ function login(){
     })
 }
 
-function clear(){
+function clears(){
     $("#username").val("");
     $("#userpassword").val("");
 }

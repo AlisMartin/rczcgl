@@ -10,7 +10,7 @@
         <result column="USERNAME" property="userName" jdbcType="VARCHAR"/>
     </resultMap>
     <select id="getLogs" resultMap="LogResultMap">
-        select * from SYS_LOG order BY  EVENT_DATE dsec
+        select * from SYS_LOG order BY  EVENT_DATE DESC
     </select>
     <insert id="inertLog" useGeneratedKeys="false" keyProperty="id" parameterType="xxw.po.Log">
         <selectKey resultType="String" keyProperty="id" order="BEFORE">

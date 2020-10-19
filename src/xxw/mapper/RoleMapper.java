@@ -27,4 +27,5 @@ public interface RoleMapper {
     int roleClearAuth(@Param("roleId")String roleId);
 
     Role selectRoleByUserId(@Param("userId")String userId);
+    Role getRoleByName(@Param("role")String role);
 }

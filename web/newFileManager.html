@@ -20,8 +20,14 @@
         .formys{
             margin-left: 5%;
         }
+        .swidth{
+            width: 100px;
+        }
         .formwid{
             width:100%;
+        }
+        .bodyheight{
+            height:100%
         }
         .labelstyle{
             margin-top: 0.5%;
@@ -66,28 +72,31 @@
     </ol>
     <div style="height: 100%;margin-top: -6%">
         <div class="panel panel-default" style="height: 80%;z-index: 1000;margin-top: 8%;width: 96%;margin-left: 2%">
-            <div class="panel-body">
+            <div class="panel-body bodyheight">
                 <label class="left labelstyle">一级目录：</label>
-                <select class="checkboxstyle left" id="fileone">
+                <select class="checkboxstyle left swidth" id="fileone">
                 </select>
                 <label class="left labelstyle">二级目录：</label>
-                <select class="checkboxstyle left" id="fileTwo">
+                <select class="checkboxstyle left swidth" id="fileTwo">
                 </select>
                 <label class="left labelstyle">三级目录：</label>
-                <select class="checkboxstyle left" id="fileThree">
+                <select class="checkboxstyle left swidth" id="fileThree">
                 </select>
                 <div style="float: right">
-                    <button type="button" class="btn btn-default"  id="filequery">
-                        <span></span>文件查询
+                    <button type="button" class="btn btn-primary"  id="filequery">
+                        <span class="glyphicon glyphicon-search"></span>文件查询
+                    </button>
+                    <button type="button" class="btn btn-warning"  id="resetquery">
+                        <span class="glyphicon glyphicon-search"></span>重置查询
                     </button>
                     <button type="button" class="btn btn-info" data-toggle="modal"  id="wjsc">
                         <span class="glyphicon glyphicon-pencil "></span>文件上传
                     </button>
-                    <button type="button" class="btn btn-danger" id="fieldadd">
+                    <button type="button" class="btn btn-success" id="fieldadd">
                         <span class="glyphicon glyphicon-plus"></span>添加文件目录
                     </button>
                     <button type="button" class="btn btn-danger" id="filedown">
-                        <span class="glyphicon glyphicon-plus"></span>文件下载
+                        <span class="glyphicon glyphicon-download-alt"></span>文件下载
                     </button>
                 </div>
                 <table id="fileTable" class="table tablemar">

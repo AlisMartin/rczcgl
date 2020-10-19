@@ -55,10 +55,16 @@
         where ROLE_ID= #{roleId,jdbcType=VARCHAR}
     </update>
     <delete id="deleteRole" parameterType="java.lang.String">
-        delete from ROLE where  ROLE_ID=#{role_Id,jdbcType=VARCHAR}
+        delete from ROLE where  ROLE_ID=#{roleId,jdbcType=VARCHAR}
     </delete>
     <select id="getAllRoles" resultMap="RoleResultMap">
         select * from ROLE
+    </select>
+    <select id="getRoleByName" resultMap="RoleResultMap">
+        select * from ROLE where 1=1
+        <if test="role != null">
+            ROLE = #{role,jdbcType=VARCHAR},
+        </if>
     </select>
 
     <insert id="roleAddAuth" useGeneratedKeys="false" keyProperty="id" parameterType="java.lang.String">

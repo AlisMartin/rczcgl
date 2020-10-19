@@ -14,6 +14,9 @@
     <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
     <script src="js/userManager/userManager.js"></script>
     <style>
+        .rowheight{
+            height: 100%;
+        }
         .checkboxstyle{
             width:100%;
             display: block;
@@ -53,7 +56,7 @@
     </ol>
     <div style="height: 100%;margin-top: -6%">
         <div class="panel panel-default" style="height: 80%;z-index: 1000;margin-top: 8%;width: 96%;margin-left: 2%;">
-            <div class="panel-body">
+            <div class="panel-body rowheight">
                 <div style="float: right">
                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addUser">
                         <span class="glyphicon glyphicon-plus"></span>添加
@@ -71,51 +74,70 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">添加用户</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h5 class="modal-title">添加用户 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
-                                </button>
+                                </button></h5>
                             </div>
-                            <form id="addform">
+                            <form id="addform" class="form-horizontal" role="form">
                                 <div class="modal-body">
 
                                     <div class="form-group">
-                                        <label for="userName">用户名</label>
+                                        <label for="userName" class="col-sm-2 control-label">用户名</label>
+                                        <div class="col-sm-10">
                                         <input type="text" class="form-control" name="userName" id="userName">
+                                        </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="tel">电话</label>
+                                        <label for="tel" class="col-sm-2 control-label">电话</label>
+                                        <div class="col-sm-10">
                                         <input type="text" class="form-control" name="tel" id="tel">
+                                        </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="email">邮箱</label>
+                                        <label for="email" class="col-sm-2 control-label">邮箱</label>
+                                        <div class="col-sm-10">
                                         <input type="text" class="form-control" name="email" id="email">
+                                        </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="password">密码</label>
+                                        <label for="password" class="col-sm-2 control-label">密码</label>
+                                        <div class="col-sm-10">
                                         <input type="password" class="form-control" name="password" id="password">
+                                            </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="password">所属公司</label>
+                                        <label for="password" class="col-sm-2 control-label">所属公司</label>
+                                        <div class="col-sm-10">
                                         <select class="checkboxstyle" id="company" name="company">
                                         </select>
+                                        </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="password">所属部门</label>
+                                        <label for="password" class="col-sm-2 control-label">所属部门</label>
+                                        <div class="col-sm-10">
                                         <select class="checkboxstyle" id="department" name="department">
                                         </select>
+                                            </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="position">职位</label>
+                                        <label for="position" class="col-sm-2 control-label">职位</label>
+                                        <div class="col-sm-10">
                                         <select class="checkboxstyle" id="position" name="position">
                                         </select>
-                                    </div>
+                                            </div>
                                 </div>
+                                    <div class="form-group">
+                                        <label for="role" class="col-sm-2 control-label">角色</label>
+                                        <div class="col-sm-10">
+                                            <select class="checkboxstyle" id="role" name="role">
+                                            </select>
+                                        </div>
+                                    </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeSave">关闭</button>
                                     <button type="button" class="btn btn-primary" id="saveUser">保存</button>
                                 </div>
-                            </form>
+                            </div></form>
                         </div>
                     </div>
                 </div>
@@ -123,10 +145,9 @@
                     <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">修改用户</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h5 class="modal-title">修改用户     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
-                                </button>
+                                </button></h5>
                             </div>
                          <!--   <div class="modal-body">
 
@@ -154,38 +175,59 @@
                                     <input type="hidden" class="form-control" id="userid1">
                                 </div>
                             </div>-->
+                            <form id="editform" class="form-horizontal" role="form">
                             <div class="modal-body">
-
                                 <div class="form-group">
-                                    <label for="userName">用户名</label>
+                                    <label for="userName" class="col-sm-2 control-label">用户名</label>
+                                    <div class="col-sm-10">
                                     <input type="text" class="form-control" name="userName" id="euserName">
+                                        </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="tel">电话</label>
+                                    <label for="tel" class="col-sm-2 control-label">电话</label>
+                                    <div class="col-sm-10">
                                     <input type="text" class="form-control" name="tel" id="etel">
+                                        </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">邮箱</label>
+                                    <label for="email" class="col-sm-2 control-label">邮箱</label>
+                                    <div class="col-sm-10">
                                     <input type="text" class="form-control" name="email" id="eemail">
+                                        </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="password">密码</label>
+                                    <label for="password" class="col-sm-2 control-label">密码</label>
+                                    <div class="col-sm-10">
                                     <input type="password" class="form-control" name="password" id="epassword">
+                                        </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="password">所属公司</label>
+                                    <label for="company" class="col-sm-2 control-label">所属公司</label>
+                                    <div class="col-sm-10">
                                     <select class="checkboxstyle" id="ecompany" name="company">
                                     </select>
+                                        </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="password">所属部门</label>
+                                    <label for="password" class="col-sm-2 control-label">所属部门</label>
+                                    <div class="col-sm-10">
                                     <select class="checkboxstyle" id="edepartment" name="department">
                                     </select>
+                                        </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="position">职位</label>
+                                    <label for="eposition" class="col-sm-2 control-label">职位</label>
+                                    <div class="col-sm-10">
                                     <select class="checkboxstyle" id="eposition" name="position">
                                     </select>
+                                        </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="erole" class="col-sm-2 control-label">角色</label>
+                                    <div class="col-sm-10">
+                                        <select class="checkboxstyle" id="erole" name="role">
+                                        </select>
+                                    </div>
                                 </div>
                                 <input type="hidden"  name="eid" id="eid">
                             </div>
@@ -193,6 +235,7 @@
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                                 <button type="button" class="btn btn-primary" id="saveeditUser">保存</button>
                             </div>
+                                </form>
                         </div>
                     </div>
                 </div>
@@ -200,10 +243,10 @@
                     <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">删除用户</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h5 class="modal-title">删除用户       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
-                                </button>
+                                </button></h5>
+
                             </div>
                             <div class="modal-body">
 

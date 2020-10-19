@@ -223,6 +223,12 @@
         <if test="status != null" >
             STATUS= #{status,jdbcType=VARCHAR}
         </if>
+        <if test="bwyj != null" >
+            BWYJ= #{bwyj,jdbcType=VARCHAR}
+        </if>
+        <if test="ldps != null" >
+            LDPS= #{bwyj,jdbcType=VARCHAR}
+        </if>
         where FLOWID=#{flowId,jdbcType=VARCHAR}
     </update>
 

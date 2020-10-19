@@ -48,11 +48,15 @@ public class RoleController {
     @ResponseBody
     public int delRole(HttpServletRequest request){
         String roleIds = request.getParameter("roleId");
-        roleIds=roleIds.substring(0,roleIds.length()-1);
-        String [] IdArray=roleIds.split(",");
-        for(int i=0;i<IdArray.length;i++){
-            roleMapper.deleteRole(IdArray[i]);
+        if(roleIds.indexOf(",")>-1){
+            String [] IdArray=roleIds.split(",");
+            for(int i=0;i<IdArray.length;i++){
+                roleMapper.deleteRole(IdArray[i]);
+            }
+        }else{
+            roleMapper.deleteRole(roleIds);
         }
+
         return 1;
     }
     @RequestMapping("/updateRole")
@@ -105,5 +109,17 @@ public class RoleController {
         String roleId = request.getParameter("roleId");
         i = roleMapper.roleClearAuth(roleId);
         return i;
+    }
+    @RequestMapping("/queryRoleByRoleName")
+    @ResponseBody
+    public int queryRoleByRoleName(HttpServletRequest request){
+        String role = request.getParameter("role");
+        Role roles=roleMapper.getRoleByName(role);
+        if(roles!=null){
+            return 1;
+        }else{
+            return 0;
+        }
+
     }
 }

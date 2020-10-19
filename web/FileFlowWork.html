@@ -19,6 +19,12 @@
         .fleft{
             float: left;
         }
+        .lf{
+            align:left
+        }
+        .wid{
+            width: 700px;
+        }
         .tableborder{
             border: 0;
         }
@@ -64,6 +70,12 @@
         .colorsty{
             background: #efeff6;
         }
+        .formwid{
+            width:100%;
+        }
+        .zt{
+            font-weight: bolder;
+        }
     </style>
 </head>
 <body class="colorsty">
@@ -74,23 +86,23 @@
     </ol>
     <div style="height: 100%;margin-top: -6%">
         <div class="panel panel-default" style="height: 80%;z-index: 1000;margin-top: 8%;width: 96%;margin-left: 2%">
-            <div class="panel-body">
+            <div class="panel-body rowheight">
                 <div style="float: right">
         <!--            <button type="button" class="btn btn-info"  id="fqlc">
                         <span class="glyphicon glyphicon-plus"></span>发起流程
                     </button>-->
                 </div>
                 <table id="flowWorkTable" class="table table-hover tablemar">
-                    <caption>流程信息一览表</caption>
+                    <caption class="zt">流程信息一览表</caption>
                 </table>
                 <div class="modal" tabindex="-1" id="addFlow" role="dialog">
                     <div class="modal-dialog">
-                        <div class="modal-content">
+                        <div class="modal-content wid">
                             <div class="modal-header">
-                                <h5 class="modal-title">文件处理签条</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                <h5 class="modal-title">文件处理签条
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button></h5>
                             </div>
                             <form id="addFlowForm" class="form-horizontal" role="form">
                                 <div class="modal-body">
@@ -99,44 +111,44 @@
                                         <thead><th colspan="4" class="tableborder">文件处理签条</th></thead>
                                         <tbody>
                                         <tr>
-                                            <td>发起人</td>
-                                            <td><input type="text" name="fqr" id="fqr" class="tableborder" disabled="disabled"/></td>
-                                            <td>发起时间</td>
+                                            <td class="lf">发起人</td>
+                                            <td><input type="text" name="fqr" id="fqr" class="tableborder formwid" disabled="disabled"/></td>
+                                            <td class="lf">发起时间</td>
                                             <td><input type="text"  id="startDate" name="startDate" class="tableborder"  disabled="disabled"></td>
                                         </tr>
                                         <tr>
-                                            <td>来文机关</td>
-                                            <td><input type="text" id="lwjg" class="tableborder" name="lwjg"  disabled="disabled"/></td>
-                                            <td>收文文号</td>
-                                            <td><input type="text" id="swwh" class="tableborder" name="swwh"  disabled="disabled"/></td>
+                                            <td class="lf">来文机关</td>
+                                            <td><input type="text" id="lwjg" class="tableborder formwid" name="lwjg"  disabled="disabled"/></td>
+                                            <td class="lf">收文文号</td>
+                                            <td><input type="text" id="swwh" class="tableborder formwid" name="swwh"  disabled="disabled"/></td>
                                         </tr>
                                         <tr>
-                                            <td rowspan="2" class="font">收文时间</td>
-                                            <td rowspan="2" class="font"><input type="text" id="swsj" class="tableborder" name="swsj"  disabled="disabled"/> </td>
-                                            <td>是否督办</td>
-                                            <td><input type="text" id="sfdb" class="tableborder" name="sfdb"  disabled="disabled"/></td>
+                                            <td rowspan="2" class="lf">收文时间</td>
+                                            <td rowspan="2" ><input type="text" id="swsj" class="tableborder formwid" name="swsj"  disabled="disabled"/> </td>
+                                            <td class="lf">是否督办</td>
+                                            <td><input type="text" id="sfdb" class="tableborder formwid" name="sfdb"  disabled="disabled"/></td>
                                         </tr>
                                         <tr>
-                                            <td>督办时限</td>
-                                            <td><input type="text" id="dbsx" class="tableborder" name="dbsx"  disabled="disabled"/></td>
+                                            <td class="lf">督办时限</td>
+                                            <td><input type="text" id="dbsx" class="tableborder formwid" name="dbsx"  disabled="disabled"/></td>
                                         </tr>
                                         <tr>
-                                            <td >文件名称</td>
-                                            <td colspan="3"><input type="text" id="wjmc" class="tableborder" name="wjmc"  disabled="disabled"/> <a href="#" id="filedown">下载</a> </td>
-                                        </tr>
-                                        <tr></tr>
-                                        <tr>
-                                            <td class="font">办文意见</td>
-                                            <td colspan="3"><input type="text" id="bwyj" class="tableborder" name="bwyj"  disabled="disabled"/> </td>
+                                            <td class="lf">文件名称</td>
+                                            <td colspan="3"><input type="text" id="wjmc" class="tableborder formwid" name="wjmc"  disabled="disabled"/> <a href="#" id="filedown">下载</a> </td>
                                         </tr>
                                         <tr></tr>
                                         <tr>
-                                            <td class="font">领导批示</td>
-                                            <td colspan="3"><input type="text" id="ldps" class="tableborder" name="ldps"  disabled="disabled"/> </td>
+                                            <td class="lf">办文意见</td>
+                                            <td colspan="3"><input type="text" id="bwyj" class="tableborder formwid" name="bwyj"  /> </td>
+                                        </tr>
+                                        <tr></tr>
+                                        <tr>
+                                            <td class="lf">领导批示</td>
+                                            <td colspan="3"><input type="text" id="ldps" class="tableborder formwid" name="ldps"  /> </td>
                                         </tr>
                                         <tr>
-                                            <td class="font" colspan="2">阅者签名</td>
-                                            <td class="font" colspan="2">阅批意见</td>
+                                            <td class="lf" colspan="2">阅者签名</td>
+                                            <td class="lf" colspan="2">阅批意见</td>
                                         </tr>
                                         <tr>
                                             <td colspan="2">
@@ -145,7 +157,7 @@
                                                 <a href='#' id='openPicModal' style="display: none" class="fleft">查看</a>
                                                 <input type="hidden" id="qm" name="yzqm" class="tableborder"  />
                                             </td>
-                                            <td colspan="2"><input type="text" id="yj" name="yzyj" class="tableborder"/> </td>
+                                            <td colspan="2"><input type="text" id="yj" name="yzyj" class="tableborder formwid"/> </td>
                                         </tr>
                                   <!--      <tr>
                                             <td colspan="2"><input type="text" id="qm2" /> </td>
@@ -184,12 +196,13 @@
 
                 <div class="modal" tabindex="-1" id="queryFlow" role="dialog">
                     <div class="modal-dialog">
-                        <div class="modal-content">
+                        <div class="modal-content wid">
                             <div class="modal-header">
-                                <h5 class="modal-title">文件处理签条</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                <h5 class="modal-title">文件处理签条
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h5>
                             </div>
                             <form id="queryFlowForm" class="form-horizontal" role="form">
                                 <div class="modal-body">
@@ -198,52 +211,52 @@
                                         <thead><th colspan="4" class="tableborder">文件处理签条</th></thead>
                                         <tbody>
                                         <tr>
-                                            <td>发起人</td>
-                                            <td><input type="text" name="fqr" id="cfqr" class="tableborder" disabled="disabled"/></td>
-                                            <td>发起时间</td>
-                                            <td><input type="text"  id="cstartDate" name="startDate" class="tableborder"  disabled="disabled"></td>
+                                            <td class="lf">发起人</td>
+                                            <td><input type="text" name="fqr" id="cfqr" class="tableborder formwid" disabled="disabled"/></td>
+                                            <td class="lf">发起时间</td>
+                                            <td><input type="text"  id="cstartDate" name="startDate" class="tableborder formwid"  disabled="disabled"></td>
                                         </tr>
                                         <tr>
-                                            <td>来文机关</td>
-                                            <td><input type="text" id="clwjg" class="tableborder" name="lwjg"  disabled="disabled"/></td>
-                                            <td>收文文号</td>
-                                            <td><input type="text" id="cswwh" class="tableborder" name="swwh"  disabled="disabled"/></td>
+                                            <td class="lf">来文机关</td>
+                                            <td><input type="text" id="clwjg" class="tableborder formwid" name="lwjg"  disabled="disabled"/></td>
+                                            <td class="lf">收文文号</td>
+                                            <td><input type="text" id="cswwh" class="tableborder formwid" name="swwh"  disabled="disabled"/></td>
                                         </tr>
                                         <tr>
-                                            <td rowspan="2" class="font">收文时间</td>
-                                            <td rowspan="2" class="font"><input type="text" id="cswsj" class="tableborder" name="swsj"  disabled="disabled"/> </td>
-                                            <td>是否督办</td>
-                                            <td><input type="text" id="csfdb" class="tableborder" name="sfdb"  disabled="disabled"/></td>
+                                            <td rowspan="2" class="lf">收文时间</td>
+                                            <td rowspan="2" ><input type="text" id="cswsj" class="tableborder formwid" name="swsj"  disabled="disabled"/> </td>
+                                            <td class="lf">是否督办</td>
+                                            <td><input type="text" id="csfdb" class="tableborder formwid" name="sfdb"  disabled="disabled"/></td>
                                         </tr>
                                         <tr>
-                                            <td>督办时限</td>
-                                            <td><input type="text" id="cdbsx" class="tableborder" name="dbsx"  disabled="disabled"/></td>
+                                            <td class="lf">督办时限</td>
+                                            <td><input type="text" id="cdbsx" class="tableborder formwid" name="dbsx"  disabled="disabled"/></td>
                                         </tr>
                                         <tr>
-                                            <td >文件名称</td>
-                                            <td colspan="3"><input type="text" id="cwjmc" class="tableborder" name="wjmc"  disabled="disabled"/> <a href="#" id="qfiledown">下载</a> </td>
-                                        </tr>
-                                        <tr></tr>
-                                        <tr>
-                                            <td class="font">办文意见</td>
-                                            <td colspan="3"><input type="text" id="cbwyj" class="tableborder" name="bwyj"  disabled="disabled"/> </td>
+                                            <td class="lf">文件名称</td>
+                                            <td colspan="3"><input type="text" id="cwjmc" class="tableborder formwid" name="wjmc"  disabled="disabled"/> <a href="#" id="qfiledown">下载</a> </td>
                                         </tr>
                                         <tr></tr>
                                         <tr>
-                                            <td class="font">领导批示</td>
-                                            <td colspan="3"><input type="text" id="cldps" class="tableborder" name="ldps"  disabled="disabled"/> </td>
+                                            <td class="lf">办文意见</td>
+                                            <td colspan="3"><input type="text" id="cbwyj" class="tableborder formwid" name="bwyj"  disabled="disabled"/> </td>
+                                        </tr>
+                                        <tr></tr>
+                                        <tr>
+                                            <td class="lf">领导批示</td>
+                                            <td colspan="3"><input type="text" id="cldps" class="tableborder formwid" name="ldps"  disabled="disabled"/> </td>
                                         </tr>
                                         <tr>
-                                            <td class="font" colspan="2">阅者签名</td>
-                                            <td class="font" colspan="2">阅批意见</td>
+                                            <td class="lf"colspan="2">阅者签名</td>
+                                            <td class="lf" colspan="2">阅批意见</td>
                                         </tr>
                                         <tr>
                                             <td colspan="2"><input type="text" id="cqm1" class="tableborder fleft" /> <a href="#" id="ckqm1" class="fleft" style="display: none">查看</a> </td>
-                                            <td colspan="2"><input type="text" id="cyj1" class="tableborder" />  </td>
+                                            <td colspan="2"><input type="text" id="cyj1" class="tableborder formwid" />  </td>
                                         </tr>
                                         <tr>
                                             <td colspan="2"><input type="text" id="cqm2" class="tableborder fleft" /> <a href="#" id="ckqm2" class="fleft" style="display: none">查看</a> </td>
-                                            <td colspan="2"><input type="text" id="cyj2" class="tableborder" /> </td>
+                                            <td colspan="2"><input type="text" id="cyj2" class="tableborder formwid" /> </td>
                                         </tr>
                                         </tbody>
                                     </table>

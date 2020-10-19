@@ -45,7 +45,8 @@ public class UserManagerController {
        // String pwd=MD5Util.getMD5Str(password);
         user.setPassword(pwd);
         int i=userMapper.addUser(user);
-        departMapper.insertNode(userid,user.getUserName(),userid,user.getPosId(),null,"user",null);
+        userMapper.userAddRole(user.getId(),user.getRole());
+        //departMapper.insertNode(userid,user.getUserName(),userid,user.getPosId(),null,"user",null);
         return i;
     }
     @RequestMapping("/editUser")
@@ -56,6 +57,7 @@ public class UserManagerController {
             user.setPassword(pwd);
         }
         int i=userMapper.editUser(user);
+        userMapper.userUpdateRole(user.getId(),user.getRole());
         return i;
     }
     @RequestMapping("/deleteUser")
@@ -133,6 +135,21 @@ public class UserManagerController {
                 names=user.getUserName();
             }
         return  new ResponseObject(1,"",names);
+
+    }
+
+    @RequestMapping("/getUserByName")
+    @ResponseBody
+    public ResponseObject getUserByName(HttpServletRequest request){
+        String name=request.getParameter("name");
+        String names="";
+        User user=userMapper.queryUser(name,null,null);
+        if(user!=null){
+            return  new ResponseObject(0,"",names);
+        }else{
+            return  new ResponseObject(1,"",names);
+        }
+
 
     }
 }

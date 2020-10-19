@@ -108,9 +108,12 @@ $(function(){
                 title:"文件接收人",
                 field:'sqInfo',
                 formatter:function(value,row,index){
-                    debugger;
-                    var names= getUserById(value);
-                    return   names;
+                    if(value==null){
+                        return null;
+                    }else{
+                        var names= getUserById(value);
+                        return   names;
+                    }
                 }
             },
             {
@@ -192,6 +195,9 @@ $(function(){
         }
     })
 
+    $(".bootstrap-table.bootstrap3").css('height',"100%");
+    $(".fixed-table-container").css('height',"85%");
+
 })
 
 
@@ -269,6 +275,8 @@ function updateFlowInstance(){
     }
     param.flowId=$("#flowId").val();
     param.node=$("#node").val();
+    param.ldps=$("#ldps").val();
+    param.bwyj=$("#bwyj").val();
     //param.startDate=getNowDate();
     $.ajax({
         type:"post",

@@ -18,10 +18,6 @@ $(function(){
                 checkbox:true
             },
             {
-                field:'roleId',
-                title:'角色ID'
-            },
-            {
                 field:'role',
                 title:'角色'
             }
@@ -31,7 +27,9 @@ $(function(){
         onLoadError:function(){
             showTips("加载失败!");
         }
-    })
+    });
+    $(".bootstrap-table.bootstrap3").css('height',"100%");
+    $(".fixed-table-container").css('height',"85%");
 
     $("#saveRole").click(function(){
         var role = $("#role").val();
@@ -39,6 +37,10 @@ $(function(){
             alert("角色必须填写！")
             return false;
         }
+       if(!judgeRoleCz(role)) {
+           alert("角色已存在！");
+           return false;
+       }
         $.ajax({
             type:"post",
             url:"/rczcgl/role/addRole.action",
@@ -46,7 +48,7 @@ $(function(){
             success:function(data){
                 if(data==1){
                     alert("添加成功！");
-                    $("#userTable").bootstrapTable('refresh');
+                    $("#roleTable").bootstrapTable('refresh');
                     $("#addmodal").modal('hide');
                 }else{
                     alert("添加失败！");
@@ -60,8 +62,9 @@ $(function(){
         })
     })
     $("#editRole").click(function(){
+        debugger;
         var row=$("#roleTable").bootstrapTable('getSelections');
-        if(row.length<0){
+        if(row.length<=0){
             alert("请选择需要修改的角色")
             return false;
         }
@@ -76,6 +79,10 @@ $(function(){
     $("#saveeditRole").click(function(){
         if($("#role1").val()==""||$("#role1").val()==null){
             alert("角色不能为空");
+            return false;
+        }
+        if(!judgeRoleCz(row[0].role)) {
+            alert("角色已存在！");
             return false;
         }
         $.ajax({
@@ -108,15 +115,17 @@ $(function(){
         $("#deletemodal").modal('show');
     })
     $("#scRole").click(function(){
+        debugger;
         var row=$("#roleTable").bootstrapTable('getSelections');
         var roleId="";
         for(var i=0;i<row.length;i++){
             roleId=roleId+row[i].roleId+",";
         }
+        roleId=roleId.substring(0,roleId.length-1);
         $.ajax({
             type:"post",
-            url:"/rczcgl/role/deleteRole.action",
-            data:{"roleIds":roleId},
+            url:"/rczcgl/role/delRole.action",
+            data:{"roleId":roleId},
             success:function(data){
                 if(data==1){
                     alert("删除成功！");
@@ -135,3 +144,21 @@ $(function(){
     })
 
 })
+//判断角色是否存在
+function judgeRoleCz(role){
+    var flag=true;
+    $.ajax({
+        type:"post",
+        url:"/rczcgl/role/queryRoleByRoleName.action",
+        data:{"role":role},
+        success:function(data){
+            if(!data==1){
+                flag=false;
+            }
+        },
+        error:function(data){
+            alert("系统错误，请稍后重试!");
+            $("#deletemodal").modal('hide');
+        }
+    })
+}

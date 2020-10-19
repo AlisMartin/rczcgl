@@ -10,7 +10,6 @@ $(function(){
 //初始化编辑modal
     $("#editDepart").click(function(){
         initEditModal();
-        $("#editDepartModal").modal('show');
     })
     //选择类型变化时
     $("#lx").change(function(){
@@ -238,6 +237,7 @@ function initEditModal(){
         alert("修改的机构只能是一个！");
         return;
     }else if(checked.length==1){
+        $("#elx").val(checked[0].depart);
         if(checked[0].depart=="company"){
             $("#ecompanydiv").css('display','block');
             $("#epxdiv").css('display','block');
@@ -251,6 +251,7 @@ function initEditModal(){
             $("#eposition").val(checked[0].text);
         }
     }
+    $("#editDepartModal").modal('show');
 }
 
 function closeDiv(){

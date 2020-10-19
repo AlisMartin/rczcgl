@@ -1,58 +1,64 @@
 $(function(){
     $("#saveGl").click(function(){
-        var rolerow=$("#roleTable").bootstrapTable('getSelections');
-        var authrow=$("#authTable").bootstrapTable('getSelections');
-        if(rolerow.length<=0||authrow.length<=0){
-            alert("请选择相应的角色和权限进行关联！");
-            return false;
-        }
-        if(rolerow.length>1){
-            alert("最多选择一种角色!");
-            return false;
-        }
-        var roleId=rolerow[0].roleId;
-        var authIds="";
-        for(var i=0;i<authrow.length;i++){
-            authIds=authIds+authrow[i].authId+",";
-        }
-        $.ajax({
-            type:"post",
-            url:"/rczcgl/role/roleAddAuth.action",
-            data:{"roleId":roleId,"authId":authIds},
-            success:function(){
-                alert("关联成功！");
-            },
-            error:function(){
-                alert("系统错误，请稍后重试！");
+        if(confirm("是否保存关联关系？")){
+            var rolerow=$("#roleTable").bootstrapTable('getSelections');
+            var authrow=$("#authTable").bootstrapTable('getSelections');
+            if(rolerow.length<=0||authrow.length<=0){
+                alert("请选择相应的角色和权限进行关联！");
+                return false;
             }
-        })
+            if(rolerow.length>1){
+                alert("最多选择一种角色!");
+                return false;
+            }
+            var roleId=rolerow[0].roleId;
+            var authIds="";
+            for(var i=0;i<authrow.length;i++){
+                authIds=authIds+authrow[i].authId+",";
+            }
+            $.ajax({
+                type:"post",
+                url:"/rczcgl/role/roleAddAuth.action",
+                data:{"roleId":roleId,"authId":authIds},
+                success:function(){
+                    alert("关联成功！");
+                },
+                error:function(){
+                    alert("系统错误，请稍后重试！");
+                }
+            })
+        }
+
     });
 
     $("#clearGl").click(function(){
-        var rolerow=$("#roleTable").bootstrapTable('getSelections');
-        var authrow=$("#authTable").bootstrapTable('getSelections');
-        if(rolerow.length<=0||authrow.length<=0){
-            alert("请选择相应的角色和权限进行关联！");
-            return false;
-        }
-        var roleId=rolerow[0].roleId;
-        var authIds="";
-        for(var i=0;i<authrow.length;i++){
-            authIds=authIds+authrow[i].authId+",";
-        }
-        $.ajax({
-            type:"post",
-            url:"/rczcgl/role/roleClearAuth.action",
-            data:{"roleId":roleId,"authId":authIds},
-            success:function(){
-                alert("取消关联成功!");
-                $("#roleTable").bootstrapTable('refresh');
-                $("#authTable").bootstrapTable('refresh');
-            },
-            error:function(){
-                alert("系统错误，请稍后重试！");
+        if(confirm("确定要清除关联关系吗？")){
+            var rolerow=$("#roleTable").bootstrapTable('getSelections');
+            var authrow=$("#authTable").bootstrapTable('getSelections');
+            if(rolerow.length<=0||authrow.length<=0){
+                alert("请选择相应的角色和权限进行关联！");
+                return false;
             }
-        })
+            var roleId=rolerow[0].roleId;
+            var authIds="";
+            for(var i=0;i<authrow.length;i++){
+                authIds=authIds+authrow[i].authId+",";
+            }
+            $.ajax({
+                type:"post",
+                url:"/rczcgl/role/roleClearAuth.action",
+                data:{"roleId":roleId,"authId":authIds},
+                success:function(){
+                    alert("取消关联成功!");
+                    $("#roleTable").bootstrapTable('refresh');
+                    $("#authTable").bootstrapTable('refresh');
+                },
+                error:function(){
+                    alert("系统错误，请稍后重试！");
+                }
+            })
+        }
+
     })
 
     $('#roleTable').bootstrapTable({
@@ -61,19 +67,15 @@ $(function(){
         clickToSelect:true,
         singleSelect: true,
         sidePagination:"client",
-        pagination:true,
-        pageNumber:1,
-        pageSize:5,
-        pageList:[5,10,20,50,100],
-        paginationPreText:"上一页",
-        paginationNextText:"下一页",
+        //pagination:true,
+        //pageNumber:1,
+        //pageSize:5,
+        //pageList:[5,10,20,50,100],
+        //paginationPreText:"上一页",
+        //paginationNextText:"下一页",
         columns:[
             {
                 checkbox:true
-            },
-            {
-                field:'roleId',
-                title:'角色ID'
             },
             {
                 field:'role',
@@ -127,14 +129,6 @@ $(function(){
         columns:[
             {
                 checkbox:true
-            },
-            {
-                field:'id',
-                title:'ID'
-            },
-            {
-                field:'authId',
-                title:'权限ID'
             },
             {
                 field:'authName',

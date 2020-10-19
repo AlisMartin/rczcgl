@@ -292,6 +292,7 @@ $(function(){
         var swsj=$("#swsj").val();
         var wjmc=$("#wjdiv").val();
         var dbsx=$("#dbsx").val();
+        var jsyh=$("#jsusername").val();
         var reg = /^\w+$/;
         if(!reg.test(dbsx)){
             alert("请输入数字！");
@@ -312,6 +313,10 @@ $(function(){
         }
         if(wjmc==""){
             alert("请选择文件！");
+            return false;
+        }
+        if(jsyh==""){
+            alert("接收用户不能为空！");
             return false;
         }
         insertFlowInstance();
@@ -353,9 +358,13 @@ $(function(){
                 title:"文件接收人",
                 field:'sqInfo',
                 formatter:function(value,row,index){
-                    debugger;
-                    var names= getUserById(value);
-                    return   names;
+                    if(value==null){
+                        return null;
+                    }else{
+                        var names= getUserById(value);
+                        return   names;
+                    }
+
                 }
             },
             {
@@ -418,6 +427,9 @@ $(function(){
         onLoadError:function(){
         }
     })
+
+    $(".bootstrap-table.bootstrap3").css('height',"100%");
+    $(".fixed-table-container").css('height',"85%");
 
 })
 

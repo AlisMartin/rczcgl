@@ -138,6 +138,9 @@
         <if test="email != null">
             EMAIL = #{email,jdbcType=VARCHAR},
         </if>
+            <if test="role != null">
+                ROLE = #{role,jdbcType=VARCHAR},
+            </if>
         <if test="type != null">
             TYPE = #{type,jdbcType=VARCHAR},
         </if>

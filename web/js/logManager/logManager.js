@@ -59,5 +59,6 @@ $(function(){
             showTips("加载失败!");
         }
     })
+    $(".fixed-table-pagination").css('margin-top',"18%");
 })
 
