@@ -94,6 +94,14 @@
             width: 570px;
             height: 400px;
         }
+        #rightPane {
+            border:none;
+            padding: 0;
+            width:228px;
+        }
+        .templatePicker {
+            border: solid 2px #444;
+        }
     </style>
 </head>
 <body class="colorsty">
@@ -127,7 +135,7 @@
                     </button>
                 </form>
                 <table id="assetsTable" class="table table-hover tablemar text-nowrap">
-                    <caption>资产信息表</caption>
+                    <!--<caption>资产信息表</caption>-->
                 </table>
 
                 <div class="modal" tabindex="-1" id="add" role="dialog">
@@ -147,6 +155,10 @@
                                     </div>
                                     <div id="newmap" >
                                         <button type="button" id="drawTool" >绘制点</button>
+                                        <!--<div id="templatePickerDiv"></div>-->
+                                    </div>
+                                    <div id="rightPane" >
+                                        <div id="templatePickerDiv"></div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -269,13 +281,15 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">地图定位</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h5 class="modal-title" style="float:left">地图定位</h5>
+                                <button type="button" class="close" style="float:right" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <div id="viewmap"></div>
+                                <div id="viewmap">
+                                    <!--<div id="templatePickerDiv"></div>-->
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
