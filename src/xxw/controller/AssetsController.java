@@ -113,17 +113,17 @@ public class AssetsController {
     @ResponseBody
     public Map<String,Object> getSumAssetsInfo(@RequestBody JSONObject json){
         Map<String,Object> res = new HashMap<>();
-        int offset = Integer.parseInt(json.getString("offset"));
-        int limit = Integer.parseInt(json.getString("limit"));
+       /* int offset = Integer.parseInt(json.getString("offset"));
+        int limit = Integer.parseInt(json.getString("limit"));*/
         String gsmc = json.getString("gsmc");
         String zctype = json.getString("zctype");
-        int pageNumber = offset==0?1:offset/limit + 1;
-        Page page = PageHelper.startPage(pageNumber,limit);
+        /*int pageNumber = offset==0?1:offset/limit + 1;
+        Page page = PageHelper.startPage(pageNumber,limit);*/
         List<AssetsInfo> info=assetsMapper.getSumAssetsInfo(zctype,gsmc);
-        PageInfo pageInfo = new PageInfo<>(info);
-        if(pageInfo.getList().size()>0){
-            res.put("total",pageInfo.getTotal());
-            res.put("rows",pageInfo.getList());
+       /* PageInfo pageInfo = new PageInfo<>(info);*/
+        if(info.size()>0){
+            res.put("total",info.size());
+            res.put("rows",info);
             return  res;
         }else{
             return null;

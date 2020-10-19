@@ -27,16 +27,19 @@
             background: #efeff6;
         }
         .height{
-            height: 100%;
+            height: 99%;
+        }
+        .hwidth{
+            width: 100%;
         }
     </style>
 </head>
 <body class="colorsty">
 <div class="container-fluid" id="ifrmheight">
-    <ol class="breadcrumb fonts">
-    </ol>
-    <div style="height: 100%;margin-top: -6%">
-        <div class="panel panel-default" style="height: 98%;z-index: 1000;margin-top: 6%;width: 100%;">
+    <!--<ol class="breadcrumb fonts">
+    </ol>-->
+    <div style="height: 98%;margin-top: -7%">
+        <div class="panel panel-default" style="height: 92%;z-index: 1000;margin-top: 10%;width: 100%;">
             <div class="panel-body height">
             <div class="row height">
                 <div class="col-md-3 height">
@@ -54,7 +57,7 @@
                                 </div>-->
                               <div class="form-group">
                                     <label for="zclx">资产类型</label>
-                                        <select id="zclx" class="form-control">
+                                        <select id="zclx" class="form-control hwidth">
                                             <option value="5">全部</option>
                                             <option value="1">土地</option>
                                             <option value="2">房屋</option>
@@ -64,12 +67,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="tjsx">统计属性</label>
-                                        <select id="tjsx" class="selectpicker" multiple>
+                                        <select id="tjsx" class="selectpicker hwidth" multiple>
                                             <option value="1">房屋出租金额</option>
                                             <option value="2">融资金额</option>
                                         </select>
                                 </div>
-                                        <button type="button" class="btn btn-default">统计分析</button>
+                                       <!-- <button type="button" class="btn btn-default">统计分析</button>-->
                             </form>
                         </div>
                     </div>
