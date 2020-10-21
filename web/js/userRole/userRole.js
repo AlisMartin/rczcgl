@@ -9,8 +9,8 @@ $(function(){
         sidePagination:"client",
         pagination:true,
         pageNumber:1,
-        pageSize:5,
-        pageList:[5,10,20,50,100],
+        pageSize:10,
+        //pageList:[5,10,20,50,100],
         paginationPreText:"上一页",
         paginationNextText:"下一页",
         columns:[

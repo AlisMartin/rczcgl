@@ -138,13 +138,16 @@
         UPDATE ASSETS_CONFIG
         <set>
             <if test="id != null">
-                ID= #{id,jdbcType=VARCHAR},
-            </if>
+            ID= #{id,jdbcType=VARCHAR},
+        </if>
             <if test="zctype != null">
                 ZCTYPE= #{zctype,jdbcType=VARCHAR},
             </if>
             <if test="field != null">
                 FIELD= #{field,jdbcType=VARCHAR},
+            </if>
+            <if test="fieldname != null">
+                FIELDNAME= #{fieldname,jdbcType=VARCHAR},
             </if>
             <if test="show != null">
                 SHOW= #{show,jdbcType=VARCHAR},

@@ -56,7 +56,7 @@ $(function(){
         pagination:true,
         pageNumber:1,
         pageSize:10,
-        pageList:[10,20,50,100],
+        //pageList:[10,20,50,100],
         paginationPreText:"上一页",
         paginationNextText:"下一页",
         columns:[

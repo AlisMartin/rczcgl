@@ -16,8 +16,8 @@ $(function(){
         sidePagination:"client",
         pagination:true,
         pageNumber:1,
-        pageSize:5,
-        pageList:[5,10,20,50,100],
+        pageSize:10,
+        //pageList:[5,10,20,50,100],
         paginationPreText:"上一页",
         paginationNextText:"下一页",
         columns:[
@@ -120,7 +120,7 @@ $(function(){
         param.order=$("#editorder").val();
         param.id=rowdata[0].id;
         var flag=queryOrder(param.zctype,param.order);
-        if(flag){
+        if(flag||(param.order==rowdata[0].order)){
             $.ajax({
                 type:"post",
                 url:"/rczcgl/assetsconfig/updateConfig.action",
@@ -198,7 +198,7 @@ function insertConfig(){
         $.ajax({
             type:"post",
             url:"/rczcgl/assetsconfig/insertConfig.action",
-            sync:false,
+            async:false,
             data:{'fieldname':fieldname,'zctype':zctype,'field':fieldlength,'order':order,'show':'1',fieldType:fieldType},
             success:function(data){
                 debugger;
