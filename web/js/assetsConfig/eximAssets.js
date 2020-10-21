@@ -501,6 +501,8 @@ $(function () {
              })*/
         }
     })
+    $(".bootstrap-table.bootstrap3").css('height',"100%");
+    $(".fixed-table-container").css('height',"75%");
 });
 
 function getcolumn() {

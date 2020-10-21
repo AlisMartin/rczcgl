@@ -33,7 +33,9 @@
         .labelstyle {
             margin-top: 0.5%;
         }
-
+        .hheigt{
+            height: 100%;
+        }
         .left {
             float: left;
             margin-right: 12px;
@@ -111,10 +113,10 @@
         <li class="active">资产信息</li>
     </ol>
     <div style="height: 100%;margin-top: -6%">
-        <div class="panel panel-default" style="height: 80%;z-index: 1000;margin-top: 8%;width: 96%;margin-left: 2%">
-            <div class="panel-body">
+        <div class="panel panel-default" style="height: 88%;z-index: 1000;margin-top: 8%;width: 100%;">
+            <div class="panel-body hheigt">
                 <form id="assetsform" name="assetsform" enctype="multipart/form-data">
-                    <input type="file" name="file" id="assetsFile" onchange="importAssetsInfo()"
+                    <input type="file" name="file"  id="assetsFile" onchange="importAssetsInfo()"
                            style="display: none;"/>
                     <input type="text" name="zctype" id="zclx" style="display: none;"/>
                     <ul id="myTab" class="nav nav-tabs" style="margin-bottom: 8px;">
@@ -142,10 +144,10 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">新增资产</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h5 class="modal-title">新增资产   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
-                                </button>
+                                </button></h5>
+
                             </div>
                             <form id="addform" action="" method="post">
                                 <div class="modal-body">
@@ -175,10 +177,10 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">查看资产</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h5 class="modal-title">查看资产     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
-                                </button>
+                                </button></h5>
+
                             </div>
                             <form id="viewform" action="" method="post">
                                 <div class="modal-body">
@@ -199,10 +201,10 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">编辑资产</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h5 class="modal-title">编辑资产     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
-                                </button>
+                                </button></h5>
+
                             </div>
                             <form id="editform" action="" method="post">
                                 <div class="modal-body">
@@ -228,10 +230,10 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">上传附件</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h5 class="modal-title">上传附件     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
-                                </button>
+                                </button></h5>
+
                             </div>
                             <div id="uploader" class="wu-example">
                                 <div id="fileList" class="uploader-list"></div>
@@ -259,10 +261,10 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">附件下载</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h5 class="modal-title">附件下载 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
-                                </button>
+                                </button></h5>
+
                             </div>
                             <div class="modal-body">
                                 <button type="button" class="btn btn-info" id="xiazai">
@@ -281,10 +283,10 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" style="float:left">地图定位</h5>
-                                <button type="button" class="close" style="float:right" data-dismiss="modal" aria-label="Close">
+                                <h5 class="modal-title" style="float:left">地图定位    <button type="button" class="close" style="float:right" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
-                                </button>
+                                </button></h5>
+
                             </div>
                             <div class="modal-body">
                                 <div id="viewmap">
@@ -302,10 +304,10 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">选择融资</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h5 class="modal-title">选择融资     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
-                                </button>
+                                </button></h5>
+
                             </div>
                             <div class="modal-body">
                                 <table id="financeTable"></table>

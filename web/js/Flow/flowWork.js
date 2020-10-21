@@ -8,13 +8,14 @@ $(function(){
     //查询流程节点配置
     getFlowConfig();
 
-    $(".sp").click(function(){
+    $("#spstatus").change(function(){
+        alert("1");
         debugger;
-       var checked= $("input[type=radio]:checked").val();
-        if(checked=="退回"){
+       var checked= $("#spstatus").val();
+        if(checked=="th"){
             $("#thdiv").css("display","block");
         }
-        if(checked=="通过"){
+        if(checked=="access"){
             $("#thdiv").css("display","none");
         }
     })
@@ -261,11 +262,11 @@ function qmPicChange(){
 //更新流程实例
 function updateFlowInstance(){
     debugger;
-    var checked= $("input[type=radio]:checked").val();
+    var checked= $("#spstatus").val();
     var param={};
-    if(checked=="通过"&&spinfo.node!="3"){
+    if(checked=="access"&&spinfo.node!="3"){
         param.status="1";
-    }else if(checked=="通过"&&spinfo.node=="3"){
+    }else if(checked=="access"&&spinfo.node=="3"){
         param.status="3";
         param.endDate=getNowDate();
     }else{
@@ -295,10 +296,10 @@ function creatFlowHistory(){
     debugger;
     var param={};
     param=spinfo;
-    var checked= $("input[type=radio]:checked").val();
-    if(checked=="通过"&&spinfo.node!="3"){
+    var checked= $("#spstatus").val();
+    if(checked=="access"&&spinfo.node!="3"){
         param.status="1";
-    }else if(checked=="通过"&&spinfo.node=="3"){
+    }else if(checked=="access"&&spinfo.node=="3"){
         param.status="3";
     }else{
         param.status="2";

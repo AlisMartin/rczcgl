@@ -83,16 +83,16 @@ public class SessionFilter extends OncePerRequestFilter {
 
             // 从session中获取登录者实体
             User user = (User)session.getAttribute("user");
-            String username=user.getUserName();
+            //String username=user.getUserName();
             Object indexHref = session.getAttribute(VariableUtils.INDEX_HREF);
-            if((null==username)){
+            if((null==user)){
 //            if((null!=username)&&(uri.contains(VariableUtils.URL_INDEX) ||
 //                    uri.contains(VariableUtils.URL_DISTRICT) ||
 //                    uri.contains(VariableUtils.URL_TOWN))){
 
                     response.setContentType("text/html; charset=UTF-8");
                     PrintWriter out = response.getWriter();
-                    out.print("<script type='text/javascript'>window.location.href='" + loginPage + "';</script>");
+                    out.print("<script type='text/javascript'>window.location.href='/rczcgl/" + loginPage + "';</script>");
 
 
             }else{
