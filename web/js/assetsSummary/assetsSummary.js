@@ -269,7 +269,6 @@ function reloadTable(a){
         param.gsmc=null;
     }
     getcolumn();
-    var a=param;
     $('#assetsTable').bootstrapTable('refreshOptions', {
         queryParams: function (params) {
             params.zctype = param.zctype;

@@ -44,14 +44,14 @@ $(function(){
     });
 
 //发起流程
+    if(pdFlow(userobj.id,"1")){
+        $("#fqlc").css('display','block');
+    }else{
+        $("#fqlc").css('display','none');
+    }
     $("#fqlc").click(function(){
-        if(pdFlow(userobj.id,"1")){
             initmodalinfo();
             $("#addFlow").modal('show');
-        }else{
-            alert("当前用户无权限发起流程！");
-        }
-
     })
 //设置文件上传
     $("#wjkup").click(function(){
@@ -668,7 +668,7 @@ function queryInfo(a){
 
     if(a.status=="2"){
         $("#cthdiv").css('display','block');
-        $("#thyy").val(a.rejectReason);
+        $("#cthyy").val(a.rejectReason);
     }
     var node=parseInt(a.node);
     if(node>=2){

@@ -204,7 +204,8 @@
 
     <!--更新流程实例-->
     <update id="updateFlow" parameterType="xxw.po.FlowInstance">
-        update FLOWINSTANCE set
+        update FLOWINSTANCE
+        <set>
         <if test="node != null" >
            NODE= #{node,jdbcType=VARCHAR},
         </if>
@@ -221,14 +222,15 @@
             DUSERS= #{dusers,jdbcType=VARCHAR},
         </if>
         <if test="status != null" >
-            STATUS= #{status,jdbcType=VARCHAR}
+            STATUS= #{status,jdbcType=VARCHAR},
         </if>
         <if test="bwyj != null" >
-            BWYJ= #{bwyj,jdbcType=VARCHAR}
+            BWYJ= #{bwyj,jdbcType=VARCHAR},
         </if>
         <if test="ldps != null" >
-            LDPS= #{bwyj,jdbcType=VARCHAR}
+            LDPS= #{bwyj,jdbcType=VARCHAR},
         </if>
+        </set>
         where FLOWID=#{flowId,jdbcType=VARCHAR}
     </update>
 

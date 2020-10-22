@@ -458,12 +458,11 @@ function initthreefiled(com,pos){
             debugger;
             var data=resonsedata.data;
             $("#fileThree").append("<option value=''>请选择</option>");
-            if(data[0]!=null){
                 for(var i=0;i<data.length;i++) {
-                    $("#fileThree").append("<option value=" + data[i] + ">" + data[i] + "</option>");
+                    if (data[i] != null) {
+                        $("#fileThree").append("<option value=" + data[i] + ">" + data[i] + "</option>");
+                    }
                 }
-            }
-
         },
         error:function(){
         }
@@ -480,8 +479,8 @@ function initmodalthreefiled(com,pos){
             debugger;
             var data=resonsedata.data;
             $("#sjml").append("<option value=''>请选择</option>");
-            if(data[0]!=null){
-                for(var i=0;i<data.length;i++) {
+            for(var i=0;i<data.length;i++) {
+                if (data[i] != null) {
                     $("#sjml").append("<option value=" + data[i] + ">" + data[i] + "</option>");
                 }
             }

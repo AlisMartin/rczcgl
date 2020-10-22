@@ -6,7 +6,7 @@ $(function(){
     //    });
     //}
     //getusernode();
-    initDepartTree();
+    //initDepartTree();
    // $('#Tree').treeview('revealNode', [ 9, { silent: true } ]);
     $('#nodeTable').bootstrapTable({
         url:'/rczcgl/flow/getNodeInfo.action',
@@ -105,7 +105,7 @@ $(function(){
         }
     })
 
-    $('#Tree').on('nodeChecked',function(event, data) {
+/*    $('#Tree').on('nodeChecked',function(event, data) {
         debugger;
         if(data.depart!="user"){
 
@@ -113,15 +113,24 @@ $(function(){
             alert("请选择具体的人员！");
             return;
         }
-    });
+    });*/
 
     $("#saveGl").click(function(){
         debugger;
+        var nodes=$("#nodeTable").bootstrapTable('getSelections');
+        var users=$("#userTable").bootstrapTable('getSelections');
+        if(users.length<1){
+            alert("请选择具体人员！");
+            return false;
+        }
+        if(nodes.length<1){
+            alert("请选择节点！");
+            return false;
+        }
         if(confirm("是否保存关联关系？")){
             var param={};
             //var users=$('#Tree').treeview('getChecked');
-            var nodes=$("#nodeTable").bootstrapTable('getSelections');
-            var users=$("#userTable").bootstrapTable('getSelections');
+
             param.nodeId=nodes[0].nodeId;
             if(param.nodeId=="4"){
                 alert("结束节点无需关联人员！");
@@ -142,22 +151,16 @@ $(function(){
                 param.id=ids;
                 // param.treeid=treeids;
             }
-            if(users.length<1){
-                alert("请选择具体人员！");
-                return false;
-            }
-            if(nodes.length<1){
-                alert("请选择节点！");
-                return false;
-            }
+
             $.ajax({
                 type:"post",
                 url:"/rczcgl/flow/upNode.action",
                 data:param,
                 async:false,
                 success:function(data){
-                    alert("关联成功！");
                     $("#nodeTable").bootstrapTable('refresh');
+                    $("#userTable").bootstrapTable('refresh');
+                   // window.location.reload();
                 },
                 error:function(){
                     alert("系统错误！");
@@ -169,24 +172,25 @@ $(function(){
     })
 
     $("#clearGl").click(function(){
+        var nodes=$("#nodeTable").bootstrapTable('getSelections');
+        var users=$("#userTable").bootstrapTable('getSelections');
+        if(users.length<1){
+            alert("此节点没有配置人员无需取消关联！");
+            return false;
+        }
+        if(nodes.length<1){
+            alert("请选择节点！");
+            return false;
+        }
         if(confirm("确定要清除关联关系吗？")){
             var param={};
             //var users=$('#Tree').treeview('getChecked');
-            var nodes=$("#nodeTable").bootstrapTable('getSelections');
-            var users=$("#userTable").bootstrapTable('getSelections');
+
             param.nodeId=nodes[0].nodeId;
             param.flowType=nodes[0].flowtype;
             if(users.length>0){
                 param.id="";
                 // param.treeid=treeids;
-            }
-            if(users.length<1){
-                alert("此节点没有配置人员无需取消关联！");
-                return false;
-            }
-            if(nodes.length<1){
-                alert("请选择节点！");
-                return false;
             }
             $.ajax({
                 type:"post",

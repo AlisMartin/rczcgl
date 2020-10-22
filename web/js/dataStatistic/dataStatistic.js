@@ -7,8 +7,7 @@ $(function(){
     initsxechart1();
     initzzechart1();
     initzzechart();
-    //initzxechart();
-    //initzzechart();
+    $(".dropdown.bootstrap-select.show-tick.bs3").css('width','100%');
     $("#zclx").change(function(){
         getdata();
         // initsdechart();

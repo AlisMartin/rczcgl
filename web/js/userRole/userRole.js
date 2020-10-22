@@ -32,6 +32,7 @@ $(function(){
     $(".fixed-table-container").css('height',"85%");
 
     $("#saveRole").click(function(){
+        debugger;
         var role = $("#role").val();
         if(role==""||role==null){
             alert("角色必须填写！")
@@ -77,11 +78,13 @@ $(function(){
         $("#roleId1").val(row[0].roleId);
     })
     $("#saveeditRole").click(function(){
+        debugger;
+        var row=$("#roleTable").bootstrapTable('getSelections');
         if($("#role1").val()==""||$("#role1").val()==null){
             alert("角色不能为空");
             return false;
         }
-        if(!judgeRoleCz(row[0].role)) {
+        if(!judgeRoleCz($("#role1").val())) {
             alert("角色已存在！");
             return false;
         }
@@ -146,19 +149,21 @@ $(function(){
 })
 //判断角色是否存在
 function judgeRoleCz(role){
+    debugger;
     var flag=true;
     $.ajax({
         type:"post",
         url:"/rczcgl/role/queryRoleByRoleName.action",
         data:{"role":role},
+        async:false,
         success:function(data){
-            if(!data==1){
+            if(!data==0){
                 flag=false;
             }
         },
         error:function(data){
             alert("系统错误，请稍后重试!");
-            $("#deletemodal").modal('hide');
         }
     })
+    return flag;
 }

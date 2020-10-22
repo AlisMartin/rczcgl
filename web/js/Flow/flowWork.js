@@ -9,7 +9,6 @@ $(function(){
     getFlowConfig();
 
     $("#spstatus").change(function(){
-        alert("1");
         debugger;
        var checked= $("#spstatus").val();
         if(checked=="th"){
@@ -226,7 +225,7 @@ function getQmPic(){
     debugger;
     $.ajax({
         type:"post",
-        url:"/rczcgl/flow/getComIds.action",
+        url:"/rczcgl/flow/queryQmPic.action",
         async:false,
         data:{
             filePath:"signPic"

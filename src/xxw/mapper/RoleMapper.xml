@@ -63,7 +63,7 @@
     <select id="getRoleByName" resultMap="RoleResultMap">
         select * from ROLE where 1=1
         <if test="role != null">
-            ROLE = #{role,jdbcType=VARCHAR},
+           and ROLE = #{role,jdbcType=VARCHAR}
         </if>
     </select>
 

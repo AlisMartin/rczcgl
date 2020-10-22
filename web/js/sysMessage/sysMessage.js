@@ -56,7 +56,7 @@ $(function(){
                     }else if(row.type=="2"){
                         return "<a href='javascript:;' id='downfile'>下载文件</a>";
                     }else{
-                        return "<a href='javascript:;' id='ck'>查看</a>";
+                        return "";
                     }
 
                 },
