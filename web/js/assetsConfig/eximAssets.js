@@ -3,7 +3,7 @@ var userobj = eval('(' + user + ')');
 var columns = [];
 var param = {};
 var zcid = "";
-var fileid = "", isreset, newmap, editmap, viewmap, map, toolBar, X, Y,
+var fileid = "", isreset, newmap, editmap, viewmap, map, toolBar, X, Y,geo,
     financeid = "",
     url = '/rczcgl/assetsconfig/getAssetsInfo.action',
     gsmc = userobj.comId;
@@ -49,8 +49,8 @@ $(function () {
             showInfoWindowOnClick: true, showLabels: true,
             displayGraphicsOnPan: false, logo: false,
             extent: initExtent,
-            maxZoom: 10,//最大缩放等级
-            minZoom: 1,//最小缩放等级
+            maxZoom: 18,//最大缩放等级
+            minZoom: 7,//最小缩放等级
             autoResize: true
         });
         //console.log(document.getElementById("newmap"));
@@ -58,16 +58,16 @@ $(function () {
             showInfoWindowOnClick: true, showLabels: true,
             displayGraphicsOnPan: false, logo: false,
             extent: initExtent,
-            maxZoom: 10,//最大缩放等级
-            minZoom: 1,//最小缩放等级
+            maxZoom: 18,//最大缩放等级
+            minZoom: 7,//最小缩放等级
             autoResize: true
         });
         editmap = new Map("editmap", {
             showInfoWindowOnClick: true, showLabels: true,
             displayGraphicsOnPan: false, logo: false,
             extent: initExtent,
-            maxZoom: 10,//最大缩放等级
-            minZoom: 1,//最小缩放等级
+            maxZoom: 18,//最大缩放等级
+            minZoom: 7,//最小缩放等级
             autoResize: true
         });
 
@@ -75,6 +75,7 @@ $(function () {
         var shandongIm = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
         var shandongIm1 = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
         var shandongIm2 = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
+
         editmap.addLayer(shandongIm2);
         //newmap.addLayer(layer);
         //  newmap.addLayer(shandongIm1);
@@ -83,7 +84,8 @@ $(function () {
 
         var PointLayer = new FeatureLayer("http://localhost:6080/arcgis/rest/services/testPOINT/FeatureServer/0", {
             mode: FeatureLayer.MODE_SNAPSHOT,
-            outFields: ["*"]
+            outFields: ["*"],
+            displayOnPan: true
         });
 
         newmap.addLayer(PointLayer);
@@ -126,6 +128,7 @@ $(function () {
                 markerSymbol.setColor(new Color("#00FFFF"));
                 symbol = markerSymbol;
             }
+
             var graphic = new Graphic(evt.geometry, symbol);
             $("#" + X).val(evt.geometry.x);
             $("#" + Y).val(evt.geometry.y);
@@ -152,7 +155,6 @@ $(function () {
                         editingEnabled = false;
                     }
                 });
-
                 PointLayer.on("click", function (evt) {
                     event.stop(evt);
                     if (evt.ctrlKey === true || evt.metaKey === true) {  //delete feature if ctrl key is depressed
@@ -162,40 +164,41 @@ $(function () {
                         editingEnabled = false;
                     }
                 });
-
                 $("#drawTool").click(function () {
                     drawToolbar.activate(Draw.POINT);
                 });
-                /*var templatePicker = new TemplatePicker({
-                 featureLayers: [PointLayer],
-                 rows: "auto",
-                 columns: 2,
-                 grouping: true,
-                 style: "height: auto; overflow: auto;"
-                 }, "templatePickerDiv");
-
-                 templatePicker.startup();*/
-
                 var drawToolbar = new Draw(newmap);
-
-                var selectedTemplate;
-                /*templatePicker.on("selection-change", function() {
-                 if( templatePicker.getSelected() ) {
-                 selectedTemplate = templatePicker.getSelected();
-                 }
-                 drawToolbar.activate(Draw.POINT);
-                 });*/
 
                 drawToolbar.on("draw-end", function (evt) {
                     drawToolbar.deactivate();
                     editToolbar.deactivate();
-                    var newAttributes = lang.mixin({}, selectedTemplate.template.prototype.attributes);
-                    var newGraphic = new Graphic(evt.geometry, null, newAttributes);
-                    selectedTemplate.featureLayer.applyEdits([newGraphic], null, null);
+                    var obj = {
+                        ID:"555",
+                        CON:"",
+                        LAYERID:""
+                    };
+                    geo = evt.geometry;
+                    var newAttributes = lang.mixin({}, obj);
+                    var markerSymbol = new SimpleMarkerSymbol();
+                    markerSymbol.setColor(new Color("#00FFFF"));
+                    var newGraphic = new Graphic(evt.geometry, markerSymbol);
+                    //PointLayer.applyEdits([newGraphic], null, null);
+                    newmap.graphics.clear();
+                    newmap.graphics.add(newGraphic);
                 });
             },
+            addSave: function(id){
+                var obj = {
+                    ID:"555",
+                    CON:"",
+                    LAYERID:id
+                };
+                var newAttributes = lang.mixin({}, obj);
+                var newGraphic = new Graphic(geo, null, newAttributes);
+                PointLayer.applyEdits([newGraphic], null, null);
+                newmap.graphics.clear();
+            },
             addPoint: function (id) {
-
                 //定义查询对象
                 var queryTask = new QueryTask("http://localhost:6080/arcgis/rest/services/TEST4326/MapServer/0");
                 //定义查询参数对象
@@ -481,24 +484,6 @@ $(function () {
         onClickCell: function (field, value, row, $element) {
         },
         onCheck: function (row, $element) {
-            /*debugger;
-             var userId = row.id;
-             $.ajax({
-             type: "post",
-             url: "/rczcgl/user/getRoleByUserId.action",
-             sync: false,
-             data: {"userid": userId},
-             success: function (data) {
-             debugger;
-             $("#roleTable").bootstrapTable('uncheckAll');
-             if (data != "" && data != null) {
-             $("#roleTable").bootstrapTable('checkBy', {field: 'roleId', values: [data]});
-             }
-             },
-             error: function () {
-             alert("关联失败！")
-             }
-             })*/
         }
     })
     $(".bootstrap-table.bootstrap3").css('height',"100%");
@@ -731,6 +716,7 @@ function addAsset() {
         contentType: "application/json;charset=UTF-8",
         datatype: "json",
         success: function (res) {
+            map.addSave(res.data);
             $('#assetsTable').bootstrapTable('refresh');
             $("#editAssert").modal('hide');
         },
@@ -818,7 +804,6 @@ function showFinanceList(id) {
         },
 
         onCheck: function (row, $element) {
-            //var row = $("#financeTable").bootstrapTable('getSelections');
             financeid = row.zcid;
         },
         onUncheck: function (row, $element) {

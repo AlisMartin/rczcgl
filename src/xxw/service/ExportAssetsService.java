@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -451,9 +452,11 @@ public class ExportAssetsService {
         //获取导出列及列名
         List<AssetsConfig> configlist = assetsMapper.getAssetsConfigInfo(zctype, null);
         AssetsConfig assetsConfig = new AssetsConfig();
-        assetsConfig.setField("layerid");
-        assetsConfig.setFieldname("要素ID");
-        configlist.add(assetsConfig);
+        if(!"5".equals(zctype)){
+            assetsConfig.setField("layerid");
+            assetsConfig.setFieldname("要素ID");
+            configlist.add(assetsConfig);
+        }
         List<Map<String, String>> maplist = new ArrayList<Map<String, String>>();
         try {
             // POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
@@ -477,6 +480,9 @@ public class ExportAssetsService {
                     if (cellvalue.equals(configlist.get(z).getFieldname())) {
                         cloarray[y] = configlist.get(z).getField();
                     }
+                    if ("融资编号".equals(cellvalue)) {
+                        cloarray[y] = "financeid";
+                    }
                 }
                 y++;
             }
@@ -489,15 +495,20 @@ public class ExportAssetsService {
                     datamap.put(cloarray[j], getCellFormatValue(row.getCell((short) j)));
                     j++;
                 }
-                //获取session
-                HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-                HttpSession session = request.getSession();
-                User user = (User) session.getAttribute("user");
-                datamap.put("companyid", user.getComId());
-                datamap.put("zctype", zctype);
-                String uuid = UUID.randomUUID().toString();
-                datamap.put("zcid", uuid);
-                maplist.add(datamap);
+                if(!"5".equals(zctype)) {
+                    //获取session
+                    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+                    HttpSession session = request.getSession();
+                    User user = (User) session.getAttribute("user");
+                    datamap.put("companyid", user.getComId());
+                    datamap.put("zctype", zctype);
+                    String uuid = UUID.randomUUID().toString();
+                    datamap.put("zcid", uuid);
+                    maplist.add(datamap);
+                }else{
+                    datamap.put("zcid", datamap.get("id"));
+                    maplist.add(datamap);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -519,7 +530,10 @@ public class ExportAssetsService {
                     // 如果是纯数字
                     else {
                         // 取得当前Cell的数值
-                        cellvalue = String.valueOf(cell.getNumericCellValue());
+//                        cellvalue = String.valueOf(cell.getNumericCellValue());
+                        DecimalFormat df = new DecimalFormat("0");
+                        cellvalue = df.format(cell.getNumericCellValue());
+                        cellvalue = subZeroAndDot(cellvalue);
                     }
                     break;
                 }
@@ -533,6 +547,20 @@ public class ExportAssetsService {
             cellvalue = "";
         }
         return cellvalue;
+    }
+
+    /** * 使用正则表达式去掉多余的.与
+     *  * @param s
+     * @return
+     */
+    private String subZeroAndDot(String s) {
+        if (s.indexOf(".0") > 0) {
+            // 去掉多余的
+            s = s.replaceAll("0+?$", "");
+            // 如果最后一位是.则去掉
+            s = s.replaceAll("[.]$", "");
+        }
+        return s;
     }
 
     /**

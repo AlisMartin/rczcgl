@@ -32,14 +32,14 @@
     .search {
         position: absolute;
         left: 70px;
-        top: 20px;
+        top: 35px;
         width: 300px;
     }
 
     #divShowResult, #layers {
         position: absolute;
         right: 30px;
-        top: 20px;
+        top: 35px;
         background-color: #edededb3;
         padding: 7px;
         border-radius: 10px;
@@ -55,8 +55,12 @@
 <!--<div id="divShowResult" style="height: 30%;overflow-y: scroll;"></div>-->
 <div class="search">
     <div class="input-group">
+        <div style="position:absolute;right:45px;top:7px;z-index:10;cursor:pointer;display:none;" class="input_clear">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                ×
+            </button>
+        </div>
         <input type="text" class="form-control" id="searchCon" placeholder="请输入资产名称">
-
         <div class="input-group-addon">
             <span class="glyphicon glyphicon-search" id="search" aria-hidden="true"></span>
         </div>

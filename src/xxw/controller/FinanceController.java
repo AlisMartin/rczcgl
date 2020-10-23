@@ -68,8 +68,8 @@ public class FinanceController {
             User user = (User)session.getAttribute("user");
             insertInfo.put("companyid", user.getComId());
 
-            UUID uuid = UUID.randomUUID();
-            insertInfo.put("zcid",uuid.toString());
+//            UUID uuid = UUID.randomUUID();
+            insertInfo.put("zcid",insertInfo.get("id"));
             i = financeMapper.insertFinance(insertInfo);
         }else {
             i = financeMapper.updateFinance(insertInfo);
