@@ -13,7 +13,7 @@ public interface DepartMapper {
     List<Map<String,String>> getNodes(@Param("level")String level,@Param("parentNodeId")String parentNodeId);
     List<DepartTree> getNodesInfo(@Param("level")String level,@Param("parentNodeId")String parentNodeId);
     String getMaxLevel();
-    List<DepartTree>getDepart(@Param("depart")String depart,@Param("pnodeId")String pnodeId,@Param("px")Integer px);
+    List<DepartTree>getDepart(@Param("depart")String depart,@Param("pnodeId")String pnodeId,@Param("px")Integer px,@Param("id")String id);
     DepartTree getCom(@Param("id")String id,@Param("depart")String depart);
     int updateNode(@Param("name")String name,@Param("id")String id,@Param("px")Integer px,@Param("depart")String depart);
     void insertNode(@Param("id")String id,@Param("nodeName")String nodeName,@Param("nodeId")String nodeId,@Param("pnodeId")String pnodeId,@Param("level")String level,@Param("depart")String depart,@Param("px")Integer px);

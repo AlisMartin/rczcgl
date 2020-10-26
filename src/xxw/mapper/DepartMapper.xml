@@ -112,6 +112,9 @@
         <if test="px !=null">
             and PX= #{px,jdbcType=DECIMAL}
         </if>
+        <if test="id !=null">
+            and ID= #{id,jdbcType=DECIMAL}
+        </if>
         order BY  PX
     </select>
 

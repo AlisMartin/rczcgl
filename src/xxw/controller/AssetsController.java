@@ -97,6 +97,8 @@ public class AssetsController {
         int limit = Integer.parseInt(json.getString("limit"));
         String gsmc = json.getString("gsmc");
         String zctype = json.getString("zctype");
+
+
         int pageNumber = offset==0?1:offset/limit + 1;
         Page page = PageHelper.startPage(pageNumber,limit);
         List<AssetsInfo> info=assetsMapper.getAssetsInfo(zctype,gsmc);

@@ -50,9 +50,6 @@ $(function(){
 
 
     if(auth.indexOf("2")>-1||auth.indexOf("8")>-1){
-        $("#financeManager").click(function(){
-            $("#InfoList").attr("src","financeManager.html?random="+Math.floor(Math.random()*100000));
-        });
         $("#landAssets").click(function(){
             $("#InfoList").attr("src","imasset.html?zctype=1&&random="+Math.floor(Math.random()*100000));
         });
@@ -66,9 +63,6 @@ $(function(){
             $("#InfoList").attr("src","imasset.html?zctype=4&&random="+Math.floor(Math.random()*100000));
         });
     }else{
-        $("#financeManager").click(function(){
-            alert("当前用户无权限操作此模块！");
-        });
         $("#landAssets").click(function(){
             alert("当前用户无权限操作此模块！");
         });
@@ -165,6 +159,15 @@ $(function(){
             alert("当前用户无权限操作此模块！");
         });
 
+    }
+    if(auth.indexOf("13")>-1||auth.indexOf("8")>-1) {
+        $("#financeManager").click(function () {
+            $("#InfoList").attr("src", "financeManager.html?random=" + Math.floor(Math.random() * 100000));
+        });
+    }else{
+        $("#financeManager").click(function(){
+            alert("当前用户无权限操作此模块！");
+        });
     }
 
 

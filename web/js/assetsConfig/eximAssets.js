@@ -41,9 +41,8 @@ $(function () {
         var initExtent = new esri.geometry.Extent({
             "xmin": 122.1102905273437, "ymin": 36.74652099609376,
             "xmax": 122.71179199218744, "ymax": 37.45513916015626,
-            "spatialReference": {"wkid": 4326}
+            //"spatialReference": {"wkid": 4326}
         });
-        //console.log(document.getElementById("viewmap"));
 
         viewmap = new Map("viewmap", {
             showInfoWindowOnClick: true, showLabels: true,
@@ -53,7 +52,6 @@ $(function () {
             minZoom: 7,//最小缩放等级
             autoResize: true
         });
-        //console.log(document.getElementById("newmap"));
         newmap = new Map("newmap", {
             showInfoWindowOnClick: true, showLabels: true,
             displayGraphicsOnPan: false, logo: false,
@@ -62,25 +60,23 @@ $(function () {
             minZoom: 7,//最小缩放等级
             autoResize: true
         });
-        editmap = new Map("editmap", {
+        /*editmap = new Map("editmap", {
             showInfoWindowOnClick: true, showLabels: true,
             displayGraphicsOnPan: false, logo: false,
             extent: initExtent,
             maxZoom: 18,//最大缩放等级
             minZoom: 7,//最小缩放等级
             autoResize: true
-        });
+        });*/
 
         var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/RongJwd/MapServer");
+        var zonghaiLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/宗海4326/MapServer");
         var shandongIm = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
         var shandongIm1 = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
         var shandongIm2 = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
 
-        editmap.addLayer(shandongIm2);
-        //newmap.addLayer(layer);
-        //  newmap.addLayer(shandongIm1);
-        //viewmap.addLayer(layer);
-        viewmap.addLayer(shandongIm);
+        //editmap.addLayer(shandongIm2);
+        viewmap.addLayer(layer);
 
         var PointLayer = new FeatureLayer("http://localhost:6080/arcgis/rest/services/testPOINT/FeatureServer/0", {
             mode: FeatureLayer.MODE_SNAPSHOT,
@@ -90,19 +86,6 @@ $(function () {
 
         newmap.addLayer(PointLayer);
 
-        // newmap.on("layers-add-result", initEditing);
-
-        //创建点要素
-        /*$("#drawTool").click(function () {
-         //使用toolbar上的绘图工具
-         toolBar = new Draw(newmap);
-         toolBar.on("draw-end", drawEndEvent);
-         toolBar.activate("point");
-
-         toolBaredit = new Draw(editmap);
-         toolBaredit.on("draw-end", drawEndEvent1);
-         toolBaredit.activate("point");
-         });*/
         function drawEndEvent(evt) {
             toolBar.deactivate();
             //添加图形到地图
@@ -119,7 +102,7 @@ $(function () {
             newmap.graphics.add(graphic)
         }
 
-        function drawEndEvent1(evt) {
+        /*function drawEndEvent1(evt) {
             toolBaredit.deactivate();
             //添加图形到地图
             var symbol;
@@ -134,7 +117,7 @@ $(function () {
             $("#" + Y).val(evt.geometry.y);
             editmap.graphics.clear();
             editmap.graphics.add(graphic)
-        }
+        }*/
 
         map = {
             initEditing: function (evt) {
@@ -198,13 +181,17 @@ $(function () {
                 PointLayer.applyEdits([newGraphic], null, null);
                 newmap.graphics.clear();
             },
+            reset:function(){
+                viewmap.setExtent(initExtent);
+
+            },
             addPoint: function (id) {
                 //定义查询对象
-                var queryTask = new QueryTask("http://localhost:6080/arcgis/rest/services/TEST4326/MapServer/0");
+                var queryTask = new QueryTask("http://localhost:6080/arcgis/rest/services/宗海4326/MapServer/0");
                 //定义查询参数对象
                 var query = new Query();
                 //查询条件，类似于sql语句的where子句
-                query.where = "XMC  like '%" + id + "%'";
+                query.where = "ZHDM_1  like '%" + id + "%'";
                 //返回的字段信息：*代表返回全部字段
                 query.outFields = ["*"];
                 //是否返回几何形状
@@ -214,18 +201,36 @@ $(function () {
                 //属性查询完成之后，用showQueryResult来处理返回的结果
                 function showQueryResult(queryResult) {
                     //创建线符号
-                    var lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new dojo.Color([255, 0, 0]), 3);
+                    var lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new dojo.Color([255, 0, 0]), 2);
                     //创建面符号
-                    var fill = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, lineSymbol);
+                    var fill = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, lineSymbol,new Color([255,255,0,0.25]));
                     if (queryResult.features.length >= 1) {
-                        for (var i = 0; i < queryResult.features.length; i++) {
+                        /*for (var i = 0; i < queryResult.features.length; i++) {
                             //获得图形graphic
                             var graphic = new Graphic(queryResult.features[i].geometry, fill);
                             //将graphic添加到地图中，从而实现高亮效果
                             viewmap.graphics.clear();
                             viewmap.graphics.add(graphic);
                             viewmap.centerAndZoom(queryResult.features[i].geometry.getExtent().getCenter(), 15);
-                        }
+                        }*/
+                        var P =  queryResult.features[0].attributes;
+                        //获得图形graphic
+                        var geometry = queryResult.features[0].geometry;
+                        var infoTemplate = new InfoTemplate("属性", "项目名称: ${NAME}<br>用海总面积: ${NUM}");
+                        var attr = {
+                            "NAME": P.XMMC,
+                            "NUM": P.YHZMJ
+                        };
+                        var graphic = new Graphic(geometry,fill,attr,infoTemplate);
+                        viewmap.graphics.clear();
+                        viewmap.infoWindow.hide();
+                        viewmap.graphics.add(graphic);
+                        var point = queryResult.features[0].geometry.getExtent().getCenter();
+                        //spatialReference: {wkid: 4326, latestWkid: 4326}
+                        //x: 122.58610995744192
+                        //y: 37.47222237015238
+                        //var point = new Point(122.58610995744192,37.47222237015238, new SpatialReference({ wkid: GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["degree",0.0174532925199433]] }));
+                        viewmap.centerAndZoom(point, 0.3);
                     }
                 }
             }
@@ -238,7 +243,11 @@ $(function () {
     var zctype = parent.document.getElementById("InfoList").src.split("?")[1].split("&&")[0];
     zctype = zctype.substring(zctype.length - 1, zctype.length);
     param.zctype = zctype;
-    //导入
+    $('#pointmap').on('hide.bs.modal', function () {
+        map.reset();
+
+    });
+        //导入
     $("#importAssets").click(function () {
         debugger;
         $("#assetsFile").click();
@@ -253,14 +262,14 @@ $(function () {
         $("#add").modal('show');
         newmap.graphics.clear();
     });
-    $("#editAssert").on('shown.bs.modal', function () {
+    /*$("#editAssert").on('shown.bs.modal', function () {
         editmap.graphics.clear();
         if (param.zctype != 2) {
             $("#editmap").hide();
         } else {
             $("#editmap").show();
         }
-    });
+    });*/
     $("#add").on('shown.bs.modal', function () {
         //newmap.autoResize;
         if (param.zctype != 2) {
@@ -429,6 +438,7 @@ $(function () {
         uploader.upload();//上传
     });
 
+
     $('#fileup').on('hide.bs.modal', function () {
         $("#fileInfo").empty();
         //$("#uparea").append
@@ -571,7 +581,7 @@ function getcolumn() {
                         '<span class="glyphicon glyphicon-map-marker">定位</span></a>',    // 添加按钮
                         events: {               // 注册按钮事件
                             'click #pointxy': function (event, value, row, index) {
-                                map.addPoint(row.id);
+                                map.addPoint(row.layerid);
                             }
                         }
                     };
@@ -580,8 +590,9 @@ function getcolumn() {
                 //生成表单
                 var htmlLeft = '',
                     htmlRight = '',
-                    html = '<div class="form-group"> <label for="' + data[i].field + '">' + data[i].fieldname + '</label>' +
-                        '<input class="form-control" id="' + data[i].field + '" name="' + data[i].field + '" type="' + data[i].fieldType + '" "> </div>';
+                    html = '<div class="form-group"> <label class="col-sm-6 control-label" for="' + data[i].field + '">' + data[i].fieldname + ' </label>' +
+                        '<div class="col-sm-6"><input class="form-control" id="' + data[i].field + '" name="' + data[i].field + '" type="' + data[i].fieldType + '" "> ' +
+                        '</div> </div>';
                 if (i % 2 === 0) {
                     htmlLeft = htmlLeft + html
                 } else {
@@ -590,10 +601,10 @@ function getcolumn() {
                 $(".landAssetsLeft").append(htmlLeft);
                 $(".landAssetsRight").append(htmlRight);
             }
-            $(".landAssetsLeft").append('<div class="form-group"> <label for="days">报警时间</label>' +
-                '<input class="form-control" id="days" name="days" type="number" "> </div>');
-            $(".landAssetsRight").append('<div class="form-group"> <label for="stopday">截止日期</label>' +
-                '<input class="form-control" id="stopday" name="stopday" type="date" "> </div>');
+            $(".landAssetsLeft").append('<div class="form-group"> <label class="col-sm-6 control-label" for="days">报警时间</label>' +
+                '<div class="col-sm-6"><input class="form-control " id="days" name="days" type="number" "> </div></div>');
+            $(".landAssetsRight").append('<div class="form-group"> <label class="col-sm-6 control-label" for="stopday">截止日期</label>' +
+                '<div class="col-sm-6"><input class="form-control" id="stopday" name="stopday" type="date" "> </div></div>');
             $(".landAssetsLeft").append(' <input type="text" class="form-control" id="zcid" name="zcid" style="display: none">' +
                 '<input type="text" class="form-control" id="financeid" name="financeid" style="display: none"> ');
             //添加操作列
@@ -691,8 +702,8 @@ function btnGroup() {   // 自定义方法，添加操作按钮
         '<span class="glyphicon glyphicon-upload">上传附件</span></a>' +
         '<a href="####" class="btn btn-info" id="filesdown" data-toggle="modal" data-target="#filedown" style="margin-left:15px" title="下载附件">' +
         '<span class="glyphicon glyphicon-download">下载附件</span></a>' +
-        '<a href="####" class="btn btn-info" id="reset" data-toggle="modal" data-target="#editAssert" style="margin-left:15px" title="重置资产">' +
-        '<span class="glyphicon glyphicon-edit">重置资产</span></a>';
+        '<a href="####" class="btn btn-info" id="reset" data-toggle="modal" data-target="#editAssert" style="margin-left:15px" title="变更资产人">' +
+        '<span class="glyphicon glyphicon-edit">变更资产人</span></a>';
     var htmlHistory =
         '<a href="####" class="btn btn-info" id="modUser"  ' +
         ' title="档案卡">' +
@@ -909,8 +920,10 @@ function reloadTable(a) {
             params.zctype = param.zctype;
             params.gsmc = gsmc;
             return JSON.stringify(params);
-        },
+        }
     })
+    $(".bootstrap-table.bootstrap3").css('height',"100%");
+    $(".fixed-table-container").css('height',"75%");
 }
 
 

@@ -69,40 +69,87 @@
             /*display: table;*/
             /*table-layout:fixed;*/
         }
+
         .toolCol .th-inner {
-            width:500px !important;
+            width: 500px !important;
         }
+
         .toolxy .th-inner {
-            width:80px !important;
+            width: 80px !important;
         }
-        .dayorder{
+
+        .dayorder {
             display: none;
         }
 
         .colorsty {
             background: #efeff6;
         }
-        .map{
+
+        .map {
             background-color: #a3ccff;
         }
-        #drawTool{
+
+        #drawTool {
             position: absolute;
             bottom: 370px;
             left: 90px;
             z-index: 100;
         }
-        #editmap{
+
+        #editmap {
             /*position: absolute;*/
-            width: 570px;
+            width: 868px;
             height: 400px;
         }
+
         #rightPane {
-            border:none;
+            border: none;
             padding: 0;
-            width:228px;
+            width: 228px;
         }
+
         .templatePicker {
             border: solid 2px #444;
+        }
+
+        .form-group {
+            margin-bottom: 22px !important;
+            height: 25px;
+        }
+
+        .box {
+            display: flex;
+            flex-wrap: wrap;
+            align-content: space-between;
+        }
+
+        .column {
+            flex-basis: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .whitred {
+            width: 20px;
+            height: 20px;
+            background-color: #dc5d599c;
+        }
+
+        .red {
+            width: 20px;
+            height: 20px;
+            background-color: #d9534f;
+        }
+
+        .markt {
+            flex-basis: 100%;
+            display: flex;
+        }
+
+        .remark {
+            display: flex;
+            flex-wrap: wrap;
         }
     </style>
 </head>
@@ -116,57 +163,82 @@
         <div class="panel panel-default" style="height: 88%;z-index: 1000;margin-top: 8%;width: 100%;">
             <div class="panel-body hheigt">
                 <form id="assetsform" name="assetsform" enctype="multipart/form-data">
-                    <input type="file" name="file"  id="assetsFile" onchange="importAssetsInfo()"
+                    <input type="file" name="file" id="assetsFile" onchange="importAssetsInfo()"
                            style="display: none;"/>
                     <input type="text" name="zctype" id="zclx" style="display: none;"/>
-                    <ul id="myTab" class="nav nav-tabs" style="margin-bottom: 8px;">
-                        <li class="active"><a  class="getAssetsInfo" data-toggle="tab" onclick="reloadTable(this)">资产信息</a></li>
-                        <li><a  class="getAssetsHistoryInfo" data-toggle="tab" onclick="reloadTable(this)">历史资产信息</a></li>
-                    </ul>
-                    <ul id="myTab1" class="nav nav-pills left">
-                    </ul>
 
-                    <button type="button" class="btn btn-info right" id="exportAssets" name="exportAssets">
-                        <span class="glyphicon glyphicon-folder-open"></span>导出
-                    </button>
-                    <button type="button" class="btn btn-primary right" id="importAssets" name="importAssets">
-                        <span class="glyphicon glyphicon-folder-open"></span>导入
-                    </button>
-                    <button type="button" class="btn btn-info right" id="addAsset" name="addAsset">
-                        <span class="glyphicon glyphicon-plus"></span>新增资产
-                    </button>
+                    <div class="box">
+                        <div class="column">
+                            <ul id="myTab" class="nav nav-tabs" style="margin-bottom: 8px;">
+                                <li class="active"><a class="getAssetsInfo" data-toggle="tab"
+                                                      onclick="reloadTable(this)">资产信息</a></li>
+                                <li><a class="getAssetsHistoryInfo" data-toggle="tab"
+                                       onclick="reloadTable(this)">历史资产信息</a></li>
+                            </ul>
+
+                            <div class="remark">
+                                <div class="markt">
+                                    <div class="whitred"></div>
+                                    <span>:为预警信息&nbsp </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div class="red"></div>
+                                    <span>:为过期信息 </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="column">
+                            <ul id="myTab1" class="nav nav-pills left">
+                            </ul>
+                            <div>
+                                <button type="button" class="btn btn-info right" id="exportAssets" name="exportAssets">
+                                    <span class="glyphicon glyphicon-folder-open"></span>导出
+                                </button>
+                                <button type="button" class="btn btn-primary right" id="importAssets"
+                                        name="importAssets">
+                                    <span class="glyphicon glyphicon-folder-open"></span>导入
+                                </button>
+                                <button type="button" class="btn btn-info right" id="addAsset" name="addAsset">
+                                    <span class="glyphicon glyphicon-plus"></span>新增资产
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </form>
                 <table id="assetsTable" class="table table-hover tablemar text-nowrap">
                     <!--<caption>资产信息表</caption>-->
                 </table>
 
                 <div class="modal" tabindex="-1" id="add" role="dialog">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">新增资产   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button></h5>
+                                <h5 class="modal-title">新增资产
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h5>
 
                             </div>
-                            <form id="addform" action="" method="post">
+                            <form id="addform" action="" method="post" class="form-horizontal">
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-6 landAssetsLeft"></div>
                                         <div class="col-md-6 landAssetsRight"></div>
                                     </div>
-                                    <div id="newmap" >
+                                    <div id="newmap">
                                         <button type="button" id="drawTool" class="btn btn-default">绘制点</button>
                                         <!--<div id="templatePickerDiv"></div>-->
                                     </div>
-                                    <div id="rightPane" >
+                                    <div id="rightPane">
                                         <div id="templatePickerDiv"></div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <input type="reset" name="reset" style="display: none;" />
+                                    <input type="reset" name="reset" style="display: none;"/>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-                                    <button type="button" class="btn btn-default selectFinance" data-toggle="modal" data-target="#financeList" >选择融资</button>
+                                    <button type="button" class="btn btn-default selectFinance" data-toggle="modal"
+                                            data-target="#financeList">选择融资
+                                    </button>
                                     <button type="button" class="btn btn-primary" id="saveAsset">保存</button>
                                 </div>
                             </form>
@@ -174,15 +246,17 @@
                     </div>
                 </div>
                 <div class="modal" tabindex="-1" id="view" role="dialog">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">查看资产     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button></h5>
+                                <h5 class="modal-title">查看资产
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h5>
 
                             </div>
-                            <form id="viewform" action="" method="post">
+                            <form id="viewform" action="" method="post" class="form-horizontal">
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-6 landAssetsLeft"></div>
@@ -198,28 +272,32 @@
                     </div>
                 </div>
                 <div class="modal" tabindex="-1" id="editAssert" role="dialog">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">编辑资产     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button></h5>
+                                <h5 class="modal-title">编辑资产
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h5>
 
                             </div>
-                            <form id="editform" action="" method="post">
+                            <form id="editform" action="" method="post" class="form-horizontal">
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-6 landAssetsLeft"></div>
                                         <div class="col-md-6 landAssetsRight"></div>
                                     </div>
                                     <!--<div id="editmap" style="height: 500px"></div>-->
-                                    <div id="editmap" >
+                                    <!--<div id="editmap" >
                                         <button type="button" class="drawTool" >绘制点</button>
-                                    </div>
+                                    </div>-->
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-                                    <button type="button" class="btn btn-default selectFinance" data-toggle="modal" data-target="#financeList" >选择融资</button>
+                                    <button type="button" class="btn btn-default selectFinance" data-toggle="modal"
+                                            data-target="#financeList">选择融资
+                                    </button>
                                     <button type="button" class="btn btn-primary" id="editAsset">保存</button>
                                 </div>
                             </form>
@@ -230,9 +308,11 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">上传附件     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button></h5>
+                                <h5 class="modal-title">上传附件
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h5>
 
                             </div>
                             <div id="uploader" class="wu-example">
@@ -240,7 +320,8 @@
                                 <div id="picker">选择文件</div>
                                 <div id="uparea" style="border:1px dashed #f1f1f1;height: 100px;margin-top: 3%">
                                     <div id="fontregion"
-                                         style="margin-top: 10%;margin-left: 44%;font-size: 30px;color:#f1f1f1"><span>文件上传区域</span>
+                                         style="margin-top: 10%;margin-left: 44%;font-size: 30px;color:#f1f1f1">
+                                        <span>文件上传区域</span>
                                     </div>
                                     <div id="fileInfo" class="fileinfo uploader-list"></div>
                                 </div>
@@ -261,9 +342,11 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">附件下载 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button></h5>
+                                <h5 class="modal-title">附件下载
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h5>
 
                             </div>
                             <div class="modal-body">
@@ -306,9 +389,11 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">选择融资     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button></h5>
+                                <h5 class="modal-title">选择融资
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h5>
 
                             </div>
                             <div class="modal-body">

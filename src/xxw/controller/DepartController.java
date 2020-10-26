@@ -7,11 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import xxw.mapper.DepartMapper;
 import xxw.po.DepartTree;
+import xxw.po.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 /**
@@ -72,13 +76,24 @@ public class DepartController {
         String depart=request.getParameter("depart");
         String pnodeId=request.getParameter("pnodeId");
         String pxs=request.getParameter("px");
+
+        HttpSession session =   request.getSession();
+        User user = (User)session.getAttribute("user");
+//        user.getComId();
+
         if(pxs!=null){
             int px=Integer.parseInt(pxs);
-            List<DepartTree> list=departMapper.getDepart(depart,pnodeId,px);
+            List<DepartTree> list=departMapper.getDepart(depart,pnodeId,px,user.getComId());
             return new ResponseObject(1,"",list);
         }else{
-            List<DepartTree> list=departMapper.getDepart(depart,pnodeId,null);
-            return new ResponseObject(1,"",list);
+            if ("8".equals(user.getAuth())){
+                List<DepartTree> list=departMapper.getDepart(depart,pnodeId,null,null);
+                return new ResponseObject(1,"",list);
+            }else{
+                List<DepartTree> list=departMapper.getDepart(depart,pnodeId,null,user.getComId());
+                return new ResponseObject(1,"",list);
+            }
+
         }
 
 
