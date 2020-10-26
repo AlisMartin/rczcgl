@@ -21,6 +21,16 @@ public class SysMessage {
     private String type;
     private String duser;
 
+    public String getRead() {
+        return read;
+    }
+
+    public void setRead(String read) {
+        this.read = read;
+    }
+
+    private String read;
+
 
     public String getTsId() {
         return tsId;

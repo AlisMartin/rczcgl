@@ -92,6 +92,10 @@
                         <span class="glyphicon glyphicon-plus"></span>发起流程
                     </button>-->
                 </div>
+                <ul id="myTab" class="nav nav-tabs" style="margin-bottom: 8px;">
+                    <li class="active"><a  class="getWorkFlow" data-toggle="tab" onclick="reloadTable(this)">待审批信息</a></li>
+                    <li><a  class="getHistoryFlow" data-toggle="tab" onclick="reloadTable(this)">历史信息</a></li>
+                </ul>
                 <table id="flowWorkTable" class="table table-hover tablemar">
                     <caption class="zt">流程信息一览表
                     </caption>

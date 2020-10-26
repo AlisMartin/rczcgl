@@ -43,8 +43,22 @@ $(function(){
                 field:'desc'
             },
             {
-                title:"处理人",
-                field:'duser'
+                title:"设置已读",
+                align:"center",
+                formatter:function(value,row,index){
+                    debugger;
+                    return "<a href='javascript:;'  id='setRead'>已读</a>";
+                },
+                events:{
+                    'click #setRead':function(e,value,row,index){
+                        debugger;
+                        var a=row.flowId;
+                        if(confirm("是否设置消息为已读？设置后将不再显示")){
+                            setRead(a);
+                        }
+
+                    }
+                }
             },
             {
                 title:"操作",
@@ -115,4 +129,52 @@ function queryFileByFileName(a){
     })
 }
 
+//设置消息已读
+function setRead(flowId){
+    $.ajax({
+        type:"post",
+        url:"/rczcgl/flow/updateMessage.action",
+        async:false,
+        data:{'flowId':flowId,'show':'0'},
+        success:function(responsedata){
+            getMessage();
+            $('#sysMessageTable').bootstrapTable('refresh');
+            alert("设置成功!");
 
+        },
+        error:function(){
+            alert("设置失败！请稍后重试！");
+        }
+    })
+}
+
+//5分钟查询一次消息
+function getMessage(){
+    var user= $.cookie('user');
+    var userobj=eval('('+user+')');
+    var param={};
+    param.show='1';
+    param.jsuser=userobj.id;
+    $.ajax({
+        type:"post",
+        url:"/rczcgl/flow/queryMessage.action",
+        data:JSON.stringify(param),
+        contentType: "application/json;charset=UTF-8",
+        success:function(responsedata){
+            var obj=responsedata;
+            if(obj.length>0){
+                var a=$('#imsg-bubble',parent.document);
+                $(".imsg-bubble").css('display','block');
+                $(".imsg-bubble").empty();
+                $(".imsg-bubble").text(obj.length+"");
+            }else{
+                $(".imsg-bubble").css('display','none');
+                $(".imsg-bubble").empty();
+                $(".imsg-bubble").text(0);
+            }
+        },
+        error:function(){
+            alert("添加失败！请稍后重试！");
+        }
+    })
+}

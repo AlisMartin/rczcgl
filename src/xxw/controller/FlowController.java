@@ -66,6 +66,7 @@ public class FlowController {
         flowInstance.setUser(flowInstance.getFqrName());
         flowInstance.setEndDate(flowInstance.getStartDate());
         flowInstance.setNode("1");
+        flowInstance.setUserId(flowInstance.getFqr());
         flowMapper.createFlowHistory(flowInstance);
         return new ResponseObject(i,"",flowInstance);
     }
@@ -139,6 +140,33 @@ public class FlowController {
         }
         return flowInfoList;
     }
+
+    @RequestMapping("/queryHistoryFlowInfos")
+    @ResponseBody
+    public List<FlowHistory> queryHistoryFlowInfos(HttpServletRequest request,@RequestBody JSONObject json){
+        //flowMapper.createFlowHistory(flowHistory);
+        String flowType=json.getString("flowType");
+        String flowId=json.getString("flowId");
+        String fqr=json.getString("fqr");
+        String duser=json.getString("duser");
+        List<FlowHistory> flowInfoList=flowMapper.queryHistoryFlowInfos(flowType,flowId,fqr,duser);
+        for(FlowHistory info:flowInfoList){
+         /*   if(!"".equals(info.getUser())&&info.getUser()!=null){
+                String cluser=getUserNames(info.getUser());
+                info.setUserId(cluser);
+            }
+            if(!"".equals(info.getDusers())&&info.getDusers()!=null&&!info.getDusers().equals("无")){
+                String cluser=getUserNames(info.getDusers());
+                info.setdName(cluser);
+            }*/
+            if(!"".equals(info.getFqr())&&info.getFqr()!=null){
+                String cluser=getUserNames(info.getFqr());
+                info.setFqrName(cluser);
+            }
+        }
+        return flowInfoList;
+    }
+
     @RequestMapping("/queryFile")
     @ResponseBody
     public ResponseObject queryFile(HttpServletRequest request){

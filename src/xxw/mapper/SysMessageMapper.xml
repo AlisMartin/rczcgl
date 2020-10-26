@@ -105,8 +105,23 @@
     </insert>
 
     <update id="updateSysMessage" parameterType="java.lang.String">
-        update SYSMESSAGE SET SHOW= #{show,jdbcType=VARCHAR},DUSER= #{duser,jdbcType=VARCHAR}
-        where FLOWID= #{flowId,jdbcType=VARCHAR} and NODE= #{node,jdbcType=VARCHAR}
+        update SYSMESSAGE
+        <set>
+            <if test="show !=null">
+                SHOW= #{show,jdbcType=VARCHAR},
+            </if>
+            <if test="duser !=null">
+                DUSER= #{duser,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where  1=1
+        <if test="flowId !=null">
+          and  FLOWID= #{flowId,jdbcType=VARCHAR}
+        </if>
+        <if test="node !=null">
+            and NODE= #{node,jdbcType=VARCHAR}
+        </if>
+
 
     </update>
 </mapper>

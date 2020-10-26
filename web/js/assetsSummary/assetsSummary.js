@@ -81,6 +81,9 @@ $(function () {
         }
 
     })
+
+    $(".bootstrap-table.bootstrap3").css('height',"100%");
+    $(".fixed-table-container").css('height',"93%");
 });
 
 function getcolumn() {
@@ -279,6 +282,8 @@ function reloadTable(a){
         }, columns: columns
 
     })
+    $(".bootstrap-table.bootstrap3").css('height',"100%");
+    $(".fixed-table-container").css('height',"93%");
 }
 
 

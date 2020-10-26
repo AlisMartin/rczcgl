@@ -58,9 +58,18 @@ $(function(){
         initmodalonefiled();
         $("#filedataup").modal('show');
     })
+    $("#filedataup").on('hide.bs.modal',function(){
+        $("#yjml").empty();
+        $("#ejml").empty();
+        $("#sjml").empty();
+        $("#sjmldiv").css('display','none');
+        $("#wj").empty();
+    })
     //一级目录变化
     $("#yjml").change(function(){
         $("#ejml").empty();
+        $("#wj").empty();
+        $("#sjmldiv").css('display','none');
         var com=$("#yjml").val();
         if(com!=""){
             initmodaltwofiled(com);
@@ -71,6 +80,7 @@ $(function(){
 //二级目录变化
     $("#ejml").change(function(){
         $("#sjml").empty();
+        $("#wj").empty();
         var com=$("#yjml").val();
         var pos=$("#ejml").val();
         if(com!=""&&pos!=""){
@@ -567,6 +577,7 @@ function initmodalonefiled(){
         data:{'filetype':"com"},
         success:function(responsedata){
             debugger;
+            $("#yjml").empty();
             var data=responsedata.data;
             $("#yjml").append("<option value=''>请选择</option>");
             for(var i=0;i<data.length;i++){
@@ -586,6 +597,7 @@ function initmodaltwofiled(com){
         data:{'filetype':"pos",'com':com},
         success:function(responsedata){
             debugger;
+            $("#ejml").empty();
             var data=responsedata.data;
             $("#ejml").append("<option value=''>请选择</option>");
             for(var i=0;i<data.length;i++) {
@@ -606,6 +618,7 @@ function initmodalthreefiled(com,pos){
         data:{'filetype':"type",'com':com,'pos':pos},
         success:function(resonsedata){
             debugger;
+            $("#sjml").empty();
             var data=resonsedata.data;
             if(data[0]!=null){
                 $("#sjmldiv").css('display','block');
@@ -613,7 +626,12 @@ function initmodalthreefiled(com,pos){
                 for(var i=0;i<data.length;i++) {
                     $("#sjml").append("<option value=" + data[i] + ">" + data[i] + "</option>");
                 }
+                var param={};
+                param.com=com;
+                param.pos=pos;
+                getManagerFiles(param);
             }else{
+                $("#sjmldiv").css('display','none');
                 var param={};
                 param.com=com;
                 param.pos=pos;
@@ -634,6 +652,7 @@ function getManagerFiles(param){
         data:param,
         success:function(resonsedata){
             debugger;
+            $("#wj").empty();
             var data=resonsedata;
             if(data!=null){
                 $("#wj").append("<option value=''>请选择</option>");

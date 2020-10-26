@@ -106,6 +106,10 @@ public class VariableUtils {
      */
     public static final String URL_LOGIN = "login.html";
     /**
+     * 系统使用到期页面
+     */
+    public static final String DQ_PAGE="overdate.html";
+    /**
      * 改厕移动端登录页 added by lipeng 2019.9.22
      */
     public static final String URL_LOGIN_LATRINE= "#/Login";

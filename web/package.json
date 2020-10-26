@@ -1,0 +1,16 @@
+{
+    "name": "web",
+    "version": "1.0.0",
+    "description": "前端js/css压缩",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "mini": "node mini.js"
+    },
+    "author": "lipeng",
+    "license": "ISC",
+    "dependencies": {
+        "cssmin": "^0.4.3",
+        "uglify-js": "^3.11.3"
+    }
+}

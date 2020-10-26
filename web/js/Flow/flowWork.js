@@ -2,6 +2,176 @@ var spinfo;
 var user= $.cookie('user');
 var userobj=eval('('+user+')');
 var node;
+var flowColum=[
+    {
+        checkbox:true
+    },
+    {
+        field:'flowId',
+        title:'流程编号'
+    },
+    {
+        field:'fqrName',
+        title:'发起人'
+    },
+    {
+        field:'nodeName',
+        title:'流程节点',
+    },
+    {
+        title:"待办人",
+        field:'dName'
+    },
+    {
+        title:"文件接收人",
+        field:'sqInfo',
+        formatter:function(value,row,index){
+            if(value==null){
+                return null;
+            }else{
+                var names= getUserById(value);
+                return   names;
+            }
+        }
+    },
+    {
+        title:"审批状态",
+        field:'status',
+        formatter:function(value,row,index){
+            var data="";
+            switch(parseInt(value)){
+                case 1:
+                    data="待审批";
+                    break;
+                case 2:
+                    data="退回";
+                    break;
+                case 3:
+                    data="通过";
+                    break;
+            }
+            return data;
+        }
+    },
+    {
+        title:"开始时间",
+        field:'startDate'
+    },
+    {
+        title:"结束时间",
+        field:'endDate'
+    },
+    {
+        title:"操作",
+        align:"center",
+        formatter:function(value,row,index){
+            debugger;
+            if(row.status=="1"){
+                return "<a href='javascript:;'  id='sp'>审批</a>&nbsp;&nbsp;<a href='javascript:;'id='ck'>查看</a>";
+            }else if(row.status=="2"){
+                return "<a href='javascript:;' id='ck'>退回详情</a>";
+            }else{
+                return "<a href='javascript:;' id='ck'>查看</a>";
+            }
+
+        },
+        events:{
+            'click #sp':function(e,value,row,index){
+                debugger;
+                if(pdFlow(userobj.id,row.node)){
+                    spinfo={};
+                    spinfo=row;
+                    spFile(row);
+                }else{
+                    alert("当前用户无权限审批！");
+                }
+
+            },
+            'click #ck':function(e,value,row,index){
+                spinfo={};
+                spinfo=row;
+                queryInfo(row);
+            }
+        }
+    }
+];
+var historyFlowColum=[
+    {
+        checkbox:true
+    },
+    {
+        field:'flowId',
+        title:'流程编号'
+    },
+    {
+        field:'fqrName',
+        title:'发起人'
+    },
+    {
+        field:'node',
+        title:'流程节点',
+        formatter:function(value,row,index){
+            var a;
+            if(value=='1'){
+                a="发文"
+            }else if(value=='2'){
+                a="审批一"
+            }else if(value=="3"){
+                a="审批二"
+            }else if(value=="4"){
+                a="结束"
+            }
+            return a;
+        }
+    },
+    {
+        title:"待办人",
+        field:'dName'
+    },
+    {
+        title:"处理人",
+        field:'user'
+    },
+    {
+        title:"文件接收人",
+        field:'sqInfo',
+        formatter:function(value,row,index){
+            if(value==null){
+                return null;
+            }else{
+                var names= getUserById(value);
+                return   names;
+            }
+        }
+    },
+  /*  {
+        title:"审批状态",
+        field:'status',
+        formatter:function(value,row,index){
+            var data="";
+            switch(parseInt(value)){
+                case 1:
+                    data="待审批";
+                    break;
+                case 2:
+                    data="退回";
+                    break;
+                case 3:
+                    data="通过";
+                    break;
+            }
+            return data;
+        }
+    },*/
+    {
+        title:"开始时间",
+        field:'startDate'
+    },
+    {
+        title:"结束时间",
+        field:'endDate'
+    }
+];
 $(function(){
 
 
@@ -178,7 +348,6 @@ $(function(){
             }
         ],
         queryParams: function (params) {
-            debugger;
             if(!(userobj.auth.indexOf("8")>-1)){
                 params.duser = userobj.id;
             }
@@ -308,6 +477,7 @@ function creatFlowHistory(){
     var user= $.cookie('user');
     var userobj=eval('('+user+')');
     param.user=userobj.userName;
+    param.userId=userobj.id;
     param.yzqm=$("#qm").val();
     param.yzyj=$("#yj").val();
     $.ajax({
@@ -522,4 +692,29 @@ function getqm(a){
     })
 }
 
+function reloadTable(a){
+    debugger;
+    var classq = a.className;
+    var columns;
+    if (classq === "getWorkFlow") {
+        url = '/rczcgl/flow/queryFlowInfos.action';
+        columns=flowColum;
+    } else if (classq === "getHistoryFlow") {
+        url = '/rczcgl/flow/queryHistoryFlowInfos.action';
+        columns=historyFlowColum;
+    } else {
+    }
+    $('#flowWorkTable').bootstrapTable('refreshOptions', {
+        url: url,
+        columns:columns,
+        queryParams: function (params) {
+            if(!(userobj.auth.indexOf("8")>-1)){
+                params.duser = userobj.id;
+            }
+            return JSON.stringify(params);
+        },
+    })
 
+    $(".bootstrap-table.bootstrap3").css('height',"100%");
+    $(".fixed-table-container").css('height',"85%");
+}

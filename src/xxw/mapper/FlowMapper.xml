@@ -228,7 +228,7 @@
             BWYJ= #{bwyj,jdbcType=VARCHAR},
         </if>
         <if test="ldps != null" >
-            LDPS= #{bwyj,jdbcType=VARCHAR},
+            LDPS= #{ldps,jdbcType=VARCHAR},
         </if>
         </set>
         where FLOWID=#{flowId,jdbcType=VARCHAR}
@@ -373,6 +373,25 @@
         order by STARTDATE DESC
     </select>
 
+    <!--查询流程实例信息-->
+    <select id="queryHistoryFlowInfos" parameterType="java.lang.String" resultType="xxw.po.FlowHistory">
+        select  a.SQINFO,a.FQR,b.* from FLOWINSTANCE a inner JOIN  FLOWHISTORY b on a.FLOWID=b.FLOWID
+        WHERE 1=1
+        <if test="flowType !=null">
+            and a.FLOWTYPE= #{flowType,jdbcType=VARCHAR}
+        </if>
+        <if test="flowId !=null">
+            and b.FLOWID= #{flowId,jdbcType=VARCHAR}
+        </if>
+        <if test="fqr !=null">
+            and a.FQR= #{fqr,jdbcType=VARCHAR}
+        </if>
+        <if test="userId !=null">
+            and b.USERID=#{userId,jdbcType=VARCHAR}
+        </if>
+        order by a.STARTDATE DESC
+    </select>
+
     <!--查询流程历史信息-->
     <select id="queryFlowHistoryInfo" parameterType="java.lang.String" resultType="xxw.po.FlowHistory">
         select  *  from FLOWHISTORY
@@ -389,12 +408,14 @@
     <!--查询文件结构-->
     <select id="selectCom" parameterType="java.lang.String" resultType="java.lang.String">
         select DISTINCT  COM from FILEMANAGER WHERE 1=1
+        and COM  is not null
     </select>
     <select id="selectPos" parameterType="java.lang.String" resultType="java.lang.String">
         select DISTINCT  POS from FILEMANAGER WHERE 1=1
         <if test="com !=null">
             and COM= #{com,jdbcType=VARCHAR}
         </if>
+        and POS  is not null
     </select>
     <select id="selectType" parameterType="java.lang.String" resultType="java.lang.String">
         select DISTINCT  TYPE from FILEMANAGER WHERE 1=1
@@ -404,6 +425,7 @@
         <if test="pos !=null">
             and POS= #{pos,jdbcType=VARCHAR}
         </if>
+        and TYPE  is not null
     </select>
     <select id="selectFile" parameterType="java.lang.String" resultType="java.util.HashMap">
         select a.*,b.* from FILEMANAGER a INNER JOIN ASSETS_FILE b on a.PATHID=b.PATHID  WHERE 1=1

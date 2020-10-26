@@ -256,7 +256,7 @@ public class ExportAssetsService {
                                 }
                             }
                         }else if(configlist.get(x).getField().indexOf("fcfield")>-1){
-                            int xtrow=1;
+                           int xtrow=1;
                             int xtcol=0;
                             int nums=0;
                             String value="";
@@ -269,6 +269,7 @@ public class ExportAssetsService {
                                         if(nums>2){
                                             sheet.addMergedRegion(new CellRangeAddress(xtrow, (xtrow + nums - 2), x, x));
                                         }
+                                        xtrow=y+1;
                                         if(y!=0){
                                             nums=0;
                                         }
@@ -394,6 +395,7 @@ public class ExportAssetsService {
                                     if(nums>1){
                                         sheet.addMergedRegion(new CellRangeAddress(xtrow, (xtrow + nums - 2), x, x));
                                     }
+                                    xtrow=y+1;
                                     if(y!=0){
                                         nums=0;
                                     }
