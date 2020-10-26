@@ -223,7 +223,7 @@ public class AssetsController {
         insertInfo.put("zcid", uuid.toString());
         int i = assetsMapper.insertAssetsInfo(insertInfo);
         if (i == 1) {
-            return new ResponseObject(1, "成功", "");
+            return new ResponseObject(1, "成功", uuid);
         } else {
             return new ResponseObject(0, "失败", "");
         }

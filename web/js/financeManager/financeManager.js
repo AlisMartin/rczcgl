@@ -10,7 +10,6 @@ $(function(){
         $("input[type=reset]").trigger("click");
     });
     $("#editUser").click(function(){
-        //editUser();
         if(editUser()){
             var row=$("#userTable").bootstrapTable('getSelections');
             loadData(row);
@@ -19,25 +18,6 @@ $(function(){
     });
     $("#saveeditUser").click(function(){
         addUser();
-        /*$.ajax({
-            type:"post",
-            url:"/rczcgl/user/editUser.action",
-            data:{"userName": $("#userName1").val(),"tel":$("#tel1").val(),"email":$("#email1").val(),"type":$("#type1").val(),"password":$("#password1").val(),"id":$("#userid1").val()},
-            success:function(data){
-                if(data==1){
-                    alert("修改成功！");
-                    $("#userTable").bootstrapTable('refresh');
-                    $("#editmodal").modal('hide');
-                }else{
-                    alert("修改失败！");
-                    $("#editmodal").modal('hide');
-                }
-            },
-            error:function(data){
-                alert("系统错误，请稍后重试!");
-                $("#editmodal").modal('hide');
-            }
-        })*/
     });
     getcolumn();
     $('#userTable').bootstrapTable({
@@ -60,13 +40,13 @@ $(function(){
         onLoadSuccess:function(){
         },
         onLoadError:function(){
-            //showTips("数据加载失败!");
         }
     })
+    $(".bootstrap-table.bootstrap3").css('height',"100%");
+    $(".fixed-table-container").css('height',"85%");
 });
 function addUser(){
     var arr = $("#addform").serializeArray();
-    //arr.push({name: "zctype", value: param.zctype});
     $.ajax({
         type:"post",
         url:"/rczcgl/finance/addOrUpdateFinance.action",
@@ -75,11 +55,11 @@ function addUser(){
         datatype: "json",
         success:function(data){
             if(data.code==1){
-                alert("添加成功！");
+                alert("编辑成功！");
                 $("#userTable").bootstrapTable('refresh');
                 $("#addUser").modal('hide');
             }else{
-                alert("添加失败！");
+                alert("编辑失败！");
                 $("#addUser").modal('hide');
             }
         },
@@ -101,8 +81,6 @@ function editUser(){
         return false;
     }
     return true;
-    //loadData(row);
-    //$("#addUser").modal('show');
 }
 
 function getcolumn() {
@@ -115,18 +93,37 @@ function getcolumn() {
         success: function (data) {
             var htmlLeft = '';
             columns.push({checkbox: true});
+            columns.push({
+                field:"id",
+                title:"融资编号"
+            });
             for (var i = 0; i < data.length; i++) {
                 var obj = {};
                 obj.field = data[i].field;
                 obj.title = data[i].fieldname;
                 columns.push(obj);
+                switch (data[i].fieldType) {
+                    case '1':
+                        data[i].fieldType = "text";
+                        break;
+                    case '2':
+                        data[i].fieldType = "number";
+                        break;
+                    case '3':
+                        data[i].fieldType = "date";
+                        break;
+                    default :
+                        break;
+                }
                 //生成表单
                 htmlLeft = htmlLeft + '<div class="form-group">'+
                     '<label for="finance_days">' + data[i].fieldname + '</label>'+
-                    '<input type="text" class="form-control" id="' + data[i].field + '" name="' + data[i].field + '" type="' + data[i].fieldType + '">'+
+                    '<input class="form-control" id="' + data[i].field + '" name="' + data[i].field + '" type="' + data[i].fieldType + '">'+
                     '</div>';
             }
             $("#financeform").append(' <input type="text" class="form-control" id="zcid" name="zcid" style="display: none"> ');
+            $("#financeform").append('<div class="form-group"> <label for="id">融资编号</label>' +
+                '<input class="form-control" id="id" name="id" type="text" "> </div>');
             $("#financeform").append(htmlLeft);
         },
         error: function () {
