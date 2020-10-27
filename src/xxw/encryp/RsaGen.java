@@ -1,8 +1,10 @@
 package xxw.encryp;
 
 import org.apache.commons.codec.binary.Base64;
+import xxw.util.RSATaskDetail;
 
 import javax.crypto.Cipher;
+import java.io.File;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -19,12 +21,12 @@ public class RsaGen {
 	private String publicFilePath = "D:\\auth_key\\id_key_rsa.pub";
 	//private String privateFilePath = "D:\\auth_key";
 	//private String publicFilePath = "D:\\auth_key";
-	public static void main(String[] args) throws ClassNotFoundException {
+	/*public static void main(String[] args) throws ClassNotFoundException {
 		new RsaGen();
-	}
+	}*/
 
 	RsaGen(){
-		try {
+/*		try {
 			System.out.println("开始生成RSA密匙............................");
 			//RsaUtils.generateKey(publicFilePath, privateFilePath, "山东智慧云天科技有限公司", 2048);
 			System.out.println("生成RSA密匙完成............................");
@@ -36,13 +38,13 @@ public class RsaGen {
 			System.out.println("加密结果：" + mes);
 			String res =  decrypt(mes,RsaUtils.getPrivateKey(privateFilePath));
 			System.out.println("解密结果：" + res);
-			vliadCode(res);
+			vliadCode(res,null,null);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("生成RSA密匙错误............................");
 			System.out.println(e.getMessage());
-		}
+		}*/
 	}
 
 	/**
@@ -85,46 +87,7 @@ public class RsaGen {
 		return outStr;
 	}
 
-	public static Boolean vliadCode(String codes) throws UnknownHostException, SocketException{
 
-		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
-
-		String[] list = codes.split("&");
-
-		int day = Integer.parseInt(list[1]);
-		String mac = list[2];
-
-		String  curr_date = formatter.format(new Date(System.currentTimeMillis()));
-		Date date1 = MyDateUtil.parseDate(list[0], "yyyy-MM-dd HH:mm:ss");
-		Date date2 = MyDateUtil.parseDate(curr_date, "yyyy-MM-dd HH:mm:ss");
-
-
-		// 获取相差的天数
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date1);
-		long timeInMillis1 = calendar.getTimeInMillis();
-		calendar.setTime(date2);
-		long timeInMillis2 = calendar.getTimeInMillis();
-
-		long betweenDays =  (timeInMillis2 - timeInMillis1) / (1000L*3600L*24L);
-
-		//判断天数
-		if(day > betweenDays){
-			System.out.println("剩余天数："  + (day - betweenDays));
-		}else{
-			return false;
-		}
-
-		InetAddress ia =  InetAddress.getLocalHost();
-		String rmac = getLocalMac(ia);
-		//判断MAC地址
-		if(rmac.equals(mac)){
-			System.out.println("服务器物理地址正确");
-		}else{
-			return false;
-		}
-		return true;
-	}
 
 
 	/**

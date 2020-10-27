@@ -1,25 +1,34 @@
 package xxw.encryp;
 
+import xxw.util.RSATaskDetail;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
- * Rsa·Ç¶Ô³Æ¼ÓÃÜ¹¤¾ßÀà  ÓÃÓÚÉú³ÉÃÜÔ¿
+ * Rsaéžå¯¹ç§°åŠ å¯†å·¥å…·ç±»  ç”¨äºŽç”Ÿæˆå¯†é’¥
  */
 public class RsaUtils {
 
     private static final int DEFAULT_KEY_SIZE = 2048;
     /**
-     * ´ÓÎÄ¼þÖÐ¶ÁÈ¡¹«Ô¿
+     * ä»Žæ–‡ä»¶ä¸­è¯»å–å…¬é’¥
      *
-     * @param filename ¹«Ô¿±£´æÂ·¾¶£¬Ïà¶ÔÓÚclasspath
-     * @return ¹«Ô¿¶ÔÏó
+     * @param filename å…¬é’¥ä¿å­˜è·¯å¾„ï¼Œç›¸å¯¹äºŽclasspath
+     * @return å…¬é’¥å¯¹è±¡
      * @throws Exception
      */
     public static PublicKey getPublicKey(String filename) throws Exception {
@@ -28,10 +37,10 @@ public class RsaUtils {
     }
 
     /**
-     * ´ÓÎÄ¼þÖÐ¶ÁÈ¡ÃÜÔ¿
+     * ä»Žæ–‡ä»¶ä¸­è¯»å–å¯†é’¥
      *
-     * @param filename Ë½Ô¿±£´æÂ·¾¶£¬Ïà¶ÔÓÚclasspath
-     * @return Ë½Ô¿¶ÔÏó
+     * @param filename ç§é’¥ä¿å­˜è·¯å¾„ï¼Œç›¸å¯¹äºŽclasspath
+     * @return ç§é’¥å¯¹è±¡
      * @throws Exception
      */
     public static PrivateKey getPrivateKey(String filename) throws Exception {
@@ -40,9 +49,9 @@ public class RsaUtils {
     }
 
     /**
-     * »ñÈ¡¹«Ô¿
+     * èŽ·å–å…¬é’¥
      *
-     * @param bytes ¹«Ô¿µÄ×Ö½ÚÐÎÊ½
+     * @param bytes å…¬é’¥çš„å­—èŠ‚å½¢å¼
      * @return
      * @throws Exception
      */
@@ -54,9 +63,9 @@ public class RsaUtils {
     }
 
     /**
-     * »ñÈ¡ÃÜÔ¿
+     * èŽ·å–å¯†é’¥
      *
-     * @param bytes Ë½Ô¿µÄ×Ö½ÚÐÎÊ½
+     * @param bytes ç§é’¥çš„å­—èŠ‚å½¢å¼
      * @return
      * @throws Exception
      */
@@ -68,22 +77,22 @@ public class RsaUtils {
     }
 
     /**
-     * ¸ù¾ÝÃÜÎÄ£¬Éú´ærsa¹«Ô¿ºÍË½Ô¿,²¢Ð´ÈëÖ¸¶¨ÎÄ¼þ
+     * æ ¹æ®å¯†æ–‡ï¼Œç”Ÿå­˜rsaå…¬é’¥å’Œç§é’¥,å¹¶å†™å…¥æŒ‡å®šæ–‡ä»¶
      *
-     * @param publicKeyFilename  ¹«Ô¿ÎÄ¼þÂ·¾¶
-     * @param privateKeyFilename Ë½Ô¿ÎÄ¼þÂ·¾¶
-     * @param secret             Éú³ÉÃÜÔ¿µÄÃÜÎÄ
+     * @param publicKeyFilename  å…¬é’¥æ–‡ä»¶è·¯å¾„
+     * @param privateKeyFilename ç§é’¥æ–‡ä»¶è·¯å¾„
+     * @param secret             ç”Ÿæˆå¯†é’¥çš„å¯†æ–‡
      */
     public static void generateKey(String publicKeyFilename, String privateKeyFilename, String secret, int keySize) throws Exception {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
         SecureRandom secureRandom = new SecureRandom(secret.getBytes());
         keyPairGenerator.initialize(Math.max(keySize, DEFAULT_KEY_SIZE), secureRandom);
         KeyPair keyPair = keyPairGenerator.genKeyPair();
-        // »ñÈ¡¹«Ô¿²¢Ð´³ö
+        // èŽ·å–å…¬é’¥å¹¶å†™å‡º
         byte[] publicKeyBytes = keyPair.getPublic().getEncoded();
         publicKeyBytes = Base64.getEncoder().encode(publicKeyBytes);
         writeFile(publicKeyFilename, publicKeyBytes);
-        // »ñÈ¡Ë½Ô¿²¢Ð´³ö
+        // èŽ·å–ç§é’¥å¹¶å†™å‡º
         byte[] privateKeyBytes = keyPair.getPrivate().getEncoded();
         privateKeyBytes = Base64.getEncoder().encode(privateKeyBytes);
         writeFile(privateKeyFilename, privateKeyBytes);
@@ -99,5 +108,85 @@ public class RsaUtils {
             dest.createNewFile();
         }
         Files.write(dest.toPath(), bytes);
+    }
+    public static Boolean vliadCode(String codes,String path,String privateKey) throws UnknownHostException, SocketException {
+
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+
+        String[] list = codes.split("&");
+
+        int day = Integer.parseInt(list[1]);
+        String mac = list[2];
+
+        String  curr_date = formatter.format(new Date(System.currentTimeMillis()));
+        Date date1 = MyDateUtil.parseDate(list[0], "yyyy-MM-dd HH:mm:ss");
+        Date date2 = MyDateUtil.parseDate(curr_date, "yyyy-MM-dd HH:mm:ss");
+
+
+        // èŽ·å–ç›¸å·®çš„å¤©æ•°
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date1);
+        long timeInMillis1 = calendar.getTimeInMillis();
+        calendar.setTime(date2);
+        long timeInMillis2 = calendar.getTimeInMillis();
+
+        long betweenDays =  (timeInMillis2 - timeInMillis1) / (1000L*3600L*24L);
+
+        //åˆ¤æ–­å¤©æ•°
+        if(day > betweenDays){
+            System.out.println("å‰©ä½™å¤©æ•°ï¼š"  + (day - betweenDays));
+        }else{
+            return false;
+        }
+		File file=new File(path);
+		String content=RSATaskDetail.txt2String(file);
+		String datelog= null;
+		try {
+			datelog = RSATaskDetail.decrypt(content, RsaUtils.getPrivateKey(privateKey));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Date date3 = MyDateUtil.parseDate(datelog, "yyyy-MM-dd HH:mm:ss");
+		calendar.setTime(date3);
+		long timeInMillis3 = calendar.getTimeInMillis();
+		long days =  (timeInMillis2 - timeInMillis3) / (1000L*3600L*24L);
+
+		//åˆ¤æ–­å¤©æ•°
+		if(days<0){
+			System.out.println("å½“å‰ç³»ç»Ÿæ—¶é—´ä¸Žè®°å½•åŽ†å²æ—¶é—´ä¸ç¬¦");
+			return false;
+		}
+        InetAddress ia =  InetAddress.getLocalHost();
+        String rmac = getLocalMac(ia);
+        //åˆ¤æ–­MACåœ°å€
+        if(rmac.equals(mac)){
+            System.out.println("æœåŠ¡å™¨ç‰©ç†åœ°å€æ­£ç¡®");
+        }else{
+            return false;
+        }
+        return true;
+    }
+    /**
+     * èŽ·å–æœåŠ¡å™¨çš„MACåœ°å€
+     * @param ia
+     * @throws SocketException
+     */
+    public static String getLocalMac(InetAddress ia) throws SocketException {
+        byte[] mac = NetworkInterface.getByInetAddress(ia).getHardwareAddress();
+        StringBuffer sb = new StringBuffer("");
+        for(int i=0; i<mac.length; i++) {
+            if(i!=0) {
+                sb.append("-");
+            }
+            //å­—èŠ‚è½¬æ¢ä¸ºæ•´æ•°
+            int temp = mac[i]&0xff;
+            String str = Integer.toHexString(temp);
+            if(str.length()==1) {
+                sb.append("0"+str);
+            }else {
+                sb.append(str);
+            }
+        }
+        return sb.toString().toUpperCase();
     }
 }

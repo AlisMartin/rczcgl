@@ -1,8 +1,109 @@
 var user= $.cookie('user');
 var userobj=eval('('+user+')');
 var userid=userobj.id;
-$(function(){
+var readingColum=[ {
+    checkbox:true
+},
+    {
+        field:'flowId',
+        title:'流程编号'
+    },
+    {
+        field:'tsUser',
+        title:'推送人'
+    },
+    {
+        field:'jsUser',
+        title:'待办人',
+    },
+    {
+        title:"文件名",
+        field:'fileName'
+    },
+    {
+        title:"推送时间",
+        field:'tsDate'
+    },
+    {
+        title:"事件描述",
+        field:'desc'
+    },
+    {
+        title:"设置已读",
+        align:"center",
+        formatter:function(value,row,index){
+            debugger;
+            return "<a href='javascript:;'  id='setRead'>已读</a>";
+        },
+        events:{
+            'click #setRead':function(e,value,row,index){
+                debugger;
+                var a=row.flowId;
+                if(confirm("是否设置消息为已读？设置后将不再显示")){
+                    setRead(a);
+                }
 
+            }
+        }
+    },
+    {
+        title:"操作",
+        align:"center",
+        formatter:function(value,row,index){
+            debugger;
+            if(row.type=="1"){
+                return "<a href='javascript:;'  id='sp'>审批</a>";
+            }else if(row.type=="2"){
+                return "<a href='javascript:;' id='downfile'>下载文件</a>";
+            }else{
+                return "";
+            }
+
+        },
+        events:{
+            'click #sp':function(e,value,row,index){
+                var id=parent.document.getElementById("InfoList");
+                id.src="FileFlowWork.html?random="+Math.floor(Math.random()*100000);
+                // id.attr("src","FileFlowWork.html?random="+Math.floor(Math.random()*100000));
+            },
+            'click #downfile':function(e,value,row,index){
+                queryFileByFileName(row.fileId);
+            }
+        }
+    }];
+
+
+var readedCloum=[
+    {
+        checkbox:true
+    },
+    {
+        field:'flowId',
+        title:'流程编号'
+    },
+    {
+        field:'tsUser',
+        title:'推送人'
+    },
+    {
+        field:'jsUser',
+        title:'待办人',
+    },
+    {
+        title:"文件名",
+        field:'fileName'
+    },
+    {
+        title:"推送时间",
+        field:'tsDate'
+    },
+    {
+        title:"事件描述",
+        field:'desc'
+    }
+]
+$(function(){
+    debugger;
     $('#sysMessageTable').bootstrapTable({
         url:'/rczcgl/flow/queryMessage.action',
         method:'post',
@@ -53,7 +154,7 @@ $(function(){
                     'click #setRead':function(e,value,row,index){
                         debugger;
                         var a=row.flowId;
-                        if(confirm("是否设置消息为已读？设置后将不再显示")){
+                        if(confirm("是否设置消息为已读？")){
                             setRead(a);
                         }
 
@@ -97,6 +198,8 @@ $(function(){
         onLoadError:function(){
         }
     })
+    $(".bootstrap-table.bootstrap3").css('height',"100%");
+    $(".fixed-table-container").css('height',"85%");
 
 })
 
@@ -162,19 +265,50 @@ function getMessage(){
         contentType: "application/json;charset=UTF-8",
         success:function(responsedata){
             var obj=responsedata;
+            var a=$('#imsg-bubble',parent.document);
             if(obj.length>0){
-                var a=$('#imsg-bubble',parent.document);
-                $(".imsg-bubble").css('display','block');
-                $(".imsg-bubble").empty();
-                $(".imsg-bubble").text(obj.length+"");
+
+                a.css('display','block');
+                a.text(obj.length+"");
             }else{
-                $(".imsg-bubble").css('display','none');
-                $(".imsg-bubble").empty();
-                $(".imsg-bubble").text(0);
+                a.css('display','none');
+                a.empty();
+                a.text(0);
             }
         },
         error:function(){
-            alert("添加失败！请稍后重试！");
         }
     })
+}
+
+function reloadTable(a){
+    debugger;
+    var classq = a.className;
+    var columns;
+    var param={};
+    if (classq === "getReadingMessage") {
+        url = '/rczcgl/flow/queryMessage.action';
+        columns=readingColum;
+        param.jsuser = userid;
+        param.show="1";
+    } else if (classq === "getReadedMessage") {
+        url = '/rczcgl/flow/queryMessage.action';
+        columns=readedCloum;
+        param.jsuser = userid;
+        param.show="0";
+    } else {
+    }
+    $('#sysMessageTable').bootstrapTable('refreshOptions', {
+        url: url,
+        columns:columns,
+        queryParams: function (params) {
+            if(!(userobj.auth.indexOf("8")>-1)){
+                params=param;
+            }
+            return params;
+        },
+    })
+
+    $(".bootstrap-table.bootstrap3").css('height',"100%");
+    $(".fixed-table-container").css('height',"85%");
 }

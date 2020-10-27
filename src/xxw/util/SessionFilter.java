@@ -39,7 +39,12 @@ public class SessionFilter extends OncePerRequestFilter {
         if(mylist.length<1){
             try {
                 RsaUtils.generateKey(publicFilePath, privateFilePath, "山东智慧云天科技有限公司", 2048);
-
+                File sjfile=new File(tempPath+"\\datelog.txt");
+                if(!sjfile.exists()){
+                    sjfile.createNewFile();
+                }
+                UpdateRSATask task=new UpdateRSATask(tempPath+"\\datelog.txt",privateFilePath,publicFilePath);
+                task.init();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -50,7 +55,7 @@ public class SessionFilter extends OncePerRequestFilter {
                 System.out.println("加密结果：" + mes);
                 String res =  RsaGen.decrypt(mes, RsaUtils.getPrivateKey(privateFilePath));
                 System.out.println("解密结果：" + res);
-                flag=RsaGen.vliadCode(res);
+                flag=RsaUtils.vliadCode(res,tempPath+"\\datelog.txt",privateFilePath);
                 if(!flag){
                     String loginPage =  VariableUtils.DQ_PAGE;
                     response.setContentType("text/html; charset=UTF-8");
