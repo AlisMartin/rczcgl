@@ -73,7 +73,7 @@ public class LoginController {
 
             request.getSession().setAttribute("user",user);
             String eventDesc="用户"+user.getUserName()+"登录系统";
-            String eventType="1";
+            String eventType="登录";
             Date date =new Date();
             SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String realdate= dateFormat.format(date);

@@ -32,19 +32,7 @@ $(function(){
             },
             {
                 field:'eventType',
-                title:'操作',
-                formatter:function(value,row,index){
-                    if(value=='1'){
-                        return "登录"
-                    }else if(value=='2'){
-                        return "查询"
-                    }else if(value='3'){
-                        return "导出";
-                    }else{
-                        return "其他"
-                    }
-                }
-
+                title:'操作'
             },
             {
                 field:'eventDesc',

@@ -1,5 +1,6 @@
 package xxw.controller;
 
+import cn.hutool.db.Session;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import xxw.mapper.UserMapper;
 import xxw.po.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -30,6 +32,8 @@ public class FlowController {
     FileMapper fileMapper;
     @Autowired
     SysMessageMapper sysMessageMapper;
+    @Autowired
+    LogController logController;
     @RequestMapping("/getNodeInfo")
     @ResponseBody
     public List<NodeInfo> getNodeInfo(HttpServletRequest request){
@@ -48,7 +52,7 @@ public class FlowController {
 
     @RequestMapping("/createFLow")
     @ResponseBody
-    public ResponseObject createFLow(FlowHistory flowInstance){
+    public ResponseObject createFLow(FlowHistory flowInstance,HttpServletRequest request){
         int i=0;
         String dusers=null;
         String duserId="";
@@ -68,11 +72,20 @@ public class FlowController {
         flowInstance.setNode("1");
         flowInstance.setUserId(flowInstance.getFqr());
         flowMapper.createFlowHistory(flowInstance);
+        HttpSession session=request.getSession();
+        User user=(User)session.getAttribute("user");
+        String eventDesc="用户"+user.getUserName()+"发起流程";
+        String eventType="发文";
+        Date date =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(date);
+        //String realdate=date.toString();
+        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
         return new ResponseObject(i,"",flowInstance);
     }
     @RequestMapping("/updateFLow")
     @ResponseBody
-    public ResponseObject updateFLow(FlowHistory flowInstance){
+    public ResponseObject updateFLow(FlowHistory flowInstance,HttpServletRequest request){
         int i=0;
         int node=Integer.parseInt(flowInstance.getNode());
         if(flowInstance.getStatus().equals("2")||flowInstance.getStatus().equals("3")){
@@ -85,6 +98,15 @@ public class FlowController {
 
         flowInstance.setNode((node+1)+"");
         flowMapper.updateFlow(flowInstance);
+        HttpSession session=request.getSession();
+        User user=(User)session.getAttribute("user");
+        String eventDesc="用户"+user.getUserName()+"审批发文";
+        String eventType="审批";
+        Date date =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(date);
+        //String realdate=date.toString();
+        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
         return new ResponseObject(i,"","");
     }
     @RequestMapping("/createFLowHistory")
