@@ -129,6 +129,7 @@ $(function(){
                 success:function(data){
                     debugger;
                     alert("修改成功！");
+                    $("#editConfig").modal('hide');
                     $("#configTable").bootstrapTable('refresh');
                 },
                 error:function(){

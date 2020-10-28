@@ -320,8 +320,10 @@ public class AssetsController {
                                     }
                                 }else {
                                     if(!financeId.contains(assetslist.get(i).get("FINANCEID"))){
-                                        count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
-                                        mapCount.put(entry.getKey().toLowerCase(), count);
+                                        if(StringUtil.isNumber(assetslist.get(i).get(entry.getKey()))) {
+                                            count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
+                                            mapCount.put(entry.getKey().toLowerCase(), count);
+                                        }
                                     }
                                 }
                             }
