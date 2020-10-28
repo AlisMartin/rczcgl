@@ -1,5 +1,6 @@
 package xxw.service;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.*;
@@ -453,7 +454,7 @@ public class ExportAssetsService {
     public List<Map<String, String>> importAssetsInfo(MultipartFile file, String zctype) {
         int num = 1;
         //获取导出列及列名
-        List<AssetsConfig> configlist = assetsMapper.getAssetsConfigInfo(zctype, null);
+        List<AssetsConfig> configlist = assetsMapper.getAllAssetsConfigInfo(zctype, null);
         AssetsConfig assetsConfig = new AssetsConfig();
         if(!"5".equals(zctype)){
             assetsConfig.setField("layerid");
@@ -523,7 +524,13 @@ public class ExportAssetsService {
         String cellvalue = "";
         if (cell != null) {
             switch (cell.getCellType()) {
-                case Cell.CELL_TYPE_NUMERIC:
+                case Cell.CELL_TYPE_NUMERIC:{
+                    if(HSSFDateUtil.isCellDateFormatted(cell)){
+                        Date date = cell.getDateCellValue();
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                        cellvalue = formatter.format(date);
+                    }
+                }
                 case Cell.CELL_TYPE_FORMULA: {
                     if (DateUtil.isCellDateFormatted(cell)) {
                         Date date = cell.getDateCellValue();

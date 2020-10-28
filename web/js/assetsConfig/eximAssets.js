@@ -69,7 +69,7 @@ $(function () {
             autoResize: true
         });*/
 
-        var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/RongJwd/MapServer");
+        var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
         var zonghaiLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/宗海4326/MapServer");
         var shandongIm = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
         var shandongIm1 = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
@@ -205,14 +205,6 @@ $(function () {
                     //创建面符号
                     var fill = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, lineSymbol,new Color([255,255,0,0.25]));
                     if (queryResult.features.length >= 1) {
-                        /*for (var i = 0; i < queryResult.features.length; i++) {
-                            //获得图形graphic
-                            var graphic = new Graphic(queryResult.features[i].geometry, fill);
-                            //将graphic添加到地图中，从而实现高亮效果
-                            viewmap.graphics.clear();
-                            viewmap.graphics.add(graphic);
-                            viewmap.centerAndZoom(queryResult.features[i].geometry.getExtent().getCenter(), 15);
-                        }*/
                         var P =  queryResult.features[0].attributes;
                         //获得图形graphic
                         var geometry = queryResult.features[0].geometry;
@@ -226,11 +218,7 @@ $(function () {
                         viewmap.infoWindow.hide();
                         viewmap.graphics.add(graphic);
                         var point = queryResult.features[0].geometry.getExtent().getCenter();
-                        //spatialReference: {wkid: 4326, latestWkid: 4326}
-                        //x: 122.58610995744192
-                        //y: 37.47222237015238
-                        //var point = new Point(122.58610995744192,37.47222237015238, new SpatialReference({ wkid: GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["degree",0.0174532925199433]] }));
-                        viewmap.centerAndZoom(point, 0.3);
+                        viewmap.centerAndZoom(point, 13);
                     }
                 }
             }
@@ -262,14 +250,7 @@ $(function () {
         $("#add").modal('show');
         newmap.graphics.clear();
     });
-    /*$("#editAssert").on('shown.bs.modal', function () {
-        editmap.graphics.clear();
-        if (param.zctype != 2) {
-            $("#editmap").hide();
-        } else {
-            $("#editmap").show();
-        }
-    });*/
+
     $("#add").on('shown.bs.modal', function () {
         //newmap.autoResize;
         if (param.zctype != 2) {
@@ -944,10 +925,10 @@ function getCompanys() {
                 //生成表单
                 if (i === 0) {
                     htmlLeft = htmlLeft +
-                        '<li class="active"><a class="' + data[i].id + '" data-toggle="tab" onclick="reloadTable(this)">' + data[i].nodeName + '</a></li>';
+                        '<li class="active" style="flex: none"><a class="' + data[i].id + '" data-toggle="tab" onclick="reloadTable(this)">' + data[i].nodeName + '</a></li>';
                 } else {
                     htmlLeft = htmlLeft +
-                        '<li><a class="' + data[i].id + '" data-toggle="tab" onclick="reloadTable(this)">' + data[i].nodeName + '</a></li>';
+                        '<li style="flex: none" ><a class="' + data[i].id + '" data-toggle="tab" onclick="reloadTable(this)">' + data[i].nodeName + '</a></li>';
                 }
             }
             if (userobj.auth.indexOf("9") > -1 || userobj.auth.indexOf("8") > -1) {
