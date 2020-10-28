@@ -15,6 +15,7 @@ import xxw.mapper.DepartMapper;
 import xxw.po.AssetsConfig;
 import xxw.po.DepartTree;
 import xxw.po.User;
+import xxw.util.StringUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -626,19 +627,25 @@ public class ExportAssetsService {
                             if(assetslist.get(i).containsKey(entry.getKey())){
                                 if(assetslist.get(i).containsKey("FINANCEID")&&entry.getKey().indexOf("FCFIELD")>-1){
                                     if(financeId.size()==0){
-                                        count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
-                                        mapCount.put(entry.getKey().toLowerCase(), count);
-                                        financeId.add(assetslist.get(i).get("FINANCEID"));
-                                    }else{
-                                        if(!financeId.contains(assetslist.get(i).get("FINANCEID"))){
+                                        if(StringUtil.isNumber(assetslist.get(i).get(entry.getKey()))) {
                                             count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
                                             mapCount.put(entry.getKey().toLowerCase(), count);
                                             financeId.add(assetslist.get(i).get("FINANCEID"));
                                         }
+                                    }else{
+                                        if(!financeId.contains(assetslist.get(i).get("FINANCEID"))){
+                                            if(StringUtil.isNumber(assetslist.get(i).get(entry.getKey()))) {
+                                                count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
+                                                mapCount.put(entry.getKey().toLowerCase(), count);
+                                                financeId.add(assetslist.get(i).get("FINANCEID"));
+                                            }
+                                        }
                                     }
                                 }else {
-                                    count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
-                                    mapCount.put(entry.getKey().toLowerCase(), count);
+                                    if(StringUtil.isNumber(assetslist.get(i).get(entry.getKey()))) {
+                                        count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
+                                        mapCount.put(entry.getKey().toLowerCase(), count);
+                                    }
                                 }
                             }
                         }

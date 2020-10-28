@@ -72,7 +72,7 @@ public class ExportAssetsController {
         String realdate= dateFormat.format(date);
 //        User user=(User)request.getSession().getAttribute("user");
 
-        logController.insertLogs("1",realdate,desc,user.getId(),user.getUserName());
+        logController.insertLogs("导出",realdate,desc,user.getId(),user.getUserName());
         //return "exportAssetsInfo/"+filename;
         return new ResponseObject(1,"","exportAssetsInfo/"+filename);
     }
@@ -117,7 +117,7 @@ public class ExportAssetsController {
         String realdate= dateFormat.format(date);
         User user=(User)request.getSession().getAttribute("user");
 
-        logController.insertLogs("1",realdate,desc,user.getId(),user.getUserName());
+        logController.insertLogs("导出",realdate,desc,user.getId(),user.getUserName());
         //return "exportAssetsInfo/"+filename;
         return new ResponseObject(1,"","exportSummaryInfo/"+filename);
     }

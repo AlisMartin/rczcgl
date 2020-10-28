@@ -483,7 +483,10 @@ $(function () {
         queryParamsType: "limit",
         queryParams: function (params) {
             params.zctype = param.zctype;
-            params.gsmc = gsmc;
+            if(userobj.auth!='8'){
+                params.gsmc = gsmc;
+            }
+
             return JSON.stringify(params);
         },
         onLoadSuccess: function () {
@@ -525,7 +528,7 @@ function getcolumn() {
     var zctype = $("#zctype").val();
     $.ajax({
         type: "post",
-        url: "/rczcgl/assetsconfig/getAllConfigInfo.action",
+        url: "/rczcgl/assetsconfig/getConfigInfoshow.action",
         async: false,
         data: param,
         success: function (data) {

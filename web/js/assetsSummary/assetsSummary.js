@@ -34,8 +34,9 @@ $(function () {
         columns: columns,
         queryParamsType : "limit",
         queryParams: function (params) {
+            debugger;
             params.zctype = param.zctype;
-            if(userobj.comId!==null){
+            if(userobj.comId!==null&&userobj.auth!='8'){
                 params.gsmc=userobj.comId;
             }
             return JSON.stringify(params);
@@ -92,7 +93,7 @@ function getcolumn() {
     var type=param.zctype+",5";
     $.ajax({
         type: "post",
-        url: "/rczcgl/assetsconfig/getAllConfigInfo.action",
+        url: "/rczcgl/assetsconfig/getConfigInfoshow.action",
         async: false,
         data: {'zctype':type},
         success: function (data) {

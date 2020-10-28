@@ -72,6 +72,33 @@ public class AssetsController {
         }
 
     }
+    /*
+     * 获取配置信息不包含隐藏show
+     */
+    @RequestMapping("/getConfigInfoshow")
+    @ResponseBody
+    public List<AssetsConfig> getConfigListshow(HttpServletRequest request){
+        String zctype=request.getParameter("zctype");
+        String order=request.getParameter("order");
+        if(zctype!=null&&zctype.indexOf(",")>-1){
+            List<AssetsConfig> info1=assetsMapper.getAssetsConfigInfo(zctype.split(",")[0], order);
+            List<AssetsConfig> info2=assetsMapper.getAssetsConfigInfo(zctype.split(",")[1],order);
+            info1.addAll(info2);
+            if(info1.size()>0){
+                return  info1;
+            }else{
+                return null;
+            }
+        }else{
+            List<AssetsConfig> info=assetsMapper.getAllAssetsConfigInfo(zctype,order);
+            if(info.size()>0){
+                return  info;
+            }else{
+                return null;
+            }
+        }
+
+    }
 
     @RequestMapping("/insertConfig")
     @ResponseBody
