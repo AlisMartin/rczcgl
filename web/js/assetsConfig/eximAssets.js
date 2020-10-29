@@ -185,13 +185,14 @@ $(function () {
                 viewmap.setExtent(initExtent);
 
             },
-            addPoint: function (id) {
+            addPoint: function (id,row) {
                 //定义查询对象
-                var queryTask = new QueryTask("http://localhost:6080/arcgis/rest/services/宗海4326/MapServer/0");
+                var url = "http://localhost:6080/arcgis/rest/services/RES1/MapServer/" + (zctype-1)
+                var queryTask = new QueryTask(url);
                 //定义查询参数对象
                 var query = new Query();
                 //查询条件，类似于sql语句的where子句
-                query.where = "ZHDM_1  like '%" + id + "%'";
+                query.where = "LAYERID  like '%" + id + "%'";
                 //返回的字段信息：*代表返回全部字段
                 query.outFields = ["*"];
                 //是否返回几何形状
@@ -208,17 +209,31 @@ $(function () {
                         var P =  queryResult.features[0].attributes;
                         //获得图形graphic
                         var geometry = queryResult.features[0].geometry;
-                        var infoTemplate = new InfoTemplate("属性", "项目名称: ${NAME}<br>用海总面积: ${NUM}");
-                        var attr = {
+
+                        $.ajax({
+                            type: "post",
+                            url: "/rczcgl/assetsconfig/getAllConfigInfo.action",
+                            async: false,
+                            data: {zctype: zctype},
+                            success: function (data) {
+                                tem = "";
+                                for (var i = 0; i < 4; i++) {
+                                    tem = tem + data[i].fieldname + ":${" + data[i].field + "}<br>"
+                                }
+                            }
+                        });
+
+                        var infoTemplate = new InfoTemplate("属性", tem);
+                        /*var attr = {
                             "NAME": P.XMMC,
                             "NUM": P.YHZMJ
-                        };
-                        var graphic = new Graphic(geometry,fill,attr,infoTemplate);
+                        };*/
+                        var graphic = new Graphic(geometry,fill,row,infoTemplate);
                         viewmap.graphics.clear();
                         viewmap.infoWindow.hide();
                         viewmap.graphics.add(graphic);
                         var point = queryResult.features[0].geometry.getExtent().getCenter();
-                        viewmap.centerAndZoom(point, 13);
+                        viewmap.centerAndZoom(point, 15);
                     }
                 }
             }
@@ -565,7 +580,7 @@ function getcolumn() {
                         '<span class="glyphicon glyphicon-map-marker">定位</span></a>',    // 添加按钮
                         events: {               // 注册按钮事件
                             'click #pointxy': function (event, value, row, index) {
-                                map.addPoint(row.layerid);
+                                map.addPoint(row.layerid,row);
                             }
                         }
                     };

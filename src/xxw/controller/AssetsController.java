@@ -197,6 +197,17 @@ public class AssetsController {
         }
     }
 
+    @RequestMapping("/getAssetByid")
+    @ResponseBody
+    public Map<String,Object> getAssetByid(@RequestBody JSONObject json){
+        Map<String,Object> res = new HashMap<>();
+        String zcid = json.getString("zcid");
+        AssetsInfo info = assetsMapper.getAssetByid(zcid);
+        res.put("code", 1);
+        res.put("data", info);
+        return res;
+    }
+
     @RequestMapping("/getAssetsInfoByName")
     @ResponseBody
     public Map<String, Object> findAssetsInfoByName(@RequestBody JSONObject json) {
@@ -211,13 +222,13 @@ public class AssetsController {
                 field1 = info.getField();
             }
             if (zctypes.contains("2") && "2".equals(info.getZctype())){
-                field1 = info.getField();
+                field2 = info.getField();
             }
             if (zctypes.contains("3") && "3".equals(info.getZctype())){
-                field1 = info.getField();
+                field3 = info.getField();
             }
             if (zctypes.contains("4") && "4".equals(info.getZctype())){
-                field1 = info.getField();
+                field4 = info.getField();
             }
         }
         List<AssetsInfo> infoList = assetsMapper.getAssetsInfoByName(StringUtil.formatLike(name), field1, field2, field3, field4);

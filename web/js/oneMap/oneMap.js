@@ -2,7 +2,8 @@
  * Created by wrh on 2020/9/14.
  */
 var map;
-
+var tem = "";
+var attr;
 require(["esri/map",
     "esri/layers/ArcGISDynamicMapServiceLayer",
     "dojo/dom",
@@ -38,7 +39,7 @@ require(["esri/map",
     });
 
     //var dynamicMapServiceLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/TEST4326/MapServer");
-    var zonghaiLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/RES/MapServer");
+    var zonghaiLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/RES1/MapServer");
     //var layer = new ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/NGS_Topo_US_2D/MapServer");
     var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
     var graphicsLayer = new GraphicsLayer();
@@ -56,7 +57,7 @@ require(["esri/map",
         var visible = [];
         $("input[name='ckb']:checkbox").each(function () {
             if ($(this).is(":checked")) {
-                visible.push($(this).attr("value")-1);
+                visible.push($(this).attr("value") - 1);
             }
         });
         if (visible.length == 0) {
@@ -80,19 +81,19 @@ require(["esri/map",
         query.returnGeometry = true;
         var visible = getLayersId();
         //实例化查询对象
-        var queryTask0 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES/MapServer/0");
+        var queryTask0 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer/0");
 
-        var queryTask1 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES/MapServer/1");
+        var queryTask1 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer/1");
 
-        var queryTask2 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES/MapServer/2");
+        var queryTask2 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer/2");
         //进行查询
-        if(visible.includes(0)){
+        if (visible.includes(0)) {
             queryTask0.execute(query, showFindResult);
         }
-        if(visible.includes(1)){
+        if (visible.includes(1)) {
             queryTask1.execute(query, showFindResult);
         }
-        if(visible.includes(2)){
+        if (visible.includes(2)) {
             queryTask2.execute(query, showFindResult);
         }
     }
@@ -113,11 +114,22 @@ require(["esri/map",
             //2.定义面符号
             var PolygonSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, outline, new Color([0, 255, 0, 1]));
             //创建客户端图形
-            var infoTemplate = new InfoTemplate("属性", "项目名称: ${NAME}<br>用海总面积: ${NUM}");
-            var attr = {
-                "NAME": feature.attributes.XMMC,
-                "NUM": feature.attributes.YHZMJ
-            };
+            var infoTemplate = new InfoTemplate("属性", tem);
+
+            $.ajax({
+                type: "post",
+                url: "/rczcgl/assetsconfig/getAssetByid.action",
+                async: false,
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify({zcid: feature.attributes.LAYERID}),
+                success: function (data) {
+                    attr = data.data;
+                }
+            });
+            /*var attr = {
+             "NAME": feature.attributes.XMMC,
+             "NUM": feature.attributes.YHZMJ
+             };*/
             var graphic = new Graphic(geometry, PolygonSymbol, attr, infoTemplate);
             //将客户端图形添加到map中
             addMap(graphic, geometry);
@@ -136,9 +148,19 @@ require(["esri/map",
 
     $("#search").click(function () {
         var queryType = $("#searchCon").val();
-        var zctypes = getLayersId();
+        //var zctypes = getLayersId();
 
-        loadRes(queryType, zctypes);
+        var visible = [];
+        $("input[name='ckb']:checkbox").each(function () {
+            if ($(this).is(":checked")) {
+                visible.push($(this).attr("value"));
+            }
+        });
+        if (visible.length == 0) {
+            visible = [-1];
+        }
+
+        loadRes(queryType, visible);
 
     });
     $("input").focus(function () {
@@ -208,6 +230,23 @@ require(["esri/map",
                     onClickCell: function (field, value, row, $element) {
                     },
                     onDblClickRow: function (row, $element, field) {
+                        $.ajax({
+                            type: "post",
+                            url: "/rczcgl/assetsconfig/getAllConfigInfo.action",
+                            async: false,
+                            data: {zctype: zctypes},
+                            success: function (data) {
+                                tem = "";
+                                for (var i = 0; i < 4; i++) {
+                                    /*if (data[i].fieldname == "项目名称") {
+                                     obj.field = data[i].field;
+                                     obj.title = data[i].fieldname;
+                                     }*/
+                                    tem = tem + data[i].fieldname + ":${" + data[i].field + "}<br>"
+                                }
+                            }
+                        });
+                        attr = row;
                         poiArea(row.layerid);
                     }
                 });
@@ -220,7 +259,7 @@ require(["esri/map",
 
     function poiArea(financed) {
         //定义查询对象
-        //var queryTask = new QueryTask("http://localhost:6080/arcgis/rest/services/RES/MapServer");
+        //var queryTask = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer");
         //定义查询参数对象
         var query = new Query();
         //查询条件，类似于sql语句的where子句
@@ -232,19 +271,19 @@ require(["esri/map",
         query.returnGeometry = true;
         var visible = getLayersId();
         //实例化查询对象
-        var queryTask0 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES/MapServer/0");
+        var queryTask0 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer/0");
 
-        var queryTask1 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES/MapServer/1");
+        var queryTask1 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer/1");
 
-        var queryTask2 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES/MapServer/2");
+        var queryTask2 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer/2");
         //进行查询
-        if(visible.includes(0)){
+        if (visible.includes(0)) {
             queryTask0.execute(query, showQueryResult);
         }
-        if(visible.includes(1)){
+        if (visible.includes(1)) {
             queryTask1.execute(query, showQueryResult);
         }
-        if(visible.includes(2)){
+        if (visible.includes(2)) {
             queryTask2.execute(query, showQueryResult);
         }
         //执行属性查询
@@ -265,11 +304,11 @@ require(["esri/map",
             var P = queryResult.features[0].attributes;
             //获得图形graphic
             var geometry = queryResult.features[0].geometry;
-            var infoTemplate = new InfoTemplate("属性", "项目名称: ${NAME}<br>用海总面积: ${NUM}");
-            var attr = {
-                "NAME": P.XMMC,
-                "NUM": P.YHZMJ
-            };
+            var infoTemplate = new InfoTemplate("属性", tem);
+            /*var attr = {
+             "NAME": P.XMMC,
+             "NUM": P.YHZMJ
+             };*/
             var graphic = new Graphic(geometry, fill, attr, infoTemplate);
 
             addMap(graphic, geometry);
