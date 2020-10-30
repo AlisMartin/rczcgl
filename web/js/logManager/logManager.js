@@ -7,13 +7,10 @@ $(function(){
         pagination:true,
         pageNumber:1,
         pageSize:10,
-        //pageList:[5,10,20,50,100],
+        pageList:[5,10,20,50,100],
         paginationPreText:"上一页",
         paginationNextText:"下一页",
         columns:[
-            {
-                checkbox:true
-            },
             {
                 title:'序号',
                 formatter:function(value,row,index){
@@ -47,6 +44,7 @@ $(function(){
             showTips("加载失败!");
         }
     })
-    $(".fixed-table-pagination").css('margin-top',"18%");
+    $(".bootstrap-table.bootstrap3").css('height',"100%");
+    $(".fixed-table-container").css('height',"93%");
 })
 

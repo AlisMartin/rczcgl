@@ -2,7 +2,6 @@ package xxw.util;
 
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Timer;
