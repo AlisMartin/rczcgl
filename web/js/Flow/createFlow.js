@@ -29,6 +29,8 @@ $(function(){
     })
 
     $('#queryFlow').on('hide.bs.modal', function () {
+        $("input[type=reset]").trigger("click");
+        $("#cthdiv").css('display','none');
         $("#ckqm1").css('display','none');
         $("#ckqm2").css('display','none');
     });

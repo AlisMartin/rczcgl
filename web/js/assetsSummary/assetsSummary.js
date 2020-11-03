@@ -298,12 +298,12 @@ function getCompanys() {
             var data = res.data;
             var htmlLeft = '';
             htmlLeft = htmlLeft +
-                '<li class="active"><a class="allcompany" data-toggle="tab" onclick="reloadTable(this)">所有公司</a></li>';
+                '<li class="active" style="flex: none"><a class="allcompany" data-toggle="tab" onclick="reloadTable(this)">所有公司</a></li>';
 
             for (var i = 0; i < data.length; i++) {
                 //生成表单
                     htmlLeft = htmlLeft +
-                        '<li><a class="' + data[i].id + '" data-toggle="tab" onclick="reloadTable(this)">' + data[i].nodeName + '</a></li>';
+                        '<li style="flex: none"><a class="' + data[i].id + '" data-toggle="tab" onclick="reloadTable(this)">' + data[i].nodeName + '</a></li>';
 
             }
             if(userobj.auth.indexOf("9")>-1||userobj.auth.indexOf("8")>-1){

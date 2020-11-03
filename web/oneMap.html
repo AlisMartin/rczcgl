@@ -5,7 +5,7 @@
     <title></title>
     <link rel="stylesheet" href="https://js.arcgis.com/3.33/esri/css/esri.css">
     <!--<link rel="stylesheet"-->
-          <!--href="http://118.190.54.143:8090/arcgis_js_v39_api/arcgis_js_api/library/3.9/3.9/js/esri/css/esri.css">-->
+    <!--href="http://118.190.54.143:8090/arcgis_js_v39_api/arcgis_js_api/library/3.9/3.9/js/esri/css/esri.css">-->
     <!--<link rel="stylesheet"
           href="http://118.190.54.143:8090/arcgis_js_v39_api/arcgis_js_api/library/3.9/3.9/js/dojo/dijit/themes/claro/claro.css">
 -->
@@ -20,13 +20,13 @@
     <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
     <script src="https://js.arcgis.com/3.33/"></script>
     <!--<script type="text/javascript"-->
-            <!--src="http://118.190.54.143:8090/arcgis_js_v39_api/arcgis_js_api/library/3.9/3.9/init.js"></script>-->
+    <!--src="http://118.190.54.143:8090/arcgis_js_v39_api/arcgis_js_api/library/3.9/3.9/init.js"></script>-->
 
 </head>
 <style>
     html, body, #map {
         height: 100%;
-        background-color: #a3ccff;
+        background-color: #ffffff;
     }
 
     .search {
@@ -44,8 +44,25 @@
         padding: 7px;
         border-radius: 10px;
     }
-    .bootstrap-table{
+
+    .bootstrap-table {
         background-color: white;
+    }
+
+    .esriPopup .titleButton.maximize {
+        display: none;
+    }
+
+    .whitred {
+        width: 20px;
+        height: 20px;
+        /*background-color: #dc5d599c;*/
+        margin-right: 10px;
+    }
+
+    .layer {
+        display: flex;
+        margin-bottom: 10px;
     }
 </style>
 <body>
@@ -61,6 +78,7 @@
             </button>
         </div>
         <input type="text" class="form-control" id="searchCon" placeholder="请输入资产名称">
+
         <div class="input-group-addon">
             <span class="glyphicon glyphicon-search" id="search" aria-hidden="true"></span>
         </div>
@@ -69,23 +87,31 @@
         <!--<caption>资产信息表</caption>-->
     </table>
 </div>
-<div id="layers">
-    <!--<nav class="navbar navbar-default">-->
-        <!--<div class="navbar-header">-->
-            <label class="checkbox-inline">
-                <input type="checkbox" name="ckb" id="inlineCheckbox1" value="1" checked="checked"> 土地资产
-            </label>
-            <label class="checkbox-inline">
-                <input type="checkbox" name="ckb" id="inlineCheckbox2" value="2" checked="checked"> 房屋资产
-            </label>
-            <label class="checkbox-inline">
-                <input type="checkbox" name="ckb" id="inlineCheckbox3" value="3" checked="checked"> 海域资产
-            </label>
-            <label class="checkbox-inline">
-                <input type="checkbox" name="ckb" id="inlineCheckbox4" value="4"> 其他资产
-            </label>
-        <!--</div>-->
-    <!--</nav>-->
+<div id="layers" style="display: flex;flex-direction: column;">
+    <div class="layer">
+        <div class="whitred" style="background-color: #EBFFBE;"></div>
+        <label>
+            <input type="checkbox" name="ckb" id="inlineCheckbox1" value="1" checked="checked"> 土地资产
+        </label>
+    </div>
+    <div class="layer">
+        <div class="whitred" style="background-color: #E8BEFF;"></div>
+        <label>
+            <input type="checkbox" name="ckb" id="inlineCheckbox2" value="2" checked="checked"> 房屋资产
+        </label>
+    </div>
+    <div class="layer">
+        <div class="whitred" style="background-color: #BEE8FF;"></div>
+        <label>
+            <input type="checkbox" name="ckb" id="inlineCheckbox3" value="3" checked="checked"> 海域资产
+        </label>
+    </div>
+    <div class="layer" style="margin-bottom: 0;">
+        <div class="whitred" style="background-color: #58ffe1;"></div>
+        <label>
+            <input type="checkbox" name="ckb" id="inlineCheckbox4" value="4"> 其他资产
+        </label>
+    </div>
 </div>
 </body>
 <script src="js/oneMap/tiandituImgLayer.js"></script>

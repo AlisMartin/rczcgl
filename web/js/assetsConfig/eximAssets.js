@@ -172,8 +172,8 @@ $(function () {
             },
             addSave: function(id){
                 var obj = {
-                    ID:"555",
-                    CON:"",
+                    FID:"555",
+                    BSM:"",
                     LAYERID:id
                 };
                 var newAttributes = lang.mixin({}, obj);

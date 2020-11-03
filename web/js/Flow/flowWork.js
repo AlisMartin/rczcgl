@@ -211,10 +211,12 @@ $(function(){
 
 
     $('#addFlow').on('hide.bs.modal', function () {
+        $("input[type=reset]").trigger("click");
         $("#openPicModal").css('display','none');
     });
 
     $('#queryFlow').on('hide.bs.modal', function () {
+        $("input[type=reset]").trigger("click");
         $("#ckqm1").css('display','none');
         $("#ckqm2").css('display','none');
     });
