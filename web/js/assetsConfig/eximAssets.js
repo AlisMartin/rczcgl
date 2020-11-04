@@ -47,17 +47,21 @@ $(function () {
         viewmap = new Map("viewmap", {
             showInfoWindowOnClick: true, showLabels: true,
             displayGraphicsOnPan: false, logo: false,
-            extent: initExtent,
+            //extent: initExtent,
             maxZoom: 18,//最大缩放等级
-            minZoom: 7,//最小缩放等级
+            minZoom: 10,//最小缩放等级
             autoResize: true
         });
         newmap = new Map("newmap", {
             showInfoWindowOnClick: true, showLabels: true,
             displayGraphicsOnPan: false, logo: false,
-            extent: initExtent,
+            extent: new esri.geometry.Extent({
+                "xmin": 122.36636457677508, "ymin": 37.11526795965575,
+                "xmax": 122.44469643308702, "ymax": 37.14087096007849,
+                //"spatialReference": {"wkid": 4326}
+            }),
             maxZoom: 18,//最大缩放等级
-            minZoom: 7,//最小缩放等级
+            minZoom: 10,//最小缩放等级
             autoResize: true
         });
         /*editmap = new Map("editmap", {
@@ -70,20 +74,18 @@ $(function () {
         });*/
 
         var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
-        var zonghaiLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/宗海4326/MapServer");
-        var shandongIm = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
-        var shandongIm1 = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
-        var shandongIm2 = new ArcGISTiledMapServiceLayer("http://www.qdxhaxqyqgd.com:6080/arcgis/rest/services/地图服务/全省卫图/MapServer");
+        var layer1 = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
 
         //editmap.addLayer(shandongIm2);
         viewmap.addLayer(layer);
 
-        var PointLayer = new FeatureLayer("http://localhost:6080/arcgis/rest/services/testPOINT/FeatureServer/0", {
+        var PointLayer = new FeatureLayer("http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0", {
             mode: FeatureLayer.MODE_SNAPSHOT,
             outFields: ["*"],
             displayOnPan: true
         });
 
+        newmap.addLayer(layer1);
         newmap.addLayer(PointLayer);
 
         function drawEndEvent(evt) {
@@ -187,12 +189,16 @@ $(function () {
             },
             addPoint: function (id,row) {
                 //定义查询对象
-                var url = "http://localhost:6080/arcgis/rest/services/RES1/MapServer/" + (zctype-1)
+
+                var url = "http://localhost:6080/arcgis/rest/services/RES1/MapServer/" + (zctype-1);
+                if(zctype == 2){
+                    url = "http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0";
+                }
                 var queryTask = new QueryTask(url);
                 //定义查询参数对象
                 var query = new Query();
                 //查询条件，类似于sql语句的where子句
-                query.where = "LAYERID  like '%" + id + "%'";
+                query.where = "LAYERID  like '" + id + "'";
                 //返回的字段信息：*代表返回全部字段
                 query.outFields = ["*"];
                 //是否返回几何形状
@@ -201,15 +207,16 @@ $(function () {
                 queryTask.execute(query, showQueryResult);
                 //属性查询完成之后，用showQueryResult来处理返回的结果
                 function showQueryResult(queryResult) {
+                    //创建点符号
+                    var markerSymbol = new SimpleMarkerSymbol();
+                    markerSymbol.setColor(new Color("#00FFFF"));
                     //创建线符号
                     var lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new dojo.Color([255, 0, 0]), 2);
                     //创建面符号
-                    var fill = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, lineSymbol,new Color([255,255,0,0.25]));
+                    var fill = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, lineSymbol,new Color([255,255,0,0.85]));
                     if (queryResult.features.length >= 1) {
-                        var P =  queryResult.features[0].attributes;
                         //获得图形graphic
                         var geometry = queryResult.features[0].geometry;
-
                         $.ajax({
                             type: "post",
                             url: "/rczcgl/assetsconfig/getAllConfigInfo.action",
@@ -222,18 +229,22 @@ $(function () {
                                 }
                             }
                         });
-
                         var infoTemplate = new InfoTemplate("属性", tem);
-                        /*var attr = {
-                            "NAME": P.XMMC,
-                            "NUM": P.YHZMJ
-                        };*/
-                        var graphic = new Graphic(geometry,fill,row,infoTemplate);
+                        var graphic;
+                        if(geometry.x){
+                            graphic = new Graphic(geometry, markerSymbol, row, infoTemplate);
+                        }else{
+                            graphic = new Graphic(geometry, fill, row, infoTemplate);
+                        }
                         viewmap.graphics.clear();
                         viewmap.infoWindow.hide();
                         viewmap.graphics.add(graphic);
-                        var point = queryResult.features[0].geometry.getExtent().getCenter();
-                        viewmap.centerAndZoom(point, 15);
+                        //viewmap.setExtent(geometry.getExtent().expand(6));
+                        if(geometry.x){
+                            viewmap.centerAndZoom(geometry, 17);
+                        }else{
+                            viewmap.setExtent(geometry.getExtent().expand(6));
+                        }
                     }
                 }
             }
@@ -268,6 +279,7 @@ $(function () {
 
     $("#add").on('shown.bs.modal', function () {
         //newmap.autoResize;
+
         if (param.zctype != 2) {
             $("#newmap").hide();
         } else {
@@ -276,6 +288,8 @@ $(function () {
         newmap.resize();
         newmap.reposition();
         map.initEditing();
+        //document.getElementsByClassName('modal').style.height = (parent.window.document.getElementById('chartheight').scrollHeight - 80) + "px";
+        //$(".modal").css("height",(parent.window.document.getElementById('chartheight').scrollHeight - 80) + "px")
     });
     $("#saveAsset").click(function () {
         addAsset();

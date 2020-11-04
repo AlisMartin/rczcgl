@@ -4,6 +4,7 @@
 var map;
 var tem = "";
 var attr;
+var isselect = false;
 require(["esri/map",
     "esri/layers/ArcGISDynamicMapServiceLayer",
     "dojo/dom",
@@ -22,8 +23,9 @@ require(["esri/map",
     "esri/layers/FeatureLayer",
     "esri/layers/ArcGISTiledMapServiceLayer",
     "esri/dijit/InfoWindow",
+    "esri/geometry/Circle",
     "dojo/domReady!"], function (Map, ArcGISDynamicMapServiceLayer, dom, on, Point, QueryTask, SpatialReference, Query, InfoTemplate,
-                                 SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer, Graphic, FeatureLayer, ArcGISTiledMapServiceLayer,InfoWindow) {
+                                 SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer, Graphic, FeatureLayer, ArcGISTiledMapServiceLayer,InfoWindow,Circle) {
     var initExtent = new esri.geometry.Extent({
         "xmin": 122.1102905273437, "ymin": 36.74652099609376,
         "xmax": 122.71179199218744, "ymax": 37.45513916015626,
@@ -39,12 +41,24 @@ require(["esri/map",
         //zoom: 12
     });
 
+    var dynamicMapServiceLayer = new FeatureLayer("http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0",{
+        mode: FeatureLayer.MODE_ONDEMAND,
+        //infoTemplate: infoTemplate,
+        outFields: ["*"]
+    });
+    //var dynamicMapServiceLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/FEATUREpoi/MapServer");
     var zonghaiLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/RES1/MapServer");
     var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
     var graphicsLayer = new GraphicsLayer();
     map.addLayer(layer);
 
     map.addLayer(zonghaiLayer);
+    map.addLayer(dynamicMapServiceLayer);
+
+    dynamicMapServiceLayer.on("load", function featureLayerLoaded(event){
+        dynamicMapServiceLayer.advancedQueryCapabilities.supportsQueryWithDistance = true;
+        console.log("advancedQueryCapabilities", dynamicMapServiceLayer.advancedQueryCapabilities);
+    });
 
     //对checkbox数组进行变量把选中的id添加到visible
     $("input[name='ckb']:checkbox").click(function () {
@@ -68,6 +82,7 @@ require(["esri/map",
     map.on("click", mapClick);
     //获得点击的地图坐标(点坐标)，并创建空间查询参数对象
     function mapClick(e) {
+        isselect = false;
         map.graphics.clear();
         map.infoWindow.hide();
         //获得用户点击的地图坐标
@@ -79,36 +94,94 @@ require(["esri/map",
         query.outSpatialReference = map.spatialReference;
         query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
         query.returnGeometry = true;
+        query.distance = 2000;
+        //query.units = "meters";
         var visible = getLayersId();
         //实例化查询对象
         var queryTask0 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer/0");
 
-        var queryTask1 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer/1");
+        var queryTask1 = new QueryTask("http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0");
 
         var queryTask2 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer/2");
         //进行查询
-        if (visible.includes(0)) {
-            queryTask0.execute(query, showFindResult);
-        }
+
         if (visible.includes(1)) {
-            queryTask1.execute(query, showFindResult);
+            //queryTask1.execute(query, showFindResult);
+            var circleGeometry = new Circle(point,{
+                "radius": 20
+            });
+            query.geometry = circleGeometry;
+            dynamicMapServiceLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW, function(results) {
+                //console.log(results.length);
+                if(results.length<1 || isselect){
+                    if (visible.includes(0)) {
+                        queryTask0.execute(query, showFindResult);
+                    }
+                    if (visible.includes(2)) {
+                        queryTask2.execute(query, showFindResult);
+                    }
+                    return;
+                }
+                isselect = true;
+                //创建点符号
+                var markerSymbol = new SimpleMarkerSymbol();
+                markerSymbol.setColor(new Color("#00FFFF"));
+                //var feature = results.features[0];
+                var geometry = results[0].geometry;
+                //创建客户端图形
+                $.ajax({
+                    type: "post",
+                    url: "/rczcgl/assetsconfig/getAllConfigInfo.action",
+                    async: false,
+                    data: {zctype: zctypes},
+                    success: function (data) {
+                        tem = "";
+                        for (var i = 0; i < 4; i++) {
+                            tem = tem + data[i].fieldname + ":${" + data[i].field + "}<br>"
+                        }
+                    }
+                });
+                var infoTemplate = new InfoTemplate("属性", tem);
+
+                $.ajax({
+                    type: "post",
+                    url: "/rczcgl/assetsconfig/getAssetByid.action",
+                    async: false,
+                    contentType: "application/json;charset=UTF-8",
+                    data: JSON.stringify({zcid: results[0].attributes.LAYERID}),
+                    success: function (data) {
+                        attr = data.data;
+                    }
+                });
+                var graphic = new Graphic(geometry, markerSymbol, attr, infoTemplate);
+                addMap(graphic, geometry);
+            });
+        }else{
+            if (visible.includes(0)) {
+                queryTask0.execute(query, showFindResult);
+            }
+            if (visible.includes(2)) {
+                queryTask2.execute(query, showFindResult);
+            }
         }
-        if (visible.includes(2)) {
-            queryTask2.execute(query, showFindResult);
-        }
+
     }
 
     function showFindResult(queryResult) {
-        if (queryResult.features == 0) {
+        if (queryResult.features == 0||isselect) {
             //map.graphics.clear();
             //map.infoWindow.hide();
             return;
         }
+        isselect = true;
         for (var i = 0; i < queryResult.features.length; i++) {
             //获得该图形的形状
             var feature = queryResult.features[i];
             var geometry = feature.geometry;
             //定义高亮图形的符号
+            //创建点符号
+            var markerSymbol = new SimpleMarkerSymbol();
+            markerSymbol.setColor(new Color("#00FFFF"));
             //1.定义面的边界线符号
             var outline = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT, new Color([255, 0, 0]), 1);
             //2.定义面符号
@@ -138,7 +211,12 @@ require(["esri/map",
                     attr = data.data;
                 }
             });
-            var graphic = new Graphic(geometry, PolygonSymbol, attr, infoTemplate);
+            if(geometry.x){
+                var graphic = new Graphic(geometry, markerSymbol, attr, infoTemplate);
+            }else{
+                var graphic = new Graphic(geometry, PolygonSymbol, attr, infoTemplate);
+            }
+            //var graphic = new Graphic(geometry, PolygonSymbol, attr, infoTemplate);
             //将客户端图形添加到map中
             addMap(graphic, geometry);
         }
@@ -147,16 +225,25 @@ require(["esri/map",
     function addMap(graphic, geometry) {
         map.graphics.clear();
         map.graphics.add(graphic);
+        if(geometry.x){
+            map.infoWindow.show(geometry);
+        }else{
+            map.infoWindow.show(geometry.getExtent().getCenter());
+        }
+        //map.infoWindow.show(geometry.getExtent().getCenter());
         map.infoWindow.setFeatures([graphic]);
-        map.infoWindow.show(geometry.getExtent().getCenter());
-        map.setExtent(geometry.getExtent().expand(6))
+        if(geometry.x){
+            map.centerAndZoom(geometry, 17);
+        }else{
+            map.setExtent(geometry.getExtent().expand(6));
+            //map.centerAndZoom(geometry.getExtent().getCenter(), 15);
+        }
+
     }
 
     var zctypes = getLayersId();
-
     $("#search").click(function () {
         var queryType = $("#searchCon").val();
-        //var zctypes = getLayersId();
 
         var visible = [];
         $("input[name='ckb']:checkbox").each(function () {
@@ -167,7 +254,6 @@ require(["esri/map",
         if (visible.length == 0) {
             visible = [-1];
         }
-
         loadRes(queryType, visible);
 
     });
@@ -237,6 +323,8 @@ require(["esri/map",
                                     return "房屋资产";
                                 } else if (value = '3') {
                                     return "海域资产";
+                                }else if (value = '4') {
+                                    return "其他资产";
                                 }
                             }
                         }, obj
@@ -293,7 +381,7 @@ require(["esri/map",
         //实例化查询对象
         var queryTask0 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer/0");
 
-        var queryTask1 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer/1");
+        var queryTask1 = new QueryTask("http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0");
 
         var queryTask2 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer/2");
         //进行查询
@@ -302,6 +390,7 @@ require(["esri/map",
         }
         if (visible.includes(1)) {
             queryTask1.execute(query, showQueryResult);
+
         }
         if (visible.includes(2)) {
             queryTask2.execute(query, showQueryResult);
@@ -309,6 +398,9 @@ require(["esri/map",
     }
 
     function showQueryResult(queryResult) {
+        //创建点符号
+        var markerSymbol = new SimpleMarkerSymbol();
+        markerSymbol.setColor(new Color("#00FFFF"));
         //创建线符号
         var lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT, new Color([255, 0, 0]), 1);
         //var lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new dojo.Color([255, 0, 0]), 3);
@@ -324,7 +416,12 @@ require(["esri/map",
             //获得图形graphic
             var geometry = queryResult.features[0].geometry;
             var infoTemplate = new InfoTemplate("属性", tem);
-            var graphic = new Graphic(geometry, fill, attr, infoTemplate);
+
+            if(geometry.x){
+                var graphic = new Graphic(geometry, markerSymbol, attr, infoTemplate);
+            }else{
+                var graphic = new Graphic(geometry, fill, attr, infoTemplate);
+            }
             addMap(graphic, geometry);
         }
     }
