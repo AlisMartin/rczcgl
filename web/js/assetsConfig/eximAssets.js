@@ -152,18 +152,20 @@ $(function () {
                 $("#drawTool").click(function () {
                     drawToolbar.activate(Draw.POINT);
                 });
-                var drawToolbar = new Draw(newmap);
+                var drawToolbar = new Draw(newmap, {
+                    showTooltips: false
+                });
 
                 drawToolbar.on("draw-end", function (evt) {
-                    drawToolbar.deactivate();
-                    editToolbar.deactivate();
-                    var obj = {
+                    //drawToolbar.deactivate();
+                    //editToolbar.deactivate();
+                    /*var obj = {
                         ID:"555",
                         CON:"",
                         LAYERID:""
-                    };
+                    };*/
                     geo = evt.geometry;
-                    var newAttributes = lang.mixin({}, obj);
+                    //var newAttributes = lang.mixin({}, obj);
                     var markerSymbol = new SimpleMarkerSymbol();
                     markerSymbol.setColor(new Color("#00FFFF"));
                     var newGraphic = new Graphic(evt.geometry, markerSymbol);
@@ -175,7 +177,6 @@ $(function () {
             addSave: function(id){
                 var obj = {
                     FID:"555",
-                    BSM:"",
                     LAYERID:id
                 };
                 var newAttributes = lang.mixin({}, obj);
@@ -185,7 +186,8 @@ $(function () {
             },
             reset:function(){
                 viewmap.setExtent(initExtent);
-
+                viewmap.graphics.clear();
+                viewmap.infoWindow.hide();
             },
             addPoint: function (id,row) {
                 //定义查询对象
@@ -493,9 +495,9 @@ $(function () {
         queryParamsType: "limit",
         queryParams: function (params) {
             params.zctype = param.zctype;
-            if(userobj.auth!='8'){
+            //if(userobj.auth!='8'){
                 params.gsmc = gsmc;
-            }
+            //}
 
             return JSON.stringify(params);
         },
@@ -538,9 +540,10 @@ function getcolumn() {
     var zctype = $("#zctype").val();
     $.ajax({
         type: "post",
-        url: "/rczcgl/assetsconfig/getConfigInfoshow.action",
+        url: "/rczcgl/assetsconfig/getConfigInfo.action",
         async: false,
-        data: param,
+        data: JSON.stringify(param),
+        contentType: "application/json;charset=UTF-8",
         success: function (data) {
             for (var i = 0; i < data.length; i++) {
 
@@ -933,7 +936,8 @@ function reloadTable(a) {
             params.zctype = param.zctype;
             params.gsmc = gsmc;
             return JSON.stringify(params);
-        }
+        },
+        pageNumber: 1
     })
     $(".bootstrap-table.bootstrap3").css('height',"100%");
     $(".fixed-table-container").css('height',"75%");

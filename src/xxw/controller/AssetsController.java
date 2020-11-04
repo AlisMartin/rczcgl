@@ -37,7 +37,7 @@ public class AssetsController {
 
     @RequestMapping("/getConfigInfo")
     @ResponseBody
-    public List<AssetsConfig> getConfigList(HttpServletRequest request,@RequestBody JSONObject json) {
+    public List<AssetsConfig> getConfigList(@RequestBody JSONObject json) {
         String zctype = json.getString("zctype");
        // String order = json.getString("order");
         List<AssetsConfig> info = assetsMapper.getAssetsConfigInfo(zctype, null);
@@ -261,6 +261,7 @@ public class AssetsController {
         //插入资产的公司id
         insertInfo.put("companyid", user.getComId());
         insertInfo.put("zcid", uuid.toString());
+        insertInfo.put("layerid", uuid.toString());
         int i = assetsMapper.insertAssetsInfo(insertInfo);
         if (i == 1) {
             return new ResponseObject(1, "成功", uuid);
