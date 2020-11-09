@@ -444,6 +444,9 @@
         <if test="pathId !=null">
             and b.PATHID= #{pathId,jdbcType=VARCHAR}
         </if>
+        <if test="filename !=null">
+            and b.FILENAME LIKE #{filename,jdbcType=VARCHAR}
+        </if>
     </select>
     <select id="selectPathId" parameterType="java.lang.String" resultType="java.util.HashMap">
         select * from FILEMANAGER  WHERE 1=1
@@ -455,6 +458,12 @@
         </if>
         <if test="type !=null">
             and TYPE= #{type,jdbcType=VARCHAR}
+        </if>
+    </select>
+    <select id="selectFileByName" parameterType="java.lang.String" resultType="xxw.po.AssetsFile">
+        select * from FILEMANAGER  WHERE 1=1
+        <if test="filename !=null">
+            and FILENAME= #{filename,jdbcType=VARCHAR}
         </if>
     </select>
     <update id="updateFile" parameterType="java.lang.String" >

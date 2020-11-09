@@ -3,6 +3,7 @@ package xxw.mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import xxw.po.AssetsFile;
 import xxw.po.FlowHistory;
 import xxw.po.FlowInstance;
 import xxw.po.NodeInfo;
@@ -32,10 +33,11 @@ public interface FlowMapper {
 
     List<String> selectType(@Param("com")String com,@Param("pos")String pos);
 
-    List<Map<String,String>>selectFile(@Param("com")String com,@Param("pos")String pos,@Param("type")String type,@Param("fileDate")String fileDate,@Param("pathId")String pathId);
+    List<Map<String,String>>selectFile(@Param("com")String com,@Param("pos")String pos,@Param("type")String type,@Param("fileDate")String fileDate,@Param("pathId")String pathId,@Param("filename")String filename);
 
     List<Map<String,String>>selectPathId(@Param("com")String com,@Param("pos")String pos,@Param("type")String type);
 
+    List<AssetsFile> selectFileByName(@Param("filename")String filename);
     int insertManagerFile(@Param("fileId")String fileId,@Param("fileName")String fileName,@Param("filePath")String filePath,@Param("realName")String realName,@Param("pathId")String pathId,@Param("fileDate")String fileDate);
     int updateFile(@Param("fileId")String fileId,@Param("zcid")String zcid);
     void savefilefold(@Param("com")String com,@Param("pos")String pos,@Param("type")String type,@Param("pathid")String pathid);

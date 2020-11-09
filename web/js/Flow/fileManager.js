@@ -300,7 +300,9 @@ $(function(){
         var com=$("#fileone").val();
         var pos=$("#fileTwo").val();
         var type=$("#fileThree").val();
+        var fileName=$("#fileName").val();
         var param={};
+        param.fileName=fileName;
         if(com=="null"||com=="请选择"||com==""||com==null){
             com=null;
         }else{
@@ -548,7 +550,11 @@ function insertFile(filePathId){
         data:{'filetype':type,'com':com,'pos':pos,'filename':filename,'pathId':filePathId},
         success:function(resonsedata){
             debugger;
-            alert("保存成功");
+            if(resonsedata.code == 1){
+                alert("保存成功");
+            }else{
+                alert(resonsedata.message);
+            }
             $("#fileup").modal('hide');
         },
         error:function(){

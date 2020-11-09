@@ -41,29 +41,35 @@ require(["esri/map",
         //zoom: 12
     });
 
-    var dynamicMapServiceLayer = new FeatureLayer("http://192.168.43.196:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0",{
+    var featureLayer = new FeatureLayer("http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0",{
         mode: FeatureLayer.MODE_ONDEMAND,
         //infoTemplate: infoTemplate,
         outFields: ["*"]
     });
-    //var dynamicMapServiceLayer = new ArcGISDynamicMapServiceLayer("http://192.168.43.196:6080/arcgis/rest/services/FEATUREpoi/MapServer");
-    var zonghaiLayer = new ArcGISDynamicMapServiceLayer("http://192.168.43.196:6080/arcgis/rest/services/RES1/MapServer");
-    var layer = new ArcGISTiledMapServiceLayer("http://192.168.43.196:6080/arcgis/rest/services/DELETE/MapServer");
-    var graphicsLayer = new GraphicsLayer();
-    map.addLayer(layer);
-
+    var zonghaiLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/RES1/MapServer");
+    var hideLayer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/RES2/MapServer");
+    var tiledLayer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
+    map.addLayer(tiledLayer);
+    map.addLayer(hideLayer);
     map.addLayer(zonghaiLayer);
-    map.addLayer(dynamicMapServiceLayer);
+    map.addLayer(featureLayer);
+    hideLayer.setOpacity(0.3);
 
-    dynamicMapServiceLayer.on("load", function featureLayerLoaded(event){
-        dynamicMapServiceLayer.advancedQueryCapabilities.supportsQueryWithDistance = true;
-        console.log("advancedQueryCapabilities", dynamicMapServiceLayer.advancedQueryCapabilities);
+    featureLayer.on("load", function featureLayerLoaded(event){
+        featureLayer.advancedQueryCapabilities.supportsQueryWithDistance = true;
+        console.log("advancedQueryCapabilities", featureLayer.advancedQueryCapabilities);
     });
 
     //对checkbox数组进行变量把选中的id添加到visible
     $("input[name='ckb']:checkbox").click(function () {
         var visible = getLayersId();
         zonghaiLayer.setVisibleLayers(visible);
+        //hideLayer.setOpacity(0.1);
+        if (visible.includes(1)) {
+            featureLayer.setVisibility(true)
+        }else{
+            featureLayer.setVisibility(false)
+        }
     });
     function getLayersId() {
         var visible = [];
@@ -98,11 +104,11 @@ require(["esri/map",
         //query.units = "meters";
         var visible = getLayersId();
         //实例化查询对象
-        var queryTask0 = new QueryTask("http://192.168.43.196:6080/arcgis/rest/services/RES1/MapServer/0");
+        var queryTask0 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer/0");
 
-        var queryTask1 = new QueryTask("http://192.168.43.196:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0");
+        var queryTask1 = new QueryTask("http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0");
 
-        var queryTask2 = new QueryTask("http://192.168.43.196:6080/arcgis/rest/services/RES1/MapServer/2");
+        var queryTask2 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer/2");
         //进行查询
 
         if (visible.includes(1)) {
@@ -111,7 +117,7 @@ require(["esri/map",
                 "radius": 20
             });
             query.geometry = circleGeometry;
-            dynamicMapServiceLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW, function(results) {
+            featureLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW, function(results) {
                 //console.log(results.length);
                 if(results.length<1 || isselect){
                     if (visible.includes(0)) {
@@ -379,11 +385,11 @@ require(["esri/map",
         query.returnGeometry = true;
         var visible = getLayersId();
         //实例化查询对象
-        var queryTask0 = new QueryTask("http://192.168.43.196:6080/arcgis/rest/services/RES1/MapServer/0");
+        var queryTask0 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer/0");
 
-        var queryTask1 = new QueryTask("http://192.168.43.196:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0");
+        var queryTask1 = new QueryTask("http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0");
 
-        var queryTask2 = new QueryTask("http://192.168.43.196:6080/arcgis/rest/services/RES1/MapServer/2");
+        var queryTask2 = new QueryTask("http://localhost:6080/arcgis/rest/services/RES1/MapServer/2");
         //进行查询
         if (visible.includes(0)) {
             queryTask0.execute(query, showQueryResult);

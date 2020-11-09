@@ -65,22 +65,23 @@ $(function () {
             minZoom: 10,//最小缩放等级
             autoResize: true
         });
-        /*editmap = new Map("editmap", {
+        editmap = new Map("editmap", {
             showInfoWindowOnClick: true, showLabels: true,
             displayGraphicsOnPan: false, logo: false,
             extent: initExtent,
             maxZoom: 18,//最大缩放等级
-            minZoom: 7,//最小缩放等级
+            minZoom: 10,//最小缩放等级
             autoResize: true
-        });*/
+        });
 
-        var layer = new ArcGISTiledMapServiceLayer("http://192.168.43.196:6080/arcgis/rest/services/DELETE/MapServer");
-        var layer1 = new ArcGISTiledMapServiceLayer("http://192.168.43.196:6080/arcgis/rest/services/DELETE/MapServer");
+        var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
+        var layer1 = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
+        var layer2 = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
 
-        //editmap.addLayer(shandongIm2);
+        editmap.addLayer(layer2);
         viewmap.addLayer(layer);
 
-        var PointLayer = new FeatureLayer("http://192.168.43.196:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0", {
+        var PointLayer = new FeatureLayer("http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0", {
             mode: FeatureLayer.MODE_SNAPSHOT,
             outFields: ["*"],
             displayOnPan: true
@@ -89,8 +90,9 @@ $(function () {
         newmap.addLayer(layer1);
         newmap.addLayer(PointLayer);
 
+
         function drawEndEvent(evt) {
-            toolBar.deactivate();
+            //toolBar.deactivate();
             //添加图形到地图
             var symbol;
             if (evt.geometry.type === "point" || evt.geometry.type === "multipoint") {
@@ -105,24 +107,32 @@ $(function () {
             newmap.graphics.add(graphic)
         }
 
-        /*function drawEndEvent1(evt) {
-            toolBaredit.deactivate();
-            //添加图形到地图
-            var symbol;
-            if (evt.geometry.type === "point" || evt.geometry.type === "multipoint") {
-                var markerSymbol = new SimpleMarkerSymbol();
-                markerSymbol.setColor(new Color("#00FFFF"));
-                symbol = markerSymbol;
-            }
-
-            var graphic = new Graphic(evt.geometry, symbol);
-            $("#" + X).val(evt.geometry.x);
-            $("#" + Y).val(evt.geometry.y);
-            editmap.graphics.clear();
-            editmap.graphics.add(graphic)
-        }*/
-
         map = {
+            teast:function(){
+                $("#drawTool1").click(function () {
+                    drawToolbar1.activate(Draw.POINT);
+                });
+                var drawToolbar1 = new Draw(newmap, {
+                    showTooltips: false
+                });
+                drawToolbar1.on("draw-end", function (evt) {
+                    //toolBaredit.deactivate();
+                    //添加图形到地图
+                    var symbol;
+                    if (evt.geometry.type === "point" || evt.geometry.type === "multipoint") {
+                        var markerSymbol = new SimpleMarkerSymbol();
+                        markerSymbol.setColor(new Color("#00FFFF"));
+                        symbol = markerSymbol;
+                    }
+
+                    var graphic = new Graphic(evt.geometry, symbol);
+                    //$("#" + X).val(evt.geometry.x);
+                    //$("#" + Y).val(evt.geometry.y);
+                    editmap.graphics.clear();
+                    editmap.graphics.add(graphic)
+                });
+
+            },
             initEditing: function (evt) {
                 var currentLayer = PointLayer;
                 var editToolbar = new Edit(newmap);
@@ -193,9 +203,9 @@ $(function () {
             addPoint: function (id,row) {
                 //定义查询对象
 
-                var url = "http://192.168.43.196:6080/arcgis/rest/services/RES1/MapServer/" + (zctype-1);
+                var url = "http://localhost:6080/arcgis/rest/services/RES1/MapServer/" + (zctype-1);
                 if(zctype == 2){
-                    url = "http://192.168.43.196:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0";
+                    url = "http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0";
                 }
                 var queryTask = new QueryTask(url);
                 //定义查询参数对象
@@ -214,9 +224,9 @@ $(function () {
                     var markerSymbol = new SimpleMarkerSymbol();
                     markerSymbol.setColor(new Color("#00FFFF"));
                     //创建线符号
-                    var lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new dojo.Color([255, 0, 0]), 2);
+                    var lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new dojo.Color([255, 0, 0]), 4);
                     //创建面符号
-                    var fill = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, lineSymbol,new Color([255,255,0,0.85]));
+                    var fill = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, lineSymbol,new Color([255,255,0,0.2]));
                     if (queryResult.features.length >= 1) {
                         //获得图形graphic
                         var geometry = queryResult.features[0].geometry;
@@ -280,6 +290,9 @@ $(function () {
         newmap.graphics.clear();
     });
 
+    $("#editAssert").on('shown.bs.modal', function () {
+        map.teast();
+    });
     $("#add").on('shown.bs.modal', function () {
         //newmap.autoResize;
 
@@ -291,6 +304,7 @@ $(function () {
         newmap.resize();
         newmap.reposition();
         map.initEditing();
+
         //document.getElementsByClassName('modal').style.height = (parent.window.document.getElementById('chartheight').scrollHeight - 80) + "px";
         //$(".modal").css("height",(parent.window.document.getElementById('chartheight').scrollHeight - 80) + "px")
     });

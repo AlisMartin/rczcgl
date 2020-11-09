@@ -12,6 +12,7 @@ import xxw.mapper.FlowMapper;
 import xxw.mapper.SysMessageMapper;
 import xxw.mapper.UserMapper;
 import xxw.po.*;
+import xxw.util.StringUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -224,7 +225,8 @@ public class FlowController {
         String pos=request.getParameter("pos");
         String fileDate=request.getParameter("fileDate");
         String pathId=request.getParameter("pathId");
-        return flowMapper.selectFile(com,pos,filetype,fileDate,pathId);
+        String fileName=request.getParameter("fileName");
+        return flowMapper.selectFile(com,pos,filetype,fileDate,pathId, StringUtil.formatLike(fileName));
     }
 
     @RequestMapping("/insertFile")
@@ -237,7 +239,7 @@ public class FlowController {
 
     @RequestMapping("/insertManagerFile")
     @ResponseBody
-    public void insertManagerFile(HttpServletRequest request){
+    public ResponseObject insertManagerFile(HttpServletRequest request){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
         Date date=new Date();
         String year=sdf.format(date);
@@ -255,10 +257,15 @@ public class FlowController {
         }else{
             filepath="filemanager/"+year+"/"+com+"/"+pos+"/"+filetype;
         }
-
+        List<AssetsFile> assetsFiles = new ArrayList<>();
+        assetsFiles = flowMapper.selectFileByName(StringUtil.formatLike(filename));
+        if (assetsFiles.size() > 0){
+            return new ResponseObject(0,"文件名称重复",null);
+        }
         UUID uid=UUID.randomUUID();
         String id=uid.toString();
         flowMapper.insertManagerFile(id,filename,filepath,null,pathId,year);
+        return new ResponseObject(1,"添加成功",null);
 
     }
 

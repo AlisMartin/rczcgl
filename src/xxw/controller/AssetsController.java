@@ -214,6 +214,11 @@ public class AssetsController {
         Map<String, Object> res = new HashMap<>();
         JSONArray zctypes = json.getJSONArray("zctypes");
         String name = json.getString("name");
+        if(StringUtil.isEmpty(name)){
+            res.put("code", 0);
+            res.put("data", null);
+            return res;
+        }
         List<AssetsConfig> assetsInfos = assetsMapper.getFieldByTypeAndName(zctypes);
 
         String field1 = null, field2 = null, field3 = null, field4 = null;
