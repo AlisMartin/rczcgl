@@ -6,7 +6,9 @@ var fileid = "";
 var countobj={};
 var user= $.cookie('user');
 var userobj=eval('('+user+')');
+var bootheight;
 $(function () {
+    bootheight=parent.window.document.getElementById('chartheight').scrollHeight*0.85+"px";
     getCompanys();
     var zctype = parent.document.getElementById("InfoList").src.split("?")[1].split("&&")[0];
     zctype = zctype.substring(zctype.length - 1, zctype.length);
@@ -24,6 +26,8 @@ $(function () {
         method: 'post',
         clickToSelect: true,
         showFooter:true,
+        theadClasses: "fontstyle",//这里设置表头样式
+        height:bootheight,
        // sidePagination: "server",
        // pagination: true,
        // pageNumber: 1,
@@ -89,7 +93,16 @@ $(function () {
 
 function getcolumn() {
     debugger;
-    columns = [];
+    columns = [
+        {
+            title:'序号',
+            formatter:function(value,row,index){
+                var pageSize=$("#assetsTable").bootstrapTable('getOptions').pageSize;
+                var pageNumber=$("#assetsTable").bootstrapTable('getOptions').pageNumber;
+                return pageSize*(pageNumber-1)+index+1;
+            },
+        },
+    ];
     var type=param.zctype+",5";
     $.ajax({
         type: "post",

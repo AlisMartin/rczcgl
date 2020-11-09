@@ -84,7 +84,7 @@
         <if test="gsmc !=null">
             and COMPANYID = #{gsmc,jdbcType=VARCHAR}
         </if>
-        order by DAYORDER
+        order by DAYORDER,"TO_NUMBER"("FIELD1")
     </select>
     <select id="getSumAssetsInfo" resultType="xxw.po.AssetsInfo">
         select * from ASSETS_INFO a LEFT  JOIN FINANCE b on a.FINANCEID=b.ZCID where 1=1
@@ -94,7 +94,7 @@
         <if test="gsmc !=null">
             and a.COMPANYID = #{gsmc,jdbcType=VARCHAR}
         </if>
-        ORDER BY a.COMPANYID,a.FINANCEID
+        ORDER BY a.COMPANYID,a.FINANCEID,"TO_NUMBER"("FIELD1")
     </select>
     <select id="getAssetByid" resultType="xxw.po.AssetsInfo">
         select * from ASSETS_INFO a  where 1=1

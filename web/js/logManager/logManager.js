@@ -2,8 +2,9 @@ $(function(){
     $('#logTable').bootstrapTable({
         url:'/rczcgl/log/getLogs.action',
         method:'post',
+        //contentType: "application/json;charset=UTF-8",
         clickToSelect:true,
-        sidePagination:"client",
+        sidePagination:"server",
         pagination:true,
         pageNumber:1,
         pageSize:10,
@@ -41,7 +42,6 @@ $(function(){
         onLoadSuccess:function(){
         },
         onLoadError:function(){
-            showTips("加载失败!");
         }
     })
     $(".bootstrap-table.bootstrap3").css('height',"100%");

@@ -7,6 +7,7 @@ var fileid = "", isreset, newmap, editmap, viewmap, map, toolBar, X, Y,geo,
     financeid = "",
     url = '/rczcgl/assetsconfig/getAssetsInfo.action',
     gsmc = userobj.comId;
+var bootheight;
 
 
 $(function () {
@@ -73,13 +74,13 @@ $(function () {
             autoResize: true
         });*/
 
-        var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
-        var layer1 = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
+        var layer = new ArcGISTiledMapServiceLayer("http://192.168.43.196:6080/arcgis/rest/services/DELETE/MapServer");
+        var layer1 = new ArcGISTiledMapServiceLayer("http://192.168.43.196:6080/arcgis/rest/services/DELETE/MapServer");
 
         //editmap.addLayer(shandongIm2);
         viewmap.addLayer(layer);
 
-        var PointLayer = new FeatureLayer("http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0", {
+        var PointLayer = new FeatureLayer("http://192.168.43.196:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0", {
             mode: FeatureLayer.MODE_SNAPSHOT,
             outFields: ["*"],
             displayOnPan: true
@@ -192,9 +193,9 @@ $(function () {
             addPoint: function (id,row) {
                 //定义查询对象
 
-                var url = "http://localhost:6080/arcgis/rest/services/RES1/MapServer/" + (zctype-1);
+                var url = "http://192.168.43.196:6080/arcgis/rest/services/RES1/MapServer/" + (zctype-1);
                 if(zctype == 2){
-                    url = "http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0";
+                    url = "http://192.168.43.196:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0";
                 }
                 var queryTask = new QueryTask(url);
                 //定义查询参数对象
@@ -254,7 +255,7 @@ $(function () {
         //}, 5000);
     });
 
-
+    bootheight=parent.window.document.getElementById('chartheight').scrollHeight*0.75+"px";
     getCompanys();
     var zctype = parent.document.getElementById("InfoList").src.split("?")[1].split("&&")[0];
     zctype = zctype.substring(zctype.length - 1, zctype.length);
@@ -334,6 +335,7 @@ $(function () {
         $('#assetsTable').bootstrapTable({
             url: '/rczcgl/assetsconfig/getAssetsInfo.action',
             method: 'post',
+            height:bootheight,
             contentType: "application/json;charset=UTF-8",
             clickToSelect: true,
             sidePagination: "server",
@@ -484,10 +486,12 @@ $(function () {
         method: 'post',
         contentType: "application/json;charset=UTF-8",
         clickToSelect: true,
+        height:bootheight,
         sidePagination: "server",
         pagination: true,
         pageNumber: 1,
         pageSize: 10,
+        theadClasses: "fontstyle",//这里设置表头样式
         //pageList: [5, 10, 20, 50, 100],
         paginationPreText: "上一页",
         paginationNextText: "下一页",
@@ -512,7 +516,7 @@ $(function () {
         }
     })
     $(".bootstrap-table.bootstrap3").css('height',"100%");
-    $(".fixed-table-container").css('height',"75%");
+    $(".fixed-table-container").css('height',"73%");
 });
 
 function getcolumn() {
@@ -521,11 +525,22 @@ function getcolumn() {
         visible: true,
         class: "dayorder",
         field: "dayorder",
-        title: "是否预警"
+        title: "是否预警",
+        align:'center'
     };
     //obj.field = "yujing";
     //obj.title = "是否预警";
-    columns = [{
+    columns = [
+
+        {
+            title:'序号',
+            formatter:function(value,row,index){
+                var pageSize=$("#assetsTable").bootstrapTable('getOptions').pageSize;
+                var pageNumber=$("#assetsTable").bootstrapTable('getOptions').pageNumber;
+                return pageSize*(pageNumber-1)+index+1;
+            },
+        },
+        {
         visible: true,
         class: "dayorder",
         field: "dayorder",
@@ -718,8 +733,8 @@ function btnGroup() {   // 自定义方法，添加操作按钮
         '<span class="glyphicon glyphicon-upload">上传附件</span></a>' +
         '<a href="####" class="btn btn-info" id="filesdown" data-toggle="modal" data-target="#filedown" style="margin-left:15px" title="下载附件">' +
         '<span class="glyphicon glyphicon-download">下载附件</span></a>' +
-        '<a href="####" class="btn btn-info" id="reset" data-toggle="modal" data-target="#editAssert" style="margin-left:15px" title="变更资产人">' +
-        '<span class="glyphicon glyphicon-edit">变更资产人</span></a>';
+        '<a href="####" class="btn btn-info" id="reset" data-toggle="modal" data-target="#editAssert" style="margin-left:15px" title="信息变更">' +
+        '<span class="glyphicon glyphicon-edit">信息变更</span></a>';
     var htmlHistory =
         '<a href="####" class="btn btn-info" id="modUser"  ' +
         ' title="档案卡">' +
@@ -983,8 +998,8 @@ function setColor(tableId) {
     var tableId = document.getElementById(tableId);
 
     for (var i = 1; i < tableId.rows.length; i++) {
-        var row = tableId.rows[i].cells[0].innerHTML;
-        var days = tableId.rows[i].cells[1].innerHTML;
+        var row = tableId.rows[i].cells[1].innerHTML;
+        var days = tableId.rows[i].cells[2].innerHTML;
         if (!isNaN(row)) {
             row = parseInt(row);
             if (row <= 0) {
