@@ -2,11 +2,11 @@ var spinfo={};
 var date=getNowDate();
 var user= $.cookie('user');
 var userobj=eval('('+user+')');
+$("#user").val(userobj.id);
 //节点信息
 var node;
 $(function(){
     //获取节点配置信息
-    getFlowConfig();
     //加载时间控件
     $('#datetimepicker2').datetimepicker({
         startDate:date,
@@ -15,18 +15,6 @@ $(function(){
         minView:"month",
         autoclose:true
     });
-
-    //查看签名图片
-    $("#ckqm1").click(function(){
-        $("#qmPicModal").modal('show');
-        var sign=$("#cqm1").val();
-        $("#qmImg").attr("src","/rczcgl/signPic/"+sign+".jpg");
-    })
-    $("#ckqm2").click(function(){
-        $("#qmPicModal").modal('show');
-        var sign=$("#cqm2").val();
-        $("#qmImg").attr("src","/rczcgl/signPic/"+sign+".jpg");
-    })
 
     $('#queryFlow').on('hide.bs.modal', function () {
         $("input[type=reset]").trigger("click");
@@ -46,11 +34,11 @@ $(function(){
     });
 
 //发起流程
-/*    if(pdFlow(userobj.id,"1")){
-        $("#fqlc").css('display','block');
-    }else{
-        $("#fqlc").css('display','none');
-    }*/
+    /*    if(pdFlow(userobj.id,"1")){
+     $("#fqlc").css('display','block');
+     }else{
+     $("#fqlc").css('display','none');
+     }*/
 
     if(userobj.auth.indexOf("7")>-1||userobj.auth.indexOf("8")>-1){
         $("#fqlc").css('display','block');
@@ -58,8 +46,8 @@ $(function(){
         $("#fqlc").css('display','none');
     }
     $("#fqlc").click(function(){
-            initmodalinfo();
-            $("#addFlow").modal('show');
+        initmodalinfo();
+        $("#addFlow").modal('show');
     })
 //设置文件上传
     $("#wjkup").click(function(){
@@ -131,7 +119,7 @@ $(function(){
     })
     $("#saveml").click(function(){
         debugger;
-       var wj= $("#wj").find("option:selected").text();
+        var wj= $("#wj").find("option:selected").text();
         var wjid= $("#wj").val();
         if(wj==null||wj==""||wj=="请选择"){
             alert("请选择要发送的文件");
@@ -167,9 +155,9 @@ $(function(){
         $("#addFlow").modal('hide');
         $("#addFlowForm")[0].reset();
     })
- /*   $("#addFlow").on('hide.bs.modal',function(){
+    /*   $("#addFlow").on('hide.bs.modal',function(){
 
-    })*/
+     })*/
 
     //上传
     $("#fileup").on('shown.bs.modal',function(){
@@ -357,24 +345,12 @@ $(function(){
                 checkbox:true
             },
             {
-                field:'flowId',
-                title:'流程编号'
+                field:'flowName',
+                title:'流程名称'
             },
             {
-                field:'fqrName',
-                title:'发起人'
-            },
-            {
-                field:'nodeName',
-                title:'流程节点',
-            },
-            {
-                title:"待办人",
-                field:'dName'
-            },
-            {
-                title:"文件接收人",
-                field:'sqInfo',
+                field:'fqr',
+                title:'发起人',
                 formatter:function(value,row,index){
                     if(value==null){
                         return null;
@@ -382,7 +358,18 @@ $(function(){
                         var names= getUserById(value);
                         return   names;
                     }
-
+                }
+            },
+            {
+                title:"待办人",
+                field:'jsr',
+                formatter:function(value,row,index){
+                    if(value==null){
+                        return null;
+                    }else{
+                        var names= getUserById(value);
+                        return   names;
+                    }
                 }
             },
             {
@@ -398,7 +385,7 @@ $(function(){
                             data="退回";
                             break;
                         case 3:
-                            data="通过";
+                            data="通过(查阅)";
                             break;
                     }
                     return data;
@@ -459,7 +446,8 @@ function initmodalinfo(){
     var user= $.cookie('user');
     var userobj=eval('('+user+')');
     var nowdate=getNowDate();
-    $("#fqr").val(userobj.userName);
+
+    $("#fqr").val(getUserById(userobj.id));
     $("#fqrid").val(userobj.id);
     $("#startDate").val(nowdate);
     $("#user").val(userobj.id);
@@ -472,7 +460,7 @@ function insertFlowInstance(){
         url:"/rczcgl/flow/createFLow.action",
         data:$("#addFlowForm").serialize(),
         success:function(resonsedata){
-            debugger
+            debugger;
             var flowinfo=resonsedata.data;
             insertMassage(flowinfo);
             alert("成功!");
@@ -484,27 +472,27 @@ function insertFlowInstance(){
 }
 
 function initDepartTree(){
-/*    $.ajax({
-        type:"post",
-        url:"/rczcgl/depart/getnodes.action",
-        dataType:"json",
-        async:false,
-        success:function(data){
-            $('#departtree').treeview({
-                data: data,
-                //levels:1 , //默认显示子级的数量
-                //collapseIcon:" glyphicon glyphicon-user",  //收缩节点的图标
-                //expandIcon:"glyphicon glyphicon-user",    //展开节点的图标
-                nodeIcon:"glyphicon glyphicon-user",
-                showIcon: true,//是否显示图标
-                showCheckbox:true,//是否显示多选框
+    /*    $.ajax({
+     type:"post",
+     url:"/rczcgl/depart/getnodes.action",
+     dataType:"json",
+     async:false,
+     success:function(data){
+     $('#departtree').treeview({
+     data: data,
+     //levels:1 , //默认显示子级的数量
+     //collapseIcon:" glyphicon glyphicon-user",  //收缩节点的图标
+     //expandIcon:"glyphicon glyphicon-user",    //展开节点的图标
+     nodeIcon:"glyphicon glyphicon-user",
+     showIcon: true,//是否显示图标
+     showCheckbox:true,//是否显示多选框
 
-            });
-        },
-        error:function(){
-            alert("系统错误！");
-        }
-    })*/
+     });
+     },
+     error:function(){
+     alert("系统错误！");
+     }
+     })*/
     $('#userTable').bootstrapTable({
         url:'/rczcgl/user/selectAllUser.action',
         method:'post',
@@ -551,15 +539,16 @@ function insertMassage(flowinfo){
     //var userobj=eval('('+user+')');
     var nowdate=getNowDate();
     var param={};
-    param.tsUser=flowinfo.fqrName;
     param.tsId=flowinfo.fqr;
+    param.jsId=flowinfo.jsr;
     param.tsDate=nowdate;
     param.desc="文件待审批";
     param.type="1";
     param.fileName=flowinfo.wjmc;
-    param.node=parseInt(flowinfo.node)+1;
+   // param.node=parseInt(flowinfo.node)+1;
     param.show="1";
     param.flowId=flowinfo.flowId;
+    param.flowName=flowinfo.flowName;
     param.fileId=flowinfo.file;
 
     $.ajax({
@@ -680,7 +669,7 @@ function getManagerFiles(param){
 function queryInfo(a){
     debugger;
     $("#queryFlow").modal('show');
-    $("#cfqr").val(a.fqrName);
+    $("#cfqr").val(getUserById(a.fqr));
     $("#cstartDate").val(a.startDate);
     $("#clwjg").val(a.lwjg);
     $("#cswwh").val(a.swwh);
@@ -689,62 +678,56 @@ function queryInfo(a){
     $("#cdbsx").val(a.dbsx);
     $("#cwjmc").val(a.wjmc);
     $("#cbwyj").val(a.bwyj);
-    $("#cldps").val(a.ldps);
-    $("#cnode").val(a.node);
     $("#cflowId").val(a.flowId);
+    $("#cflowname").val(a.flowName);
+    if(a.flowType=="1"){
+        $("#cflowtype").val("查阅");
+    }else if(a.flowType=="2"){
+        $("#cflowtype").val("审批");
+    }
+
 
     if(a.status=="2"){
         $("#cthdiv").css('display','block');
         $("#cthyy").val(a.rejectReason);
     }
-    var node=parseInt(a.node);
-    if(node>=2){
-        getqm(spinfo);
-    }
-    var qm1=$("#cqm1").val();
-    var qm2=$("#cqm2").val();
-    if(qm1!=""&&qm1!=null){
-        $("#ckqm1").css('display','block');
-    }
-    if(qm2!=""&&qm2!=null){
-        $("#ckqm2").css('display','block');
-    }
+    querySpInfo(a);
 }
 
-//查询签名
-function getqm(a){
+//查询审批信息
+function querySpInfo(a){
+    debugger;
+    $(".zjqm").remove();
     var param={};
-    param.flowId= a.flowId;
-    param.node= a.node;
-    var node=parseInt(a.node);
+        param.flowId= a.flowId;
     $.ajax({
         type:"post",
-        url:"/rczcgl/flow/getQm.action",
+        url:"/rczcgl/flow/queryHistoryFlowInfos.action",
         async:false,
-        data:param,
-        success:function(data){
-            for(var i=0;i<data.length;i++){
-                if(data[i].node=="2"){
-                    if(data[i].yzqm.indexOf(".")>-1){
-                        $("#cqm1").val(data[i].yzqm.split(".")[0]);
-                    }else{
-                        $("#cqm1").val(data[i].yzqm);
+        contentType:"application/json",
+        data:JSON.stringify(param),
+        success:function(resonsedata){
+            debugger;
+            var data=resonsedata;
+            var html="";
+            if(data!=null){
+                for(var i=0;i<data.length;i++){
+                    if(data[i].yzqm!=null&&data[i].yzqm!=""){
+                        html=html+"<tr class='zjqm'><td colspan='2'><input type='text'  value='"+data[i].yzqm+"' class='tableborder' disabled='disabled'</td><td colspan='2'><input type='text'   value='"+data[i].yzyj+"' class='tableborder' disabled='disabled'</td></tr>";
+                  /*      $("#cflowtable tbody").append("<tr class='zjqm'>");
+                        $("#cflowtable tbody").append("<td><input type='text' colspan='2' value='"+data[i].yzqm+"' class='tableborder' disabled='disabled'</td>");
+                        $("#cflowtable tbody").append("<td><input type='text'  colspan='2' value='"+data[i].yzyj+"' class='tableborder' disabled='disabled'</td>");
+                        $("#cflowtable tbody").append("</tr>");*/
                     }
+                }
+                $("#cflowtable tbody").append(html);
+            }else{
 
-                    $("#cyj1").val(data[i].yzyj);
-                }
-                if(data[i].node=="3"){
-                    if(data[i].yzqm.indexOf(".")>-1){
-                        $("#cqm2").val(data[i].yzqm.split(".")[0]);
-                    }else{
-                        $("#cqm2").val(data[i].yzqm);
-                    }
-                    $("#cyj2").val(data[i].yzyj);
-                }
             }
+
         },
         error:function(){
-            alert("系统错误！");
         }
     })
 }
+

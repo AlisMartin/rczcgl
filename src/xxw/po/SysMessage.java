@@ -6,6 +6,7 @@ package xxw.po;
 public class SysMessage {
 
     private String flowId;
+    private String flowName;
     private String tsUser;
     private String jsUser;
     private String fileName;
@@ -20,6 +21,15 @@ public class SysMessage {
     private String desc;
     private String type;
     private String duser;
+
+
+    public String getFlowName() {
+        return flowName;
+    }
+
+    public void setFlowName(String flowName) {
+        this.flowName = flowName;
+    }
 
     public String getRead() {
         return read;

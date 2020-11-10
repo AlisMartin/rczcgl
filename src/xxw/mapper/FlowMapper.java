@@ -24,9 +24,9 @@ public interface FlowMapper {
 
     int createFlowHistory(FlowHistory flowHistory);
 
-    List<FlowHistory>  queryFlowInfos(@Param("flowType")String flowType,@Param("flowId")String flowId,@Param("fqr")String fqr,@Param("duser")String duser);
+    List<FlowHistory>  queryFlowInfos(@Param("flowType")String flowType,@Param("flowId")String flowId,@Param("fqr")String fqr,@Param("jsr")String jsr);
     List<FlowHistory>  queryHistoryFlowInfos(@Param("flowType")String flowType,@Param("flowId")String flowId,@Param("fqr")String fqr,@Param("userId")String userId);
-    List<FlowHistory> queryFlowHistoryInfo(@Param("flowId")String flowId,@Param("node")String node);
+    List<FlowHistory> queryFlowHistoryInfo(@Param("flowId")String flowId,@Param("node")String node,@Param("flowOrder")String flowOrder);
     List<String> selectCom();
 
     List<String> selectPos(@Param("com")String com);

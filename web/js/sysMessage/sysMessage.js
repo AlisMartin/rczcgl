@@ -5,16 +5,32 @@ var readingColum=[ {
     checkbox:true
 },
     {
-        field:'flowId',
-        title:'流程编号'
+        field:'flowName',
+        title:'流程名称'
     },
     {
-        field:'tsUser',
-        title:'推送人'
+        field:'tsId',
+        title:'推送人',
+        formatter:function(value,row,index){
+            if(value==null){
+                return null;
+            }else{
+                var names= getUserById(value);
+                return   names;
+            }
+        }
     },
     {
-        field:'jsUser',
+        field:'jsId',
         title:'待办人',
+        formatter:function(value,row,index){
+            if(value==null){
+                return null;
+            }else{
+                var names= getUserById(value);
+                return   names;
+            }
+        }
     },
     {
         title:"文件名",
@@ -78,16 +94,32 @@ var readedCloum=[
         checkbox:true
     },
     {
-        field:'flowId',
-        title:'流程编号'
+        field:'flowName',
+        title:'流程名称'
     },
     {
-        field:'tsUser',
-        title:'推送人'
+        field:'tsId',
+        title:'推送人',
+        formatter:function(value,row,index){
+            if(value==null){
+                return null;
+            }else{
+                var names= getUserById(value);
+                return   names;
+            }
+        }
     },
     {
-        field:'jsUser',
+        field:'jsId',
         title:'待办人',
+        formatter:function(value,row,index){
+            if(value==null){
+                return null;
+            }else{
+                var names= getUserById(value);
+                return   names;
+            }
+        }
     },
     {
         title:"文件名",
@@ -120,16 +152,32 @@ $(function(){
                 checkbox:true
             },
             {
-                field:'flowId',
-                title:'流程编号'
+                field:'flowName',
+                title:'流程名称'
             },
             {
-                field:'tsUser',
-                title:'推送人'
+                field:'tsId',
+                title:'推送人',
+                formatter:function(value,row,index){
+                    if(value==null){
+                        return null;
+                    }else{
+                        var names= getUserById(value);
+                        return   names;
+                    }
+                }
             },
             {
-                field:'jsUser',
+                field:'jsId',
                 title:'待办人',
+                formatter:function(value,row,index){
+                    if(value==null){
+                        return null;
+                    }else{
+                        var names= getUserById(value);
+                        return   names;
+                    }
+                }
             },
             {
                 title:"文件名",

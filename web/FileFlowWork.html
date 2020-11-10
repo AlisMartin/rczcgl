@@ -14,7 +14,7 @@
     <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
     <script src="js/common/common.js"></script>
-    <script src="js/Flow/flowWork.js"></script>
+    <script src="js/Flow/newFlowWork.js"></script>
     <style>
         .fleft{
             float: left;
@@ -100,6 +100,7 @@
                     <caption class="zt">流程信息一览表
                     </caption>
                 </table>
+
                 <div class="modal" tabindex="-1" id="addFlow" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content wid">
@@ -113,8 +114,16 @@
                                 <div class="modal-body">
                                     <input type="hidden" id="user" name="user">
                                     <table class="table table-bordered" id="flowtable">
-                                        <thead><th colspan="4" class="tableborder">文件处理签条</th></thead>
+                                        <thead><th colspan="4" class="tableborder">发起信息</th></thead>
                                         <tbody>
+                                        <tr>
+                                            <td class="lf">流程名称</td>
+                                            <td colspan="3"><input type="text" id="flowName" class="tableborder formwid" name="flowName"  /> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="lf">流程类型</td>
+                                            <td colspan="3"><input type="text" id="flowType" class="tableborder formwid" name="flowType"  /> </td>
+                                        </tr>
                                         <tr>
                                             <td class="lf">发起人</td>
                                             <td><input type="text" name="fqr" id="fqr" class="tableborder formwid" disabled="disabled"/></td>
@@ -146,35 +155,25 @@
                                             <td class="lf">办文意见</td>
                                             <td colspan="3"><input type="text" id="bwyj" class="tableborder formwid" name="bwyj"  /> </td>
                                         </tr>
-                                        <tr></tr>
                                         <tr>
-                                            <td class="lf">领导批示</td>
-                                            <td colspan="3"><input type="text" id="ldps" class="tableborder formwid" name="ldps"  /> </td>
+                                            <td class="lf" colspan="4">审批信息</td>
                                         </tr>
                                         <tr>
                                             <td class="lf" colspan="2">阅者签名</td>
                                             <td class="lf" colspan="2">阅批意见</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2">
-                                                <select id="qmPic" class="checkboxstyle fleft" >
-                                                </select>
-                                                <a href='#' id='openPicModal' style="display: none" class="fleft">查看</a>
-                                                <input type="hidden" id="qm" name="yzqm" class="tableborder"  />
-                                            </td>
-                                            <td colspan="2"><input type="text" id="yj" name="yzyj" class="tableborder formwid"/> </td>
+                                            <td colspan="2"><input type="text" id="yzqm" name="yzqm"/> </td>
+                                            <td colspan="2"><input type="text" id="yzyj" name="yzyj"/> </td>
                                         </tr>
-                                  <!--      <tr>
-                                            <td colspan="2"><input type="text" id="qm2" /> </td>
-                                            <td colspan="2"><input type="text" id="yj2" /> </td>
-                                        </tr>-->
                                         </tbody>
                                     </table>
                                     <div class="form-group">
                                         <label  class="col-sm-2 control-label" style="text-align: left">审批</label>
                                         <div class="col-sm-10">
                                         <select id="spstatus" class="checkboxstyle formwid">
-                                            <option value="access">通过</option>
+                                            <option value="access">审批通过</option>
+                                            <option value="jxxf">继续下发文件</option>
                                             <option value="th">退回</option>
                                         </select>
                                         </div>
@@ -187,6 +186,17 @@
                                            <input type="text" class="form-control" id="thyy"/>
                                         </div>
                                     </div>
+                                    <div class="form-group" id="wjjs" style="display: none">
+                                        <label  class="col-sm-2 control-label" style="text-align: left">文件接收人</label>
+                                        <div class="col-sm-10">
+                                            <a href="#" id="openFileModal" class="fleft">请选择</a> <input type="text" disabled="disabled" id="jsusername" class="tableborder fleft"/>
+                                            <input type="hidden" name="jsr"  id="jsusers" />
+                                        </div>
+                                    </div>
+                                 <!--   <tr id="wjjs" style="display: none">
+                                        <td class="lf">文件接收人</td>
+                                        <td colspan="3"><a href="#" id="openFileModal" class="fleft">请选择</a> <input type="text"  disabled="disabled" id="jsusername" class="tableborder fleft"/></td>
+                                    </tr>-->
                                     <input type="hidden" id="node"/>
                                     <input type="hidden" id="flowId"/>
                                     <div>
@@ -217,9 +227,17 @@
                                 <div class="modal-body">
                                     <input type="hidden" id="cuser" name="user">
                                     <table class="table table-bordered" id="cflowtable">
-                                        <thead><th colspan="4" class="tableborder">文件处理签条</th></thead>
+                                        <thead><th colspan="4" class="tableborder">发起信息</th></thead>
                                         <tbody>
                                         <tr>
+                                        <tr>
+                                            <td class="lf">流程名称</td>
+                                            <td colspan="3"><input type="text" id="cflowName" class="tableborder formwid" name="flowName"  /> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="lf">流程类型</td>
+                                            <td colspan="3"><input type="text" id="cflowType" class="tableborder formwid" name="flowType"  /> </td>
+                                        </tr>
                                             <td class="lf">发起人</td>
                                             <td><input type="text" name="fqr" id="cfqr" class="tableborder formwid" disabled="disabled"/></td>
                                             <td class="lf">发起时间</td>
@@ -250,22 +268,10 @@
                                             <td class="lf">办文意见</td>
                                             <td colspan="3"><input type="text" id="cbwyj" class="tableborder formwid" name="bwyj"  disabled="disabled"/> </td>
                                         </tr>
-                                        <tr></tr>
-                                        <tr>
-                                            <td class="lf">领导批示</td>
-                                            <td colspan="3"><input type="text" id="cldps" class="tableborder formwid" name="ldps"  disabled="disabled"/> </td>
-                                        </tr>
+                                        <tr>  <td colspan="4">审批信息 </td></tr>
                                         <tr>
                                             <td class="lf"colspan="2">阅者签名</td>
                                             <td class="lf" colspan="2">阅批意见</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2"><input type="text" id="cqm1" class="tableborder fleft" /> <a href="#" id="ckqm1" class="fleft" style="display: none">查看</a> </td>
-                                            <td colspan="2"><input type="text" id="cyj1" class="tableborder formwid" />  </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2"><input type="text" id="cqm2" class="tableborder fleft" /> <a href="#" id="ckqm2" class="fleft" style="display: none">查看</a> </td>
-                                            <td colspan="2"><input type="text" id="cyj2" class="tableborder formwid" /> </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -290,15 +296,26 @@
                     </div>
                 </div>
 
-                <div class="modal" tabindex="-1" id="qmPicModal" role="dialog">
+                <div class="modal" tabindex="1" id="treeModal" role="dialog">
                     <div class="modal-dialog">
-                        <div class="modal-content" style="width: 302px;height: 454px">
+                        <div class="modal-content">
                             <div class="modal-header">
+                                <h5 class="modal-title">组织机构</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <img id="qmImg" style="width: 300px;height: 400px"/>
+
+                            <div class="modal-body">
+
+                                <!-- <tree id="departtree"></tree>-->
+
+                                <table class="table tablemar" id="userTable"></table>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" id="saveUsers">确定</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

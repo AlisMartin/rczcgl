@@ -17,6 +17,9 @@
             <if test=" flowId!= null" >
                 "FLOWID",
             </if>
+            <if test=" flowName!= null" >
+                "FLOWNAME",
+            </if>
             <if test="tsUser != null" >
                 "TSUSER",
             </if>
@@ -61,6 +64,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="flowId != null" >
                 #{flowId,jdbcType=VARCHAR},
+            </if>
+            <if test="flowName != null" >
+                #{flowName,jdbcType=VARCHAR},
             </if>
             <if test="tsUser != null" >
                 #{tsUser,jdbcType=VARCHAR},

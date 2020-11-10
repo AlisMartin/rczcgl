@@ -60,18 +60,24 @@ public class FlowController {
         String usernames="";
         UUID uuid=UUID.randomUUID();
         flowInstance.setFlowId(uuid.toString());
-        flowInstance.setNode("2");
-        duserId=getUserIds("2");
-        flowInstance.setDusers(duserId);
-        flowInstance.setStatus("1");
+       // flowInstance.setNode("2");
+       // duserId=getUserIds("2");
+       // flowInstance.setDusers(duserId);
+        if(flowInstance.getFlowType().equals("1")){
+            flowInstance.setStatus("3");
+        }else{
+            flowInstance.setStatus("1");
+        }
+
         //flowInstance.setFile(flowInstance.getWjmc());
         flowMapper.createFlow(flowInstance);
-        usernames=dbusers("2");
-        flowInstance.setdName(usernames);
-        flowInstance.setUser(flowInstance.getFqrName());
+        //usernames=dbusers("2");
+       // flowInstance.setdName(usernames);
+        //flowInstance.setUser(flowInstance.getFqrName());
         flowInstance.setEndDate(flowInstance.getStartDate());
-        flowInstance.setNode("1");
-        flowInstance.setUserId(flowInstance.getFqr());
+       // flowInstance.setNode("1");
+        //flowInstance.setUserId(flowInstance.getFqr());
+        flowInstance.setFlowOrder(1);
         flowMapper.createFlowHistory(flowInstance);
         HttpSession session=request.getSession();
         User user=(User)session.getAttribute("user");
@@ -88,16 +94,6 @@ public class FlowController {
     @ResponseBody
     public ResponseObject updateFLow(FlowHistory flowInstance,HttpServletRequest request){
         int i=0;
-        int node=Integer.parseInt(flowInstance.getNode());
-        if(flowInstance.getStatus().equals("2")||flowInstance.getStatus().equals("3")){
-            flowInstance.setDusers("无");
-        }else{
-           // String usernames=dbusers((node+1)+"");
-            String userids=getUserIds((node+1)+"");
-            flowInstance.setDusers(userids);
-        }
-
-        flowInstance.setNode((node+1)+"");
         flowMapper.updateFlow(flowInstance);
         HttpSession session=request.getSession();
         User user=(User)session.getAttribute("user");
@@ -114,18 +110,16 @@ public class FlowController {
     @ResponseBody
     public ResponseObject createFLowHistory(FlowHistory flowHistory){
         int i=0;
-        int node=Integer.parseInt(flowHistory.getNode());
-        if(node>1){
-            List<FlowHistory> list=   flowMapper.queryFlowHistoryInfo(flowHistory.getFlowId(),(node-1)+"");
-            flowHistory.setStartDate(list.get(0).getEndDate());
-        }
-        flowMapper.createFlowHistory(flowHistory);
-
         if(flowHistory.getStatus().equals("2")||flowHistory.getStatus().equals("3")){
-            flowHistory.setNode("4");
             String data=flowHistory.getEndDate();
             flowHistory.setStartDate(data);
             flowHistory.setEndDate(data);
+            flowHistory.setNodeOrder(flowHistory.getNodeOrder()+1);
+            flowMapper.createFlowHistory(flowHistory);
+        }else{
+            List<FlowHistory> list=   flowMapper.queryFlowHistoryInfo(flowHistory.getFlowId(),null,flowHistory.getNodeOrder());
+            flowHistory.setStartDate(list.get(0).getEndDate());
+            flowHistory.setNodeOrder(flowHistory.getNodeOrder()+1);
             flowMapper.createFlowHistory(flowHistory);
         }
         return new ResponseObject(i,"","");
@@ -147,20 +141,6 @@ public class FlowController {
         String fqr=json.getString("fqr");
         String duser=json.getString("duser");
         List<FlowHistory> flowInfoList=flowMapper.queryFlowInfos(flowType,flowId,fqr,duser);
-        for(FlowHistory info:flowInfoList){
-            if(!"".equals(info.getUser())&&info.getUser()!=null){
-                String cluser=getUserNames(info.getUser());
-                info.setUserId(cluser);
-            }
-            if(!"".equals(info.getDusers())&&info.getDusers()!=null&&!info.getDusers().equals("无")){
-                String cluser=getUserNames(info.getDusers());
-                info.setdName(cluser);
-            }
-            if(!"".equals(info.getFqr())&&info.getFqr()!=null){
-                String cluser=getUserNames(info.getFqr());
-                info.setFqrName(cluser);
-            }
-        }
         return flowInfoList;
     }
 
@@ -173,20 +153,20 @@ public class FlowController {
         String fqr=json.getString("fqr");
         String duser=json.getString("duser");
         List<FlowHistory> flowInfoList=flowMapper.queryHistoryFlowInfos(flowType,flowId,fqr,duser);
-        for(FlowHistory info:flowInfoList){
-         /*   if(!"".equals(info.getUser())&&info.getUser()!=null){
+ /*       for(FlowHistory info:flowInfoList){
+         if(!"".equals(info.getUser())&&info.getUser()!=null){
                 String cluser=getUserNames(info.getUser());
                 info.setUserId(cluser);
             }
             if(!"".equals(info.getDusers())&&info.getDusers()!=null&&!info.getDusers().equals("无")){
                 String cluser=getUserNames(info.getDusers());
                 info.setdName(cluser);
-            }*/
+            }
             if(!"".equals(info.getFqr())&&info.getFqr()!=null){
                 String cluser=getUserNames(info.getFqr());
                 info.setFqrName(cluser);
             }
-        }
+        }*/
         return flowInfoList;
     }
 
@@ -360,20 +340,6 @@ public class FlowController {
     @RequestMapping("/insertSysMessage")
     @ResponseBody
     public void insertSysMessage(HttpServletRequest request,SysMessage sysMessage){
-        if(!sysMessage.getNode().equals("4")){
-            String duser=dbusers(sysMessage.getNode());
-            String duserId=getUserIds(sysMessage.getNode());
-            sysMessage.setJsUser(duser);
-            sysMessage.setJsId(duserId);
-        }else{
-            sysMessage.setJsId(sysMessage.getJsUser());
-            String jsuser=getUserNames(sysMessage.getJsUser());
-            if(jsuser.indexOf(",")>-1){
-                jsuser=jsuser.substring(0,jsuser.length()-1);
-            }
-            sysMessage.setJsUser(jsuser);
-        }
-
         sysMessageMapper.insertSysMessage(sysMessage);
 
     }
@@ -404,7 +370,7 @@ public class FlowController {
     public List<FlowHistory> getQm(HttpServletRequest request){
         String flowId=request.getParameter("flowId");
         String node=request.getParameter("node");
-        return flowMapper.queryFlowHistoryInfo(flowId,null);
+        return flowMapper.queryFlowHistoryInfo(flowId,null,null);
     }
 
 

@@ -20,7 +20,7 @@
     <script src="third/datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
     <script src="third/webuploader/webuploader.nolog.min.js"></script>
     <script src="js/common/common.js"></script>
-    <script src="js/Flow/createFlow.js"></script>
+    <script src="js/Flow/newCreateFlow.js"></script>
     <style>
         .wid{
             width: 700px;
@@ -108,7 +108,7 @@
                                 <div class="modal-body">
                                     <input type="hidden" id="userId" name="userId">
                                     <input type="hidden" id="user" name="user">
-                                    <input type="hidden" name="sqInfo"id="jsusers"/>
+                                    <input type="hidden" name="jsr"id="jsusers"/>
                                     <table class="table table-bordered" id="flowtable">
                                         <thead><th colspan="4" class="tableborder">文件处理签条</th></thead>
                                         <tbody>
@@ -153,7 +153,7 @@
                                             <td><input type="text" id="dbsx" class="tableborder formwid" name="dbsx"/></td>
                                         </tr>
                                         <tr>
-                                            <td class="lf">文件名称</td>
+                                            <td class="lf">文件</td>
                                             <td colspan="3">
                                               <!--  <div id="wjdiv" name="wjmc"></div>-->
                                                 <input type="hidden" id="wjid" name="file"/>
@@ -166,16 +166,29 @@
                                         <tr></tr>
                                         <tr>
                                             <td class="lf">办文意见</td>
-                                            <td colspan="3"><input type="text" id="bwyj" class="tableborder formwid" name="bwyj" disabled="disabled"/> </td>
+                                            <td colspan="3"><input type="text" id="bwyj" class="tableborder formwid" name="bwyj"/> </td>
                                         </tr>
                                         <tr></tr>
-                                        <tr>
+                                    <!--    <tr>
                                             <td class="lf">领导批示</td>
                                             <td colspan="3"><input type="text" id="ldps" class="tableborder formwid" name="ldps" disabled="disabled"/> </td>
-                                        </tr>
+                                        </tr>-->
                                         <tr>
                                             <td class="lf">文件接收人</td>
-                                            <td colspan="3"><a href="#" id="openFileModal" class="fleft">请选择</a> <input type="text" disabled="disabled" id="jsusername" class="tableborder fleft"/></td>
+                                            <td colspan="3"><a href="#" id="openFileModal" class="fleft">请选择</a> <input type="text"  disabled="disabled" id="jsusername" class="tableborder fleft"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="lf">流程名称</td>
+                                            <td colspan="3"><input type="text" id="flowName" class="tableborder formwid" name="flowName"/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="lf">发起类型</td>
+                                            <td colspan="3">
+                                                <select id="flowType" class="checkboxstyle formwid" name="flowType">
+                                                <option value="1">查阅</option>
+                                                <option value="2">审批</option>
+                                            </select>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -304,8 +317,16 @@
                                 <div class="modal-body">
                                     <input type="hidden" id="cuser" name="user">
                                     <table class="table table-bordered" id="cflowtable">
-                                        <thead><th colspan="4" class="tableborder">文件处理签条</th></thead>
+                                        <thead><th colspan="4" class="tableborder">发起信息</th></thead>
                                         <tbody>
+                                        <tr>
+                                            <td class="lf">流程名称</td>
+                                            <td colspan="3"><input type="text" id="cflowname" class="tableborder" name="flowName"  disabled="disabled"/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="lf">发起类型</td>
+                                            <td colspan="3"><input type="text" id="cflowtype" class="tableborder" name="flowType"  disabled="disabled"/> </td>
+                                        </tr>
                                         <tr>
                                             <td class="lf">发起人</td>
                                             <td>
@@ -333,7 +354,7 @@
                                             <td><input type="text" id="cdbsx" class="tableborder" name="dbsx"  disabled="disabled"/></td>
                                         </tr>
                                         <tr>
-                                            <td class="lf">文件名称</td>
+                                            <td class="lf">文件</td>
                                             <td colspan="3"><input type="text" id="cwjmc" class="tableborder" name="wjmc"  disabled="disabled"/> <!--<a  id="filedown">下载</a>--> </td>
                                         </tr>
                                         <tr></tr>
@@ -341,22 +362,12 @@
                                             <td class="lf">办文意见</td>
                                             <td colspan="3"><input type="text" id="cbwyj" class="tableborder" name="bwyj"  disabled="disabled"/> </td>
                                         </tr>
-                                        <tr></tr>
                                         <tr>
-                                            <td class="lf">领导批示</td>
-                                            <td colspan="3"><input type="text" id="cldps" class="tableborder" name="ldps"  disabled="disabled"/> </td>
+                                            <td class="lf" colspan="4">审批信息</td>
                                         </tr>
                                         <tr>
                                             <td class="lf" colspan="2">阅者签名</td>
                                             <td class="lf" colspan="2">阅批意见</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2"><input type="text" id="cqm1" class="tableborder fleft"/><a href="#" id="ckqm1" class="fleft" style="display: none">查看</a> </td>
-                                            <td colspan="2"><input type="text" id="cyj1" class="tableborder" /> </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2"><input type="text" id="cqm2" class="tableborder fleft"/> <a href="#" id="ckqm2" class="fleft" style="display: none">查看</a></td>
-                                            <td colspan="2"><input type="text" id="cyj2" class="tableborder"/> </td>
                                         </tr>
                                         </tbody>
                                     </table>

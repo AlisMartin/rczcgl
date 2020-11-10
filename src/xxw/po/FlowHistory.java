@@ -8,6 +8,17 @@ import java.util.Date;
 public class FlowHistory {
     private String id;
     private String flowId;
+    private String flowName;
+
+    public Integer getFlowOrder() {
+        return flowOrder;
+    }
+
+    public void setFlowOrder(Integer flowOrder) {
+        this.flowOrder = flowOrder;
+    }
+
+    private Integer flowOrder;
     private String flowType;
     private String node;
     private String nodeName;
@@ -33,11 +44,26 @@ public class FlowHistory {
     private String ldps;
     private String yzqm;
     private String yzyj;
-
-
     private String userId;
     private String fqrName;
     private String dName;
+    private String jsr;
+
+    public String getJsr() {
+        return jsr;
+    }
+
+    public void setJsr(String jsr) {
+        this.jsr = jsr;
+    }
+
+    public String getFlowName() {
+        return flowName;
+    }
+
+    public void setFlowName(String flowName) {
+        this.flowName = flowName;
+    }
 
     public String getUserId() {
         return userId;

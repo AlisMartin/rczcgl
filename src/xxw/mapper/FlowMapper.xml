@@ -90,8 +90,8 @@
             <if test="flowId != null" >
                 "FLOWID",
             </if>
-            <if test="node != null" >
-                "NODE",
+            <if test="flowName != null" >
+                "FLOWNAME",
             </if>
             <if test="startDate != null" >
                 "STARTDATE",
@@ -129,14 +129,11 @@
             <if test="bwyj != null" >
                 "BWYJ",
             </if>
-            <if test="ldps != null" >
-                "LDPS",
-            </if>
             <if test="dusers != null" >
                 "DUSERS",
             </if>
-            <if test="sqInfo != null" >
-                "SQINFO",
+            <if test="jsr != null" >
+                "JSR",
             </if>
             <if test="file != null" >
                 "FILE",
@@ -148,8 +145,8 @@
             <if test="flowId != null" >
                 #{flowId,jdbcType=VARCHAR},
             </if>
-            <if test="node != null" >
-                #{node,jdbcType=VARCHAR},
+            <if test="flowName != null" >
+                #{flowName,jdbcType=VARCHAR},
             </if>
             <if test="startDate != null" >
                 #{startDate,jdbcType=VARCHAR},
@@ -187,14 +184,11 @@
             <if test="bwyj != null" >
                 #{bwyj,jdbcType=VARCHAR},
             </if>
-            <if test="ldps != null" >
-                #{ldps,jdbcType=VARCHAR},
-            </if>
             <if test="dusers != null" >
                 #{dusers,jdbcType=VARCHAR},
             </if>
-            <if test="sqInfo != null" >
-                #{sqInfo,jdbcType=VARCHAR},
+            <if test="jsr != null" >
+                #{jsr,jdbcType=VARCHAR},
             </if>
             <if test="file != null" >
                 #{file,jdbcType=VARCHAR},
@@ -206,9 +200,6 @@
     <update id="updateFlow" parameterType="xxw.po.FlowInstance">
         update FLOWINSTANCE
         <set>
-        <if test="node != null" >
-           NODE= #{node,jdbcType=VARCHAR},
-        </if>
         <if test="startDate != null" >
             STARTDATE= #{startDate,jdbcType=VARCHAR},
         </if>
@@ -218,18 +209,13 @@
         <if test="rejectReason != null" >
             REJECTREASON= #{rejectReason,jdbcType=VARCHAR},
         </if>
-        <if test="dusers != null" >
-            DUSERS= #{dusers,jdbcType=VARCHAR},
+        <if test="jsr != null" >
+            JSR= #{jsr,jdbcType=VARCHAR},
         </if>
         <if test="status != null" >
             STATUS= #{status,jdbcType=VARCHAR},
         </if>
-        <if test="bwyj != null" >
-            BWYJ= #{bwyj,jdbcType=VARCHAR},
-        </if>
-        <if test="ldps != null" >
-            LDPS= #{ldps,jdbcType=VARCHAR},
-        </if>
+
         </set>
         where FLOWID=#{flowId,jdbcType=VARCHAR}
     </update>
@@ -263,8 +249,8 @@
             <if test="flowId != null and flowId != ''" >
                 "FLOWID",
             </if>
-            <if test="node != null and node != ''" >
-                "NODE",
+            <if test="flowName != null and flowName != ''" >
+                "FLOWNAME",
             </if>
             <if test="startDate != null and startDate != ''" >
                 "STARTDATE",
@@ -284,6 +270,9 @@
             <if test="rejectReason != null and rejectReason != ''" >
                 "REJECTREASON",
             </if>
+            <if test="jsr != null and jsr != ''" >
+                "JSR",
+            </if>
 
             <if test="user != null and user != ''" >
                 "USER",
@@ -294,14 +283,8 @@
             <if test="yzyj != null and yzyj != ''" >
                 "YZYJ",
             </if>
-            <if test="userId != null and userId != ''" >
-                "USERID",
-            </if>
-            <if test="fqrName != null and fqrName != ''" >
-                "FQRNAME",
-            </if>
-            <if test="dName != null and fqrName != ''" >
-                "DNAME",
+            <if test="flowOrder != null and flowOrder != ''" >
+                "FLOWORDER",
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -311,8 +294,8 @@
             <if test="flowId != null and flowId != ''" >
                 #{flowId,jdbcType=VARCHAR},
             </if>
-            <if test="node != null and node != ''" >
-                #{node,jdbcType=VARCHAR},
+            <if test="flowName != null and flowName != ''" >
+                #{flowName,jdbcType=VARCHAR},
             </if>
             <if test="startDate != null and startDate != ''" >
                 #{startDate,jdbcType=VARCHAR},
@@ -333,6 +316,10 @@
                 #{rejectReason,jdbcType=VARCHAR},
             </if>
 
+            <if test="jsr != null and jsr != ''" >
+                #{jsr,jdbcType=VARCHAR},
+            </if>
+
             <if test="user != null and user != ''" >
                 #{user,jdbcType=VARCHAR},
             </if>
@@ -342,40 +329,34 @@
             <if test="yzyj != null and yzyj != ''" >
                 #{yzyj,jdbcType=VARCHAR},
             </if>
-            <if test="userId != null and userId != ''" >
-                #{userId,jdbcType=VARCHAR},
-            </if>
-            <if test="fqrName != null and fqrName != ''" >
-                #{fqrName,jdbcType=VARCHAR},
-            </if>
-            <if test="dName != null and fqrName != ''" >
-                #{dName,jdbcType=VARCHAR},
+            <if test="flowOrder != null and flowOrder != ''" >
+                #{flowOrder,jdbcType=DECIMAL},
             </if>
         </trim>
     </insert>
 
     <!--查询流程实例信息-->
     <select id="queryFlowInfos" parameterType="java.lang.String" resultType="xxw.po.FlowHistory">
-        select  a.*,b.nodeOrder,b.nodeName  from FLOWINSTANCE a inner JOIN  NODECONFIG b on a.NODE=b.NODEID
+        select  *  from FLOWINSTANCE
         WHERE 1=1
         <if test="flowType !=null">
-            and a.FLOWTYPE= #{flowType,jdbcType=VARCHAR}
+            and FLOWTYPE= #{flowType,jdbcType=VARCHAR}
         </if>
         <if test="flowId !=null">
-            and a.FLOWID= #{flowId,jdbcType=VARCHAR}
+            and FLOWID= #{flowId,jdbcType=VARCHAR}
         </if>
         <if test="fqr !=null">
-            and a.FQR= #{fqr,jdbcType=VARCHAR}
+            and FQR= #{fqr,jdbcType=VARCHAR}
         </if>
-        <if test="duser !=null">
-            and instr(','||a.DUSERS||',',concat(concat(',',#{duser}),','))>0
+        <if test="jsr !=null">
+            and instr(','||JSR||',',concat(concat(',',#{jsr}),','))>0
         </if>
         order by STARTDATE DESC
     </select>
 
     <!--查询流程实例信息-->
     <select id="queryHistoryFlowInfos" parameterType="java.lang.String" resultType="xxw.po.FlowHistory">
-        select  a.SQINFO,a.FQR,b.* from FLOWINSTANCE a inner JOIN  FLOWHISTORY b on a.FLOWID=b.FLOWID
+        select  a.FQR,a.LWJG,a.SWWH,a.SWSJ,a.SFDB,a.DBSX,a.WJMC,a.BWYJ,b.* from FLOWINSTANCE a inner JOIN  FLOWHISTORY b on a.FLOWID=b.FLOWID
         WHERE 1=1
         <if test="flowType !=null">
             and a.FLOWTYPE= #{flowType,jdbcType=VARCHAR}
@@ -387,7 +368,7 @@
             and a.FQR= #{fqr,jdbcType=VARCHAR}
         </if>
         <if test="userId !=null">
-            and b.USERID=#{userId,jdbcType=VARCHAR}
+            and b."USER"=#{userId,jdbcType=VARCHAR}
         </if>
         order by a.STARTDATE DESC
     </select>
