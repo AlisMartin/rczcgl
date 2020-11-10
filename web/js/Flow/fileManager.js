@@ -338,6 +338,7 @@ $(function(){
         $("#fileone").val("");
         $("#fileTwo").empty();
         $("#fileThree").empty();
+        $("#fileName").val("");
         $.ajax({
             type:"post",
             url:"/rczcgl/flow/queryManagerFileList.action",

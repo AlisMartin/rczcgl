@@ -340,6 +340,7 @@ public class FlowController {
     @RequestMapping("/insertSysMessage")
     @ResponseBody
     public void insertSysMessage(HttpServletRequest request,SysMessage sysMessage){
+        sysMessage.setFlowtype("flow");
         sysMessageMapper.insertSysMessage(sysMessage);
 
     }

@@ -21,6 +21,9 @@ public class SysMessage {
     private String desc;
     private String type;
     private String duser;
+    private String flowtype;
+
+
 
 
     public String getFlowName() {
@@ -159,4 +162,11 @@ public class SysMessage {
         this.duser = duser;
     }
 
+    public String getFlowtype() {
+        return flowtype;
+    }
+
+    public void setFlowtype(String flowtype) {
+        this.flowtype = flowtype;
+    }
 }

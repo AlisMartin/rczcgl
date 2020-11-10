@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import xxw.mapper.SysMessageMapper;
 import xxw.po.*;
 import xxw.util.DateUtils;
 import xxw.util.StringUtil;
@@ -34,6 +35,8 @@ import java.util.*;
 public class AssetsController {
     @Autowired
     AssetsMapper assetsMapper;
+    @Autowired
+    SysMessageMapper sysMessageMapper;
 
     @RequestMapping("/getConfigInfo")
     @ResponseBody
@@ -294,6 +297,14 @@ public class AssetsController {
             i = assetsMapper.insertAssetsInfoHistory(assetsInfo);
             //先从资产表吧老的存到历史表，再把新的编辑进去
             int a = assetsMapper.updateAssetsInfo(insertInfo);
+            SysMessage sysMessage = new SysMessage();
+            sysMessage.setFlowName(insertInfo.get("field3"));
+            sysMessage.setFlowId(uuid.toString());
+            Date date = new Date();
+            String tsdate = DateUtils.getFormatTime(date,"yyyy-MM-dd");
+            sysMessage.setTsDate(tsdate);
+            sysMessage.setFlowtype("assess");
+            sysMessageMapper.insertSysMessage(sysMessage);
         } else {
             i = assetsMapper.updateAssetsInfo(insertInfo);
         }

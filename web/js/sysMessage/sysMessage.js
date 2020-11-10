@@ -1,7 +1,8 @@
 var user= $.cookie('user');
 var userobj=eval('('+user+')');
 var userid=userobj.id;
-var readingColum=[ {
+var readingColum=[
+    {
     checkbox:true
 },
     {

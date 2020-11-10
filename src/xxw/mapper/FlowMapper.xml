@@ -442,7 +442,7 @@
         </if>
     </select>
     <select id="selectFileByName" parameterType="java.lang.String" resultType="xxw.po.AssetsFile">
-        select * from FILEMANAGER  WHERE 1=1
+        select * from ASSETS_FILE  WHERE 1=1
         <if test="filename !=null">
             and FILENAME= #{filename,jdbcType=VARCHAR}
         </if>
