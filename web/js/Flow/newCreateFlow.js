@@ -6,6 +6,10 @@ $("#user").val(userobj.id);
 //节点信息
 var node;
 $(function(){
+
+    $("#qfiledown").click(function(){
+        queryFileByFileName(spinfo.file);
+    })
     //获取节点配置信息
     //加载时间控件
     $('#datetimepicker2').datetimepicker({
@@ -542,8 +546,14 @@ function insertMassage(flowinfo){
     param.tsId=flowinfo.fqr;
     param.jsId=flowinfo.jsr;
     param.tsDate=nowdate;
-    param.desc="文件待审批";
-    param.type="1";
+    if(flowinfo.status=="3"){
+        param.desc="文件待查看";
+        param.type="3";
+    }else{
+        param.desc="文件待审批";
+        param.type="1";
+    }
+
     param.fileName=flowinfo.wjmc;
    // param.node=parseInt(flowinfo.node)+1;
     param.show="1";
@@ -567,11 +577,16 @@ function insertMassage(flowinfo){
 //初始化弹窗内下拉框
 function initmodalonefiled(){
     debugger;
+    var param={};
+    param.filetype="com";
+    if(userobj.auth.indexOf("8")=="-1"){
+        param.departId=userobj.departId;
+    }
     $.ajax({
         type:"post",
         url:"/rczcgl/flow/queryFile.action",
         async:false,
-        data:{'filetype':"com"},
+        data:parma,
         success:function(responsedata){
             debugger;
             $("#yjml").empty();
@@ -587,11 +602,17 @@ function initmodalonefiled(){
 }
 //初始化文件二级目录
 function initmodaltwofiled(com){
+    var param={};
+    param.filetype="com";
+    param.com=com;
+    if(userobj.auth.indexOf("8")=="-1"){
+        param.departId=userobj.departId;
+    }
     $.ajax({
         type:"post",
         url:"/rczcgl/flow/queryFile.action",
         async:false,
-        data:{'filetype':"pos",'com':com},
+        data:param,
         success:function(responsedata){
             debugger;
             $("#ejml").empty();
@@ -608,11 +629,18 @@ function initmodaltwofiled(com){
 }
 //初始化文件三级目录
 function initmodalthreefiled(com,pos){
+    var param={};
+    param.filetype="com";
+    param.com=com;
+    param.pos=pos;
+    if(userobj.auth.indexOf("8")=="-1"){
+        param.departId=userobj.departId;
+    }
     $.ajax({
         type:"post",
         url:"/rczcgl/flow/queryFile.action",
         async:false,
-        data:{'filetype':"type",'com':com,'pos':pos},
+        data:param,
         success:function(resonsedata){
             debugger;
             $("#sjml").empty();
@@ -626,12 +654,18 @@ function initmodalthreefiled(com,pos){
                 var param={};
                 param.com=com;
                 param.pos=pos;
+                if(userobj.auth.indexOf("8")=="-1"){
+                    param.departId=userobj.departId;
+                }
                 getManagerFiles(param);
             }else{
                 $("#sjmldiv").css('display','none');
                 var param={};
                 param.com=com;
                 param.pos=pos;
+                if(userobj.auth.indexOf("8")=="-1"){
+                    param.departId=userobj.departId;
+                }
                 getManagerFiles(param);
             }
 
@@ -694,40 +728,35 @@ function queryInfo(a){
     querySpInfo(a);
 }
 
-//查询审批信息
-function querySpInfo(a){
+function queryFileByFileName(a){
     debugger;
-    $(".zjqm").remove();
-    var param={};
-        param.flowId= a.flowId;
+    var fileid= a.substring(0, a.length-1);
     $.ajax({
         type:"post",
-        url:"/rczcgl/flow/queryHistoryFlowInfos.action",
+        url:"/rczcgl/flow/queryFileInfo.action",
         async:false,
-        contentType:"application/json",
-        data:JSON.stringify(param),
-        success:function(resonsedata){
+        data:{'fileId':fileid},
+        success:function(responsedata){
             debugger;
-            var data=resonsedata;
-            var html="";
-            if(data!=null){
-                for(var i=0;i<data.length;i++){
-                    if(data[i].yzqm!=null&&data[i].yzqm!=""){
-                        html=html+"<tr class='zjqm'><td colspan='2'><input type='text'  value='"+data[i].yzqm+"' class='tableborder' disabled='disabled'</td><td colspan='2'><input type='text'   value='"+data[i].yzyj+"' class='tableborder' disabled='disabled'</td></tr>";
-                  /*      $("#cflowtable tbody").append("<tr class='zjqm'>");
-                        $("#cflowtable tbody").append("<td><input type='text' colspan='2' value='"+data[i].yzqm+"' class='tableborder' disabled='disabled'</td>");
-                        $("#cflowtable tbody").append("<td><input type='text'  colspan='2' value='"+data[i].yzyj+"' class='tableborder' disabled='disabled'</td>");
-                        $("#cflowtable tbody").append("</tr>");*/
-                    }
+            var obj=responsedata.data;
+            if(obj.length>0){
+                for(var i=0;i<obj.length;i++){
+                    var downloadA=document.createElement("a");
+                    downloadA.setAttribute("href","/rczcgl/"+obj[i].filePath+"/"+obj[i].fileName);
+                    downloadA.setAttribute("target","_blank");
+                    downloadA.setAttribute("download",obj[i].fileName);
+                    downloadA.click();
+                    downloadA.remove();
+
                 }
-                $("#cflowtable tbody").append(html);
-            }else{
 
             }
 
         },
         error:function(){
+            alert("添加失败！请稍后重试！");
         }
     })
 }
+
 

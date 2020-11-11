@@ -74,14 +74,14 @@ $(function () {
             autoResize: true
         });
 
-        var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
-        var layer1 = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
-        var layer2 = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
+        var layer = new ArcGISTiledMapServiceLayer("http://192.168.0.108:6080/arcgis/rest/services/DELETE/MapServer");
+        var layer1 = new ArcGISTiledMapServiceLayer("http://192.168.0.108:6080/arcgis/rest/services/DELETE/MapServer");
+        var layer2 = new ArcGISTiledMapServiceLayer("http://192.168.0.108:6080/arcgis/rest/services/DELETE/MapServer");
 
         editmap.addLayer(layer2);
         viewmap.addLayer(layer);
 
-        var PointLayer = new FeatureLayer("http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0", {
+        var PointLayer = new FeatureLayer("http://192.168.0.108:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0", {
             mode: FeatureLayer.MODE_SNAPSHOT,
             outFields: ["*"],
             displayOnPan: true
@@ -203,9 +203,9 @@ $(function () {
             addPoint: function (id,row) {
                 //定义查询对象
 
-                var url = "http://localhost:6080/arcgis/rest/services/RES1/MapServer/" + (zctype-1);
+                var url = "http://192.168.0.108:6080/arcgis/rest/services/RES1/MapServer/" + (zctype-1);
                 if(zctype == 2){
-                    url = "http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0";
+                    url = "http://192.168.0.108:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0";
                 }
                 var queryTask = new QueryTask(url);
                 //定义查询参数对象

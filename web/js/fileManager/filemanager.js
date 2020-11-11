@@ -194,8 +194,7 @@ function getcolumn(){
     debugger;
     columns=[{
         checkbox:true
-    }
-    ];
+    }];
     var zctype=$("#zctype").val();
     $.ajax({
         type:"post",

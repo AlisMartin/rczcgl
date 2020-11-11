@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
     <link href="third/webuploader/webuploader.css" rel="stylesheet" type="text/css" />
     <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="third/jquery.cookie.js"></script>
     <script src="assets/vendor/bootstrap3/js/bootstrap.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap-treeview.js"></script>
     <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
@@ -17,6 +18,9 @@
     <script src="js/Flow/fileManager.js"></script>
 
     <style>
+        .yc{
+            display: none;
+        }
         .formys{
             margin-left: 5%;
         }
@@ -142,23 +146,34 @@
                             </div>
                             <div class="modal-body">
                                <form class="form-horizontal" role="form">
-                                     <div class="form-group">
+                                   <div class="form-group">
+                                       <label for="mljb" class="col-sm-2 control-label">目录级别</label>
+                                       <div class="col-sm-10">
+                                           <select class="checkboxstyle formwid" id="mljb">
+                                               <option value="0">请选择</option>
+                                               <option value="1">一级目录</option>
+                                               <option value="2">二级目录</option>
+                                               <option value="3">三级目录</option>
+                                           </select>
+                                       </div>
+                                   </div>
+                                     <div class="form-group yc" id="yjformgroup">
                                          <label for="yjml" class="col-sm-2 control-label">一级目录</label>
-                                         <div class="col-sm-10">
+                                         <div class="col-sm-10" id="yjdiv">
                                              <select class="checkboxstyle formwid" id="yjml">
                                              </select>
                                          </div>
                                      </div>
-                                     <div class="form-group">
+                                     <div class="form-group yc" id="ejformgroup">
                                          <label for="ejml" class="col-sm-2 control-label">二级目录</label>
-                                         <div class="col-sm-10">
+                                         <div class="col-sm-10" id="ejdiv">
                                              <select class="checkboxstyle formwid" id="ejml">
                                              </select>
                                          </div>
                                      </div>
-                                     <div class="form-group">
+                                     <div class="form-group yc" id="sjformgroup">
                                          <label for="sjml" class="col-sm-2 control-label">三级目录</label>
-                                         <div class="col-sm-10">
+                                         <div class="col-sm-10" id="sjdiv">
                                              <input type="text" class="form-control" id="sjml" placeholder="请输入目录名称">
                                          </div>
                                      </div>

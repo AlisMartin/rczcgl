@@ -1,5 +1,72 @@
-
+var user = $.cookie('user');
+var userobj = eval('(' + user + ')');
 $(function(){
+    debugger;
+    /*$("#yjml").on('change',function(){
+        debugger;
+        $("#ejml").empty();
+        var com=$("#yjml").val();
+        if(com!=""){
+            initmodaltwofiled(com);
+        }else{
+            alert("请选择具体目录！")
+        }
+    })*/
+    $("#ejml").change(function(){
+        debugger;
+        $("#sjml").empty();
+        var com=$("#yjml").val();
+        var pos=$("#ejml").val();
+        if(com!=""&&pos!=""){
+            initmodalthreefiled(com,pos);
+        }else{
+            alert("请选择具体目录!");
+        }
+
+    })
+    $("#mljb").change(function(){
+        var value=$("#mljb").val();
+        if(value=="1"){
+
+            $("#yjdiv").empty();
+            var html=" <input type='text' class='form-control' id='yjml'  placeholder='请输入目录名称'>";
+            $("#yjdiv").append(html);
+
+            $("#yjformgroup").css('display','block');
+            $("#ejformgroup").css('display','none');
+            $("#sjformgroup").css('display','none');
+        }else if(value=="2"){
+
+            $("#yjdiv").empty();
+            $("#ejdiv").empty();
+            var yjhtml="<select class='checkboxstyle formwid' id='yjml' ></select>";
+            var ejhtml=" <input type='text' class='form-control' id='ejml'  placeholder='请输入目录名称'>";
+            $("#yjdiv").append(yjhtml);
+            $("#ejdiv").append(ejhtml);
+            initmodalonefiled();
+
+            $("#yjformgroup").css('display','block');
+            $("#ejformgroup").css('display','block');
+            $("#sjformgroup").css('display','none');
+
+        }else if(value=="3"){
+
+            $("#yjdiv").empty();
+            $("#ejdiv").empty();
+            $("#sjdiv").empty();
+            var yjhtml="<select class='checkboxstyle formwid' id='yjml' onchange='initejml()'></select>";
+            var ejhtml="<select class='checkboxstyle formwid' id='ejml'></select>";
+            var sjhtml=" <input type='text' class='form-control' id='sjml'  placeholder='请输入目录名称'>";
+            $("#yjdiv").append(yjhtml);
+            $("#ejdiv").append(ejhtml);
+            $("#sjdiv").append(sjhtml);
+            initmodalonefiled();
+
+            $("#yjformgroup").css('display','block');
+            $("#ejformgroup").css('display','block');
+            $("#sjformgroup").css('display','block');
+        }else{}
+    });
     initonefiled();
     $("#fileone").change(function(){
         $("#fileTwo").empty();
@@ -10,15 +77,10 @@ $(function(){
             alert("请选择具体目录！")
         }
     })
-    $("#yjml").change(function(){
-        $("#ejml").empty();
-        var com=$("#yjml").val();
-        if(com!=""){
-            initmodaltwofiled(com);
-        }else{
-            alert("请选择具体目录！")
-        }
-    })
+  /*  $("#yjml").change(function(){
+        debugger;
+
+    })*/
 
     $("#fileTwo").change(function(){
         $("#fileThree").empty();
@@ -32,27 +94,17 @@ $(function(){
 
     })
 
-    $("#ejml").change(function(){
-        $("#sjml").empty();
-        var com=$("#yjml").val();
-        var pos=$("#ejml").val();
-        if(com!=""&&pos!=""){
-            initmodalthreefiled(com,pos);
-        }else{
-            alert("请选择具体目录!");
-        }
-
-    })
-
     $("#savefile").click(function(){
         var pathId=selectPathId();
         insertFile(pathId);
     })
 
     $('#fileTable').bootstrapTable({
-        url:'/rczcgl/flow/queryManagerFileList.action',
+        url:'/rczcgl/flow/queryManagerFileListByJson.action',
+        method:'post',
         clickToSelect:true,
         sidePagination:"client",
+        contentType: "application/json;charset=UTF-8",
         pagination:true,
         pageNumber:1,
         pageSize:10,
@@ -64,8 +116,12 @@ $(function(){
                 checkbox:true
             },
             {
-                field:'FILEID',
-                title:'文件编号'
+                title:'序号',
+                formatter:function(value,row,index){
+                    var pageSize=$("#fileTable").bootstrapTable('getOptions').pageSize;
+                    var pageNumber=$("#fileTable").bootstrapTable('getOptions').pageNumber;
+                    return pageSize*(pageNumber-1)+index+1;
+                }
             },
             {
                 field:'COM',
@@ -91,6 +147,10 @@ $(function(){
                 }
             },
             {
+                field:'REALNAME',
+                title:'文件序号',
+            },
+            {
                 field:'FILENAME',
                 title:'类型',
                 formatter:function(value,row){
@@ -102,6 +162,13 @@ $(function(){
                 }
             }
         ],
+        queryParams: function (params) {
+            debugger;
+            if(userobj.auth.indexOf("8")=="-1"){
+                params.departId=userobj.departId;
+            }
+            return JSON.stringify(params);
+        },
         onLoadSuccess:function(){
         },
         onLoadError:function(){
@@ -109,7 +176,7 @@ $(function(){
     })
 
     $(".bootstrap-table.bootstrap3").css('height',"100%");
-    $(".fixed-table-container").css('height',"85%");
+    $(".fixed-table-container").css('height',"75%");
 
     //上传
     $("#fileup").on('shown.bs.modal',function(){
@@ -229,32 +296,69 @@ $(function(){
     //打开添加文件目录弹窗
     $("#fieldadd").click(function(){
         $("#addfilefold").modal("show");
-        initmodalonefiled();
+        //initmodalonefiled();
     })
+    //隐藏弹窗
+    $("#addfilefold").on('hide.bs.modal',function(){
+        $("#mljb").val("1");
+        $("#yjdiv").empty();
+        $("#ejdiv").empty();
+        $("#sjdiv").empty();
+        $("#yjformgroup").css('display','none');
+        $("#ejformgroup").css('display','none');
+        $("#sjformgroup").css('display','none');
+    })
+
     //添加文件目录
     $("#saveml").click(function(){
+        var mljb=$("#mljb").val();
         var com=$("#yjml").val();
         var pos=$("#ejml").val();
         var type=$("#sjml").val();
         var param={};
-        if(com=="null"||com=="请选择"||com==""||com==null){
-            alert("请选择一级目录！");
+        param.departId=userobj.departId;
+        if(mljb=="0"){
+            alert("请选择具体的目录级别！");
             return;
-        }else{
+        }else if(mljb=="1"){
+            if(com==""||com==null){
+                alert("请填写目录名称！");
+                return
+            }
             param.com=com;
-        }
-        if(pos=="null"||pos=="请选择"||pos==""||pos==null){
-            alert("请选择二级目录！");
-            return;
-        }else{
+        }else if(mljb=="2"){
+            if(com=="null"||com=="请选择"||com==""||com==null){
+                alert("请选择一级目录！");
+                return;
+            }else{
+                param.com=com;
+            }
+            if(pos==""||pos==null){
+                alert("请填写目录名称！");
+                return
+            }
             param.pos=pos;
+        }else if(mljb=="3"){
+            if(com=="null"||com=="请选择"||com==""||com==null){
+                alert("请选择一级目录！");
+                return;
+            }else{
+                param.com=com;
+            }
+            if(pos=="null"||pos=="请选择"||pos==""||pos==null){
+                alert("请选择二级目录！");
+                return;
+            }else{
+                param.pos=pos;
+            }
+            if(type=="null"||type=="请选择"||type==""||type==null){
+                alert("请输入目录名称！");
+                return;
+            }else{
+                param.type=type
+            }
         }
-        if(type=="null"||type=="请选择"||type==""||type==null){
-            alert("请输入目录名称！");
-            return;
-        }else{
-            param.type=type
-        }
+
         $.ajax({
             type:"post",
             url:"/rczcgl/flow/savefold.action",
@@ -267,7 +371,7 @@ $(function(){
                 $("#yjml").empty();
                 $("#ejml").empty();
                 $("#sjml").empty();
-                initmodalonefiled();
+                initmodalonefiled();12
             },
             error:function(){
             }
@@ -374,11 +478,17 @@ $(function(){
 
 function initonefiled(){
     debugger;
+    var param={};
+    param.filetype="com";
+    if(userobj.auth.indexOf("8")=="-1"){
+        param.departId=userobj.departId;
+    }
+
     $.ajax({
         type:"post",
         url:"/rczcgl/flow/queryFile.action",
         async:false,
-        data:{'filetype':"com"},
+        data:param,
         success:function(responsedata){
             debugger;
             var data=responsedata.data;
@@ -395,11 +505,16 @@ function initonefiled(){
 //初始化弹窗内下拉框
 function initmodalonefiled(){
     debugger;
+    var param={};
+    param.filetype="com";
+    if(userobj.auth.indexOf("8")=="-1"){
+        param.departId=userobj.departId;
+    }
     $.ajax({
         type:"post",
         url:"/rczcgl/flow/queryFile.action",
         async:false,
-        data:{'filetype':"com"},
+        data:param,
         success:function(responsedata){
             debugger;
             var data=responsedata.data;
@@ -414,11 +529,17 @@ function initmodalonefiled(){
 }
 
 function inittwofiled(com){
+    var param={};
+    param.filetype="pos";
+    param.com=com;
+    if(userobj.auth.indexOf("8")=="-1"){
+        param.departId=userobj.departId;
+    }
     $.ajax({
         type:"post",
         url:"/rczcgl/flow/queryFile.action",
         async:false,
-        data:{'filetype':"pos",'com':com},
+        data:param,
         success:function(responsedata){
             debugger;
             var data=responsedata.data;
@@ -433,11 +554,17 @@ function inittwofiled(com){
 }
 
 function initmodaltwofiled(com){
+    var param={};
+    param.filetype="pos";
+    param.com=com;
+    if(userobj.auth.indexOf("8")=="-1"){
+        param.departId=userobj.departId;
+    }
     $.ajax({
         type:"post",
         url:"/rczcgl/flow/queryFile.action",
         async:false,
-        data:{'filetype':"pos",'com':com},
+        data:param,
         success:function(responsedata){
             debugger;
             var data=responsedata.data;
@@ -452,11 +579,18 @@ function initmodaltwofiled(com){
 }
 
 function initthreefiled(com,pos){
+    var param={};
+    param.filetype="type";
+    param.com=com;
+    param.pos=pos;
+    if(userobj.auth.indexOf("8")=="-1"){
+        param.departId=userobj.departId;
+    }
     $.ajax({
         type:"post",
         url:"/rczcgl/flow/queryFile.action",
         async:false,
-        data:{'filetype':"type",'com':com,'pos':pos},
+        data:param,
         success:function(resonsedata){
             debugger;
             var data=resonsedata.data;
@@ -473,11 +607,18 @@ function initthreefiled(com,pos){
 }
 
 function initmodalthreefiled(com,pos){
+    var param={};
+    param.filetype="type";
+    param.com=com;
+    param.pos=pos;
+    if(userobj.auth.indexOf("8")=="-1"){
+        param.departId=userobj.departId;
+    }
     $.ajax({
         type:"post",
         url:"/rczcgl/flow/queryFile.action",
         async:false,
-        data:{'filetype':"type",'com':com,'pos':pos},
+        data:param,
         success:function(resonsedata){
             debugger;
             var data=resonsedata.data;
@@ -536,19 +677,32 @@ function selectPathId(){
 
 function insertFile(filePathId){
     debugger;
+    var param={};
+    param.pathId=filePathId;
     var com=$("#fileone").val();
     var pos=$("#fileTwo").val();
     var type=$("#fileThree").val();
     var filename=$("#fileid").text();
+    if(com!==""&&com!=null){
+        param.com=com;
+    }
+    if(pos!==""&&pos!=null){
+        param.pos=pos;
+    }
+    if(type!==""&&type!=null){
+        param.filetype=type;
+    }
     if(filename==null||filename==""){
         alert("请先上传文件！");
         return false;
+    }else{
+        param.filename=filename;
     }
     $.ajax({
         type:"post",
         url:"/rczcgl/flow/insertManagerFile.action",
         async:false,
-        data:{'filetype':type,'com':com,'pos':pos,'filename':filename,'pathId':filePathId},
+        data:param,
         success:function(resonsedata){
             debugger;
             if(resonsedata.code == 1){
@@ -561,5 +715,16 @@ function insertFile(filePathId){
         error:function(){
         }
     })
+}
+
+function initejml(){
+    debugger;
+    $("#ejml").empty();
+    var com=$("#yjml").val();
+    if(com!=""){
+        initmodaltwofiled(com);
+    }else{
+        alert("请选择具体目录！")
+    }
 }
 

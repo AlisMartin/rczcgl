@@ -390,11 +390,17 @@
     <select id="selectCom" parameterType="java.lang.String" resultType="java.lang.String">
         select DISTINCT  COM from FILEMANAGER WHERE 1=1
         and COM  is not null
+        <if test="departId !=null">
+            and DEPARTMENT= #{departId,jdbcType=VARCHAR}
+        </if>
     </select>
     <select id="selectPos" parameterType="java.lang.String" resultType="java.lang.String">
         select DISTINCT  POS from FILEMANAGER WHERE 1=1
         <if test="com !=null">
             and COM= #{com,jdbcType=VARCHAR}
+        </if>
+        <if test="departId !=null">
+            and DEPARTMENT= #{departId,jdbcType=VARCHAR}
         </if>
         and POS  is not null
     </select>
@@ -405,6 +411,9 @@
         </if>
         <if test="pos !=null">
             and POS= #{pos,jdbcType=VARCHAR}
+        </if>
+        <if test="departId !=null">
+            and DEPARTMENT= #{departId,jdbcType=VARCHAR}
         </if>
         and TYPE  is not null
     </select>
@@ -419,6 +428,9 @@
         <if test="type !=null">
             and a.TYPE= #{type,jdbcType=VARCHAR}
         </if>
+        <if test="departId !=null">
+            and a.DEPARTMENT= #{departId,jdbcType=VARCHAR}
+        </if>
         <if test="fileDate !=null">
             and b.FILEDATE= #{fileDate,jdbcType=VARCHAR}
         </if>
@@ -427,6 +439,19 @@
         </if>
         <if test="filename !=null">
             and b.FILENAME LIKE #{filename,jdbcType=VARCHAR}
+        </if>
+        order BY  a.DEPARTMENT,b.FILEDATE,a.COM,a.POS,a.TYPE,"TO_NUMBER"("REALNAME")
+    </select>
+    <select id="selectFileOrder" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select MAX("TO_NUMBER"("REALNAME")) FROM ASSETS_FILE WHERE 1=1
+        <if test="fileDate !=null">
+            and FILEDATE = #{fileDate,jdbcType=VARCHAR}
+        </if>
+        <if test="pathId !=null">
+            and PATHID= #{pathId,jdbcType=VARCHAR}
+        </if>
+        <if test="fileorder !=null">
+            and REALNAME= #{fileorder,jdbcType=VARCHAR}
         </if>
     </select>
     <select id="selectPathId" parameterType="java.lang.String" resultType="java.util.HashMap">
@@ -442,7 +467,7 @@
         </if>
     </select>
     <select id="selectFileByName" parameterType="java.lang.String" resultType="xxw.po.AssetsFile">
-        select * from ASSETS_FILE  WHERE 1=1
+        select * from ASSETS_FILE WHERE 1=1
         <if test="filename !=null">
             and FILENAME= #{filename,jdbcType=VARCHAR}
         </if>
@@ -476,7 +501,9 @@
             <if test="fileDate !=null">
                 "FILEDATE",
             </if>
-
+            <if test="fileorder !=null">
+                "REALNAME",
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             #{id,jdbcType=VARCHAR},
@@ -497,6 +524,9 @@
             </if>
             <if test="fileDate != null" >
                 #{fileDate,jdbcType=VARCHAR},
+            </if>
+            <if test="fileorder != null" >
+                #{fileorder,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -519,6 +549,9 @@
             <if test="type != null" >
                 "TYPE",
             </if>
+            <if test="departId != null" >
+                "DEPARTMENT",
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -531,6 +564,9 @@
             </if>
             <if test="type != null" >
                 #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="departId != null" >
+                #{departId,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>

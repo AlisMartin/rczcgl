@@ -476,7 +476,7 @@ function creatFlowHistory(){
     param.yzqm=$("#yzqm").val();
     param.yzyj=$("#yzyj").val();
     param.jsr=$("#jsusers").val();
-    var checked= $("#spstatus").val();
+    var spstatus= $("#spstatus").val();
     if($("#yzqm").val()==""){
         alert("领导签名必须填写！");
         return;
@@ -485,20 +485,19 @@ function creatFlowHistory(){
         alert("领导意见必须填写！");
         return;
     }
-    if(checked=="1"&&$("#jsusers").val()==""){
+    if(spstatus=="1"&&$("#jsusers").val()==""){
         alert("必须填写下发文件接收人！");
         return;
     }
     //param.userId=userobj.id;
-/*    $.ajax({
+        $.ajax({
         type:"post",
         url:"/rczcgl/flow/createFLowHistory.action",
         data:param,
         success:function(){
-
             $('#flowWorkTable').bootstrapTable("refresh");
         }
-    })*/
+    })
 }
 
 function spFile(row){
@@ -526,26 +525,13 @@ function queryInfo(a){
     $("#cdbsx").val(a.dbsx);
     $("#cwjmc").val(a.wjmc);
     $("#cbwyj").val(a.bwyj);
-    $("#cldps").val(a.ldps);
-    $("#cnode").val(a.node);
     $("#cflowId").val(a.flowId);
 
     if(a.status=="2"){
         $("#cthdiv").css('display','block');
-        $("#thyy").val(a.rejectReason);
+        $("#cthyy").val(a.rejectReason);
     }
-    var node=parseInt(a.node);
-    if(node>=2){
-        getqm(spinfo);
-    }
-    var qm1=$("#cqm1").val();
-    var qm2=$("#cqm2").val();
-    if(qm1!=""&&qm1!=null){
-        $("#ckqm1").css('display','block');
-    }
-    if(qm2!=""&&qm2!=null){
-        $("#ckqm2").css('display','block');
-    }
+    querySpInfo(a)
 }
 
 function queryFileByFileName(a){
@@ -606,6 +592,8 @@ function insertMassage(flowinfo,info){
     param.tsUser=userobj.userName;
     param.tsId=userobj.id;
     param.tsDate=nowdate;
+    param.flowName=flowinfo.flowName;
+    param.jsId=flowinfo.jsr;
     if(info.status=="2"){
         param.desc="文件审批退回";
         param.type="3";
@@ -653,45 +641,6 @@ function updateMessage(spinfo){
         async:false,
         data:param,
         success:function(data){
-        },
-        error:function(){
-            alert("系统错误！");
-        }
-    })
-}
-
-//查询签名
-function getqm(a){
-    debugger;
-    var param={};
-    param.flowId= a.flowId;
-    param.node= a.node;
-    var node=parseInt(a.node);
-    $.ajax({
-        type:"post",
-        url:"/rczcgl/flow/getQm.action",
-        async:false,
-        data:param,
-        success:function(data){
-            for(var i=0;i<data.length;i++){
-                if(data[i].node=="2"){
-                    if(data[i].yzqm.indexOf(".")>-1){
-                        $("#cqm1").val(data[i].yzqm.split(".")[0]);
-                    }else{
-                        $("#cqm1").val(data[i].yzqm);
-                    }
-
-                    $("#cyj1").val(data[i].yzyj);
-                }
-                if(data[i].node=="3"){
-                    if(data[i].yzqm.indexOf(".")>-1){
-                        $("#cqm2").val(data[i].yzqm.split(".")[0]);
-                    }else{
-                        $("#cqm2").val(data[i].yzqm);
-                    }
-                    $("#cyj2").val(data[i].yzyj);
-                }
-            }
         },
         error:function(){
             alert("系统错误！");

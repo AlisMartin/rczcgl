@@ -71,7 +71,7 @@ public class WebUploadController {
                     otherTempFile.createNewFile();
                     UUID uid=UUID.randomUUID();
                     String id=uid.toString();
-                    flowMapper.insertManagerFile(id,name,xdPath,null,null,null);
+                    flowMapper.insertManagerFile(id,name,xdPath,null,null,null,null);
                     responseObject.setCode(1);
                     responseObject.setData(id);
                     responseObject.setMessage("上传完毕");
@@ -108,7 +108,7 @@ public class WebUploadController {
                         }
                         UUID uid=UUID.randomUUID();
                         String id=uid.toString();
-                        flowMapper.insertManagerFile(id,name,xdPath,null,null,null);
+                        flowMapper.insertManagerFile(id,name,xdPath,null,null,null,null);
                         responseObject.setData(id);
                         FileUtils.deleteDirectory(parentFileDir);
                     }

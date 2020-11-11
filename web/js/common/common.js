@@ -65,3 +65,36 @@ function getUserById(userid){
     })
     return names;
 }
+
+//查询审批信息
+function querySpInfo(a){
+    debugger;
+    $(".zjqm").remove();
+    var param={};
+    param.flowId= a.flowId;
+    $.ajax({
+        type:"post",
+        url:"/rczcgl/flow/queryHistoryFlowInfos.action",
+        async:false,
+        contentType:"application/json",
+        data:JSON.stringify(param),
+        success:function(resonsedata){
+            debugger;
+            var data=resonsedata;
+            var html="";
+            if(data!=null){
+                for(var i=0;i<data.length;i++){
+                    if(data[i].yzqm!=null&&data[i].yzqm!=""){
+                        html=html+"<tr class='zjqm'><td colspan='2'><input type='text'  value='"+data[i].yzqm+"' class='tableborder' disabled='disabled'</td><td colspan='2'><input type='text'   value='"+data[i].yzyj+"' class='tableborder' disabled='disabled'</td></tr>";
+                    }
+                }
+                $("#cflowtable tbody").append(html);
+            }else{
+
+            }
+
+        },
+        error:function(){
+        }
+    })
+}

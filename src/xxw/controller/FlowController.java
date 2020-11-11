@@ -14,6 +14,7 @@ import xxw.mapper.UserMapper;
 import xxw.po.*;
 import xxw.util.StringUtil;
 
+import javax.json.Json;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
@@ -173,15 +174,16 @@ public class FlowController {
     @RequestMapping("/queryFile")
     @ResponseBody
     public ResponseObject queryFile(HttpServletRequest request){
+        String departId=request.getParameter("departId");
         String filetype=request.getParameter("filetype");
         String com=request.getParameter("com");
         String pos=request.getParameter("pos");
         if(filetype.equals("com")){
-            return new ResponseObject(1,"",flowMapper.selectCom());
+            return new ResponseObject(1,"",flowMapper.selectCom(departId));
         }else if(filetype.equals("pos")){
-            return new ResponseObject(1,"",flowMapper.selectPos(com));
+            return new ResponseObject(1,"",flowMapper.selectPos(com,departId));
         }else if(filetype.equals("type")){
-            return  new ResponseObject(1,"",flowMapper.selectType(com,pos));
+            return  new ResponseObject(1,"",flowMapper.selectType(com,pos,departId));
         }else{
             return null;
         }
@@ -200,13 +202,27 @@ public class FlowController {
     @RequestMapping("/queryManagerFileList")
     @ResponseBody
     public List<Map<String,String>> queryManagerFileList(HttpServletRequest request){
+        String departId=request.getParameter("departId");
         String filetype=request.getParameter("filetype");
         String com=request.getParameter("com");
         String pos=request.getParameter("pos");
         String fileDate=request.getParameter("fileDate");
         String pathId=request.getParameter("pathId");
         String fileName=request.getParameter("fileName");
-        return flowMapper.selectFile(com,pos,filetype,fileDate,pathId, StringUtil.formatLike(fileName));
+        return flowMapper.selectFile(com,pos,filetype,fileDate,pathId, StringUtil.formatLike(fileName),departId);
+    }
+    @RequestMapping("/queryManagerFileListByJson")
+    @ResponseBody
+    public List<Map<String,String>> queryManagerFileList(HttpServletRequest request,@RequestBody JSONObject json){
+        String departId=json.getString("departId");
+       /* String departId=request.getParameter("departId");
+        String filetype=request.getParameter("filetype");
+        String com=request.getParameter("com");
+        String pos=request.getParameter("pos");
+        String fileDate=request.getParameter("fileDate");
+        String pathId=request.getParameter("pathId");
+        String fileName=request.getParameter("fileName");*/
+        return flowMapper.selectFile(null,null,null,null,null,null,departId);
     }
 
     @RequestMapping("/insertFile")
@@ -223,28 +239,43 @@ public class FlowController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
         Date date=new Date();
         String year=sdf.format(date);
-        String filetype=request.getParameter("filetype");
-        if(filetype.equals("请选择")||filetype.equals("null")){
+
+     /*   if(filetype.equals("请选择")||filetype.equals("null")){
             filetype=null;
-        }
+        }*/
         String com=request.getParameter("com");
         String pos=request.getParameter("pos");
+        String filetype=request.getParameter("filetype");
+     /*   if(pos.equals("请选择")||pos.equals("null")){
+            pos=null;
+        }*/
+
         String filename=request.getParameter("filename");
         String pathId=request.getParameter("pathId");
         String filepath="";
-        if(filetype==null){
+        if(filetype==null&&pos!=null){
             filepath="filemanager/"+year+"/"+com+"/"+pos;
-        }else{
+        }
+        if(filetype!=null){
             filepath="filemanager/"+year+"/"+com+"/"+pos+"/"+filetype;
+        }
+        if(pos==null&&filetype==null){
+            filepath="filemanager/"+year+"/"+com;
         }
         List<AssetsFile> assetsFiles = new ArrayList<>();
         assetsFiles = flowMapper.selectFileByName(StringUtil.formatLike(filename));
         if (assetsFiles.size() > 0){
             return new ResponseObject(0,"文件名称重复",null);
         }
+
+        Integer order=flowMapper.selectFileOrder(null,pathId,null);
+        if(order==null){
+            order=0;
+        }
+        order=order+1;
         UUID uid=UUID.randomUUID();
         String id=uid.toString();
-        flowMapper.insertManagerFile(id,filename,filepath,null,pathId,year);
+        flowMapper.insertManagerFile(id,filename,filepath,null,pathId,year,order+"");
         return new ResponseObject(1,"添加成功",null);
 
     }
@@ -255,9 +286,10 @@ public class FlowController {
         String com=request.getParameter("com");
         String pos=request.getParameter("pos");
         String type=request.getParameter("type");
+        String departId=request.getParameter("departId");
         UUID uid=UUID.randomUUID();
         String id=uid.toString();
-        flowMapper.savefilefold(com,pos,type,id);
+        flowMapper.savefilefold(com,pos,type,id,departId);
         return 1;
     }
 
