@@ -1,6 +1,8 @@
 /**
  * Created by wrh on 2020/9/27.
  */
+var user= $.cookie('user');
+var userobj=eval('('+user+')');
 var columns = [];
 $(function(){
     $("#saveUser").click(function(){
@@ -46,6 +48,10 @@ $(function(){
     $(".fixed-table-container").css('height',"85%");
 });
 function addUser(){
+    if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("14")==-1){
+        alert("当前用户无权限进行此操作！");
+        return;
+    }
     var arr = $("#addform").serializeArray();
     $.ajax({
         type:"post",

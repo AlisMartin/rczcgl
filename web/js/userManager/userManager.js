@@ -213,10 +213,6 @@ $(function(){
                 checkbox:true
             },
             {
-                field:'id',
-                title:'用户ID'
-            },
-            {
                 field:'userName',
                 title:'用户名'
             },

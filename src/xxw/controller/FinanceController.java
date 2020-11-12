@@ -19,10 +19,8 @@ import xxw.util.StringUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by wrh on 2020/9/27.
@@ -32,6 +30,8 @@ import java.util.UUID;
 public class FinanceController {
     @Autowired
     FinanceMapper financeMapper;
+    @Autowired
+    LogController logController;
 
     @RequestMapping("/getFinanceList")
     @ResponseBody
@@ -71,8 +71,27 @@ public class FinanceController {
 //            UUID uuid = UUID.randomUUID();
             insertInfo.put("zcid",insertInfo.get("id"));
             i = financeMapper.insertFinance(insertInfo);
+
+            String eventDesc="用户"+user.getUserName()+"新增融资信息";
+            String eventType="新增融资";
+            Date date =new Date();
+            SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String realdate= dateFormat.format(date);
+            //String realdate=date.toString();
+            logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
         }else {
             i = financeMapper.updateFinance(insertInfo);
+
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            HttpSession session =   request.getSession();
+            User user = (User)session.getAttribute("user");
+            String eventDesc="用户"+user.getUserName()+"修改融资信息";
+            String eventType="修改融资";
+            Date date =new Date();
+            SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String realdate= dateFormat.format(date);
+            //String realdate=date.toString();
+            logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
         }
         if (i == 1) {
             return new ResponseObject(1, "成功", "");
