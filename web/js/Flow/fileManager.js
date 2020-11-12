@@ -281,6 +281,10 @@ $(function(){
     });
     //文件上传
     $('#wjsc').click(function(){
+        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("20")==-1){
+            alert("当前用户无权限进行此操作！");
+            return;
+        }
         var com=$("#fileone").val();
         var pos=$("#fileTwo").val();
         var type=$("#fileThree").val();
@@ -295,6 +299,10 @@ $(function(){
 
     //打开添加文件目录弹窗
     $("#fieldadd").click(function(){
+        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("21")==-1){
+            alert("当前用户无权限进行此操作！");
+            return;
+        }
         $("#addfilefold").modal("show");
         //initmodalonefiled();
     })
@@ -380,6 +388,10 @@ $(function(){
     //文件下载
     $("#filedown").click(function(){
         debugger;
+        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("20")==-1){
+            alert("当前用户无权限进行此操作！");
+            return;
+        }
         var rowdata=$("#fileTable").bootstrapTable('getSelections');
         if(rowdata.length>0){
             for(var i=0;i<rowdata.length;i++){

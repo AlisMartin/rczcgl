@@ -12,6 +12,10 @@ $(function(){
         $("input[type=reset]").trigger("click");
     });
     $("#editUser").click(function(){
+        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("14")==-1){
+            alert("当前用户无权限进行此操作！");
+            return;
+        }
         if(editUser()){
             var row=$("#userTable").bootstrapTable('getSelections');
             loadData(row);
@@ -19,6 +23,10 @@ $(function(){
         }
     });
     $("#saveeditUser").click(function(){
+        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("14")==-1){
+            alert("当前用户无权限进行此操作！");
+            return;
+        }
         addUser();
     });
     getcolumn();
@@ -48,10 +56,7 @@ $(function(){
     $(".fixed-table-container").css('height',"85%");
 });
 function addUser(){
-    if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("14")==-1){
-        alert("当前用户无权限进行此操作！");
-        return;
-    }
+
     var arr = $("#addform").serializeArray();
     $.ajax({
         type:"post",

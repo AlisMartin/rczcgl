@@ -11,6 +11,9 @@ import xxw.po.User;
 import xxw.util.MD5Util;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +27,8 @@ public class UserManagerController {
     private UserMapper userMapper;
     @Autowired
     private DepartMapper departMapper;
+    @Autowired
+    LogController logController;
     @RequestMapping("/selectAllUser")
     @ResponseBody
     public List<User> selectAllUser(HttpServletRequest request){
@@ -46,6 +51,15 @@ public class UserManagerController {
         user.setPassword(pwd);
         int i=userMapper.addUser(user);
         userMapper.userAddRole(user.getId(),user.getRole());
+        HttpSession session =   request.getSession();
+        User users = (User)session.getAttribute("user");
+        String eventDesc="用户"+users.getUserName()+"添加用户及设置角色";
+        String eventType="添加用户";
+        Date date =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(date);
+        //String realdate=date.toString();
+        logController.insertLogs(eventType,realdate,eventDesc,users.getId(),users.getUserName());
         //departMapper.insertNode(userid,user.getUserName(),userid,user.getPosId(),null,"user",null);
         return i;
     }
@@ -58,6 +72,16 @@ public class UserManagerController {
         }
         int i=userMapper.editUser(user);
         userMapper.userUpdateRole(user.getId(),user.getRole());
+
+        HttpSession session =   request.getSession();
+        User users = (User)session.getAttribute("user");
+        String eventDesc="用户"+users.getUserName()+"修改用户及设置角色";
+        String eventType="修改用户";
+        Date date =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(date);
+        //String realdate=date.toString();
+        logController.insertLogs(eventType,realdate,eventDesc,users.getId(),users.getUserName());
         return i;
     }
     @RequestMapping("/deleteUser")
@@ -69,6 +93,16 @@ public class UserManagerController {
         for(int i=0;i<ids.length;i++){
             userMapper.deleteUser(ids[i]);
         }
+
+        HttpSession session =   request.getSession();
+        User users = (User)session.getAttribute("user");
+        String eventDesc="用户"+users.getUserName()+"删除用户";
+        String eventType="删除用户";
+        Date date =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(date);
+        //String realdate=date.toString();
+        logController.insertLogs(eventType,realdate,eventDesc,users.getId(),users.getUserName());
     }
     @RequestMapping("/userAddRole")
     @ResponseBody

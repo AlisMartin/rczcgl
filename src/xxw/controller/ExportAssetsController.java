@@ -131,6 +131,17 @@ public class ExportAssetsController {
         for(int z=0;z<listdata.size();z++){
             i=assetsMapper.insertAssetsInfo(listdata.get(z));
         }
+
+        HttpSession session =   request.getSession();
+        User user = (User)session.getAttribute("user");
+        String eventDesc="用户"+user.getUserName()+"导入资产信息";
+        String eventType="导入资产信息";
+        Date dates =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(dates);
+        //String realdate=date.toString();ss
+        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
+
         return  new ResponseObject(i,"","");
     }
 }

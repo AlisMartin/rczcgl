@@ -37,7 +37,8 @@ public class AssetsController {
     AssetsMapper assetsMapper;
     @Autowired
     SysMessageMapper sysMessageMapper;
-
+    @Autowired
+    LogController logController;
     @RequestMapping("/getConfigInfo")
     @ResponseBody
     public List<AssetsConfig> getConfigList(@RequestBody JSONObject json) {
@@ -108,6 +109,15 @@ public class AssetsController {
     public int insertAssetsConfig(HttpServletRequest request, AssetsConfig assetsConfig) {
         int i = 0;
         i = assetsMapper.insertConfig(assetsConfig);
+        HttpSession session =   request.getSession();
+        User user = (User)session.getAttribute("user");
+        String eventDesc="用户"+user.getUserName()+"添加资产信息项";
+        String eventType="添加资产信息项";
+        Date date =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(date);
+        //String realdate=date.toString();
+        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
         return i;
     }
 
@@ -116,6 +126,16 @@ public class AssetsController {
     public int updateConfig(HttpServletRequest request,AssetsConfig assetsConfig){
         int i=0;
         i=assetsMapper.updateConfig(assetsConfig);
+
+        HttpSession session =   request.getSession();
+        User user = (User)session.getAttribute("user");
+        String eventDesc="用户"+user.getUserName()+"修改资产信息项";
+        String eventType="修改资产信息项";
+        Date date =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(date);
+        //String realdate=date.toString();
+        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
         return i;
     }
 
@@ -271,6 +291,14 @@ public class AssetsController {
         insertInfo.put("zcid", uuid.toString());
         insertInfo.put("layerid", uuid.toString());
         int i = assetsMapper.insertAssetsInfo(insertInfo);
+
+        String eventDesc="用户"+user.getUserName()+"新增资产";
+        String eventType="新增资产";
+        Date date =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(date);
+        //String realdate=date.toString();
+        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
         if (i == 1) {
             return new ResponseObject(1, "成功", uuid);
         } else {
@@ -295,8 +323,21 @@ public class AssetsController {
             assetsInfo.remove("ID");
             assetsInfo.put("ZCID", uuid.toString());
             i = assetsMapper.insertAssetsInfoHistory(assetsInfo);
+
             //先从资产表吧老的存到历史表，再把新的编辑进去
             int a = assetsMapper.updateAssetsInfo(insertInfo);
+
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            HttpSession session =   request.getSession();
+            User user = (User)session.getAttribute("user");
+            String eventDesc="用户"+user.getUserName()+"编辑资产";
+            String eventType="编辑资产";
+            Date dates =new Date();
+            SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String realdate= dateFormat.format(dates);
+            //String realdate=date.toString();ss
+            logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
+
             SysMessage sysMessage = new SysMessage();
             sysMessage.setFlowName(insertInfo.get("field3"));
             sysMessage.setFlowId(uuid.toString());

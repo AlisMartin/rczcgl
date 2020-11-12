@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import xxw.mapper.FileMapper;
 import xxw.mapper.FlowMapper;
 import xxw.mapper.SysMessageMapper;
@@ -231,6 +233,16 @@ public class FlowController {
         String zcid = json.getString("zcid");
         String fileid = json.getString("fileid");
         flowMapper.updateFile(fileid, zcid);
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        HttpSession session =   request.getSession();
+        User user = (User)session.getAttribute("user");
+        String eventDesc="用户"+user.getUserName()+"上传附件";
+        String eventType="上传附件";
+        Date dates =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(dates);
+        //String realdate=date.toString();ss
+        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
     }
 
     @RequestMapping("/insertManagerFile")
@@ -276,6 +288,19 @@ public class FlowController {
         UUID uid=UUID.randomUUID();
         String id=uid.toString();
         flowMapper.insertManagerFile(id,filename,filepath,null,pathId,year,order+"");
+
+
+        HttpSession session=request.getSession();
+        User user=(User)session.getAttribute("user");
+        String eventDesc="用户"+user.getUserName()+"上传文件到文件库";
+        String eventType="文件上传";
+        Date dates =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(dates);
+        //String realdate=date.toString();
+        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
+
+
         return new ResponseObject(1,"添加成功",null);
 
     }
@@ -290,6 +315,16 @@ public class FlowController {
         UUID uid=UUID.randomUUID();
         String id=uid.toString();
         flowMapper.savefilefold(com,pos,type,id,departId);
+
+        HttpSession session=request.getSession();
+        User user=(User)session.getAttribute("user");
+        String eventDesc="用户"+user.getUserName()+"文件库添加目录";
+        String eventType="文件库添加目录";
+        Date dates =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(dates);
+        //String realdate=date.toString();
+        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
         return 1;
     }
 

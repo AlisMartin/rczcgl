@@ -7,8 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import xxw.mapper.RoleMapper;
 import xxw.po.Role;
+import xxw.po.User;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -21,6 +25,8 @@ import java.util.UUID;
 public class RoleController {
     @Autowired
     RoleMapper roleMapper;
+    @Autowired
+    LogController logController;
     @RequestMapping("/getAllRoles")
     @ResponseBody
     public List<Role> getAllRoles(HttpServletRequest request){
@@ -42,6 +48,16 @@ public class RoleController {
         rol.setRoleId(roleId);
         rol.setRole(role);
         int i=roleMapper.addRole(rol);
+
+        HttpSession session =   request.getSession();
+        User user = (User)session.getAttribute("user");
+        String eventDesc="用户"+user.getUserName()+"添加角色";
+        String eventType="添加角色";
+        Date date =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(date);
+        //String realdate=date.toString();
+        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
         return i;
     }
     @RequestMapping("/delRole")
@@ -57,6 +73,16 @@ public class RoleController {
             roleMapper.deleteRole(roleIds);
         }
 
+        HttpSession session =   request.getSession();
+        User user = (User)session.getAttribute("user");
+        String eventDesc="用户"+user.getUserName()+"删除角色";
+        String eventType="删除角色";
+        Date date =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(date);
+        //String realdate=date.toString();
+        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
+
         return 1;
     }
     @RequestMapping("/updateRole")
@@ -65,6 +91,16 @@ public class RoleController {
         String roleId = request.getParameter("roleId");
         String role = request.getParameter("role");
         int i = roleMapper.updateRole(roleId,role);
+
+        HttpSession session =   request.getSession();
+        User user = (User)session.getAttribute("user");
+        String eventDesc="用户"+user.getUserName()+"修改角色";
+        String eventType="修改角色";
+        Date date =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(date);
+        //String realdate=date.toString();
+        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
         return i;
     }
 
@@ -83,6 +119,16 @@ public class RoleController {
         }else{
             i=roleMapper.roleUpdateAuth(roleId,authId);
         }
+
+        HttpSession session =   request.getSession();
+        User user = (User)session.getAttribute("user");
+        String eventDesc="用户"+user.getUserName()+"设置角色权限";
+        String eventType="设置角色权限";
+        Date date =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(date);
+        //String realdate=date.toString();
+        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
         return i;
     }
     @RequestMapping("/selectAuthByRole")

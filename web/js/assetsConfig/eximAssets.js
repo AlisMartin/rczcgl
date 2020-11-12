@@ -277,14 +277,26 @@ $(function () {
         //导入
     $("#importAssets").click(function () {
         debugger;
+        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("18")==-1){
+            alert("当前用户无权限进行此操作！");
+            return;
+        }
         $("#assetsFile").click();
     });
     //导出
     $("#exportAssets").click(function () {
+        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("18")==-1){
+            alert("当前用户无权限进行此操作！");
+            return;
+        }
         exportAssetsInfo();
     });
     //新增资产
     $("#addAsset").click(function () {
+        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("16")==-1){
+            alert("当前用户无权限进行此操作！");
+            return;
+        }
         $("input[type=reset]").trigger("click");
         $("#add").modal('show');
         newmap.graphics.clear();
@@ -661,6 +673,10 @@ function getcolumn() {
                 formatter: btnGroup,    // 自定义方法，添加按钮组
                 events: {               // 注册按钮组事件
                     'click #modRole': function (event, value, row, index) {
+                        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("19")==-1){
+                            alert("当前用户无权限进行此操作！");
+                            return;
+                        }
                         $("#fileup").modal('show');
                         zcid = row.zcid;
                     },
@@ -671,13 +687,25 @@ function getcolumn() {
                         //$("#view").modal('show');
                     },
                     'click #edit': function (event, value, row, index) {
+                        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("16")==-1){
+                            alert("当前用户无权限进行此操作！");
+                            return;
+                        }
                         loadData(row);
                         isreset = 0;
                     },
                     'click #filesdown': function (event, value, row, index) {
+                        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("16")==-1){
+                            alert("当前用户无权限进行此操作！");
+                            return;
+                        }
                         showInfoDown(row);
                     },
                     'click #reset': function (event, value, row, index) {
+                        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("19")==-1){
+                            alert("当前用户无权限进行此操作！");
+                            return;
+                        }
                         loadData(row);
                         isreset = 1;
                     }
