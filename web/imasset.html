@@ -381,6 +381,9 @@
                                     <button type="button" class="btn btn-default selectFinance" data-toggle="modal"
                                             data-target="#financeList">选择融资
                                     </button>
+                                    <button type="button" class="btn btn-default selectuser" data-toggle="modal"
+                                            data-target="#selectuser">选择接收人
+                                    </button>
                                     <button type="button" class="btn btn-primary" id="editAsset">保存</button>
                                 </div>
                             </form>
@@ -489,12 +492,31 @@
                         </div>
                     </div>
                 </div>
+                <div class="modal" tabindex="-1" id="selectuser" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">选择接收人
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h5>
+                            </div>
+                            <div class="modal-body">
+                                <table id="Jsuser"></table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-primary" id="saveJsuser">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <script>
         $(".modal").css("height",(parent.window.document.getElementById('chartheight').scrollHeight - 60) + "px");
-
         document.getElementById('ifrmheight').style.height = parent.window.document.getElementById('chartheight').scrollHeight * 0.883 + "px";
     </script>
 </div>

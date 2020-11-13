@@ -73,7 +73,7 @@ var readingColum=[
             }else if(row.type=="2"){
                 return "<a href='javascript:;' id='downfile'>下载文件</a>";
             }else{
-                return "";
+                return "<a href='javascript:;'  id='view'>查看</a>";
             }
 
         },
@@ -85,6 +85,10 @@ var readingColum=[
             },
             'click #downfile':function(e,value,row,index){
                 queryFileByFileName(row.fileId);
+            },
+            'click #view':function(e,value,row,index){
+                var id=parent.document.getElementById("InfoList");
+                id.src="imasset.html?random="+Math.floor(Math.random()*100000);
             }
         }
     }];
@@ -215,14 +219,17 @@ $(function(){
                 align:"center",
                 formatter:function(value,row,index){
                     debugger;
-                    if(row.type=="1"){
-                        return "<a href='javascript:;'  id='sp'>审批</a>";
-                    }else if(row.type=="2"){
-                        return "<a href='javascript:;' id='downfile'>下载文件</a>";
+                    if (row.flowtype=="assess"){
+                        return "<a href='javascript:;'  id='view'>查看</a>";
                     }else{
-                        return "";
+                        if(row.type=="1"){
+                            return "<a href='javascript:;'  id='sp'>审批</a>";
+                        }else if(row.type=="2"){
+                            return "<a href='javascript:;' id='downfile'>下载文件</a>";
+                        }else{
+                            return "";
+                        }
                     }
-
                 },
                 events:{
                     'click #sp':function(e,value,row,index){
@@ -232,6 +239,11 @@ $(function(){
                     },
                     'click #downfile':function(e,value,row,index){
                         queryFileByFileName(row.fileId);
+                    },
+                    'click #view':function(e,value,row,index){
+                        var id=parent.document.getElementById("InfoList");
+                        id.src="imasset.html?zctype="+ row.type +"&&?random="+Math.floor(Math.random()*100000);
+                        // $("#InfoList").attr("src","imasset.html?zctype=1&&random="+Math.floor(Math.random()*100000));
                     }
                 }
             }

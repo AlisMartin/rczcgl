@@ -354,6 +354,24 @@ $(function () {
         })
     });
 
+    $("#saveJsuser").click(function(){
+        debugger;
+        var data=$("#Jsuser").bootstrapTable('getSelections');
+        if(data.length<=0){
+            alert("请选择消息接收人员！");
+            return;
+        }
+        var users="";
+        var usernames="";
+        for(var i=0;i<data.length;i++){
+            users=users+data[i].id+",";
+            usernames=usernames+data[i].userName+",";
+        }
+        users=users.substring(0,users.length-1);
+        $("#editform #jsusers").val(users);
+        $("#selectuser").modal('hide');
+    });
+
     $("#zctype").change(function () {
         param.zctype = $('#zctype').val();
         getcolumn();
@@ -663,7 +681,8 @@ function getcolumn() {
             $(".landAssetsRight").append('<div class="form-group"> <label class="col-sm-6 control-label" for="stopday">截止日期</label>' +
                 '<div class="col-sm-6"><input class="form-control" id="stopday" name="stopday" type="date" "> </div></div>');
             $(".landAssetsLeft").append(' <input type="text" class="form-control" id="zcid" name="zcid" style="display: none">' +
-                '<input type="text" class="form-control" id="financeid" name="financeid" style="display: none"> ');
+                '<input type="text" class="form-control" id="financeid" name="financeid" style="display: none"> ' +
+                '<input type="text" class="form-control" id="jsusers" name="jsusers" style="display: none"> ');
             //添加操作列
             var toolCol = {
                 field: 'operate',
@@ -690,7 +709,11 @@ function getcolumn() {
                         if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("16")==-1){
                             alert("当前用户无权限进行此操作！");
                             return;
-                        }
+                        };
+                        $("#editAssert").modal('show');
+                        $("#editmap").show();
+                        $(".selectuser").hide();
+                        $(".selectFinance").hide();
                         loadData(row);
                         isreset = 0;
                     },
@@ -699,6 +722,7 @@ function getcolumn() {
                             alert("当前用户无权限进行此操作！");
                             return;
                         }
+                        $("#filedown").modal('show');
                         showInfoDown(row);
                     },
                     'click #reset': function (event, value, row, index) {
@@ -706,6 +730,11 @@ function getcolumn() {
                             alert("当前用户无权限进行此操作！");
                             return;
                         }
+                        $("#editAssert").modal('show');
+                        $("#editmap").hide();
+                        $(".selectuser").show();
+                        $(".selectFinance").show();
+                        loadJsuser();
                         loadData(row);
                         isreset = 1;
                     }
@@ -768,20 +797,20 @@ function btnGroup() {   // 自定义方法，添加操作按钮
         '<a href="####" class="btn btn-info" id="modUser"  ' +
         ' title="档案卡">' +
         '<span class="glyphicon glyphicon-info-sign">档案卡</span></a>' +
-        '<a href="####" class="btn btn-primary" id="edit" data-toggle="modal" data-target="#editAssert" ' +
+        '<a href="####" class="btn btn-primary" id="edit"' +
         'style="margin-left:15px" title="编辑资产">' +
         '<span class="glyphicon glyphicon-edit">编辑资产</span></a>' +
         '<a href="####" class="btn btn-warning" id="modRole" title="上传附件" style="margin-left:15px">' +
         '<span class="glyphicon glyphicon-upload">上传附件</span></a>' +
-        '<a href="####" class="btn btn-info" id="filesdown" data-toggle="modal" data-target="#filedown" style="margin-left:15px" title="下载附件">' +
+        '<a href="####" class="btn btn-info" id="filesdown" style="margin-left:15px" title="下载附件">' +
         '<span class="glyphicon glyphicon-download">下载附件</span></a>' +
-        '<a href="####" class="btn btn-info" id="reset" data-toggle="modal" data-target="#editAssert" style="margin-left:15px" title="信息变更">' +
+        '<a href="####" class="btn btn-info" id="reset" style="margin-left:15px" title="信息变更">' +
         '<span class="glyphicon glyphicon-edit">信息变更</span></a>';
     var htmlHistory =
         '<a href="####" class="btn btn-info" id="modUser"  ' +
         ' title="档案卡">' +
         '<span class="glyphicon glyphicon-info-sign">档案卡</span></a>' +
-        '<a href="####" class="btn btn-info" id="filesdown" data-toggle="modal" data-target="#filedown" style="margin-left:15px" title="下载附件">' +
+        '<a href="####" class="btn btn-info" id="filesdown" style="margin-left:15px" title="下载附件">' +
         '<span class="glyphicon glyphicon-download">下载附件</span></a>';
     if (url === '/rczcgl/assetsconfig/getAssetsInfo.action') {
         return html
@@ -847,6 +876,49 @@ function insertFile() {
         }
     })
 }
+
+function loadJsuser() {
+    $("#Jsuser").bootstrapTable('destroy');
+    $('#Jsuser').bootstrapTable({
+        url:'/rczcgl/user/selectAllUser.action',
+        method:'post',
+        clickToSelect:true,
+        /* sidePagination:"client",
+         pagination:true,
+         pageNumber:1,
+         pageSize:5,
+         pageList:[5,10,20,50,100],
+         paginationPreText:"上一页",
+         paginationNextText:"下一页",*/
+        columns:[
+            {
+                checkbox:true
+            },
+            {
+                field:'userName',
+                title:'用户名'
+            },
+            {
+                field:'company',
+                title:'所属公司'
+            },
+            {
+                field:'department',
+                title:'所属部门'
+            },
+            {
+                field:'position',
+                title:'职务'
+            }
+        ],
+        onLoadSuccess:function(){
+        },
+        onLoadError:function(){
+            showTips("数据加载失败!");
+        }
+    })
+}
+
 function showFinanceList(id) {
     $("#financeTable").bootstrapTable('destroy');
     var columns = [];
@@ -901,6 +973,7 @@ function showFinanceList(id) {
         }
     })
 }
+
 function showInfoDown(row) {
     $("#filedownlist").bootstrapTable('destroy');
     $('#filedownlist').bootstrapTable({

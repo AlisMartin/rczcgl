@@ -59,6 +59,9 @@
             <if test="dId !=null">
                 "DID",
             </if>
+            <if test="flowtype !=null">
+                "FLOWTYPE",
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -106,6 +109,9 @@
             </if>
             <if test="dId !=null">
                 #{dId,jdbcType=VARCHAR},
+            </if>
+            <if test="flowtype !=null">
+                #{flowtype,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>

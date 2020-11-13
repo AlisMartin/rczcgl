@@ -201,8 +201,34 @@ function getMessage(){
         data:JSON.stringify(param),
         contentType: "application/json;charset=UTF-8",
         success:function(responsedata){
-            var obj=responsedata;
+            var obj=responsedata,assess = 0,flow = 0;
             if(obj.length>0){
+                for (var i = 0; i < obj.length; i++) {
+                    if(obj[i].flowtype == "assess"){
+                        assess++;
+                    }else{
+                        flow++;
+                    }
+                }
+                // layer.alert('文件流程'+flow+"个未审批；资产信息"+assess+"个已变更。");
+                /*layer.confirm('文件流程'+flow+"个未审批；资产信息"+assess+"个已变更。", {
+                    btn: ['查看'] //按钮
+                }, function(){
+                    var id=parent.document.getElementById("InfoList");
+                    id.src="SysMessage.html?random="+Math.floor(Math.random()*100000);
+                });*/
+                layer.open({
+                    content: '文件流程' + flow + "个代办；资产信息" + assess + "个已变更。"
+                    , btn: ['查看']
+                    , closeBtn: 1
+                    , anim: 6
+                    , yes: function (index, layero) {
+                        //按钮【按钮一】的回调
+                        layer.close(index);
+                        var id=parent.document.getElementById("InfoList");
+                        id.src="SysMessage.html?random="+Math.floor(Math.random()*100000);
+                    }
+                });
                 $(".imsg-bubble").css('display','block');
                 $(".imsg-bubble").empty();
                 $(".imsg-bubble").text(obj.length+"");

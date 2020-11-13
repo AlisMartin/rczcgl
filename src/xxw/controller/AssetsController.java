@@ -309,8 +309,13 @@ public class AssetsController {
     @RequestMapping("/editAsset")
     @ResponseBody
     public ResponseObject editAsset(@RequestBody List<AssetVO> dto) {
+        String jsusers = "";
         Map<String, String> insertInfo = new HashMap<>();
         for (AssetVO assetVO : dto) {
+            if("jsusers".equals(assetVO.getName())){
+                jsusers = assetVO.getValue();
+                continue;
+            }
             if (StringUtil.isNotEmpty(assetVO.getValue())) {
                 insertInfo.put(assetVO.getName(), assetVO.getValue());
             }
@@ -342,8 +347,14 @@ public class AssetsController {
             sysMessage.setFlowName(insertInfo.get("field3"));
             sysMessage.setFlowId(uuid.toString());
             Date date = new Date();
-            String tsdate = DateUtils.getFormatTime(date,"yyyy-MM-dd");
+            String tsdate = DateUtils.getFormatTime(date,"yyyy-MM-dd HH:mm:ss");
             sysMessage.setTsDate(tsdate);
+            sysMessage.setJsId(jsusers);
+            sysMessage.setTsUser(user.getUserName());
+            sysMessage.setTsId(user.getId());
+            sysMessage.setDesc("资产信息变更");
+            sysMessage.setShow("1");
+            sysMessage.setType(insertInfo.get("zctype"));
             sysMessage.setFlowtype("assess");
             sysMessageMapper.insertSysMessage(sysMessage);
         } else {
