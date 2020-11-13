@@ -58,9 +58,6 @@ public class FlowController {
     @ResponseBody
     public ResponseObject createFLow(FlowHistory flowInstance,HttpServletRequest request){
         int i=0;
-        String dusers=null;
-        String duserId="";
-        String usernames="";
         UUID uuid=UUID.randomUUID();
         flowInstance.setFlowId(uuid.toString());
        // flowInstance.setNode("2");
@@ -68,6 +65,9 @@ public class FlowController {
        // flowInstance.setDusers(duserId);
         if(flowInstance.getFlowType().equals("1")){
             flowInstance.setStatus("3");
+            flowInstance.setUser(flowInstance.getJsr());
+            flowInstance.setJsr(null);
+            flowInstance.setEndDate(flowInstance.getStartDate());
         }else{
             flowInstance.setStatus("1");
         }

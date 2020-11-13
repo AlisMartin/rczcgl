@@ -73,12 +73,18 @@ var readingColum=[
             }else if(row.type=="2"){
                 return "<a href='javascript:;' id='downfile'>下载文件</a>";
             }else{
+                return "<a href='javascript:;'  id='look'>查看</a>";
                 return "<a href='javascript:;'  id='view'>查看</a>";
             }
 
         },
         events:{
             'click #sp':function(e,value,row,index){
+                var id=parent.document.getElementById("InfoList");
+                id.src="FileFlowWork.html?random="+Math.floor(Math.random()*100000);
+                // id.attr("src","FileFlowWork.html?random="+Math.floor(Math.random()*100000));
+            },
+            'click #look':function(e,value,row,index){
                 var id=parent.document.getElementById("InfoList");
                 id.src="FileFlowWork.html?random="+Math.floor(Math.random()*100000);
                 // id.attr("src","FileFlowWork.html?random="+Math.floor(Math.random()*100000));

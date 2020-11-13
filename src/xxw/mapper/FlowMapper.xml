@@ -138,6 +138,9 @@
             <if test="file != null" >
                 "FILE",
             </if>
+            <if test="user != null" >
+                "USER",
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -192,6 +195,9 @@
             </if>
             <if test="file != null" >
                 #{file,jdbcType=VARCHAR},
+            </if>
+            <if test="user != null" >
+                #{USER,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
