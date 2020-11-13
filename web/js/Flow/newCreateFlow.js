@@ -377,6 +377,18 @@ $(function(){
                 }
             },
             {
+                title:"查阅人",
+                field:'user',
+                formatter:function(value,row,index){
+                    if(value==null){
+                        return null;
+                    }else{
+                        var names= getUserById(value);
+                        return   names;
+                    }
+                }
+            },
+            {
                 title:"审批状态",
                 field:'status',
                 formatter:function(value,row,index){
@@ -539,12 +551,16 @@ function initDepartTree(){
 
 //推送消息
 function insertMassage(flowinfo){
-    //var user= $.cookie('user');
-    //var userobj=eval('('+user+')');
+   debugger;
     var nowdate=getNowDate();
     var param={};
     param.tsId=flowinfo.fqr;
-    param.jsId=flowinfo.jsr;
+    if(flowinfo.status=="3"){
+        param.jsId=flowinfo.user;
+    }else{
+        param.jsId=flowinfo.jsr;
+    }
+
     param.tsDate=nowdate;
     if(flowinfo.status=="3"){
         param.desc="文件待查看";
@@ -586,7 +602,7 @@ function initmodalonefiled(){
         type:"post",
         url:"/rczcgl/flow/queryFile.action",
         async:false,
-        data:parma,
+        data:param,
         success:function(responsedata){
             debugger;
             $("#yjml").empty();
@@ -603,7 +619,7 @@ function initmodalonefiled(){
 //初始化文件二级目录
 function initmodaltwofiled(com){
     var param={};
-    param.filetype="com";
+    param.filetype="pos";
     param.com=com;
     if(userobj.auth.indexOf("8")=="-1"){
         param.departId=userobj.departId;
@@ -630,7 +646,7 @@ function initmodaltwofiled(com){
 //初始化文件三级目录
 function initmodalthreefiled(com,pos){
     var param={};
-    param.filetype="com";
+    param.filetype="type";
     param.com=com;
     param.pos=pos;
     if(userobj.auth.indexOf("8")=="-1"){

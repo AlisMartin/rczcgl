@@ -516,7 +516,12 @@ function queryInfo(a){
 
     $("#cfqr").val(getUserById(a.fqr));
     $("#cflowName").val(a.flowName);
-    $("#cflowType").val(a.flowType);
+    if(a.flowType=="1"){
+        $("#cflowType").val("查阅");
+    }else if(a.flowType=="2"){
+        $("#cflowType").val("审批");
+    }
+
     $("#cstartDate").val(a.startDate);
     $("#clwjg").val(a.lwjg);
     $("#cswwh").val(a.swwh);
