@@ -11,28 +11,12 @@ var flowColum=[
         title:'流程名称'
     },
     {
-        field:'fqr',
-        title:'发起人',
-        formatter:function(value,row,index){
-            if(value==null){
-                return null;
-            }else{
-                var names= getUserById(value);
-                return   names;
-            }
-        }
+        field:'fqrName',
+        title:'发起人'
     },
     {
         title:"待办人",
-        field:'jsr',
-        formatter:function(value,row,index){
-            if(value==null){
-                return null;
-            }else{
-                var names= getUserById(value);
-                return   names;
-            }
-        }
+        field:'dusers'
     },
     {
         title:"审批状态",
@@ -104,40 +88,16 @@ var historyFlowColum=[
         title:'流程名称'
     },
     {
-        field:'fqr',
-        title:'发起人',
-        formatter:function(value,row,index){
-            if(value==null){
-                return null;
-            }else{
-                var names= getUserById(value);
-                return   names;
-            }
-        }
+        field:'fqrName',
+        title:'发起人'
     },
     {
         title:"待办人",
-        field:'jsr',
-        formatter:function(value,row,index){
-            if(value==null){
-                return null;
-            }else{
-                var names= getUserById(value);
-                return   names;
-            }
-        }
+        field:'dusers'
     },
     {
         title:"处理人",
-        field:'user',
-        formatter:function(value,row,index){
-            if(value==null){
-                return null;
-            }else{
-                var names= getUserById(value);
-                return   names;
-            }
-        }
+        field:'username'
     },
     {
         title:"开始时间",
@@ -279,42 +239,13 @@ $(function(){
                 title:'流程名称'
             },
             {
-                field:'fqr',
-                title:'发起人',
-                formatter:function(value,row,index){
-                    if(value==null){
-                        return null;
-                    }else{
-                        var names= getUserById(value);
-                        return   names;
-                    }
-                }
+                field:'fqrName',
+                title:'发起人'
             },
             {
                 title:"待办人",
-                field:'jsr',
-                formatter:function(value,row,index){
-                    if(value==null){
-                        return null;
-                    }else{
-                        var names= getUserById(value);
-                        return   names;
-                    }
-                }
+                field:'dusers'
             },
-            {
-                title:"处理人",
-                field:'user',
-                formatter:function(value,row,index){
-                    if(value==null){
-                        return null;
-                    }else{
-                        var names= getUserById(value);
-                        return   names;
-                    }
-                }
-            },
-
             {
                 title:"审批状态",
                 field:'status',

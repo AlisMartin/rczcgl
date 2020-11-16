@@ -144,6 +144,20 @@ public class FlowController {
         String fqr=json.getString("fqr");
         String duser=json.getString("duser");
         List<FlowHistory> flowInfoList=flowMapper.queryFlowInfos(flowType,flowId,fqr,duser);
+        for(FlowHistory flowHistory:flowInfoList){
+            if(!"".equals(flowHistory.getFqr())&&flowHistory.getFqr()!=null){
+                String cluser=getUserNames(flowHistory.getFqr());
+                flowHistory.setFqrName(cluser);
+            }
+            if(!"".equals(flowHistory.getUser())&&flowHistory.getUser()!=null){
+                String cluser=getUserNames(flowHistory.getUser());
+                flowHistory.setUsername(cluser);
+            }
+            if(!"".equals(flowHistory.getJsr())&&flowHistory.getJsr()!=null){
+                String cluser=getUserNames(flowHistory.getJsr());
+                flowHistory.setDusers(cluser);
+            }
+        }
         return flowInfoList;
     }
 
@@ -156,20 +170,20 @@ public class FlowController {
         String fqr=json.getString("fqr");
         String duser=json.getString("duser");
         List<FlowHistory> flowInfoList=flowMapper.queryHistoryFlowInfos(flowType,flowId,fqr,duser);
- /*       for(FlowHistory info:flowInfoList){
-         if(!"".equals(info.getUser())&&info.getUser()!=null){
-                String cluser=getUserNames(info.getUser());
-                info.setUserId(cluser);
+        for(FlowHistory flowHistory:flowInfoList){
+            if(!"".equals(flowHistory.getFqr())&&flowHistory.getFqr()!=null){
+                String cluser=getUserNames(flowHistory.getFqr());
+                flowHistory.setFqrName(cluser);
             }
-            if(!"".equals(info.getDusers())&&info.getDusers()!=null&&!info.getDusers().equals("无")){
-                String cluser=getUserNames(info.getDusers());
-                info.setdName(cluser);
+            if(!"".equals(flowHistory.getUser())&&flowHistory.getUser()!=null){
+                String cluser=getUserNames(flowHistory.getUser());
+                flowHistory.setUsername(cluser);
             }
-            if(!"".equals(info.getFqr())&&info.getFqr()!=null){
-                String cluser=getUserNames(info.getFqr());
-                info.setFqrName(cluser);
+            if(!"".equals(flowHistory.getJsr())&&flowHistory.getJsr()!=null){
+                String cluser=getUserNames(flowHistory.getJsr());
+                flowHistory.setDusers(cluser);
             }
-        }*/
+        }
         return flowInfoList;
     }
 
@@ -417,9 +431,20 @@ public class FlowController {
     public List<SysMessage> queryMessage(HttpServletRequest request,@RequestBody JSONObject json){
         String jsuser = json.getString("jsuser");
         String show = json.getString("show");
+        List<SysMessage> messageList=sysMessageMapper.queryMessage(jsuser,show);
+        for(SysMessage sysMessage:messageList){
+            if(!"".equals(sysMessage.getJsId())&&sysMessage.getJsId()!=null){
+                String cluser=getUserNames(sysMessage.getJsId());
+                sysMessage.setJsId(cluser);
+            }
+            if(!"".equals(sysMessage.getTsId())&&sysMessage.getTsId()!=null){
+                String cluser=getUserNames(sysMessage.getTsId());
+                sysMessage.setTsId(cluser);
+            }
+        }
         /*String jsuser=request.getParameter("jsuser");
         String show=request.getParameter("show");*/
-        return sysMessageMapper.queryMessage(jsuser,show);
+        return messageList;
 
     }
     @RequestMapping("/updateMessage")
