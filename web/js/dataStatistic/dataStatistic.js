@@ -19,6 +19,7 @@ $(function(){
 })
 
 function initzzechart(){
+    debugger;
     var name=[];
     var value=[];
     for(var i=0;i<sjdata.zj.length;i++){
@@ -38,7 +39,11 @@ function initzzechart(){
       },
         xAxis: {
             type: 'category',
-            data: name
+            data: name,
+            axisLabel : {
+                interval:0,
+                rotate:"45"
+            }
         },
         yAxis: {
             type: 'value'
@@ -76,7 +81,11 @@ function initzzechart1(){
         },
         xAxis: {
             type: 'category',
-            data: name
+            data: name,
+            axisLabel : {
+                interval:0,
+                rotate:"45"
+            }
         },
         yAxis: {
             type: 'value'
