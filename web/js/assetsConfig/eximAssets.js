@@ -3,7 +3,7 @@ var userobj = eval('(' + user + ')');
 var columns = [];
 var param = {};
 var zcid = "";
-var fileid = "", isreset, newmap, editmap, viewmap, map, toolBar, X, Y,geo,
+var fileid = "", isreset, newmap, editmap, viewmap, map, toolBar, X, Y,geo,initExtent,
     financeid = "",
     url = '/rczcgl/assetsconfig/getAssetsInfo.action',
     gsmc = userobj.comId;
@@ -39,11 +39,16 @@ $(function () {
                                      Draw, Edit, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Color, GraphicsLayer,
                                      ArcGISTiledMapServiceLayer, Graphic, FeatureLayer, TemplatePicker, arrayUtil, event, lang) {
         //setTimeout(function () {
-        var initExtent = new esri.geometry.Extent({
+        initExtent = new esri.geometry.Extent({
+            "xmin": 122.36636457677508, "ymin": 37.11526795965575,
+            "xmax": 122.44469643308702, "ymax": 37.14087096007849,
+            //"spatialReference": {"wkid": 4326}
+        })
+            /*new esri.geometry.Extent({
             "xmin": 122.1102905273437, "ymin": 36.74652099609376,
             "xmax": 122.71179199218744, "ymax": 37.45513916015626,
             //"spatialReference": {"wkid": 4326}
-        });
+        });*/
 
         viewmap = new Map("viewmap", {
             showInfoWindowOnClick: true, showLabels: true,
@@ -313,8 +318,12 @@ $(function () {
         } else {
             $("#newmap").show();
         }
-        newmap.resize();
+        // 获取mapDiv大小改变前的地图中心点坐标
+        // var centerPoint = initExtent.getCenter();
+        newmap.resize(true);
         newmap.reposition();
+        // newmap.centerAt(centerPoint);
+
         map.initEditing();
 
         //document.getElementsByClassName('modal').style.height = (parent.window.document.getElementById('chartheight').scrollHeight - 80) + "px";
@@ -599,10 +608,9 @@ function getcolumn() {
     var zctype = $("#zctype").val();
     $.ajax({
         type: "post",
-        url: "/rczcgl/assetsconfig/getConfigInfo.action",
+        url: "/rczcgl/assetsconfig/getAllConfigInfo.action",
         async: false,
-        data: JSON.stringify(param),
-        contentType: "application/json;charset=UTF-8",
+        data: param,
         success: function (data) {
             for (var i = 0; i < data.length; i++) {
 
@@ -821,6 +829,20 @@ function btnGroup() {   // 自定义方法，添加操作按钮
 
 function addAsset() {
     var arr = $("#addform").serializeArray();
+    for (var i = 0; i < arr.length; i++) {
+        if(arr[i].name == "field1" && arr[i].value == ""){
+            alert("请输入编号");
+            return;
+        }
+        if(arr[i].name == "field2" && arr[i].value == ""){
+            alert("请输入公司名称");
+            return;
+        }
+        if(arr[i].name == "field3" && arr[i].value == ""){
+            alert("请输入项目名称");
+            return;
+        }
+    }
     arr.push({name: "zctype", value: param.zctype});
     $.ajax({
         type: "post",

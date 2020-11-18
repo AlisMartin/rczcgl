@@ -2,15 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
     <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
     <title></title>
-    <link rel="stylesheet" href="assets/libs/css/style.css">
-    <!--<link rel="stylesheet"-->
-          <!--href="http://118.190.54.143:8090/arcgis_js_v39_api/arcgis_js_api/library/3.9/3.9/js/esri/css/esri.css">-->
-    <!--<link rel="stylesheet"-->
-          <!--href="http://118.190.54.143:8090/arcgis_js_v39_api/arcgis_js_api/library/3.9/3.9/js/dojo/dijit/themes/claro/claro.css">-->
-    <link rel="stylesheet" href="https://js.arcgis.com/3.33/esri/css/esri.css">
+    <link rel="stylesheet" href="http://192.168.0.108:8097/arcgis_js_api/library/3.34/3.34/esri/css/esri.css">
+    <!--<link rel="stylesheet" href="https://js.arcgis.com/3.33/esri/css/esri.css">-->
     <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
     <link rel="stylesheet" href="third/bootstrap-table/bootstrap-table.min.css">
@@ -22,12 +18,16 @@
     <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
     <script src="third/webuploader/webuploader.nolog.min.js"></script>
-   <!--<script type="text/javascript"-->
-            <!--src="http://118.190.54.143:8090/arcgis_js_v39_api/arcgis_js_api/library/3.9/3.9/init.js"></script>-->
-    <script src="https://js.arcgis.com/3.33/"></script>
-    <!--<script src="assets/vendor/slimscroll/jquery.slimscroll.js"></script>-->
+    <script type="text/javascript" src="http://192.168.0.108:8097/arcgis_js_api/library/3.34/3.34/init.js"></script>
+    <!--<script src="https://js.arcgis.com/3.33/"></script>-->
     <script src="js/assetsConfig/eximAssets.js"></script>
     <style>
+        html, body {
+            /*padding-top: 25px;*/
+            /*margin: 0;*/
+            height: 100%;
+        }
+
         .right {
             float: right;
             margin-left: 12px;
@@ -36,9 +36,11 @@
         .fontstyle {
             font-weight: bold;
         }
-        .hheigt{
+
+        .hheigt {
             height: 100%;
         }
+
         .left {
             float: left;
             margin-right: 12px;
@@ -91,6 +93,7 @@
 
         .map {
             background-color: #a3ccff;
+            /*width: 100% !important;*/
         }
 
         #drawTool {
@@ -99,6 +102,7 @@
             left: 90px;
             z-index: 100;
         }
+
         #drawTool1 {
             position: absolute;
             bottom: 370px;
@@ -161,7 +165,7 @@
             flex-wrap: wrap;
         }
 
-        .scroll{
+        .scroll {
             overflow: auto;
         }
 
@@ -177,11 +181,11 @@
 
         .scroll::-webkit-scrollbar-thumb {
 
-            background-color: rgba(0,0,0,.05);
+            background-color: rgba(0, 0, 0, .05);
 
             border-radius: 10px;
 
-            -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.1);
+            -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1);
 
         }
 
@@ -189,11 +193,11 @@
 
         .scroll:hover::-webkit-scrollbar-thumb {
 
-            background-color: rgba(0,0,0,.2);
+            background-color: rgba(0, 0, 0, .2);
 
             border-radius: 10px;
 
-            -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.1);
+            -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1);
 
         }
 
@@ -201,9 +205,9 @@
 
         .scroll::-webkit-scrollbar-thumb:hover {
 
-            background-color: rgba(0,0,0,.4);
+            background-color: rgba(0, 0, 0, .4);
 
-            -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.1);
+            -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1);
 
         }
 
@@ -213,7 +217,7 @@
 
             border-radius: 10px;
 
-            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
 
             background-color: white;
 
@@ -223,17 +227,18 @@
 
         .scroll::-webkit-scrollbar-track:hover {
 
-            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.4);
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .4);
 
-            background-color: rgba(0,0,0,.01);
+            background-color: rgba(0, 0, 0, .01);
 
         }
-       /* #viewmap{
-            width: 570px;
-        }
-        #newmap{
-            width: 870px;
-        }*/
+
+         /*#viewmap{
+             width: 570px;
+         }
+         #newmap{
+             width: 870px;
+         }*/
     </style>
 </head>
 <body class="colorsty">
@@ -270,7 +275,8 @@
                         </div>
 
                         <div class="column">
-                            <ul id="myTab1" class="nav nav-pills left scroll" style="overflow-x: auto;height: 50px;width:70%;display: flex;">
+                            <ul id="myTab1" class="nav nav-pills left scroll"
+                                style="overflow-x: auto;height: 50px;width:70%;display: flex;">
                             </ul>
                             <div>
                                 <button type="button" class="btn btn-info right" id="exportAssets" name="exportAssets">
@@ -308,10 +314,11 @@
                                         <div class="col-md-6 landAssetsLeft"></div>
                                         <div class="col-md-6 landAssetsRight"></div>
                                     </div>
-                                    <div id="newmap">
-                                        <button type="button" id="drawTool" class="btn btn-default">绘制点</button>
-                                        <!--<div id="templatePickerDiv"></div>-->
-                                    </div>
+                                        <div id="newmap">
+                                            <button type="button" id="drawTool" class="btn btn-default">绘制点</button>
+                                            <!--<div id="templatePickerDiv"></div>-->
+                                        </div>
+                                    </di>
                                     <div id="rightPane">
                                         <div id="templatePickerDiv"></div>
                                     </div>
@@ -372,8 +379,8 @@
                                         <div class="col-md-6 landAssetsRight"></div>
                                     </div>
                                     <!--<div id="editmap" style="height: 500px"></div>-->
-                                    <div id="editmap" >
-                                        <button type="button" id="drawTool1" >绘制点</button>
+                                    <div id="editmap">
+                                        <button type="button" id="drawTool1">绘制点</button>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -459,7 +466,7 @@
                                 </h5>
 
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body" >
                                 <div id="viewmap">
                                     <!--<div id="templatePickerDiv"></div>-->
                                 </div>
@@ -516,7 +523,7 @@
         </div>
     </div>
     <script>
-        $(".modal").css("height",(parent.window.document.getElementById('chartheight').scrollHeight - 60) + "px");
+        $(".modal").css("height", (parent.window.document.getElementById('chartheight').scrollHeight - 60) + "px");
         document.getElementById('ifrmheight').style.height = parent.window.document.getElementById('chartheight').scrollHeight * 0.883 + "px";
     </script>
 </div>

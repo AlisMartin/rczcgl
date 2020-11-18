@@ -51,7 +51,7 @@ var readingColum=[
         title:"操作",
         align:"center",
         formatter:function(value,row,index){
-            debugger;    
+            debugger;
             if (row.flowtype=="assess"){
                 return "<a href='javascript:;'  id='view'>查看</a>";
             }else {
