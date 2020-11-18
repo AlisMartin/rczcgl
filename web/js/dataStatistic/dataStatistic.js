@@ -23,7 +23,10 @@ function initzzechart(){
     var name=[];
     var value=[];
     for(var i=0;i<sjdata.zj.length;i++){
-        name.push(sjdata.zj[i].name);
+        var comname=sjdata.zj[i].name.replace("有限公司","").replace("有限责任公司","").replace("公司","");
+        //sjdata.zj[i].name;
+        var a=comname.indexOf("市");
+        name.push(comname.substring(a+1,comname.length));
         value.push(sjdata.zj[i].value);
     }
     var myChart = echarts.init(document.getElementById('zzechart'));
@@ -36,6 +39,9 @@ function initzzechart(){
       tooltip: {
           trigger: 'item',
           formatter: '{b} : {c} '
+      },
+      grid:{
+          bottom:"80"
       },
         xAxis: {
             type: 'category',
@@ -65,7 +71,10 @@ function initzzechart1(){
     var name=[];
     var value=[];
     for(var i=0;i<sjdata.rzje.length;i++){
-        name.push(sjdata.rzje[i].name);
+        var comname=sjdata.zj[i].name.replace("有限公司","").replace("有限责任公司","").replace("公司","");
+       // sjdata.zj[i].name;
+        var a=comname.indexOf("市");
+        name.push(comname.substring(a+1,comname.length));
         value.push(sjdata.rzje[i].value);
     }
     var myChart = echarts.init(document.getElementById('zzechart1'));
@@ -74,6 +83,9 @@ function initzzechart1(){
             text: '各公司融资金额汇总',
             // subtext: '纯属虚构',
             left: 'center'
+        },
+        grid:{
+            bottom:"80"
         },
         tooltip: {
             trigger: 'item',
