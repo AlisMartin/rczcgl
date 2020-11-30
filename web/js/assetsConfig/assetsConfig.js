@@ -75,6 +75,10 @@ $(function(){
             alert("请选择一条需要修改的配置信息！")
             return;
         }else{
+            if(rowdata[0].field == "field1" ||rowdata[0].field == "field2" ||rowdata[0].field == "field3"){
+                alert("重点字段禁止修改！");
+                return;
+            }
             $("#editConfig").modal('show');
             $("#editzctype").val(rowdata[0].zctype);
             $("#editfieldname").val(rowdata[0].fieldname);
@@ -86,6 +90,10 @@ $(function(){
     $("#deleteconfig").click(function(){
         if(confirm("确定要删除吗？")){
             var rowdata=$("#configTable").bootstrapTable('getSelections');
+            if(rowdata[0].field == "field1" ||rowdata[0].field == "field2" ||rowdata[0].field == "field3"){
+                alert("重点字段禁止删除！");
+                return;
+            }
             if(rowdata.length<=0){
                 alert("请选择要删除的配置项！");
                 return;

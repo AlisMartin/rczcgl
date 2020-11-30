@@ -289,7 +289,9 @@ public class AssetsController {
         //插入资产的公司id
         insertInfo.put("companyid", user.getComId());
         insertInfo.put("zcid", uuid.toString());
-        insertInfo.put("layerid", uuid.toString());
+        if("2".equals(insertInfo.get("zctype"))){
+            insertInfo.put("layerid", uuid.toString());
+        }
         int i = assetsMapper.insertAssetsInfo(insertInfo);
 
         String eventDesc="用户"+user.getUserName()+"新增资产";
@@ -300,7 +302,12 @@ public class AssetsController {
         //String realdate=date.toString();
         logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
         if (i == 1) {
-            return new ResponseObject(1, "成功", uuid);
+            if("2".equals(insertInfo.get("zctype"))){
+                return new ResponseObject(1, "成功", uuid);
+            }else{
+                return new ResponseObject(1, "成功", "");
+            }
+
         } else {
             return new ResponseObject(0, "失败", "");
         }

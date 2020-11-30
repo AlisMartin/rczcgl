@@ -353,6 +353,9 @@ $(function () {
     $('#financeList').on('hidden.bs.modal', function () {
         $(".colorsty").addClass("modal-open");
     });
+    $('#selectuser').on('hidden.bs.modal', function () {
+        $(".colorsty").addClass("modal-open");
+    });
     $("#search").click(function () {
         $('#assetsTable').bootstrapTable('refreshOptions', {
             queryParams: function (params) {
@@ -851,7 +854,10 @@ function addAsset() {
         contentType: "application/json;charset=UTF-8",
         datatype: "json",
         success: function (res) {
-            map.addSave(res.data);
+            $('#add').modal('hide');
+            if (res.data != "") {
+                map.addSave(res.data);
+            }
             $('#assetsTable').bootstrapTable('refresh');
             $("#editAssert").modal('hide');
         },
