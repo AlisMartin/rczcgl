@@ -120,6 +120,42 @@ public class DataStatisticController {
             datamap.put("rzje",datalist);
         }
 
+        if(sx.indexOf("3")>-1){
+            List<AssetVO> datalist=new ArrayList<>();
+            for(String comid:gsmcs){
+                Map<String,Object> map=new HashMap<>();
+                map=  totalAssets(zctype,comid,"3");
+ /*               List<AssetsConfig>configlist=new ArrayList<>();
+                if(zctype==null){
+                    configlist=assetsMapper.getAllAssetsConfigInfo(null, null);
+                }else{
+                    configlist=assetsMapper.getAllAssetsConfigInfo(zctype, null);
+                    List<AssetsConfig> rzconfiglist=assetsMapper.getAllAssetsConfigInfo("5", null);
+                    configlist.addAll(rzconfiglist);
+                }
+                for(AssetsConfig assetsConfig :configlist){
+                    if(assetsConfig.getFieldname().indexOf("融资金额")>-1){
+                        if(map.containsKey(assetsConfig.getField())){
+                            AssetVO assetVO=new AssetVO();
+                            assetVO.setName(map.get("gsmc").toString());
+                            assetVO.setValue(map.get(assetsConfig.getField()).toString());
+                            datalist.add(assetVO);
+                        }
+
+                    }
+                }*/
+                AssetVO assetVO = new AssetVO();
+                assetVO.setName(map.get("name").toString());
+                if(map.get("value")==null){
+                    assetVO.setValue("");
+                }else{
+                    assetVO.setValue(map.get("value").toString());
+                }
+                datalist.add(assetVO);
+            }
+            datamap.put("cjj",datalist);
+        }
+
         return  new ResponseObject(1,"",datamap);
     }
 
@@ -173,6 +209,12 @@ public class DataStatisticController {
                                         } else {
                                             if (tjx.indexOf("1") > -1) {
                                                 if ((assetsConfig.getFieldname().indexOf("租金") > -1) && StringUtil.isNumber(assetslist.get(i).get(fields[x].getName().toString().toUpperCase()))) {
+                                                    count = count + Float.parseFloat(assetslist.get(i).get(fields[x].getName().toString().toUpperCase()));
+                                                    mapCount.put(zcarray[y], count);
+                                                }
+                                            }
+                                            if (tjx.indexOf("3") > -1) {
+                                                if ((assetsConfig.getFieldname().indexOf("成交价(万元)") == 0) && StringUtil.isNumber(assetslist.get(i).get(fields[x].getName().toString().toUpperCase()))) {
                                                     count = count + Float.parseFloat(assetslist.get(i).get(fields[x].getName().toString().toUpperCase()));
                                                     mapCount.put(zcarray[y], count);
                                                 }
@@ -239,6 +281,12 @@ public class DataStatisticController {
                                     } else {
                                         if (tjx.indexOf("1") > -1) {
                                             if ((assetsConfig.getFieldname().indexOf("租金") > -1) && StringUtil.isNumber(assetslist.get(i).get(fields[x].getName().toString().toUpperCase()))) {
+                                                count = count + Float.parseFloat(assetslist.get(i).get(fields[x].getName().toString().toUpperCase()));
+                                                mapCount.put(zctype, count);
+                                            }
+                                        }
+                                        if (tjx.indexOf("3") > -1) {
+                                            if ((assetsConfig.getFieldname().indexOf("成交价(万元)") == 0) && StringUtil.isNumber(assetslist.get(i).get(fields[x].getName().toString().toUpperCase()))) {
                                                 count = count + Float.parseFloat(assetslist.get(i).get(fields[x].getName().toString().toUpperCase()));
                                                 mapCount.put(zctype, count);
                                             }

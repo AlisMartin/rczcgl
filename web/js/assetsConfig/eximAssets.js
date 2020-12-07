@@ -555,9 +555,9 @@ $(function () {
         queryParamsType: "limit",
         queryParams: function (params) {
             params.zctype = param.zctype;
-            //if(userobj.auth!='8'){
+            if(userobj.auth!='8'){
                 params.gsmc = gsmc;
-            //}
+            }
 
             return JSON.stringify(params);
         },
@@ -1077,11 +1077,11 @@ function reloadTable(a) {
     //$('#importAssets').toggle();
     //$('#addAsset').toggle();
     var classq = a.className;
-    if (classq === "getAssetsInfo") {
+    if (classq === "getAssetsInfo"||classq === "allcompany") {
         url = '/rczcgl/assetsconfig/getAssetsInfo.action';
         $('#importAssets').show();
         $('#addAsset').show();
-    } else if (classq === "getAssetsHistoryInfo") {
+    } else if (classq === "getAssetsHistoryInfo"||classq === "allcompany") {
         url = '/rczcgl/assetsconfig/getAssetsHistoryInfo.action';
         $('#importAssets').hide();
         $('#addAsset').hide();
@@ -1091,8 +1091,12 @@ function reloadTable(a) {
     $('#assetsTable').bootstrapTable('refreshOptions', {
         url: url,
         queryParams: function (params) {
+
             params.zctype = param.zctype;
-            params.gsmc = gsmc;
+            if(classq!="allcompany"){
+                params.gsmc = gsmc;
+            }
+
             return JSON.stringify(params);
         },
         pageNumber: 1
@@ -1112,15 +1116,16 @@ function getCompanys() {
             var data = res.data;
             gsmc = data[0].id;
             var htmlLeft = '';
+            htmlLeft = htmlLeft +  '<li class="active" style="flex: none"><a class="allcompany" data-toggle="tab" onclick="reloadTable(this)">所有公司</a></li>';
             for (var i = 0; i < data.length; i++) {
                 //生成表单
-                if (i === 0) {
+            /*    if (i === 0) {
                     htmlLeft = htmlLeft +
                         '<li class="active" style="flex: none"><a class="' + data[i].id + '" data-toggle="tab" onclick="reloadTable(this)">' + data[i].nodeName + '</a></li>';
-                } else {
+                } else {*/
                     htmlLeft = htmlLeft +
                         '<li style="flex: none" ><a class="' + data[i].id + '" data-toggle="tab" onclick="reloadTable(this)">' + data[i].nodeName + '</a></li>';
-                }
+               // }
             }
             if (userobj.auth.indexOf("9") > -1 || userobj.auth.indexOf("8") > -1) {
                 $("#myTab1").append(htmlLeft);

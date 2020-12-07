@@ -1,6 +1,6 @@
 var sjdata;
 $(function(){
-    $("#tjsx").selectpicker('val', ['1','2']);
+    $("#tjsx").selectpicker('val', ['1','2','3']);
     getdata();
    // initsdechart();
     initsxechart();
@@ -10,7 +10,7 @@ $(function(){
     $(".dropdown.bootstrap-select.show-tick.bs3").css('width','100%');
     $("#zclx").change(function(){
         getdata();
-        // initsdechart();
+        //initsdechart();
         initsxechart();
         initsxechart1();
         initzzechart1();
@@ -23,16 +23,16 @@ function initzzechart(){
     var name=[];
     var value=[];
     for(var i=0;i<sjdata.zj.length;i++){
-        var comname=sjdata.zj[i].name.replace("有限公司","").replace("有限责任公司","").replace("公司","");
+        var comname=sjdata.cjj[i].name.replace("有限公司","").replace("有限责任公司","").replace("公司","");
         //sjdata.zj[i].name;
         var a=comname.indexOf("市");
         name.push(comname.substring(a+1,comname.length));
-        value.push(sjdata.zj[i].value);
+        value.push(sjdata.cjj[i].value);
     }
     var myChart = echarts.init(document.getElementById('zzechart'));
   var  option = {
       title: {
-          text: '各公司房租汇总',
+          text: '各公司土地成交价汇总',
           // subtext: '纯属虚构',
           left: 'center'
       },
