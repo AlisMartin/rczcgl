@@ -655,7 +655,9 @@ function getcolumn() {
                 var obj = {};
                 obj.field = data[i].field;
                 obj.title = data[i].fieldname;
-                columns.push(obj);
+                if(i != 0){
+                    columns.push(obj);
+                }
                 //插入定位列
                 if (i === 2) {
                     var pointxy = {
