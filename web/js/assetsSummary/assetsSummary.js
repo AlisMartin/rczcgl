@@ -261,7 +261,7 @@ function gettotal(zctype,gs){
     if(zctype!=null&&zctype!=""){
         param.zctype=zctype;
     }
-    if(gs!=null&&gs!=""&&gs!="allcompany"){
+    if(gs!=null&&gs!=""&&gs!="allcompany"&&userobj.auth!='8'&&userobj.auth!="9"){
         param.gsmc=gs;
     }
         $.ajax({
