@@ -235,8 +235,12 @@ $(function () {
                 PointLayer.applyEdits([newGraphic], null, null);
                 newmap.graphics.clear();
             },
-            editSave: function(id){
-                var newGraphic = new Graphic(geo1, null, null);
+            editSave: function(OBJECTID_1){
+                var obj = {
+                    OBJECTID_1:OBJECTID_1
+                };
+                var newAttributes = lang.mixin({}, obj);
+                var newGraphic = new Graphic(geo1, null, newAttributes);
                 PointLayer.applyEdits(null, [newGraphic],  null);
                 editmap.graphics.clear();
             },
@@ -931,7 +935,7 @@ function editAsset() {
         success: function (res) {
             $('#assetsTable').bootstrapTable('refresh');
             $("#editAssert").modal('hide');
-            map.editSave();
+            map.editSave(res.data);
         },
         error: function (res) {
             alert("系统错误，请稍后重试！");
