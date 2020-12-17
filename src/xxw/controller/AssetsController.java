@@ -368,7 +368,7 @@ public class AssetsController {
             i = assetsMapper.updateAssetsInfo(insertInfo);
         }
         if (i == 1) {
-            return new ResponseObject(1, "成功", "");
+            return new ResponseObject(1, "成功", insertInfo.get("OBJECTID_1"));
         } else {
             return new ResponseObject(0, "失败", "");
         }
