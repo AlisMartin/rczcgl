@@ -3,7 +3,7 @@ var userobj = eval('(' + user + ')');
 var columns = [];
 var param = {};
 var zcid = "";
-var fileid = "", isreset, newmap, editmap, viewmap, map, toolBar, X, Y,geo,initExtent,
+var fileid = "", isreset, newmap, editmap, viewmap, map, toolBar, X, Y,geo,geo1,initExtent,
     financeid = "",
     url = '/rczcgl/assetsconfig/getAssetsInfo.action',
     gsmc = userobj.comId;
@@ -79,14 +79,20 @@ $(function () {
             autoResize: true
         });
 
-        var layer = new ArcGISTiledMapServiceLayer("http://192.168.0.108:6080/arcgis/rest/services/DELETE/MapServer");
-        var layer1 = new ArcGISTiledMapServiceLayer("http://192.168.0.108:6080/arcgis/rest/services/DELETE/MapServer");
-        var layer2 = new ArcGISTiledMapServiceLayer("http://192.168.0.108:6080/arcgis/rest/services/DELETE/MapServer");
+        var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
+        var layer1 = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
+        var layer2 = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
+        var PointLayer1 = new FeatureLayer("http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0", {
+            mode: FeatureLayer.MODE_SNAPSHOT,
+            outFields: ["*"],
+            displayOnPan: true
+        });
 
         editmap.addLayer(layer2);
+        editmap.addLayer(PointLayer1);
         viewmap.addLayer(layer);
 
-        var PointLayer = new FeatureLayer("http://192.168.0.108:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0", {
+        var PointLayer = new FeatureLayer("http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0", {
             mode: FeatureLayer.MODE_SNAPSHOT,
             outFields: ["*"],
             displayOnPan: true
@@ -114,10 +120,38 @@ $(function () {
 
         map = {
             teast:function(){
+                var currentLayer = PointLayer1;
+                var editToolbar = new Edit(editmap);
+                editToolbar.on("deactivate", function (evt) {
+                    currentLayer.applyEdits(null, [evt.graphic], null);
+                });
+                var editingEnabled = false;
+                PointLayer1.on("dbl-click", function (evt) {
+                    event.stop(evt);
+                    if (editingEnabled === false) {
+                        editingEnabled = true;
+                        editToolbar.activate(Edit.EDIT_VERTICES, evt.graphic);
+                    } else {
+                        currentLayer = this;
+                        editToolbar.deactivate();
+                        editingEnabled = false;
+                    }
+                });
+                PointLayer1.on("click", function (evt) {
+                    event.stop(evt);
+                    if (evt.ctrlKey === true || evt.metaKey === true) {  //delete feature if ctrl key is depressed
+                        PointLayer1.applyEdits(null, null, [evt.graphic]);
+                        currentLayer = this;
+                        editToolbar.deactivate();
+                        editingEnabled = false;
+                    }
+                });
+
                 $("#drawTool1").click(function () {
+
                     drawToolbar1.activate(Draw.POINT);
                 });
-                var drawToolbar1 = new Draw(newmap, {
+                var drawToolbar1 = new Draw(editmap, {
                     showTooltips: false
                 });
                 drawToolbar1.on("draw-end", function (evt) {
@@ -129,13 +163,14 @@ $(function () {
                         markerSymbol.setColor(new Color("#00FFFF"));
                         symbol = markerSymbol;
                     }
-
+                    geo1 = evt.geometry;
                     var graphic = new Graphic(evt.geometry, symbol);
                     //$("#" + X).val(evt.geometry.x);
                     //$("#" + Y).val(evt.geometry.y);
                     editmap.graphics.clear();
                     editmap.graphics.add(graphic)
                 });
+
 
             },
             initEditing: function (evt) {
@@ -200,6 +235,11 @@ $(function () {
                 PointLayer.applyEdits([newGraphic], null, null);
                 newmap.graphics.clear();
             },
+            editSave: function(id){
+                var newGraphic = new Graphic(geo1, null, null);
+                PointLayer.applyEdits(null, [newGraphic],  null);
+                editmap.graphics.clear();
+            },
             reset:function(){
                 viewmap.setExtent(initExtent);
                 viewmap.graphics.clear();
@@ -208,9 +248,9 @@ $(function () {
             addPoint: function (id,row) {
                 //定义查询对象
 
-                var url = "http://192.168.0.108:6080/arcgis/rest/services/RES1/MapServer/" + (zctype-1);
+                var url = "http://localhost:6080/arcgis/rest/services/RES1/MapServer/" + (zctype-1);
                 if(zctype == 2){
-                    url = "http://192.168.0.108:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0";
+                    url = "http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0";
                 }
                 var queryTask = new QueryTask(url);
                 //定义查询参数对象
@@ -308,6 +348,9 @@ $(function () {
     });
 
     $("#editAssert").on('shown.bs.modal', function () {
+
+        editmap.resize(true);
+        editmap.reposition();
         map.teast();
     });
     $("#add").on('shown.bs.modal', function () {
@@ -724,7 +767,11 @@ function getcolumn() {
                             return;
                         };
                         $("#editAssert").modal('show');
-                        $("#editmap").show();
+                        if(row.zctype == 2){
+                            $("#editmap").show();
+                        }else{
+                            $("#editmap").hide();
+                        }
                         $(".selectuser").hide();
                         $(".selectFinance").hide();
                         loadData(row);
@@ -884,6 +931,7 @@ function editAsset() {
         success: function (res) {
             $('#assetsTable').bootstrapTable('refresh');
             $("#editAssert").modal('hide');
+            map.editSave();
         },
         error: function (res) {
             alert("系统错误，请稍后重试！");
