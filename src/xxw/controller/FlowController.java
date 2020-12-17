@@ -466,5 +466,13 @@ public class FlowController {
         return flowMapper.queryFlowHistoryInfo(flowId,null,null);
     }
 
+    @RequestMapping("/delFileById")
+    @ResponseBody
+    public ResponseObject delFileById(HttpServletRequest request){
 
+        int i=0;
+        String fileId=request.getParameter("fileId");
+        i=fileMapper.delById(fileId);
+        return new ResponseObject(i,"","")  ;
+    }
 }

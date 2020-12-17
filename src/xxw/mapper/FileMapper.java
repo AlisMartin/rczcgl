@@ -11,5 +11,5 @@ import java.util.List;
 public interface FileMapper {
     FileInfo queryFileByParam(@Param("fileName")String fileName,@Param("fileId")String fileId,@Param("pathId")String pathId);
     List<FileInfo> queryQmPicByParam(@Param("filePath")String filePath);
-
+    int delById(@Param("fileId")String fileId);
 }

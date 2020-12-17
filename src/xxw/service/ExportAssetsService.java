@@ -504,7 +504,11 @@ public class ExportAssetsService {
                     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
                     HttpSession session = request.getSession();
                     User user = (User) session.getAttribute("user");
-                    datamap.put("companyid", user.getComId());
+                    DepartTree departtree = departmapper.getComByNodename(datamap.get("field2"),"company");
+                    if(departtree == null){
+                        continue;
+                    }
+                    datamap.put("companyid", departtree.getId());
                     datamap.put("zctype", zctype);
                     String uuid = UUID.randomUUID().toString();
                     datamap.put("zcid", uuid);

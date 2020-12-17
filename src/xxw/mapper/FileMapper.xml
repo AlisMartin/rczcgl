@@ -19,4 +19,7 @@
             and FILEPATH= #{filePath,jdbcType=VARCHAR}
         </if>
     </select>
+    <delete id="delById" parameterType="java.lang.String">
+        DELETE  FROM ASSETS_FILE WHERE FILEID= #{fileId,jdbcType=VARCHAR}
+    </delete>
 </mapper>

@@ -20,6 +20,15 @@
             and DEPART = #{depart,jdbcType=VARCHAR}
         </if>
     </select>
+    <select id="getComByNodename" resultType="xxw.po.DepartTree">
+        select * from DEPARTTREE where 1=1
+        <if test="name !=null">
+            and ID = #{nodename,jdbcType=VARCHAR}
+        </if>
+        <if test="depart !=null">
+            and DEPART = #{depart,jdbcType=VARCHAR}
+        </if>
+    </select>
     <insert id="insertNode"  parameterType="java.lang.String">
         insert into DEPARTTREE
         <trim prefix="(" suffix=")" suffixOverrides="," >

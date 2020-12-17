@@ -12,6 +12,43 @@ $(function(){
             alert("请选择具体目录！")
         }
     })*/
+    $("#fielddel").click(function(){
+        debugger;
+        if(confirm("是否刪除")){
+            if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("22")==-1){
+                alert("当前用户无权限进行此操作！");
+                return;
+            }
+            var rowdata=$("#fileTable").bootstrapTable('getSelections');
+            if(rowdata.length>0){
+                for(var i=0;i<rowdata.length;i++){
+                    var a=rowdata[i].FILEID;
+                    $.ajax({
+                        type:"post",
+                        url:"/rczcgl/flow/delFileById.action",
+                        async:false,
+                        data:{fileId:a},
+                        success:function(resdata){
+                            debugger;
+                        if(resdata.code==1){
+                            alert("刪除成功！");
+                            $("#fileTable").bootstrapTable('refresh');
+                        }else{
+                            alert("刪除失敗！");
+                        }
+                        },
+                        error:function(){
+                        }
+                    })
+
+                }
+            }else{
+                alert("请选择要删除的文件");
+                return;
+            }
+        }
+    })
+
     $("#ejml").change(function(){
         debugger;
         $("#sjml").empty();
@@ -235,6 +272,7 @@ $(function(){
         uploader.on('uploadSuccess', function (file) {
             $('#state').text('已上传');
             $('#' + file.id).find(".progress").find(".progress-bar").attr("class", "progress-bar progress-bar-success");
+            $("#upflag").val(1);
             alert("上传成功");
 
         });
@@ -281,6 +319,7 @@ $(function(){
     });
     //文件上传
     $('#wjsc').click(function(){
+        $("#upflag").val(0);
         if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("20")==-1){
             alert("当前用户无权限进行此操作！");
             return;
@@ -691,6 +730,10 @@ function insertFile(filePathId){
     debugger;
     var param={};
     param.pathId=filePathId;
+    if($("#upflag").val()!=1){
+        alert("请先上传文件！")
+        return;
+    }
     var com=$("#fileone").val();
     var pos=$("#fileTwo").val();
     var type=$("#fileThree").val();

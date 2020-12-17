@@ -15,6 +15,7 @@ public interface DepartMapper {
     String getMaxLevel();
     List<DepartTree>getDepart(@Param("depart")String depart,@Param("pnodeId")String pnodeId,@Param("px")Integer px,@Param("id")String id);
     DepartTree getCom(@Param("id")String id,@Param("depart")String depart);
+    DepartTree getComByNodename(@Param("name")String name,@Param("depart")String depart);
     int updateNode(@Param("name")String name,@Param("id")String id,@Param("px")Integer px,@Param("depart")String depart);
     void insertNode(@Param("id")String id,@Param("nodeName")String nodeName,@Param("nodeId")String nodeId,@Param("pnodeId")String pnodeId,@Param("level")String level,@Param("depart")String depart,@Param("px")Integer px);
 }
