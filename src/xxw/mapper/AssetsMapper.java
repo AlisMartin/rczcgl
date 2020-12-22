@@ -34,7 +34,8 @@ public interface AssetsMapper {
     int updateConfig(AssetsConfig assetsConfig);
     List<AssetsFile> getAssetFileListByZcid(@Param("zcid")String zcid);
     List<Map<String,String>> getSumAssetsInfoByMap(@Param("zctype")String zctype,@Param("gsmc")String gsmc);
-
+    int delAssets(@Param("zcid")String zcid);
+    int delAssetsFile(@Param("fileId")String fileId);
     List<String> getComIds(@Param("zctype")String zctype);
     Map<String,String> selectAssetsInfo(@Param("zcid")String zcid);
 }

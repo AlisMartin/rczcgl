@@ -327,11 +327,12 @@ public class AssetsController {
                 insertInfo.put(assetVO.getName(), assetVO.getValue());
             }
         }
+        String zcid = insertInfo.get("zcid");
+        Map<String,String> assetsInfo = assetsMapper.selectAssetsInfo(zcid);
         int i;
         if (StringUtil.isNotEmpty(insertInfo.get("zctype"))) {
             UUID uuid = UUID.randomUUID();
-            String zcid = insertInfo.get("zcid");
-            Map<String,String> assetsInfo = assetsMapper.selectAssetsInfo(zcid);
+
             assetsInfo.remove("ID");
             assetsInfo.put("ZCID", uuid.toString());
             i = assetsMapper.insertAssetsInfoHistory(assetsInfo);
@@ -368,7 +369,7 @@ public class AssetsController {
             i = assetsMapper.updateAssetsInfo(insertInfo);
         }
         if (i == 1) {
-            return new ResponseObject(1, "成功", insertInfo.get("OBJECTID_1"));
+            return new ResponseObject(1, "成功", assetsInfo.get("LAYERID"));
         } else {
             return new ResponseObject(0, "失败", "");
         }
@@ -448,6 +449,29 @@ public class AssetsController {
             return mapCount;
         }
 
+    }
+
+    @RequestMapping("/delAssets")
+    @ResponseBody
+    public ResponseObject delAssets(@RequestBody JSONObject json){
+        String id=json.getString("id");
+        Integer a = assetsMapper.delAssets(id);
+        if (a == 1) {
+            return new ResponseObject(1, "成功", "");
+        } else {
+            return new ResponseObject(0, "失败", "");
+        }
+    }
+    @RequestMapping("/delAssetsFile")
+    @ResponseBody
+    public ResponseObject delAssetsFile(@RequestBody JSONObject json){
+        String id=json.getString("id");
+        Integer a = assetsMapper.delAssetsFile(id);
+        if (a == 1) {
+            return new ResponseObject(1, "成功", "");
+        } else {
+            return new ResponseObject(0, "失败", "");
+        }
     }
 
     /**

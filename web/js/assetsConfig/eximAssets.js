@@ -79,10 +79,10 @@ $(function () {
             autoResize: true
         });
 
-        var layer = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
-        var layer1 = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
-        var layer2 = new ArcGISTiledMapServiceLayer("http://localhost:6080/arcgis/rest/services/DELETE/MapServer");
-        var PointLayer1 = new FeatureLayer("http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0", {
+        var layer = new ArcGISTiledMapServiceLayer("http://192.168.0.108:6080/arcgis/rest/services/DELETE/MapServer");
+        var layer1 = new ArcGISTiledMapServiceLayer("http://192.168.0.108:6080/arcgis/rest/services/DELETE/MapServer");
+        var layer2 = new ArcGISTiledMapServiceLayer("http://192.168.0.108:6080/arcgis/rest/services/DELETE/MapServer");
+        var PointLayer1 = new FeatureLayer("http://192.168.0.108:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0", {
             mode: FeatureLayer.MODE_SNAPSHOT,
             outFields: ["*"],
             displayOnPan: true
@@ -92,7 +92,7 @@ $(function () {
         editmap.addLayer(PointLayer1);
         viewmap.addLayer(layer);
 
-        var PointLayer = new FeatureLayer("http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0", {
+        var PointLayer = new FeatureLayer("http://192.168.0.108:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0", {
             mode: FeatureLayer.MODE_SNAPSHOT,
             outFields: ["*"],
             displayOnPan: true
@@ -230,18 +230,26 @@ $(function () {
                     FID:"555",
                     LAYERID:id
                 };
+
                 var newAttributes = lang.mixin({}, obj);
                 var newGraphic = new Graphic(geo, null, newAttributes);
                 PointLayer.applyEdits([newGraphic], null, null);
                 newmap.graphics.clear();
             },
             editSave: function(OBJECTID_1){
-                var obj = {
-                    OBJECTID_1:OBJECTID_1
-                };
-                var newAttributes = lang.mixin({}, obj);
-                var newGraphic = new Graphic(geo1, null, newAttributes);
-                PointLayer.applyEdits(null, [newGraphic],  null);
+
+                debugger;
+                var query = new Query();
+                query.where = "LAYERID  like '" + OBJECTID_1 + "'";
+                PointLayer.queryIds(query, function(objectIds) {
+                    var obj = {
+                        OBJECTID_1:objectIds[0]
+                    };
+                    var newAttributes = lang.mixin({}, obj);
+                    var newGraphic = new Graphic(geo1, null, newAttributes);
+                    PointLayer.applyEdits(null, [newGraphic],  null);
+                });
+
                 editmap.graphics.clear();
             },
             reset:function(){
@@ -252,9 +260,9 @@ $(function () {
             addPoint: function (id,row) {
                 //定义查询对象
 
-                var url = "http://localhost:6080/arcgis/rest/services/RES1/MapServer/" + (zctype-1);
+                var url = "http://192.168.0.108:6080/arcgis/rest/services/RES1/MapServer/" + (zctype-1);
                 if(zctype == 2){
-                    url = "http://localhost:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0";
+                    url = "http://192.168.0.108:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0";
                 }
                 var queryTask = new QueryTask(url);
                 //定义查询参数对象
@@ -580,6 +588,64 @@ $(function () {
         }
 
     })
+    //文件删除
+    $("#deleteFile").click(function () {
+        var rowdata = $("#filedownlist").bootstrapTable('getSelections');
+        if (rowdata.length > 0) {
+            for (var i = 0; i < rowdata.length; i++) {
+                var a=rowdata[i].fileid;
+                $.ajax({
+                    type:"post",
+                    contentType: "application/json;charset=UTF-8",
+                    url:"/rczcgl/assetsconfig/delAssetsFile.action",
+                    async:false,
+                    data:JSON.stringify({id:a}),
+                    success:function(resdata){
+                        if(resdata.code==1){
+                            alert("刪除成功！");
+                            $("#filedownlist").bootstrapTable('refresh');
+                        }else{
+                            alert("刪除失敗！");
+                        }
+                    },
+                    error:function(){
+                    }
+                })
+            }
+        } else {
+            alert("请选择要删除的文件");
+            return;
+        }
+    })
+    //资产删除
+    $("#deleteAssets").click(function () {
+        var rowdata = $("#assetsTable").bootstrapTable('getSelections');
+        if (rowdata.length > 0) {
+            for (var i = 0; i < rowdata.length; i++) {
+                var a=rowdata[i].zcid;
+                $.ajax({
+                    type:"post",
+                    contentType: "application/json;charset=UTF-8",
+                    url:"/rczcgl/assetsconfig/delAssets.action",
+                    async:false,
+                    data:JSON.stringify({id:a}),
+                    success:function(resdata){
+                        if(resdata.code==1){
+                            alert("刪除成功！");
+                            $("#assetsTable").bootstrapTable('refresh');
+                        }else{
+                            alert("刪除失敗！");
+                        }
+                    },
+                    error:function(){
+                    }
+                })
+            }
+        } else {
+            alert("请选择要删除的资产");
+            return;
+        }
+    })
 
 
     //获取动态列
@@ -634,7 +700,7 @@ function getcolumn() {
     //obj.field = "yujing";
     //obj.title = "是否预警";
     columns = [
-
+        {checkbox: true},
         {
             title:'序号',
             formatter:function(value,row,index){

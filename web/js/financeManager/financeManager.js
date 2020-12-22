@@ -29,6 +29,9 @@ $(function(){
         }
         addUser();
     });
+    $("#deleteFin").click(function(){
+        deleteFin();
+    });
     getcolumn();
     $('#userTable').bootstrapTable({
         url:'/rczcgl/finance/getFinanceList.action',
@@ -79,6 +82,35 @@ function addUser(){
             $("#addUser").modal('hide');
         }
     })
+}
+function deleteFin() {
+    var rowdata = $("#userTable").bootstrapTable('getSelections');
+    if (rowdata.length > 0) {
+        for (var i = 0; i < rowdata.length; i++) {
+            var a=rowdata[i].id;
+            $.ajax({
+                type:"post",
+                contentType: "application/json;charset=UTF-8",
+                url:"/rczcgl/finance/delFinance.action",
+                async:false,
+                data:JSON.stringify({id:a}),
+                success:function(resdata){
+                    if(resdata.code==1){
+                        alert("刪除成功！");
+                        $("#userTable").bootstrapTable('refresh');
+                    }else{
+                        alert("刪除失敗！");
+                        $("#userTable").bootstrapTable('refresh');
+                    }
+                },
+                error:function(){
+                }
+            })
+        }
+    } else {
+        alert("请选择要删除的融资");
+        return;
+    }
 }
 function editUser(){
     debugger;

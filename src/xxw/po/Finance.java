@@ -19,6 +19,18 @@ public class Finance {
     private String fcfield8;
     private String fcfield9;
     private String fcfield10;
+    private String fcfield11;
+    private String fcfield12;
+    private String fcfield13;
+    private String fcfield14;
+    private String fcfield15;
+    private String fcfield16;
+    private String fcfield17;
+    private String fcfield18;
+    private String fcfield19;
+    private String fcfield20;
+    private String fcfield21;
+    private String companyid;
 
     public String getId() {
         return id;
@@ -138,5 +150,101 @@ public class Finance {
 
     public void setFcfield10(String fcfield10) {
         this.fcfield10 = fcfield10;
+    }
+
+    public String getCompanyid() {
+        return companyid;
+    }
+
+    public void setCompanyid(String companyid) {
+        this.companyid = companyid;
+    }
+
+    public String getFcfield11() {
+        return fcfield11;
+    }
+
+    public void setFcfield11(String fcfield11) {
+        this.fcfield11 = fcfield11;
+    }
+
+    public String getFcfield12() {
+        return fcfield12;
+    }
+
+    public void setFcfield12(String fcfield12) {
+        this.fcfield12 = fcfield12;
+    }
+
+    public String getFcfield13() {
+        return fcfield13;
+    }
+
+    public void setFcfield13(String fcfield13) {
+        this.fcfield13 = fcfield13;
+    }
+
+    public String getFcfield14() {
+        return fcfield14;
+    }
+
+    public void setFcfield14(String fcfield14) {
+        this.fcfield14 = fcfield14;
+    }
+
+    public String getFcfield15() {
+        return fcfield15;
+    }
+
+    public void setFcfield15(String fcfield15) {
+        this.fcfield15 = fcfield15;
+    }
+
+    public String getFcfield16() {
+        return fcfield16;
+    }
+
+    public void setFcfield16(String fcfield16) {
+        this.fcfield16 = fcfield16;
+    }
+
+    public String getFcfield17() {
+        return fcfield17;
+    }
+
+    public void setFcfield17(String fcfield17) {
+        this.fcfield17 = fcfield17;
+    }
+
+    public String getFcfield18() {
+        return fcfield18;
+    }
+
+    public void setFcfield18(String fcfield18) {
+        this.fcfield18 = fcfield18;
+    }
+
+    public String getFcfield19() {
+        return fcfield19;
+    }
+
+    public void setFcfield19(String fcfield19) {
+        this.fcfield19 = fcfield19;
+    }
+
+    public String getFcfield20() {
+        return fcfield20;
+    }
+
+    public void setFcfield20(String fcfield20) {
+        this.fcfield20 = fcfield20;
+    }
+
+    public String getFcfield21() {
+        return fcfield21;
+    }
+
+    public void setFcfield21(String fcfield21) {
+        this.fcfield21 = fcfield21;
     }
 }

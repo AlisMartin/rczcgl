@@ -5,15 +5,20 @@
         select * from FINANCE
     </select>
 
+    <select id="getFinanceById" parameterType="java.lang.String" resultType="xxw.po.Finance">
+        select * from FINANCE where 1=1
+        <if test="id !=null">
+            and ID= #{id,jdbcType=VARCHAR}
+        </if>
+    </select>
+
     <insert id="insertFinance">
         insert into FINANCE(
-        id,
         <foreach collection="assetsMap" item="value" index="key" separator=",">
             ${key}
         </foreach>
         )
         values(
-        ASSETSINFOSEQ.nextval,
         <foreach collection="assetsMap" item="value" index="key" separator=",">
             #{value}
         </foreach>
@@ -26,4 +31,8 @@
         </foreach>
         where zcid = #{assetsMap.zcid}
     </update>
+
+    <delete  id="delFinance" parameterType="java.lang.String">
+        delete from FINANCE where ID= #{id,jdbcType=VARCHAR}
+    </delete>
 </mapper>

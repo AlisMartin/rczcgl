@@ -4,6 +4,7 @@
 var map;
 var tem = "";
 var attr;
+var layerNum;
 var isselect = false;
 require(["esri/map",
     "esri/layers/ArcGISDynamicMapServiceLayer",
@@ -41,14 +42,14 @@ require(["esri/map",
         //zoom: 12
     });
 
-    var featureLayer = new FeatureLayer("http://srcb86a88e54:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0",{
+    var featureLayer = new FeatureLayer("http://192.168.0.108:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0",{
         mode: FeatureLayer.MODE_ONDEMAND,
         //infoTemplate: infoTemplate,
         outFields: ["*"]
     });
-    var zonghaiLayer = new ArcGISDynamicMapServiceLayer("http://srcb86a88e54:6080/arcgis/rest/services/RES1/MapServer");
-    var hideLayer = new ArcGISDynamicMapServiceLayer("http://srcb86a88e54:6080/arcgis/rest/services/RES2/MapServer");
-    var tiledLayer = new ArcGISTiledMapServiceLayer("http://srcb86a88e54:6080/arcgis/rest/services/newTile/MapServer");
+    var zonghaiLayer = new ArcGISDynamicMapServiceLayer("http://192.168.0.108:6080/arcgis/rest/services/RES1/MapServer");
+    var hideLayer = new ArcGISDynamicMapServiceLayer("http://192.168.0.108:6080/arcgis/rest/services/RES2/MapServer");
+    var tiledLayer = new ArcGISTiledMapServiceLayer("http://192.168.0.108:6080/arcgis/rest/services/DELETE/MapServer");
     map.addLayer(tiledLayer);
     map.addLayer(hideLayer);
     map.addLayer(zonghaiLayer);
@@ -104,11 +105,11 @@ require(["esri/map",
         //query.units = "meters";
         var visible = getLayersId();
         //实例化查询对象
-        var queryTask0 = new QueryTask("http://srcb86a88e54:6080/arcgis/rest/services/RES1/MapServer/0");
+        var queryTask0 = new QueryTask("http://192.168.0.108:6080/arcgis/rest/services/RES1/MapServer/0");
 
-        var queryTask1 = new QueryTask("http://srcb86a88e54:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0");
+        var queryTask1 = new QueryTask("http://192.168.0.108:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0");
 
-        var queryTask2 = new QueryTask("http://srcb86a88e54:6080/arcgis/rest/services/RES1/MapServer/2");
+        var queryTask2 = new QueryTask("http://192.168.0.108:6080/arcgis/rest/services/RES1/MapServer/2");
         //进行查询
 
         if (visible.includes(1)) {
@@ -121,10 +122,12 @@ require(["esri/map",
                 //console.log(results.length);
                 if(results.length<1 || isselect){
                     if (visible.includes(0)) {
-                        queryTask0.execute(query, showFindResult);
+                        queryTask0.execute(query, showFindResult1);
+                        layerNum = 1;
                     }
                     if (visible.includes(2)) {
-                        queryTask2.execute(query, showFindResult);
+                        queryTask2.execute(query, showFindResult2);
+                        layerNum = 3;
                     }
                     return;
                 }
@@ -145,6 +148,7 @@ require(["esri/map",
                         for (var i = 0; i < 4; i++) {
                             tem = tem + data[i].fieldname + ":${" + data[i].field + "}<br>"
                         }
+                        tem = tem + "坐标 : " + geometry.x.toFixed(4) +","+geometry.y.toFixed(4) +"<br>";
                     }
                 });
                 var infoTemplate = new InfoTemplate("属性", tem);
@@ -165,9 +169,11 @@ require(["esri/map",
         }else{
             if (visible.includes(0)) {
                 queryTask0.execute(query, showFindResult);
+                layerNum = 1;
             }
             if (visible.includes(2)) {
                 queryTask2.execute(query, showFindResult);
+                layerNum = 3;
             }
         }
 
@@ -197,12 +203,123 @@ require(["esri/map",
                 type: "post",
                 url: "/rczcgl/assetsconfig/getAllConfigInfo.action",
                 async: false,
-                data: {zctype: zctypes},
+                data: {zctype: layerNum},
                 success: function (data) {
                     tem = "";
                     for (var i = 0; i < 4; i++) {
-                        tem = tem + data[i].fieldname + ":${" + data[i].field + "}<br>"
+                        tem = tem + data[i].fieldname + " : ${" + data[i].field + "}<br>"
                     }
+                    tem = tem + "坐标 : " + geometry.getCentroid().x.toFixed(4) +","+geometry.getCentroid().y.toFixed(4) +"<br>";
+                }
+            });
+            var infoTemplate = new InfoTemplate("属性", tem);
+
+            $.ajax({
+                type: "post",
+                url: "/rczcgl/assetsconfig/getAssetByid.action",
+                async: false,
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify({zcid: feature.attributes.LAYERID}),
+                success: function (data) {
+                    attr = data.data;
+                }
+            });
+            if(geometry.x){
+                var graphic = new Graphic(geometry, markerSymbol, attr, infoTemplate);
+            }else{
+                var graphic = new Graphic(geometry, PolygonSymbol, attr, infoTemplate);
+            }
+            //var graphic = new Graphic(geometry, PolygonSymbol, attr, infoTemplate);
+            //将客户端图形添加到map中
+            addMap(graphic, geometry);
+        }
+    }
+    function showFindResult1(queryResult) {
+        if (queryResult.features == 0||isselect) {
+            //map.graphics.clear();
+            //map.infoWindow.hide();
+            return;
+        }
+        isselect = true;
+        for (var i = 0; i < queryResult.features.length; i++) {
+            //获得该图形的形状
+            var feature = queryResult.features[i];
+            var geometry = feature.geometry;
+            //定义高亮图形的符号
+            //创建点符号
+            var markerSymbol = new SimpleMarkerSymbol();
+            markerSymbol.setColor(new Color("#00FFFF"));
+            //1.定义面的边界线符号
+            var outline = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT, new Color([255, 0, 0]), 1);
+            //2.定义面符号
+            var PolygonSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, outline, new Color([0, 255, 0, 1]));
+            //创建客户端图形
+            $.ajax({
+                type: "post",
+                url: "/rczcgl/assetsconfig/getAllConfigInfo.action",
+                async: false,
+                data: {zctype: 1},
+                success: function (data) {
+                    tem = "";
+                    for (var i = 0; i < 4; i++) {
+                        tem = tem + data[i].fieldname + " : ${" + data[i].field + "}<br>"
+                    }
+                    tem = tem + "坐标 : " + geometry.getCentroid().x.toFixed(4) +","+geometry.getCentroid().y.toFixed(4) +"<br>";
+                }
+            });
+            var infoTemplate = new InfoTemplate("属性", tem);
+
+            $.ajax({
+                type: "post",
+                url: "/rczcgl/assetsconfig/getAssetByid.action",
+                async: false,
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify({zcid: feature.attributes.LAYERID}),
+                success: function (data) {
+                    attr = data.data;
+                }
+            });
+            if(geometry.x){
+                var graphic = new Graphic(geometry, markerSymbol, attr, infoTemplate);
+            }else{
+                var graphic = new Graphic(geometry, PolygonSymbol, attr, infoTemplate);
+            }
+            //var graphic = new Graphic(geometry, PolygonSymbol, attr, infoTemplate);
+            //将客户端图形添加到map中
+            addMap(graphic, geometry);
+        }
+    }
+    function showFindResult2(queryResult) {
+        if (queryResult.features == 0||isselect) {
+            //map.graphics.clear();
+            //map.infoWindow.hide();
+            return;
+        }
+        isselect = true;
+        for (var i = 0; i < queryResult.features.length; i++) {
+            //获得该图形的形状
+            var feature = queryResult.features[i];
+            var geometry = feature.geometry;
+            //定义高亮图形的符号
+            //创建点符号
+            var markerSymbol = new SimpleMarkerSymbol();
+            markerSymbol.setColor(new Color("#00FFFF"));
+            //1.定义面的边界线符号
+            var outline = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT, new Color([255, 0, 0]), 1);
+            //2.定义面符号
+            var PolygonSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, outline, new Color([0, 255, 0, 1]));
+            //创建客户端图形
+            $.ajax({
+                type: "post",
+                url: "/rczcgl/assetsconfig/getAllConfigInfo.action",
+                async: false,
+                data: {zctype: 3},
+                success: function (data) {
+                    tem = "";
+                    for (var i = 0; i < 4; i++) {
+                        tem = tem + data[i].fieldname + " : ${" + data[i].field + "}<br>"
+                    }
+                    tem = tem + "坐标 : " + geometry.getCentroid().x.toFixed(4) +","+geometry.getCentroid().y.toFixed(4) +"<br>";
                 }
             });
             var infoTemplate = new InfoTemplate("属性", tem);
@@ -385,11 +502,11 @@ require(["esri/map",
         query.returnGeometry = true;
         var visible = getLayersId();
         //实例化查询对象
-        var queryTask0 = new QueryTask("http://srcb86a88e54:6080/arcgis/rest/services/RES1/MapServer/0");
+        var queryTask0 = new QueryTask("http://192.168.0.108:6080/arcgis/rest/services/RES1/MapServer/0");
 
-        var queryTask1 = new QueryTask("http://srcb86a88e54:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0");
+        var queryTask1 = new QueryTask("http://192.168.0.108:6080/arcgis/rest/services/FEATUREpoi/FeatureServer/0");
 
-        var queryTask2 = new QueryTask("http://srcb86a88e54:6080/arcgis/rest/services/RES1/MapServer/2");
+        var queryTask2 = new QueryTask("http://192.168.0.108:6080/arcgis/rest/services/RES1/MapServer/2");
         //进行查询
         if (visible.includes(0)) {
             queryTask0.execute(query, showQueryResult);

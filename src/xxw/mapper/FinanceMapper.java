@@ -12,8 +12,11 @@ import java.util.Map;
  */
 public interface FinanceMapper {
     List<Finance> getFinance ();
+    List<Finance> getFinanceById (@Param("id")String id);
 
     int insertFinance(@Param("assetsMap")Map<String,String> assetsMap);
 
     int updateFinance(@Param("assetsMap")Map<String,String> assetsMap);
+
+    int delFinance(@Param("id")String id);
 }

@@ -408,14 +408,14 @@ function creatFlowHistory(){
     param.yzyj=$("#yzyj").val();
     param.jsr=$("#jsusers").val();
     var spstatus= $("#spstatus").val();
-    if($("#yzqm").val()==""){
+    /*if($("#yzqm").val()==""){
         alert("领导签名必须填写！");
         return;
     }
     if($("#yzyj").val()==""){
         alert("领导意见必须填写！");
         return;
-    }
+    }*/
     if(spstatus=="1"&&$("#jsusers").val()==""){
         alert("必须填写下发文件接收人！");
         return;

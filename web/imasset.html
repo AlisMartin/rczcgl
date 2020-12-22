@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
     <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
     <title></title>
-    <link rel="stylesheet" href="http://srcb86a88e54:8097/arcgis_js_api/library/3.34/3.34/esri/css/esri.css">
+    <link rel="stylesheet" href="http://192.168.0.108:8097/arcgis_js_api/library/3.34/3.34/esri/css/esri.css">
     <!--<link rel="stylesheet" href="https://js.arcgis.com/3.33/esri/css/esri.css">-->
     <link rel="stylesheet" href="assets/vendor/bootstrap3/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-treeview.css">
@@ -18,7 +18,7 @@
     <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
     <script src="third/webuploader/webuploader.nolog.min.js"></script>
-    <script type="text/javascript" src="http://srcb86a88e54:8097/arcgis_js_api/library/3.34/3.34/init.js"></script>
+    <script type="text/javascript" src="http://192.168.0.108:8097/arcgis_js_api/library/3.34/3.34/init.js"></script>
     <!--<script src="https://js.arcgis.com/3.33/"></script>-->
     <script src="js/assetsConfig/eximAssets.js"></script>
     <style>
@@ -286,6 +286,9 @@
                                         name="importAssets">
                                     <span class="glyphicon glyphicon-folder-open"></span>导入
                                 </button>
+                                <button type="button" class="btn btn-info right" id="deleteAssets" name="addAsset">
+                                    <span class="glyphicon glyphicon-trash"></span>删除资产
+                                </button>
                                 <button type="button" class="btn btn-info right" id="addAsset" name="addAsset">
                                     <span class="glyphicon glyphicon-plus"></span>新增资产
                                 </button>
@@ -445,6 +448,9 @@
                             <div class="modal-body">
                                 <button type="button" class="btn btn-info" id="xiazai">
                                     <span class="glyphicon glyphicon-download"></span>下载附件
+                                </button>
+                                <button type="button" class="btn btn-info" id="deleteFile">
+                                    <span class="glyphicon glyphicon-trash"></span>删除附件
                                 </button>
                                 <table id="filedownlist"></table>
                             </div>

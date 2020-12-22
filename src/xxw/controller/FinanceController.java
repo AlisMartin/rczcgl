@@ -62,31 +62,38 @@ public class FinanceController {
         }
         int i;
         if (StringUtil.isEmpty(insertInfo.get("zcid"))){
-            //»ñÈ¡session
+            //è·å–session
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             HttpSession session =   request.getSession();
             User user = (User)session.getAttribute("user");
             insertInfo.put("companyid", user.getComId());
-
+            List<Finance> finances = financeMapper.getFinanceById(insertInfo.get("id"));
+            if (finances.size()>0){
+                return new ResponseObject(0, "èèµ„ç¼–å·å·²å­˜åœ¨", "");
+            }
 //            UUID uuid = UUID.randomUUID();
             insertInfo.put("zcid",insertInfo.get("id"));
             i = financeMapper.insertFinance(insertInfo);
 
-            String eventDesc="ÓÃ»§"+user.getUserName()+"ĞÂÔöÈÚ×ÊĞÅÏ¢";
-            String eventType="ĞÂÔöÈÚ×Ê";
+            String eventDesc="ç”¨æˆ·"+user.getUserName()+"æ–°å¢èèµ„ä¿¡æ¯";
+            String eventType="æ–°å¢èèµ„";
             Date date =new Date();
             SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String realdate= dateFormat.format(date);
             //String realdate=date.toString();
             logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
         }else {
+            List<Finance> finances = financeMapper.getFinanceById(insertInfo.get("id"));
+            if (finances.size()>0 &&  !insertInfo.get("zcid").equals(finances.get(0).getZcid())){
+                return new ResponseObject(0, "èèµ„ç¼–å·å·²å­˜åœ¨", "");
+            }
             i = financeMapper.updateFinance(insertInfo);
 
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             HttpSession session =   request.getSession();
             User user = (User)session.getAttribute("user");
-            String eventDesc="ÓÃ»§"+user.getUserName()+"ĞŞ¸ÄÈÚ×ÊĞÅÏ¢";
-            String eventType="ĞŞ¸ÄÈÚ×Ê";
+            String eventDesc="ç”¨æˆ·"+user.getUserName()+"ä¿®æ”¹èèµ„ä¿¡æ¯";
+            String eventType="ä¿®æ”¹èèµ„";
             Date date =new Date();
             SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String realdate= dateFormat.format(date);
@@ -94,9 +101,20 @@ public class FinanceController {
             logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
         }
         if (i == 1) {
-            return new ResponseObject(1, "³É¹¦", "");
+            return new ResponseObject(1, "æˆåŠŸ", "");
         } else {
-            return new ResponseObject(0, "Ê§°Ü", "");
+            return new ResponseObject(0, "å¤±è´¥", "");
+        }
+    }
+    @RequestMapping("/delFinance")
+    @ResponseBody
+    public ResponseObject delFinance(@RequestBody JSONObject json){
+        String id=json.getString("id");
+        Integer a = financeMapper.delFinance(id);
+        if (a == 1) {
+            return new ResponseObject(1, "æˆåŠŸ", "");
+        } else {
+            return new ResponseObject(0, "å¤±è´¥", "");
         }
     }
 }

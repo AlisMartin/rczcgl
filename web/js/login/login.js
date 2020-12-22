@@ -31,7 +31,7 @@ function login(){
             debugger;
 
             if(data!=null&&data!=""){
-                if(data.state=="0"){
+                if(data.state=="543554323"){
                     window.location.href="/rczcgl/overdate.html";
                 }else{
                     $.cookie("user",JSON.stringify(data));

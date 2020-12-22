@@ -142,7 +142,7 @@ $(function(){
         }
     })
     $("#savefile").click(function(){
-        $("#uparea").empty();
+        $("#fileInfo").empty();
         if(uploader!=null){
             uploader.destroy();
         }
@@ -150,7 +150,7 @@ $(function(){
     })
 
     $("#fileup").on('hide.bs.modal',function(){
-        $("#uparea").empty();
+        $("#fileInfo").empty();
         if(uploader!=null){
             uploader.destroy();
         }
@@ -222,7 +222,7 @@ $(function(){
             var  wjid=$("#wjid").val();
             if(wjid.indexOf(response.data)>-1){
                 alert("文件已存在，请重新选择后上传！");
-                $("#uparea").empty();
+                $("#fileInfo").empty();
                 if(uploader!=null){
                     uploader.destroy();
                 }

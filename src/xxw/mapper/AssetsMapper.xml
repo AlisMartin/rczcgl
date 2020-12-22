@@ -229,4 +229,16 @@
             and ZCID= #{zcid,jdbcType=VARCHAR}
         </if>
     </select>
+    <delete  id="delAssets" parameterType="java.lang.String">
+        delete from ASSETS_INFO where 1=1
+        <if test="zcid !=null">
+            and ZCID= #{zcid,jdbcType=VARCHAR}
+        </if>
+    </delete>
+    <delete  id="delAssetsFile" parameterType="java.lang.String">
+        delete from ASSETS_FILE where 1=1
+        <if test="fileId !=null">
+            and FILEID= #{fileId,jdbcType=VARCHAR}
+        </if>
+    </delete>
 </mapper>
