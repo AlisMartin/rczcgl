@@ -64,7 +64,7 @@
         <if test="gsmc !=null">
             and a.COMPANYID= #{gsmc,jdbcType=VARCHAR}
         </if>
-        order by COMPANYID,FINANCEID
+        order by a.COMPANYID,a.FINANCEID
     </select>
 
     <select id="getAllAssetsInfoByMap" resultType="map">
