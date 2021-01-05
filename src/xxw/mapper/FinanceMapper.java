@@ -1,6 +1,7 @@
 package xxw.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import xxw.po.AssetsInfo;
 import xxw.po.FileInfo;
 import xxw.po.Finance;
 
@@ -19,4 +20,6 @@ public interface FinanceMapper {
     int updateFinance(@Param("assetsMap")Map<String,String> assetsMap);
 
     int delFinance(@Param("id")String id);
+
+    int updateFinanceInfoDays(@Param("list")List<Finance> assetsList);
 }

@@ -141,7 +141,13 @@ function getcolumn() {
 
                 columns.push(obj);
             }
-
+            columns.push({
+                field:"days",
+                title:"预警天数"
+            },{
+                field:"stopday",
+                title:"截止日期"
+            });
         },
         error: function () {
         }

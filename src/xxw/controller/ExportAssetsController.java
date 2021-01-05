@@ -126,7 +126,7 @@ public class ExportAssetsController {
     @ResponseBody
     public ResponseObject importAssets(HttpServletRequest request,MultipartFile file,String zctype){
         int i=0;
-        List<Map<String,String>> listdata=new ArrayList<>();
+        List<Map<String,Object>> listdata=new ArrayList<>();
         listdata=exportAssetsService.importAssetsInfo(file,zctype);
         for(int z=0;z<listdata.size();z++){
             i=assetsMapper.insertAssetsInfo(listdata.get(z));

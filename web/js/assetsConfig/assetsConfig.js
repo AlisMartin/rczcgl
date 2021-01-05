@@ -99,7 +99,7 @@ $(function(){
                 return;
             }else{
                 var param={};
-                param.show="0";
+                param.isdel="1";
                 param.id=rowdata[0].id
                 $.ajax({
                     type:"post",

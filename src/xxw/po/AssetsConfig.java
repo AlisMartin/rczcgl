@@ -11,6 +11,7 @@ public class AssetsConfig {
     private String show;
     private String order;
     private String fieldType;
+    private String isdel;
     public String getFieldType() {
         return fieldType;
     }
@@ -64,5 +65,13 @@ public class AssetsConfig {
 
     public void setOrder(String order) {
         this.order = order;
+    }
+
+    public String getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(String isdel) {
+        this.isdel = isdel;
     }
 }

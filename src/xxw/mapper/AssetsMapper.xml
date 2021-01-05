@@ -15,7 +15,7 @@
         <if test="order !=null">
             and "ORDER"= #{order,jdbcType=VARCHAR}
         </if>
-        and SHOW='1'
+        and SHOW='1' and ISDEL='0'
         ORDER BY "TO_NUMBER"("ORDER")
     </select>
     <select id="getAllAssetsConfigInfo" resultType="xxw.po.AssetsConfig">
@@ -26,6 +26,7 @@
         <if test="order !=null">
             and "ORDER"= #{order,jdbcType=VARCHAR}
         </if>
+        and ISDEL='0'
         ORDER BY ZCTYPE,"TO_NUMBER"("ORDER")
     </select>
     <select id="getFieldByTypeAndName" resultType="xxw.po.AssetsConfig">
@@ -37,6 +38,7 @@
         <foreach collection="zctypes" item="zctype" index="index" open="(" close=")" separator=",">
             #{zctype}
         </foreach>
+        and ISDEL='0'
         ORDER BY ZCTYPE ASC
     </select>
     <select id="getAssetsInfoByMap" resultType="map">
@@ -139,8 +141,8 @@
         <selectKey resultType="String" keyProperty="id" order="BEFORE">
             select CONFIGSEQ.nextval as id from dual
         </selectKey>
-        insert into ASSETS_CONFIG("ID","ZCTYPE","FIELD","FIELDNAME","ORDER","SHOW","FIELDTYPE") VALUES
-        (#{id,jdbcType=VARCHAR},#{zctype,jdbcType=VARCHAR},#{field,jdbcType=VARCHAR},#{fieldname,jdbcType=VARCHAR},#{order,jdbcType=VARCHAR},#{show,jdbcType=VARCHAR},#{fieldType,jdbcType=VARCHAR})
+        insert into ASSETS_CONFIG("ID","ZCTYPE","FIELD","FIELDNAME","ORDER","SHOW","FIELDTYPE","ISDEL") VALUES
+        (#{id,jdbcType=VARCHAR},#{zctype,jdbcType=VARCHAR},#{field,jdbcType=VARCHAR},#{fieldname,jdbcType=VARCHAR},#{order,jdbcType=VARCHAR},#{show,jdbcType=VARCHAR},#{fieldType,jdbcType=VARCHAR},#{isdel,jdbcType=VARCHAR})
     </insert>
     <update id="updateConfig" parameterType="xxw.po.AssetsConfig">
         UPDATE ASSETS_CONFIG
@@ -162,6 +164,9 @@
             </if>
             <if test="order != null">
                 "ORDER"= #{order,jdbcType=VARCHAR},
+            </if>
+            <if test="isdel != null">
+                "ISDEL"= #{isdel,jdbcType=VARCHAR},
             </if>
         </set>
 
