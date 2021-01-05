@@ -109,6 +109,31 @@ public class FlowController {
         logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
         return new ResponseObject(i,"","");
     }
+    @RequestMapping("/updateFLowStatus")
+    @ResponseBody
+    public ResponseObject updateFLowStatus(HttpServletRequest request){
+        int i=0;
+        String flowIds=request.getParameter("flowIds");
+        if(flowIds.indexOf(",")>-1){
+            String[] flowIdArray=flowIds.split(",");
+            for(String flowId:flowIdArray){
+                flowMapper.updateFlowStatus(flowId,"4");
+            }
+        }else{
+            flowMapper.updateFlowStatus(flowIds,"4");
+        }
+
+        HttpSession session=request.getSession();
+        User user=(User)session.getAttribute("user");
+        String eventDesc="用户"+user.getUserName()+"撤回发文";
+        String eventType="审批";
+        Date date =new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate= dateFormat.format(date);
+        //String realdate=date.toString();
+        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
+        return new ResponseObject(i,"","");
+    }
     @RequestMapping("/createFLowHistory")
     @ResponseBody
     public ResponseObject createFLowHistory(FlowHistory flowHistory){

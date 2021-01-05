@@ -226,6 +226,17 @@
         where FLOWID=#{flowId,jdbcType=VARCHAR}
     </update>
 
+    <update id="updateFlowStatus" parameterType="java.lang.String">
+        update FLOWINSTANCE
+        <set>
+            <if test="status != null" >
+                STATUS= #{status,jdbcType=VARCHAR},
+            </if>
+
+        </set>
+        where FLOWID=#{flowId,jdbcType=VARCHAR}
+    </update>
+
   <!--  <update id="updateFlowHistory" parameterType="xxw.po.FlowInstance">
         update FLOWHISTORY set
         <if test="node != null" >

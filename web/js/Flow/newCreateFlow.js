@@ -10,6 +10,26 @@ $(function(){
     $("#qfiledown").click(function(){
         queryFileByFileName(spinfo.file);
     })
+
+    $("#chlc").click(function(){
+        debugger;
+        var flowids="";
+        var data=$("#flowInstanceTable").bootstrapTable('getSelections');
+        if(data.length<=0){
+            alert("请选择要撤回的流程！")
+            return;
+        }
+        for(var i=0;i<data.length;i++){
+            if(data[i].status!="1"){
+                alert("撤回的流程状态必须是未审批！")
+                return;
+            }else{
+                flowids=flowids+data[i].flowId+",";
+            }
+        }
+        flowids=flowids.substring(0,flowids.length-1);
+        updateFlowInstanceStatus(flowids);
+    })
     //获取节点配置信息
     //加载时间控件
     $('#datetimepicker2').datetimepicker({
@@ -403,6 +423,9 @@ $(function(){
                         case 3:
                             data="通过(查阅)";
                             break;
+                        case 4:
+                            data="撤回";
+                            break;
                     }
                     return data;
                 }
@@ -487,6 +510,18 @@ function insertFlowInstance(){
     })
 }
 
+function updateFlowInstanceStatus(flowIds){
+    $.ajax({
+        type:"post",
+        url:"/rczcgl/flow/updateFLowStatus.action",
+        data:{"flowIds":flowIds},
+        success:function(resonsedata){
+            debugger;
+            alert("撤回成功!");
+            $("#flowInstanceTable").bootstrapTable('refresh');
+        }
+    })
+}
 function initDepartTree(){
     /*    $.ajax({
      type:"post",

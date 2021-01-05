@@ -22,6 +22,8 @@ public interface FlowMapper {
 
     int updateFlow(FlowHistory flowInstance);
 
+    int updateFlowStatus(@Param("flowId")String flowId,@Param("status")String status);
+
     int createFlowHistory(FlowHistory flowHistory);
 
     List<FlowHistory>  queryFlowInfos(@Param("flowType")String flowType,@Param("flowId")String flowId,@Param("fqr")String fqr,@Param("jsr")String jsr);

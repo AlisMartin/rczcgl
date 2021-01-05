@@ -33,6 +33,9 @@ var flowColum=[
                 case 3:
                     data="通过";
                     break;
+                case 4:
+                    data="撤回";
+                    break;
             }
             return data;
         }

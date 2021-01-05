@@ -12,6 +12,8 @@ import xxw.util.MD5Util;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -47,14 +49,14 @@ public class UserManagerController {
         String userid=uuid.toString();
         user.setId(userid);
         String pwd=DigestUtils.md5Hex(user.getPassword().getBytes());
-       // String pwd=MD5Util.getMD5Str(password);
+        // String pwd=MD5Util.getMD5Str(password);
         user.setPassword(pwd);
         int i=userMapper.addUser(user);
         userMapper.userAddRole(user.getId(),user.getRole());
         HttpSession session =   request.getSession();
         User users = (User)session.getAttribute("user");
-        String eventDesc="ÓÃ»§"+users.getUserName()+"Ìí¼ÓÓÃ»§¼°ÉèÖÃ½ÇÉ«";
-        String eventType="Ìí¼ÓÓÃ»§";
+        String eventDesc="ç”¨æˆ·"+users.getUserName()+"æ·»åŠ ç”¨æˆ·åŠè®¾ç½®è§’è‰²";
+        String eventType="æ·»åŠ ç”¨æˆ·";
         Date date =new Date();
         SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String realdate= dateFormat.format(date);
@@ -67,7 +69,12 @@ public class UserManagerController {
     @ResponseBody
     public int editUser(HttpServletRequest request,User user){
         if(user.getPassword().length()<32){
-            String pwd=MD5Util.getMD5Str(user.getPassword());
+            try {
+                MessageDigest md = MessageDigest.getInstance("MD5");
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            String pwd=org.springframework.util.DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
             user.setPassword(pwd);
         }
         int i=userMapper.editUser(user);
@@ -75,8 +82,8 @@ public class UserManagerController {
 
         HttpSession session =   request.getSession();
         User users = (User)session.getAttribute("user");
-        String eventDesc="ÓÃ»§"+users.getUserName()+"ĞŞ¸ÄÓÃ»§¼°ÉèÖÃ½ÇÉ«";
-        String eventType="ĞŞ¸ÄÓÃ»§";
+        String eventDesc="ç”¨æˆ·"+users.getUserName()+"ä¿®æ”¹ç”¨æˆ·åŠè®¾ç½®è§’è‰²";
+        String eventType="ä¿®æ”¹ç”¨æˆ·";
         Date date =new Date();
         SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String realdate= dateFormat.format(date);
@@ -96,8 +103,8 @@ public class UserManagerController {
 
         HttpSession session =   request.getSession();
         User users = (User)session.getAttribute("user");
-        String eventDesc="ÓÃ»§"+users.getUserName()+"É¾³ıÓÃ»§";
-        String eventType="É¾³ıÓÃ»§";
+        String eventDesc="ç”¨æˆ·"+users.getUserName()+"åˆ é™¤ç”¨æˆ·";
+        String eventType="åˆ é™¤ç”¨æˆ·";
         Date date =new Date();
         SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String realdate= dateFormat.format(date);
@@ -111,7 +118,7 @@ public class UserManagerController {
         String czrole=null;
         String userId=request.getParameter("userid");
         String roleIds=request.getParameter("roleids");
-         czrole=userMapper.selectUserRoleIdByUser(userId);
+        czrole=userMapper.selectUserRoleIdByUser(userId);
         if(roleIds!=null){
             roleIds=roleIds.substring(0,roleIds.length()-1);
         }
@@ -156,18 +163,18 @@ public class UserManagerController {
     @RequestMapping("/getUsersById")
     @ResponseBody
     public ResponseObject getUserById(HttpServletRequest request){
-            String ids=request.getParameter("ids");
-            String names="";
-            if(ids.indexOf(",")>-1){
-                String  idarray []=ids.split(",");
-                for(int i=0;i<idarray.length;i++){
-                    User user=userMapper.queryUser(null,null,idarray[i]);
-                    names=names+user.getUserName()+",";
-                }
-            }else{
-                User user=userMapper.queryUser(null,null,ids);
-                names=user.getUserName();
+        String ids=request.getParameter("ids");
+        String names="";
+        if(ids.indexOf(",")>-1){
+            String  idarray []=ids.split(",");
+            for(int i=0;i<idarray.length;i++){
+                User user=userMapper.queryUser(null,null,idarray[i]);
+                names=names+user.getUserName()+",";
             }
+        }else{
+            User user=userMapper.queryUser(null,null,ids);
+            names=user.getUserName();
+        }
         return  new ResponseObject(1,"",names);
 
     }

@@ -13,7 +13,7 @@ $(function () {
     var zctype = parent.document.getElementById("InfoList").src.split("?")[1].split("&&")[0];
     zctype = zctype.substring(zctype.length - 1, zctype.length);
     param.zctype = zctype;
-    param.gsmc=userobj.comId;
+   // param.gsmc=userobj.comId;
     //导出
     $("#exportSummary").click(function () {
         exportSummary();
@@ -261,7 +261,7 @@ function gettotal(zctype,gs){
     if(zctype!=null&&zctype!=""){
         param.zctype=zctype;
     }
-    if(gs!=null&&gs!=""&&gs!="allcompany"&&userobj.auth!='8'&&userobj.auth!="9"){
+    if(gs!=null&&gs!=""&&gs!="allcompany"){
         param.gsmc=gs;
     }
         $.ajax({
