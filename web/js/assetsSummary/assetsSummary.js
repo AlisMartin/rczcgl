@@ -335,7 +335,7 @@ function exportSummary(){
     var data={};
     data.zctype=param.zctype;
     if(userobj.auth.indexOf("8")<=-1){
-        data.gsmc=param.gsmc;
+        data.gsmc=userobj.comId;
     }
    $.ajax({
         type: "post",

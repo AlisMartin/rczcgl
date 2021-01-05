@@ -1197,6 +1197,7 @@ function reloadTable(a) {
     //$('#importAssets').toggle();
     //$('#addAsset').toggle();
     var classq = a.className;
+
     if (classq === "getAssetsInfo"||classq === "allcompany") {
         url = '/rczcgl/assetsconfig/getAssetsInfo.action';
         $('#importAssets').show();
@@ -1207,6 +1208,13 @@ function reloadTable(a) {
         $('#addAsset').hide();
     } else {
         gsmc = classq;
+    }
+
+    var comId= a.className;
+    if(comId!=""&&comId!="allcompany"){
+        param.gsmc = comId;
+    }else{
+        param.gsmc=null;
     }
     $('#assetsTable').bootstrapTable('refreshOptions', {
         url: url,
