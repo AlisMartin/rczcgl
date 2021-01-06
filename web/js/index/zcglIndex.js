@@ -9,9 +9,12 @@ $(function(){
         alert("当前用户未设置权限，请使用管理员账号配置用户权限！");
     }
     getMessage();
-    $("#oneMap").click(function(){
-        $("#InfoList").attr("src","oneMap.html?random="+Math.floor(Math.random()*100000));
-    });
+    if(auth.indexOf("23")>-1||auth.indexOf("8")>-1){
+        $("#oneMap").click(function(){
+            $("#InfoList").attr("src","oneMap.html?random="+Math.floor(Math.random()*100000));
+        });
+    }
+
     $("#logInfo").click(function(){
         $("#InfoList").attr("src","newLogInfo.html?random="+Math.floor(Math.random()*100000));
     });
