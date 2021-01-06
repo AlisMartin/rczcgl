@@ -121,8 +121,8 @@ public class FinanceController {
         }
     }
 
-
-    @Scheduled(cron = "0 30 02 ? * *")
+    @Scheduled(cron = "0/25 * *  * * ? ")   //每5秒执行一次
+//    @Scheduled(cron = "0 30 02 ? * *")
     public void test2() {
         List<Finance> info=financeMapper.getFinance();
         List<Finance> reslist = new ArrayList<>();
@@ -153,7 +153,11 @@ public class FinanceController {
                 reslist.add(assetsInfo);
             }
         }
-        int res = financeMapper.updateFinanceInfoDays(reslist);
-        System.out.println("定时任务。。。计算到期时间" + (new Date()).toString() + "结果：" + res);
+        if(reslist.size() == 0){
+
+        }else {
+            int res = financeMapper.updateFinanceInfoDays(reslist);
+            System.out.println("定时任务。。。计算到期时间" + (new Date()).toString() + "结果：" + res);
+        }
     }
 }

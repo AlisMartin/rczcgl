@@ -1274,8 +1274,8 @@ function setColor(tableId) {
     var tableId = document.getElementById(tableId);
 
     for (var i = 1; i < tableId.rows.length; i++) {
-        var row = tableId.rows[i].cells[1].innerHTML;
-        var days = tableId.rows[i].cells[2].innerHTML;
+        var row = tableId.rows[i].cells[2].innerHTML;
+        var days = tableId.rows[i].cells[3].innerHTML;
         if (!isNaN(row)) {
             row = parseInt(row);
             if (row <= 0) {
