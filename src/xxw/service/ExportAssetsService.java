@@ -451,7 +451,7 @@ public class ExportAssetsService {
         }
     }
 
-    public List<Map<String, String>> importAssetsInfo(MultipartFile file, String zctype) {
+    public List<Map<String, Object>> importAssetsInfo(MultipartFile file, String zctype) {
         int num = 1;
         //获取导出列及列名
         List<AssetsConfig> configlist = assetsMapper.getAllAssetsConfigInfo(zctype, null);
@@ -461,7 +461,7 @@ public class ExportAssetsService {
             assetsConfig.setFieldname("要素ID");
             configlist.add(assetsConfig);
         }
-        List<Map<String, String>> maplist = new ArrayList<Map<String, String>>();
+        List<Map<String, Object>> maplist = new ArrayList<>();
         try {
             // POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
             //HSSFWorkbook hw =new HSSFWorkbook(fs);
@@ -492,7 +492,7 @@ public class ExportAssetsService {
             }
 
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-                Map<String, String> datamap = new HashMap<String, String>();
+                Map<String, Object> datamap = new HashMap<>();
                 Row row = sheet.getRow(i);
                 int j = 0;
                 while (j < colNum) {
@@ -504,7 +504,7 @@ public class ExportAssetsService {
                     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
                     HttpSession session = request.getSession();
                     User user = (User) session.getAttribute("user");
-                    DepartTree departtree = departmapper.getComByNodename(datamap.get("field2"),"company");
+                    DepartTree departtree = departmapper.getComByNodename(datamap.get("field2").toString(),"company");
                     if(departtree == null){
                         continue;
                     }

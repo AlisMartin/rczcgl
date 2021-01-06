@@ -39,11 +39,12 @@ public class AssetsController {
     SysMessageMapper sysMessageMapper;
     @Autowired
     LogController logController;
+
     @RequestMapping("/getConfigInfo")
     @ResponseBody
     public List<AssetsConfig> getConfigList(@RequestBody JSONObject json) {
         String zctype = json.getString("zctype");
-       // String order = json.getString("order");
+        // String order = json.getString("order");
         List<AssetsConfig> info = assetsMapper.getAssetsConfigInfo(zctype, null);
         if (info.size() > 0) {
             return info;
@@ -54,50 +55,51 @@ public class AssetsController {
 
     @RequestMapping("/getAllConfigInfo")
     @ResponseBody
-    public List<AssetsConfig> getAllConfigList(HttpServletRequest request){
-        String zctype=request.getParameter("zctype");
-        String order=request.getParameter("order");
-        if(zctype!=null&&zctype.indexOf(",")>-1){
-            List<AssetsConfig> info1=assetsMapper.getAllAssetsConfigInfo(zctype.split(",")[0],order);
-            List<AssetsConfig> info2=assetsMapper.getAllAssetsConfigInfo(zctype.split(",")[1],order);
+    public List<AssetsConfig> getAllConfigList(HttpServletRequest request) {
+        String zctype = request.getParameter("zctype");
+        String order = request.getParameter("order");
+        if (zctype != null && zctype.indexOf(",") > -1) {
+            List<AssetsConfig> info1 = assetsMapper.getAllAssetsConfigInfo(zctype.split(",")[0], order);
+            List<AssetsConfig> info2 = assetsMapper.getAllAssetsConfigInfo(zctype.split(",")[1], order);
             info1.addAll(info2);
-            if(info1.size()>0){
-                return  info1;
-            }else{
+            if (info1.size() > 0) {
+                return info1;
+            } else {
                 return null;
             }
-        }else{
-            List<AssetsConfig> info=assetsMapper.getAllAssetsConfigInfo(zctype,order);
-            if(info.size()>0){
-                return  info;
-            }else{
+        } else {
+            List<AssetsConfig> info = assetsMapper.getAllAssetsConfigInfo(zctype, order);
+            if (info.size() > 0) {
+                return info;
+            } else {
                 return null;
             }
         }
 
     }
+
     /*
      * 获取配置信息不包含隐藏show
      */
     @RequestMapping("/getConfigInfoshow")
     @ResponseBody
-    public List<AssetsConfig> getConfigListshow(HttpServletRequest request){
-        String zctype=request.getParameter("zctype");
-        String order=request.getParameter("order");
-        if(zctype!=null&&zctype.indexOf(",")>-1){
-            List<AssetsConfig> info1=assetsMapper.getAssetsConfigInfo(zctype.split(",")[0], order);
-            List<AssetsConfig> info2=assetsMapper.getAssetsConfigInfo(zctype.split(",")[1],order);
+    public List<AssetsConfig> getConfigListshow(HttpServletRequest request) {
+        String zctype = request.getParameter("zctype");
+        String order = request.getParameter("order");
+        if (zctype != null && zctype.indexOf(",") > -1) {
+            List<AssetsConfig> info1 = assetsMapper.getAssetsConfigInfo(zctype.split(",")[0], order);
+            List<AssetsConfig> info2 = assetsMapper.getAssetsConfigInfo(zctype.split(",")[1], order);
             info1.addAll(info2);
-            if(info1.size()>0){
-                return  info1;
-            }else{
+            if (info1.size() > 0) {
+                return info1;
+            } else {
                 return null;
             }
-        }else{
-            List<AssetsConfig> info=assetsMapper.getAllAssetsConfigInfo(zctype,order);
-            if(info.size()>0){
-                return  info;
-            }else{
+        } else {
+            List<AssetsConfig> info = assetsMapper.getAllAssetsConfigInfo(zctype, order);
+            if (info.size() > 0) {
+                return info;
+            } else {
                 return null;
             }
         }
@@ -108,34 +110,33 @@ public class AssetsController {
     @ResponseBody
     public int insertAssetsConfig(HttpServletRequest request, AssetsConfig assetsConfig) {
         int i = 0;
+        assetsConfig.setIsdel("0");
         i = assetsMapper.insertConfig(assetsConfig);
-        HttpSession session =   request.getSession();
-        User user = (User)session.getAttribute("user");
-        String eventDesc="用户"+user.getUserName()+"添加资产信息项";
-        String eventType="添加资产信息项";
-        Date date =new Date();
-        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String realdate= dateFormat.format(date);
-        //String realdate=date.toString();
-        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        String eventDesc = "用户" + user.getUserName() + "添加资产信息项";
+        String eventType = "添加资产信息项";
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate = dateFormat.format(date);
+        logController.insertLogs(eventType, realdate, eventDesc, user.getId(), user.getUserName());
         return i;
     }
 
     @RequestMapping("/updateConfig")
     @ResponseBody
-    public int updateConfig(HttpServletRequest request,AssetsConfig assetsConfig){
-        int i=0;
-        i=assetsMapper.updateConfig(assetsConfig);
+    public int updateConfig(HttpServletRequest request, AssetsConfig assetsConfig) {
+        int i = 0;
+        i = assetsMapper.updateConfig(assetsConfig);
 
-        HttpSession session =   request.getSession();
-        User user = (User)session.getAttribute("user");
-        String eventDesc="用户"+user.getUserName()+"修改资产信息项";
-        String eventType="修改资产信息项";
-        Date date =new Date();
-        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String realdate= dateFormat.format(date);
-        //String realdate=date.toString();
-        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        String eventDesc = "用户" + user.getUserName() + "修改资产信息项";
+        String eventType = "修改资产信息项";
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate = dateFormat.format(date);
+        logController.insertLogs(eventType, realdate, eventDesc, user.getId(), user.getUserName());
         return i;
     }
 
@@ -149,9 +150,9 @@ public class AssetsController {
         String zctype = json.getString("zctype");
 
 
-        int pageNumber = offset==0?1:offset/limit + 1;
-        Page page = PageHelper.startPage(pageNumber,limit);
-        List<AssetsInfo> info=assetsMapper.getAssetsInfo(zctype,gsmc);
+        int pageNumber = offset == 0 ? 1 : offset / limit + 1;
+        Page page = PageHelper.startPage(pageNumber, limit);
+        List<AssetsInfo> info = assetsMapper.getAssetsInfo(zctype, gsmc);
         PageInfo pageInfo = new PageInfo<>(info);
         if (pageInfo.getList().size() > 0) {
             res.put("total", pageInfo.getTotal());
@@ -164,24 +165,25 @@ public class AssetsController {
 
     @RequestMapping("/getSumAssetsInfo")
     @ResponseBody
-    public Map<String,Object> getSumAssetsInfo(@RequestBody JSONObject json){
-        Map<String,Object> res = new HashMap<>();
+    public Map<String, Object> getSumAssetsInfo(@RequestBody JSONObject json) {
+        Map<String, Object> res = new HashMap<>();
        /* int offset = Integer.parseInt(json.getString("offset"));
         int limit = Integer.parseInt(json.getString("limit"));*/
         String gsmc = json.getString("gsmc");
         String zctype = json.getString("zctype");
         /*int pageNumber = offset==0?1:offset/limit + 1;
         Page page = PageHelper.startPage(pageNumber,limit);*/
-        List<AssetsInfo> info=assetsMapper.getSumAssetsInfo(zctype,gsmc);
-       /* PageInfo pageInfo = new PageInfo<>(info);*/
-        if(info.size()>0){
-            res.put("total",info.size());
-            res.put("rows",info);
-            return  res;
-        }else{
+        List<AssetsInfo> info = assetsMapper.getSumAssetsInfo(zctype, gsmc);
+        /* PageInfo pageInfo = new PageInfo<>(info);*/
+        if (info.size() > 0) {
+            res.put("total", info.size());
+            res.put("rows", info);
+            return res;
+        } else {
             return null;
         }
     }
+
     @RequestMapping("/getAssetsHistoryInfo")
     @ResponseBody
     public Map<String, Object> getAssetsHistoryInfo(@RequestBody JSONObject json) {
@@ -190,9 +192,9 @@ public class AssetsController {
         int limit = Integer.parseInt(json.getString("limit"));
         String gsmc = json.getString("gsmc");
         String zctype = json.getString("zctype");
-        int pageNumber = offset==0?1:offset/limit + 1;
-        Page page = PageHelper.startPage(pageNumber,limit);
-        List<AssetsInfoHistory> info=assetsMapper.getAssetsHistoryInfo(zctype,gsmc);
+        int pageNumber = offset == 0 ? 1 : offset / limit + 1;
+        Page page = PageHelper.startPage(pageNumber, limit);
+        List<AssetsInfoHistory> info = assetsMapper.getAssetsHistoryInfo(zctype, gsmc);
         PageInfo pageInfo = new PageInfo<>(info);
         if (pageInfo.getList().size() > 0) {
             res.put("total", pageInfo.getTotal());
@@ -205,25 +207,25 @@ public class AssetsController {
 
     @RequestMapping("/getAllSumAssetsInfo")
     @ResponseBody
-    public Map<String,Object> getAllSumAssetsInfo(@RequestBody JSONObject json){
-        Map<String,Object> res = new HashMap<>();
+    public Map<String, Object> getAllSumAssetsInfo(@RequestBody JSONObject json) {
+        Map<String, Object> res = new HashMap<>();
         String gsmc = json.getString("gsmc");
         String zctype = json.getString("zctype");
-        List<AssetsInfo> info=assetsMapper.getSumAssetsInfo(zctype,gsmc);
+        List<AssetsInfo> info = assetsMapper.getSumAssetsInfo(zctype, gsmc);
         PageInfo pageInfo = new PageInfo<>(info);
-        if(pageInfo.getList().size()>0){
-            res.put("total",pageInfo.getTotal());
-            res.put("rows",pageInfo.getList());
-            return  res;
-        }else{
+        if (pageInfo.getList().size() > 0) {
+            res.put("total", pageInfo.getTotal());
+            res.put("rows", pageInfo.getList());
+            return res;
+        } else {
             return null;
         }
     }
 
     @RequestMapping("/getAssetByid")
     @ResponseBody
-    public Map<String,Object> getAssetByid(@RequestBody JSONObject json){
-        Map<String,Object> res = new HashMap<>();
+    public Map<String, Object> getAssetByid(@RequestBody JSONObject json) {
+        Map<String, Object> res = new HashMap<>();
         String zcid = json.getString("zcid");
         AssetsInfo info = assetsMapper.getAssetByid(zcid);
         res.put("code", 1);
@@ -237,7 +239,7 @@ public class AssetsController {
         Map<String, Object> res = new HashMap<>();
         JSONArray zctypes = json.getJSONArray("zctypes");
         String name = json.getString("name");
-        if(StringUtil.isEmpty(name)){
+        if (StringUtil.isEmpty(name)) {
             res.put("code", 0);
             res.put("data", null);
             return res;
@@ -246,16 +248,16 @@ public class AssetsController {
 
         String field1 = null, field2 = null, field3 = null, field4 = null;
         for (AssetsConfig info : assetsInfos) {
-            if (zctypes.contains("1") && "1".equals(info.getZctype())){
+            if (zctypes.contains("1") && "1".equals(info.getZctype())) {
                 field1 = info.getField();
             }
-            if (zctypes.contains("2") && "2".equals(info.getZctype())){
+            if (zctypes.contains("2") && "2".equals(info.getZctype())) {
                 field2 = info.getField();
             }
-            if (zctypes.contains("3") && "3".equals(info.getZctype())){
+            if (zctypes.contains("3") && "3".equals(info.getZctype())) {
                 field3 = info.getField();
             }
-            if (zctypes.contains("4") && "4".equals(info.getZctype())){
+            if (zctypes.contains("4") && "4".equals(info.getZctype())) {
                 field4 = info.getField();
             }
         }
@@ -274,37 +276,45 @@ public class AssetsController {
     @RequestMapping("/addAssetsByType")
     @ResponseBody
     public ResponseObject addAssetsByType(@RequestBody List<AssetVO> dto) {
-        Map<String, Object> res = new HashMap<>();
-        Map<String, String> insertInfo = new HashMap<>();
+        Map<String, Object> insertInfo = new HashMap<>();
         for (AssetVO assetVO : dto) {
             if (StringUtil.isNotEmpty(assetVO.getValue())) {
+                if ("stopday".equals(assetVO.getName())) {
+                    SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+                    try {
+                        Date realdate1 = dateFormat1.parse(assetVO.getValue());
+                        insertInfo.put("stopday", realdate1);
+                    } catch (Exception e) {
+                    }
+                    continue;
+                }
                 insertInfo.put(assetVO.getName(), assetVO.getValue());
             }
         }
         UUID uuid = UUID.randomUUID();
         //获取session
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        HttpSession session =   request.getSession();
-        User user = (User)session.getAttribute("user");
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
         //插入资产的公司id
         insertInfo.put("companyid", user.getComId());
         insertInfo.put("zcid", uuid.toString());
-        if("2".equals(insertInfo.get("zctype"))){
+        if ("2".equals(insertInfo.get("zctype"))) {
             insertInfo.put("layerid", uuid.toString());
         }
+
         int i = assetsMapper.insertAssetsInfo(insertInfo);
 
-        String eventDesc="用户"+user.getUserName()+"新增资产";
-        String eventType="新增资产";
-        Date date =new Date();
-        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String realdate= dateFormat.format(date);
-        //String realdate=date.toString();
-        logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
+        String eventDesc = "用户" + user.getUserName() + "新增资产";
+        String eventType = "新增资产";
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String realdate = dateFormat.format(date);
+        logController.insertLogs(eventType, realdate, eventDesc, user.getId(), user.getUserName());
         if (i == 1) {
-            if("2".equals(insertInfo.get("zctype"))){
+            if ("2".equals(insertInfo.get("zctype"))) {
                 return new ResponseObject(1, "成功", uuid);
-            }else{
+            } else {
                 return new ResponseObject(1, "成功", "");
             }
 
@@ -317,20 +327,29 @@ public class AssetsController {
     @ResponseBody
     public ResponseObject editAsset(@RequestBody List<AssetVO> dto) {
         String jsusers = "";
-        Map<String, String> insertInfo = new HashMap<>();
+        Map<String, Object> insertInfo = new HashMap<>();
         for (AssetVO assetVO : dto) {
-            if("jsusers".equals(assetVO.getName())){
+            if ("jsusers".equals(assetVO.getName())) {
                 jsusers = assetVO.getValue();
+                continue;
+            }
+            if ("stopday".equals(assetVO.getName())) {
+                SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    Date realdate1 = dateFormat1.parse(assetVO.getValue());
+                    insertInfo.put("stopday", realdate1);
+                } catch (Exception e) {
+                }
                 continue;
             }
             if (StringUtil.isNotEmpty(assetVO.getValue())) {
                 insertInfo.put(assetVO.getName(), assetVO.getValue());
             }
         }
-        String zcid = insertInfo.get("zcid");
-        Map<String,String> assetsInfo = assetsMapper.selectAssetsInfo(zcid);
+        String zcid = insertInfo.get("zcid").toString();
+        Map<String, String> assetsInfo = assetsMapper.selectAssetsInfo(zcid);
         int i;
-        if (StringUtil.isNotEmpty(insertInfo.get("zctype"))) {
+        if (StringUtil.isNotEmpty(insertInfo.get("zctype") == null ? null : insertInfo.get("zctype").toString())) {
             UUID uuid = UUID.randomUUID();
 
             assetsInfo.remove("ID");
@@ -341,28 +360,27 @@ public class AssetsController {
             int a = assetsMapper.updateAssetsInfo(insertInfo);
 
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-            HttpSession session =   request.getSession();
-            User user = (User)session.getAttribute("user");
-            String eventDesc="用户"+user.getUserName()+"编辑资产";
-            String eventType="编辑资产";
-            Date dates =new Date();
-            SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String realdate= dateFormat.format(dates);
-            //String realdate=date.toString();ss
-            logController.insertLogs(eventType,realdate,eventDesc,user.getId(),user.getUserName());
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
+            String eventDesc = "用户" + user.getUserName() + "编辑资产";
+            String eventType = "编辑资产";
+            Date dates = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String realdate = dateFormat.format(dates);
+            logController.insertLogs(eventType, realdate, eventDesc, user.getId(), user.getUserName());
 
             SysMessage sysMessage = new SysMessage();
-            sysMessage.setFlowName(insertInfo.get("field3"));
+            sysMessage.setFlowName(insertInfo.get("field3") == null ? null : insertInfo.get("field3").toString());
             sysMessage.setFlowId(uuid.toString());
             Date date = new Date();
-            String tsdate = DateUtils.getFormatTime(date,"yyyy-MM-dd HH:mm:ss");
+            String tsdate = DateUtils.getFormatTime(date, "yyyy-MM-dd HH:mm:ss");
             sysMessage.setTsDate(tsdate);
             sysMessage.setJsId(jsusers);
             sysMessage.setTsUser(user.getUserName());
             sysMessage.setTsId(user.getId());
             sysMessage.setDesc("资产信息变更");
             sysMessage.setShow("1");
-            sysMessage.setType(insertInfo.get("zctype"));
+            sysMessage.setType(insertInfo.get("zctype") == null ? null : insertInfo.get("zctype").toString());
             sysMessage.setFlowtype("assess");
             sysMessageMapper.insertSysMessage(sysMessage);
         } else {
@@ -389,53 +407,53 @@ public class AssetsController {
 
     @RequestMapping("/total")
     @ResponseBody
-    public Map<String,Float> totalAssets(HttpServletRequest request){
-        String zctype=request.getParameter("zctype");
-        String gsmc=request.getParameter("gsmc");
-        Map<String,Float> mapCount=new HashMap<>();
-        List<AssetsConfig> configlist=assetsMapper.getAllAssetsConfigInfo(zctype, null);
+    public Map<String, Float> totalAssets(HttpServletRequest request) {
+        String zctype = request.getParameter("zctype");
+        String gsmc = request.getParameter("gsmc");
+        Map<String, Float> mapCount = new HashMap<>();
+        List<AssetsConfig> configlist = assetsMapper.getAllAssetsConfigInfo(zctype, null);
         //融资统计
-        List<AssetsConfig> rzconfiglist=assetsMapper.getAllAssetsConfigInfo("5", null);
+        List<AssetsConfig> rzconfiglist = assetsMapper.getAllAssetsConfigInfo("5", null);
         configlist.addAll(rzconfiglist);
-        List<Map<String,String>> assetslist=assetsMapper.getAllAssetsInfoByMap(zctype, gsmc);
-        if(assetslist.size()<1){
+        List<Map<String, String>> assetslist = assetsMapper.getAllAssetsInfoByMap(zctype, gsmc);
+        if (assetslist.size() < 1) {
             return null;
-        }else{
-            int maxentry=assetslist.get(0).size();
-            int entryi=0;
-            for(int i=0;i<assetslist.size();i++){
-                if(assetslist.get(i).size()>maxentry){
-                    maxentry=assetslist.get(i).size();
-                    entryi=i;
+        } else {
+            int maxentry = assetslist.get(0).size();
+            int entryi = 0;
+            for (int i = 0; i < assetslist.size(); i++) {
+                if (assetslist.get(i).size() > maxentry) {
+                    maxentry = assetslist.get(i).size();
+                    entryi = i;
                 }
             }
-            List<String> financeId=new ArrayList<>();
-            for(Map.Entry<String,String> entry:assetslist.get(entryi).entrySet()) {
-                Float count = (float)0;
+            List<String> financeId = new ArrayList<>();
+            for (Map.Entry<String, String> entry : assetslist.get(entryi).entrySet()) {
+                Float count = (float) 0;
                 for (int i = 0; i < assetslist.size(); i++) {
                     for (AssetsConfig assetsConfig : configlist) {
                         if (assetsConfig.getFieldType().equals("2") && assetsConfig.getField().toUpperCase().equals(entry.getKey())) {
-                            if(assetslist.get(i).containsKey(entry.getKey())){
-                                if(assetslist.get(i).containsKey("FINANCEID")&&entry.getKey().indexOf("FCFIELD")>-1){
-                                    if(financeId.size()==0){
-                                        if(StringUtil.isNumber(assetslist.get(i).get(entry.getKey()))){
+                            if (assetslist.get(i).containsKey(entry.getKey())) {
+                                if (assetslist.get(i).containsKey("FINANCEID") && entry.getKey().indexOf("FCFIELD") > -1) {
+                                    if (financeId.size() == 0) {
+                                        if (StringUtil.isNumber(assetslist.get(i).get(entry.getKey()))) {
                                             count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
                                             mapCount.put(entry.getKey().toLowerCase(), count);
                                             financeId.add(assetslist.get(i).get("FINANCEID"));
                                         }
 
-                                    }else{
-                                       if(!financeId.contains(assetslist.get(i).get("FINANCEID"))){
-                                           if(StringUtil.isNumber(assetslist.get(i).get(entry.getKey()))){
-                                               count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
-                                               mapCount.put(entry.getKey().toLowerCase(), count);
-                                               financeId.add(assetslist.get(i).get("FINANCEID"));
-                                           }
-                                       }
+                                    } else {
+                                        if (!financeId.contains(assetslist.get(i).get("FINANCEID"))) {
+                                            if (StringUtil.isNumber(assetslist.get(i).get(entry.getKey()))) {
+                                                count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
+                                                mapCount.put(entry.getKey().toLowerCase(), count);
+                                                financeId.add(assetslist.get(i).get("FINANCEID"));
+                                            }
+                                        }
                                     }
-                                }else {
-                                    if(!financeId.contains(assetslist.get(i).get("FINANCEID"))){
-                                        if(StringUtil.isNumber(assetslist.get(i).get(entry.getKey()))) {
+                                } else {
+                                    if (!financeId.contains(assetslist.get(i).get("FINANCEID"))) {
+                                        if (StringUtil.isNumber(assetslist.get(i).get(entry.getKey()))) {
                                             count = count + Float.parseFloat(assetslist.get(i).get(entry.getKey()));
                                             mapCount.put(entry.getKey().toLowerCase(), count);
                                         }
@@ -453,8 +471,8 @@ public class AssetsController {
 
     @RequestMapping("/delAssets")
     @ResponseBody
-    public ResponseObject delAssets(@RequestBody JSONObject json){
-        String id=json.getString("id");
+    public ResponseObject delAssets(@RequestBody JSONObject json) {
+        String id = json.getString("id");
         Integer a = assetsMapper.delAssets(id);
         if (a == 1) {
             return new ResponseObject(1, "成功", "");
@@ -462,10 +480,11 @@ public class AssetsController {
             return new ResponseObject(0, "失败", "");
         }
     }
+
     @RequestMapping("/delAssetsFile")
     @ResponseBody
-    public ResponseObject delAssetsFile(@RequestBody JSONObject json){
-        String id=json.getString("id");
+    public ResponseObject delAssetsFile(@RequestBody JSONObject json) {
+        String id = json.getString("id");
         Integer a = assetsMapper.delAssetsFile(id);
         if (a == 1) {
             return new ResponseObject(1, "成功", "");
@@ -477,7 +496,7 @@ public class AssetsController {
     /**
      * 每天02点30启动任务
      */
-   // @Scheduled(cron = "0/25 * *  * * ? ")   //每5秒执行一次
+    // @Scheduled(cron = "0/25 * *  * * ? ")   //每5秒执行一次
     @Scheduled(cron = "0 30 02 ? * *")
     public void test1() {
         List<AssetsInfo> configlist = assetsMapper.getAssetsInfo(null, null);
@@ -496,20 +515,17 @@ public class AssetsController {
             if (assetsInfo.getDays() != null && assetsInfo.getStopday() != null) {
                 String stopday = assetsInfo.getStopday();
                 Date date2;
-                try{
+                try {
                     date2 = new SimpleDateFormat("yyyy-MM-dd").parse(stopday);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     continue;
                 }
 
                 Integer days = Integer.parseInt(assetsInfo.getDays());
                 int betweenDay = DateUtils.daysBetween(date1, date2);
-                int dayorder = betweenDay - days;
-//                if (dayorder <= 0) {
-                    assetsInfo.setDayorder(betweenDay);
-                    reslist.add(assetsInfo);
-//                }
+                assetsInfo.setDayorder(betweenDay);
+                reslist.add(assetsInfo);
             }
         }
         int res = assetsMapper.updateAssetsInfoDays(reslist);

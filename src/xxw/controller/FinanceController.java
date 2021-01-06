@@ -5,6 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +14,10 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import xxw.mapper.FinanceMapper;
 import xxw.po.AssetVO;
+import xxw.po.AssetsInfo;
 import xxw.po.Finance;
 import xxw.po.User;
+import xxw.util.DateUtils;
 import xxw.util.StringUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -116,5 +119,41 @@ public class FinanceController {
         } else {
             return new ResponseObject(0, "失败", "");
         }
+    }
+
+
+    @Scheduled(cron = "0 30 02 ? * *")
+    public void test2() {
+        List<Finance> info=financeMapper.getFinance();
+        List<Finance> reslist = new ArrayList<>();
+        Date date1 = new Date();
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date1);
+        // 将时分秒,毫秒域清零
+        cal1.set(Calendar.HOUR_OF_DAY, 0);
+        cal1.set(Calendar.MINUTE, 0);
+        cal1.set(Calendar.SECOND, 0);
+        cal1.set(Calendar.MILLISECOND, 0);
+        date1 = cal1.getTime();
+
+        for (Finance assetsInfo : info) {
+            if (assetsInfo.getDays() != null && assetsInfo.getStopday() != null) {
+                String stopday = assetsInfo.getStopday();
+                Date date2;
+                try {
+                    date2 = new SimpleDateFormat("yyyy-MM-dd").parse(stopday);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    continue;
+                }
+
+                Integer days = Integer.parseInt(assetsInfo.getDays());
+                int betweenDay = DateUtils.daysBetween(date1, date2);
+                assetsInfo.setDayorder(betweenDay);
+                reslist.add(assetsInfo);
+            }
+        }
+        int res = financeMapper.updateFinanceInfoDays(reslist);
+        System.out.println("定时任务。。。计算到期时间" + (new Date()).toString() + "结果：" + res);
     }
 }

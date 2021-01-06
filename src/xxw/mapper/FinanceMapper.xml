@@ -35,4 +35,18 @@
     <delete  id="delFinance" parameterType="java.lang.String">
         delete from FINANCE where ID= #{id,jdbcType=VARCHAR}
     </delete>
+
+    <update id="updateFinanceInfoDays"  parameterType="java.util.List">
+        BEGIN
+        <foreach collection="list" item="item"  separator="">
+            update FINANCE
+            <set>
+                <if test="item.dayorder != null">
+                    dayorder = #{item.dayorder},
+                </if>
+            </set>
+            where zcid = #{item.zcid};
+        </foreach>
+        END;
+    </update>
 </mapper>

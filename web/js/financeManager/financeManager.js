@@ -164,6 +164,21 @@ function getcolumn() {
                     '<input class="form-control" id="' + data[i].field + '" name="' + data[i].field + '" type="' + data[i].fieldType + '">'+
                     '</div>';
             }
+            htmlLeft = htmlLeft + '<div class="form-group">'+
+                '<label for="finance_days">预警天数</label>'+
+                '<input class="form-control" id="days" name="days" type="number">'+
+                '</div>';
+            htmlLeft = htmlLeft + '<div class="form-group">'+
+                '<label for="finance_days">截止日期</label>'+
+                '<input class="form-control" id="stopday" name="stopday" type="date">'+
+                '</div>';
+            columns.push({
+                field:"days",
+                title:"预警天数"
+            },{
+                field:"stopday",
+                title:"截止日期"
+            });
             $("#financeform").append(' <input type="text" class="form-control" id="zcid" name="zcid" style="display: none"> ');
             $("#financeform").append('<div class="form-group"> <label for="id">融资编号</label>' +
                 '<input class="form-control" id="id" name="id" type="text" "> </div>');

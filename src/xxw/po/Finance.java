@@ -31,6 +31,9 @@ public class Finance {
     private String fcfield20;
     private String fcfield21;
     private String companyid;
+    private String days;
+    private String stopday;
+    private Integer dayorder;
 
     public String getId() {
         return id;
@@ -246,5 +249,29 @@ public class Finance {
 
     public void setFcfield21(String fcfield21) {
         this.fcfield21 = fcfield21;
+    }
+
+    public String getDays() {
+        return days;
+    }
+
+    public void setDays(String days) {
+        this.days = days;
+    }
+
+    public String getStopday() {
+        return stopday;
+    }
+
+    public void setStopday(String stopday) {
+        this.stopday = stopday;
+    }
+
+    public Integer getDayorder() {
+        return dayorder;
+    }
+
+    public void setDayorder(Integer dayorder) {
+        this.dayorder = dayorder;
     }
 }
