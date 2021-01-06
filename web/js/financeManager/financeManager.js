@@ -51,6 +51,7 @@ $(function(){
             return JSON.stringify(params);
         },
         onLoadSuccess:function(){
+            setColor("userTable");
         },
         onLoadError:function(){
         }
@@ -127,7 +128,20 @@ function editUser(){
 }
 
 function getcolumn() {
-    columns = [];
+    columns = [
+        {
+            visible: true,
+            class: "dayorder",
+            field: "dayorder",
+            title: "是否预警"
+        },
+        {
+            visible: true,
+            class: "dayorder",
+            field: "days",
+            title: "预警天数"
+        }
+    ];
     $.ajax({
         type: "post",
         url: "/rczcgl/assetsconfig/getAllConfigInfo.action",
@@ -217,5 +231,27 @@ function loadData(row) {
             }
 
         });
+    }
+}
+
+/**
+ * 给表格的指定单元格值的行上色<br/>
+ * 示例：setColor1('table_datalist', 'Waiting approval' , 'orange')
+ * @returns
+ */
+function setColor(tableId) {
+    var tableId = document.getElementById(tableId);
+
+    for (var i = 1; i < tableId.rows.length; i++) {
+        var row = tableId.rows[i].cells[0].innerHTML;
+        var days = tableId.rows[i].cells[1].innerHTML;
+        if (!isNaN(row)) {
+            row = parseInt(row);
+            if (row <= 0) {
+                tableId.rows[i].setAttribute("style", "background: #d9534f;");
+            } else if (row < days) {
+                tableId.rows[i].setAttribute("style", "background: #dc5d599c;");
+            }
+        }
     }
 }
