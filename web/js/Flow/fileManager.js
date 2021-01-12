@@ -523,6 +523,9 @@ $(function(){
         }else{
             param.filetype=type
         }
+        if(!hasAuth(userobj.auth,"8")){
+            param.departId=userobj.departId;
+        }
         $.ajax({
             type:"post",
             url:"/rczcgl/flow/queryManagerFileList.action",
@@ -540,15 +543,20 @@ $(function(){
     //重置文件查询
     $("#resetquery").click(function(){
         debugger;
+        var param={};
+        if(!hasAuth(userobj.auth,"8")){
+            param.departId=userobj.departId;
+        }
         $("#fileone").val("");
         $("#fileTwo").empty();
         $("#fileThree").empty();
         $("#fileName").val("");
+
         $.ajax({
             type:"post",
             url:"/rczcgl/flow/queryManagerFileList.action",
             async:false,
-            //data:param,
+            data:param,
             success:function(responsedata){
                 debugger;
                 $("#fileTable").bootstrapTable('load',responsedata);

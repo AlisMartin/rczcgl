@@ -326,7 +326,7 @@ function getCompanys() {
 
             }
 
-            if(hasAuth(userobj.auth,"9")||hasAuth(userobj.auth,"9")){
+            if(hasAuth(userobj.auth,"8")||hasAuth(userobj.auth,"9")){
                 $("#myTab").append(htmlLeft);
             }
 

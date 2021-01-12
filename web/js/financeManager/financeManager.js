@@ -5,6 +5,11 @@ var user= $.cookie('user');
 var userobj=eval('('+user+')');
 var columns = [];
 $(function(){
+    $("#closeUser").click(function(){
+        $("#addform")[0].reset();
+        $("#addUser").modal('hide');
+
+    })
     $("#saveUser").click(function(){
         addUser();
     });
@@ -71,6 +76,7 @@ function addUser(){
         success:function(data){
             if(data.code==1){
                 alert("编辑成功！");
+                $("#addform")[0].reset();
                 $("#userTable").bootstrapTable('refresh');
                 $("#addUser").modal('hide');
             }else{

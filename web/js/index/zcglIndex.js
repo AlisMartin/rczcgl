@@ -8,7 +8,9 @@ $(function(){
     if(auth==null){
         alert("当前用户未设置权限，请使用管理员账号配置用户权限！");
     }
-
+    if(hasAuth(auth,"8")||hasAuth(auth,"6")){
+        $("#InfoList").attr("src","newFileManager.html?random="+Math.floor(Math.random()*100000));
+    }
     getMessage();
 
     if(hasAuth(auth,"23")||hasAuth(auth,"8")){
