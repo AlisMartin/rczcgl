@@ -419,7 +419,9 @@ $(function(){
                 $("#yjml").empty();
                 $("#ejml").empty();
                 $("#sjml").empty();
+               //$("#fileTable").bootstrapTable('refresh');
                 initmodalonefiled();
+                window.location.reload();
             },
             error:function(){
             }
@@ -433,13 +435,17 @@ $(function(){
             alert("当前用户无权限进行此操作！");
             return;
         }
+        var f=$("#fileone").val();
+        if(f==null||f==""){
+            alert("请选择文件目录");
+        }
         if(confirm("是否刪除")){
             var com=$("#fileone").val();
             var pos=$("#fileTwo").val();
             var type=$("#fileThree").val();
             var pathId= selectPathId(com,pos,type);
             if(pathId==null||pathId==""){
-                alert("请选择要删除的目录!");
+                alert("当前目录存在子级目录，请先删除子级目录！");
                 return;
             }
             $.ajax({
@@ -448,7 +454,14 @@ $(function(){
                 async:false,
                 data:{"pathId":pathId},
                 success:function(responsedata){
-                    alert("删除成功！")
+                    alert("删除成功！");
+                    window.location.reload();
+               /*     $("#fileone").val("");
+                    $("#fileTwo").empty();
+                    $("#fileThree").empty();
+                    $("#fileName").val("");
+                    $("#fileTable").bootstrapTable('refresh');*/
+
                 },
                 error:function(){
                 }
