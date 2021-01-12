@@ -14,12 +14,17 @@ $(function(){
     })*/
     $("#fielddel").click(function(){
         debugger;
+        var rowdata=$("#fileTable").bootstrapTable('getSelections');
+        if(rowdata.length<=0){
+            alert("请先选择要删除的文件！");
+            return;
+        }
         if(confirm("是否刪除")){
             if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"22")){
                 alert("当前用户无权限进行此操作！");
                 return;
             }
-            var rowdata=$("#fileTable").bootstrapTable('getSelections');
+
             if(rowdata.length>0){
                 for(var i=0;i<rowdata.length;i++){
                     var a=rowdata[i].FILEID;
@@ -438,6 +443,7 @@ $(function(){
         var f=$("#fileone").val();
         if(f==null||f==""){
             alert("请选择文件目录");
+            return;
         }
         if(confirm("是否刪除")){
             var com=$("#fileone").val();
