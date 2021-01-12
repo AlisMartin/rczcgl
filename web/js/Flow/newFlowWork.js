@@ -311,7 +311,7 @@ $(function(){
             }
         ],
         queryParams: function (params) {
-            if(!(userobj.auth.indexOf("8")>-1)){
+            if(!hasAuth(userobj.auth,"8")){
                 params.duser = userobj.id;
             }
 
@@ -603,7 +603,7 @@ function reloadTable(a){
         url: url,
         columns:columns,
         queryParams: function (params) {
-            if(!(userobj.auth.indexOf("8")>-1)){
+            if(!hasAuth(userobj.auth,"8")){
                 params.duser = userobj.id;
             }
             return JSON.stringify(params);

@@ -12,7 +12,7 @@ $(function(){
         $("input[type=reset]").trigger("click");
     });
     $("#editUser").click(function(){
-        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("14")==-1){
+        if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"14")){
             alert("当前用户无权限进行此操作！");
             return;
         }
@@ -23,7 +23,7 @@ $(function(){
         }
     });
     $("#saveeditUser").click(function(){
-        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("14")==-1){
+        if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"14")){
             alert("当前用户无权限进行此操作！");
             return;
         }

@@ -15,7 +15,7 @@ $(function(){
     $("#fielddel").click(function(){
         debugger;
         if(confirm("是否刪除")){
-            if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("22")==-1){
+            if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"22")){
                 alert("当前用户无权限进行此操作！");
                 return;
             }
@@ -201,7 +201,8 @@ $(function(){
         ],
         queryParams: function (params) {
             debugger;
-            if(userobj.auth.indexOf("8")=="-1"){
+
+            if(!hasAuth(userobj.auth,"8")){
                 params.departId=userobj.departId;
             }
             return JSON.stringify(params);
@@ -320,7 +321,7 @@ $(function(){
     //文件上传
     $('#wjsc').click(function(){
         $("#upflag").val(0);
-        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("20")==-1){
+        if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"20")){
             alert("当前用户无权限进行此操作！");
             return;
         }
@@ -338,7 +339,7 @@ $(function(){
 
     //打开添加文件目录弹窗
     $("#fieldadd").click(function(){
-        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("21")==-1){
+        if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"21")){
             alert("当前用户无权限进行此操作！");
             return;
         }
@@ -418,16 +419,42 @@ $(function(){
                 $("#yjml").empty();
                 $("#ejml").empty();
                 $("#sjml").empty();
-                initmodalonefiled();12
+                initmodalonefiled();
             },
             error:function(){
             }
         })
     })
+
+    //删除文件目录
+    $("#delMl").click(function(){
+        debugger;
+        if(confirm("是否刪除")){
+            var com=$("#fileone").val();
+            var pos=$("#fileTwo").val();
+            var type=$("#fileThree").val();
+            var pathId= selectPathId(com,pos,type);
+            if(pathId==null||pathId==""){
+                alert("请选择要删除的目录!");
+                return;
+            }
+            $.ajax({
+                type:"post",
+                url:"/rczcgl/flow/delMl.action",
+                async:false,
+                data:{"pathId":pathId},
+                success:function(responsedata){
+                    alert("删除成功！")
+                },
+                error:function(){
+                }
+            })
+        }
+    })
     //文件下载
     $("#filedown").click(function(){
         debugger;
-        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("20")==-1){
+        if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"20")){
             alert("当前用户无权限进行此操作！");
             return;
         }
@@ -527,11 +554,13 @@ $(function(){
 })
 
 
+
 function initonefiled(){
     debugger;
     var param={};
     param.filetype="com";
-    if(userobj.auth.indexOf("8")=="-1"){
+
+    if(!hasAuth(userobj.auth,"8")){
         param.departId=userobj.departId;
     }
 
@@ -558,7 +587,7 @@ function initmodalonefiled(){
     debugger;
     var param={};
     param.filetype="com";
-    if(userobj.auth.indexOf("8")=="-1"){
+    if(!hasAuth(userobj.auth,"8")){
         param.departId=userobj.departId;
     }
     $.ajax({
@@ -583,7 +612,7 @@ function inittwofiled(com){
     var param={};
     param.filetype="pos";
     param.com=com;
-    if(userobj.auth.indexOf("8")=="-1"){
+    if(!hasAuth(userobj.auth,"8")){
         param.departId=userobj.departId;
     }
     $.ajax({
@@ -608,7 +637,7 @@ function initmodaltwofiled(com){
     var param={};
     param.filetype="pos";
     param.com=com;
-    if(userobj.auth.indexOf("8")=="-1"){
+    if(!hasAuth(userobj.auth,"8")){
         param.departId=userobj.departId;
     }
     $.ajax({
@@ -634,7 +663,7 @@ function initthreefiled(com,pos){
     param.filetype="type";
     param.com=com;
     param.pos=pos;
-    if(userobj.auth.indexOf("8")=="-1"){
+    if(!hasAuth(userobj.auth,"8")){
         param.departId=userobj.departId;
     }
     $.ajax({
@@ -662,7 +691,7 @@ function initmodalthreefiled(com,pos){
     param.filetype="type";
     param.com=com;
     param.pos=pos;
-    if(userobj.auth.indexOf("8")=="-1"){
+    if(!hasAuth(userobj.auth,"8")){
         param.departId=userobj.departId;
     }
     $.ajax({
@@ -692,9 +721,9 @@ function selectPathId(){
     var pos=$("#fileTwo").val();
     var type=$("#fileThree").val();
     var param={};
-    if(com==""||pos==""){
+    if(com==""){
         alert("请选择文件目录！");
-        return;
+        return null;
     }
     if(com!=null&&com!=""){
         param.com=com;

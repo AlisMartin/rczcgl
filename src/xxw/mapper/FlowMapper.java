@@ -44,5 +44,6 @@ public interface FlowMapper {
     List<AssetsFile> selectFileByName(@Param("filename")String filename);
     int insertManagerFile(@Param("fileId")String fileId,@Param("fileName")String fileName,@Param("filePath")String filePath,@Param("realName")String realName,@Param("pathId")String pathId,@Param("fileDate")String fileDate,@Param("fileorder")String fileorder);
     int updateFile(@Param("fileId")String fileId,@Param("zcid")String zcid);
+    void delFold(@Param("pathId")String pathId);
     void savefilefold(@Param("com")String com,@Param("pos")String pos,@Param("type")String type,@Param("pathid")String pathid,@Param("departId")String departId);
 }

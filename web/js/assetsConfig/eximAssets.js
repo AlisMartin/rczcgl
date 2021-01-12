@@ -334,7 +334,7 @@ $(function () {
         //导入
     $("#importAssets").click(function () {
         debugger;
-        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("18")==-1){
+        if(!hasAuth(auth,"8")&&!hasAuth(auth,"18")){
             alert("当前用户无权限进行此操作！");
             return;
         }
@@ -342,7 +342,7 @@ $(function () {
     });
     //导出
     $("#exportAssets").click(function () {
-        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("18")==-1){
+        if(!hasAuth(auth,"8")&&!hasAuth(auth,"18")){
             alert("当前用户无权限进行此操作！");
             return;
         }
@@ -350,7 +350,7 @@ $(function () {
     });
     //新增资产
     $("#addAsset").click(function () {
-        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("16")==-1){
+        if(!hasAuth(auth,"8")&&!hasAuth(auth,"16")){
             alert("当前用户无权限进行此操作！");
             return;
         }
@@ -818,7 +818,7 @@ function getcolumn() {
                 formatter: btnGroup,    // 自定义方法，添加按钮组
                 events: {               // 注册按钮组事件
                     'click #modRole': function (event, value, row, index) {
-                        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("19")==-1){
+                        if(!hasAuth(auth,"8")&&!hasAuth(auth,"19")){
                             alert("当前用户无权限进行此操作！");
                             return;
                         }
@@ -832,7 +832,7 @@ function getcolumn() {
                         //$("#view").modal('show');
                     },
                     'click #edit': function (event, value, row, index) {
-                        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("16")==-1){
+                        if(!hasAuth(auth,"8")&&!hasAuth(auth,"16")){
                             alert("当前用户无权限进行此操作！");
                             return;
                         };
@@ -848,7 +848,7 @@ function getcolumn() {
                         isreset = 0;
                     },
                     'click #filesdown': function (event, value, row, index) {
-                        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("16")==-1){
+                        if(!hasAuth(auth,"8")&&!hasAuth(auth,"16")){
                             alert("当前用户无权限进行此操作！");
                             return;
                         }
@@ -856,7 +856,7 @@ function getcolumn() {
                         showInfoDown(row);
                     },
                     'click #reset': function (event, value, row, index) {
-                        if(userobj.auth.indexOf("8")==-1&&userobj.auth.indexOf("19")==-1){
+                        if(!hasAuth(auth,"8")&&!hasAuth(auth,"19")){
                             alert("当前用户无权限进行此操作！");
                             return;
                         }
@@ -1255,7 +1255,8 @@ function getCompanys() {
                         '<li style="flex: none" ><a class="' + data[i].id + '" data-toggle="tab" onclick="reloadTable(this)">' + data[i].nodeName + '</a></li>';
                // }
             }
-            if (userobj.auth.indexOf("9") > -1 || userobj.auth.indexOf("8") > -1) {
+
+            if (hasAuth(userobj.auth,"9") || hasAuth(userobj.auth,"8")) {
                 $("#myTab1").append(htmlLeft);
             }
             /* $("#myTab1").append(htmlLeft);*/

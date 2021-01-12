@@ -325,7 +325,8 @@ function getCompanys() {
                         '<li style="flex: none"><a class="' + data[i].id + '" data-toggle="tab" onclick="reloadTable(this)">' + data[i].nodeName + '</a></li>';
 
             }
-            if(userobj.auth.indexOf("9")>-1||userobj.auth.indexOf("8")>-1){
+
+            if(hasAuth(userobj.auth,"9")||hasAuth(userobj.auth,"9")){
                 $("#myTab").append(htmlLeft);
             }
 
@@ -340,7 +341,7 @@ function exportSummary(){
     debugger;
     var data={};
     data.zctype=param.zctype;
-    if(userobj.auth.indexOf("8")<=-1){
+    if(!hasAuth(userobj.auth,"8")){
         data.gsmc=userobj.comId;
     }
    $.ajax({

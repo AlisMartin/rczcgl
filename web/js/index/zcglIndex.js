@@ -8,10 +8,17 @@ $(function(){
     if(auth==null){
         alert("当前用户未设置权限，请使用管理员账号配置用户权限！");
     }
+
     getMessage();
-    if(auth.indexOf("23")>-1||auth.indexOf("8")>-1){
+
+    if(hasAuth(auth,"23")||hasAuth(auth,"8")){
+        debugger;
         $("#oneMap").click(function(){
             $("#InfoList").attr("src","oneMap.html?random="+Math.floor(Math.random()*100000));
+        });
+    }else{
+        $("#oneMap").click(function(){
+            alert("当前用户无权限操作此模块！");
         });
     }
 
@@ -23,7 +30,7 @@ $(function(){
     });
 
     //资产汇总
-    if(auth.indexOf("1")>-1||auth.indexOf("8")>-1){
+    if(hasAuth(auth,"1")||hasAuth(auth,"8")){
         $("#landSummary").click(function(){
             $("#InfoList").attr("src","assetsSummary.html?zctype=1&&random="+Math.floor(Math.random()*100000));
         });
@@ -52,7 +59,7 @@ $(function(){
     }
 
 
-    if(auth.indexOf("2")>-1||auth.indexOf("8")>-1){
+    if(hasAuth(auth,"2")||hasAuth(auth,"8")){
         $("#landAssets").click(function(){
             $("#InfoList").attr("src","imasset.html?zctype=1&&random="+Math.floor(Math.random()*100000));
         });
@@ -82,7 +89,7 @@ $(function(){
 
 
 
-    if(auth.indexOf("3")>-1||auth.indexOf("8")>-1){
+    if(hasAuth(auth,"3")||hasAuth(auth,"8")){
         $("#userManager").click(function(){
             $("#InfoList").attr("src","newUserManager.html?random="+Math.floor(Math.random()*100000));
         });
@@ -122,7 +129,7 @@ $(function(){
         });
     }
 
-    if(auth.indexOf("4")>-1||auth.indexOf("8")>-1){
+    if(hasAuth(auth,"4")||hasAuth(auth,"8")){
         $("#sysConfig").click(function(){
             $("#InfoList").attr("src","assetsConfig.html?random="+Math.floor(Math.random()*100000));
         });
@@ -132,7 +139,7 @@ $(function(){
         });
     }
 
-    if(auth.indexOf("5")>-1||auth.indexOf("8")>-1){
+    if(hasAuth(auth,"5")||hasAuth(auth,"8")){
         $("#nodeAddUser").click(function(){
             $("#InfoList").attr("src","nodeAddUser.html?random="+Math.floor(Math.random()*100000));
         });
@@ -142,7 +149,7 @@ $(function(){
         });
     }
 
-    if(auth.indexOf("6")>-1||auth.indexOf("8")>-1){
+    if(hasAuth(auth,"6")||hasAuth(auth,"8")){
         $("#FlowFileManager").click(function(){
             $("#InfoList").attr("src","newFileManager.html?random="+Math.floor(Math.random()*100000));
         });
@@ -153,7 +160,7 @@ $(function(){
 
     }
 
-    if(auth.indexOf("7")>-1||auth.indexOf("8")>-1){
+    if(hasAuth(auth,"7")||hasAuth(auth,"8")){
         $("#FileFlowStart").click(function(){
             $("#InfoList").attr("src","CreateFlow.html?random="+Math.floor(Math.random()*100000));
         });
@@ -163,7 +170,7 @@ $(function(){
         });
 
     }
-    if(auth.indexOf("13")>-1||auth.indexOf("8")>-1) {
+    if(hasAuth(auth,"13")||hasAuth(auth,"8")) {
         $("#financeManager").click(function () {
             $("#InfoList").attr("src", "financeManager.html?random=" + Math.floor(Math.random() * 100000));
         });

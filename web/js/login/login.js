@@ -31,28 +31,29 @@ function login(){
             debugger;
 
             if(data!=null&&data!=""){
-                if(data.state=="543554323"){
+         /*     if(data.state=="0"){
                     window.location.href="/rczcgl/overdate.html";
                 }else{
                     $.cookie("user",JSON.stringify(data));
                     window.location.href="/rczcgl/rczcgl.html";
-                }
-
+                }*/
+                $.cookie("user",JSON.stringify(data));
+                window.location.href="/rczcgl/rczcgl.html";
             }else{
                 alert("用户名或密码错误，请重新输入!");
                 return false;
             }
         }
     })
-  /*  $.ajax({
+/*    $.ajax({
         type:"post",
-        url:"http://localhost:8080/login",
+        url:"http://localhost:8080/user/login",
         data:{"name":name,"password":pwd},
         async:false,
         success: function (data) {
             if (data != null && data != "") {
                 $.cookie("Authorization",data.token);
-                getqq();
+               // getqq();
             }
         }
     })*/

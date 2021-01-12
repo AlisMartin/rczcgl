@@ -64,7 +64,7 @@ $(function(){
      $("#fqlc").css('display','none');
      }*/
 
-    if(userobj.auth.indexOf("7")>-1||userobj.auth.indexOf("8")>-1){
+    if(hasAuth(userobj.auth,"7")||hasAuth(userobj.auth,"8")){
         $("#fqlc").css('display','block');
     }else{
         $("#fqlc").css('display','none');
@@ -630,7 +630,7 @@ function initmodalonefiled(){
     debugger;
     var param={};
     param.filetype="com";
-    if(userobj.auth.indexOf("8")=="-1"){
+    if(!hasAuth(userobj.auth,"8")){
         param.departId=userobj.departId;
     }
     $.ajax({
@@ -656,7 +656,7 @@ function initmodaltwofiled(com){
     var param={};
     param.filetype="pos";
     param.com=com;
-    if(userobj.auth.indexOf("8")=="-1"){
+    if(!hasAuth(userobj.auth,"8")){
         param.departId=userobj.departId;
     }
     $.ajax({
@@ -684,7 +684,7 @@ function initmodalthreefiled(com,pos){
     param.filetype="type";
     param.com=com;
     param.pos=pos;
-    if(userobj.auth.indexOf("8")=="-1"){
+    if(!hasAuth(userobj.auth,"8")){
         param.departId=userobj.departId;
     }
     $.ajax({
@@ -705,7 +705,7 @@ function initmodalthreefiled(com,pos){
                 var param={};
                 param.com=com;
                 param.pos=pos;
-                if(userobj.auth.indexOf("8")=="-1"){
+                if(!hasAuth(userobj.auth,"8")){
                     param.departId=userobj.departId;
                 }
                 getManagerFiles(param);
@@ -714,7 +714,7 @@ function initmodalthreefiled(com,pos){
                 var param={};
                 param.com=com;
                 param.pos=pos;
-                if(userobj.auth.indexOf("8")=="-1"){
+                if(!hasAuth(userobj.auth,"8")){
                     param.departId=userobj.departId;
                 }
                 getManagerFiles(param);

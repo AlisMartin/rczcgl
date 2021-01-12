@@ -3,6 +3,24 @@ function getNow(s) {
     return s < 10 ? '0' + s: s;
 }
 
+function  hasAuth(auth,param){
+    var authArray;
+    if(auth.indexOf(",")>-1){
+        authArray=auth.split(",");
+        for(var i=0;i<authArray.length;i++){
+            if(authArray[i]==param){
+                return true
+            }
+        }
+        return false;
+    }else{
+        if(auth==param){
+            return true;
+        }else{
+            return false;
+        }
+    }
+}
 function getNowDate(){
     var myDate = new Date();
 

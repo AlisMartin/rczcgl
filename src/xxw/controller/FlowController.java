@@ -240,6 +240,14 @@ public class FlowController {
 
     }
 
+    @RequestMapping("/delMl")
+    @ResponseBody
+    public void delMl(HttpServletRequest request){
+        String pathId=request.getParameter("pathId");
+        flowMapper.delFold(pathId);
+
+    }
+
     @RequestMapping("/queryManagerFileList")
     @ResponseBody
     public List<Map<String,String>> queryManagerFileList(HttpServletRequest request){

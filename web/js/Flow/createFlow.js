@@ -52,7 +52,7 @@ $(function(){
         $("#fqlc").css('display','none');
     }*/
 
-    if(userobj.auth.indexOf("7")>-1||userobj.auth.indexOf("8")>-1){
+    if(hasAuth(userobj.auth,"7")||hasAuth(userobj.auth,"8")){
         $("#fqlc").css('display','block');
     }else{
         $("#fqlc").css('display','none');
@@ -435,7 +435,7 @@ $(function(){
             }
         ],
         queryParams: function (params) {
-            if(!(userobj.auth.indexOf("8")>-1)){
+            if(!hasAuth(userobj.auth,"8")){
                 params.fqr = userobj.id;
             }
             return  JSON.stringify(params);
