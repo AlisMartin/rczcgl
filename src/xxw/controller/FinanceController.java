@@ -121,8 +121,8 @@ public class FinanceController {
         }
     }
 
-    @Scheduled(cron = "0/25 * *  * * ? ")   //每5秒执行一次
-//    @Scheduled(cron = "0 30 02 ? * *")
+//    @Scheduled(cron = "0/25 * *  * * ? ")   //每5秒执行一次
+    @Scheduled(cron = "0 10 02 ? * *")
     public void test2() {
         List<Finance> info=financeMapper.getFinance();
         List<Finance> reslist = new ArrayList<>();

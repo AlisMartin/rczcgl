@@ -163,6 +163,7 @@
         .remark {
             display: flex;
             flex-wrap: wrap;
+            margin-left: 15px;
         }
 
         .scroll {
@@ -263,22 +264,7 @@
                                 <li><a class="getAssetsHistoryInfo" data-toggle="tab"
                                        onclick="reloadTable(this)">历史资产信息</a></li>
                             </ul>
-
-                            <div class="remark">
-                                <div class="markt">
-                                    <div class="whitred"></div>
-                                    <span>:为预警信息&nbsp </span>&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <div class="red"></div>
-                                    <span>:为过期信息 </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="column">
-                            <ul id="myTab1" class="nav nav-pills left scroll"
-                                style="overflow-x: auto;height: 50px;width:70%;display: flex;">
-                            </ul>
-                            <div>
+                            <div style="flex: auto;">
                                 <button type="button" class="btn btn-info right" id="exportAssets" name="exportAssets">
                                     <span class="glyphicon glyphicon-folder-open"></span>导出
                                 </button>
@@ -293,6 +279,21 @@
                                     <span class="glyphicon glyphicon-plus"></span>新增资产
                                 </button>
                             </div>
+                            <div class="remark">
+                                <div class="markt">
+                                    <div class="whitred"></div>
+                                    <span>:为预警信息&nbsp </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div class="red"></div>
+                                    <span>:为过期信息 </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="column">
+                            <ul id="myTab1" class="nav nav-pills left scroll"
+                                style="overflow-x: auto;height: 50px;width:70%;display: flex;">
+                            </ul>
+
                         </div>
                     </div>
                 </form>
@@ -530,7 +531,7 @@
     </div>
     <script>
         $(".modal").css("height", (parent.window.document.getElementById('chartheight').scrollHeight - 60) + "px");
-        document.getElementById('ifrmheight').style.height = parent.window.document.getElementById('chartheight').scrollHeight * 0.883 + "px";
+        document.getElementById('ifrmheight').style.height = parent.window.document.getElementById('chartheight').scrollHeight * 0.9 + "px";
     </script>
 </div>
 </body>

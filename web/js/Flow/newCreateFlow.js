@@ -178,6 +178,10 @@ $(function(){
     $("#closeAddFlow").click(function(){
         $("#addFlow").modal('hide');
         $("#addFlowForm")[0].reset();
+        $("#jsusers").val("");
+        $("#jsusername").val("");
+        $("#wjdiv").val("");
+        $("#wjid").val("");
     })
     /*   $("#addFlow").on('hide.bs.modal',function(){
 
@@ -323,29 +327,34 @@ $(function(){
         var wjmc=$("#wjdiv").val();
         var dbsx=$("#dbsx").val();
         var jsyh=$("#jsusername").val();
+        var flowName=$("#flowName").val();
         var reg = /^\w+$/;
         if(!reg.test(dbsx)){
             alert("请输入数字！");
             return;
         }
 
-        if(lwjg==""){
+        if(lwjg=="" || lwjg==null){
             alert("来文机关不能为空！");
             return false;
         }
-        if(swwh==""){
+        if(swwh=="" || swwh==null){
             alert("收文文号不能为空！");
             return false;
         }
-        if(swsj==""){
+        if(swsj=="" || swsj==null){
             alert("收文事件不能为空！");
             return false;
         }
-        if(wjmc==""){
+        if(wjmc=="" || wjmc==null){
             alert("请选择文件！");
             return false;
         }
-        if(jsyh==""){
+        if(jsyh=="" || jsyh==null){
+            alert("接收用户不能为空！");
+            return false;
+        }
+        if(flowName=="" || flowName==null){
             alert("接收用户不能为空！");
             return false;
         }
