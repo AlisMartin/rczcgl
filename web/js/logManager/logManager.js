@@ -1,3 +1,5 @@
+var user = $.cookie('user');
+var userobj = eval('(' + user + ')');
 $(function(){
     $('#logTable').bootstrapTable({
         url:'/rczcgl/log/getLogs.action',

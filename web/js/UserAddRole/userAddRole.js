@@ -1,3 +1,5 @@
+var user = $.cookie('user');
+var userobj = eval('(' + user + ')');
 $(function(){
     $("#saveGl").click(function(){
         var userrow=$("#userTable").bootstrapTable('getSelections');

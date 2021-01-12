@@ -1,10 +1,18 @@
 /**
  * Created by lp on 2020/5/27.
  */
+var user = $.cookie('user');
+var userobj = eval('(' + user + ')');
 var positionarr=[];
 $(function(){
     debugger;
     initrole();
+    $("#closeEditUser").click(function(){
+        $("#editform")[0].reset();
+        $("#eposition").empty();
+        $("#edepartment").empty();
+        $("#editmodal").modal('hide');
+    })
 /*    var user= $.cookie('user');
     var userobj=eval('('+user+')');
     var authArray=[];

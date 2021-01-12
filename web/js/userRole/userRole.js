@@ -1,6 +1,8 @@
 /**
  * Created by lp on 2020/5/29.
  */
+var user = $.cookie('user');
+var userobj = eval('(' + user + ')');
 $(function(){
     $('#roleTable').bootstrapTable({
         url:'/rczcgl/role/getAllRoles.action',

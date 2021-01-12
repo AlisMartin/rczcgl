@@ -1,4 +1,5 @@
-
+var user = $.cookie('user');
+var userobj = eval('(' + user + ')');
 $(function(){
     $('#authTable').bootstrapTable({
         url:'/rczcgl/auth/getAllauths.action',

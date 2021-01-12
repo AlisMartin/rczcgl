@@ -1,3 +1,5 @@
+var user = $.cookie('user');
+var userobj = eval('(' + user + ')');
 $(function(){
     $("#saveGl").click(function(){
         if(confirm("是否保存关联关系？")){

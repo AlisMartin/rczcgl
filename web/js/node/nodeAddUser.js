@@ -1,4 +1,6 @@
 var userid;
+var user = $.cookie('user');
+var userobj = eval('(' + user + ')');
 $(function(){
     debugger;
     //if ($(".usertable").length) {

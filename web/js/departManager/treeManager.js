@@ -1,3 +1,5 @@
+var user = $.cookie('user');
+var userobj = eval('(' + user + ')');
 $(function(){
 //初始化组织机构树
     initDepartTree();
