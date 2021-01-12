@@ -341,8 +341,13 @@ function exportSummary(){
     debugger;
     var data={};
     data.zctype=param.zctype;
+
     if(!hasAuth(userobj.auth,"8")){
         data.gsmc=userobj.comId;
+    }
+    if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"18")){
+        alert("当前用户无权限进行此操作！");
+        return;
     }
    $.ajax({
         type: "post",

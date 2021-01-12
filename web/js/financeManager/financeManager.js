@@ -85,6 +85,10 @@ function addUser(){
     })
 }
 function deleteFin() {
+    if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"25")){
+        alert("当前用户无权限进行此操作！");
+        return;
+    }
     var rowdata = $("#userTable").bootstrapTable('getSelections');
     if (rowdata.length > 0) {
         for (var i = 0; i < rowdata.length; i++) {

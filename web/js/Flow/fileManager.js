@@ -429,6 +429,10 @@ $(function(){
     //删除文件目录
     $("#delMl").click(function(){
         debugger;
+        if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"26")){
+            alert("当前用户无权限进行此操作！");
+            return;
+        }
         if(confirm("是否刪除")){
             var com=$("#fileone").val();
             var pos=$("#fileTwo").val();

@@ -272,7 +272,7 @@ function reloadTable(a){
         url: url,
         columns:columns,
         queryParams: function (params) {
-            if(!hasAuth(userobj.auth,"8")){
+            if(!(userobj.auth.indexOf("8")>-1)){
                 params=param;
             }
             return params;

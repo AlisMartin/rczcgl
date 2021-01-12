@@ -370,6 +370,10 @@ function editUser(){
     $("#editmodal").modal('show');
 }
 function deleteUser(){
+    if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"25")){
+        alert("当前用户无权限进行此操作！");
+        return;
+    }
     var row=$("#userTable").bootstrapTable('getSelections');
     if(row.length<=0){
         alert("请先选择需要删除的用户！");

@@ -110,6 +110,10 @@ $(function(){
     })
     $("#deleteRole").click(function(){
         debugger;
+        if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"25")){
+            alert("当前用户无权限进行此操作！");
+            return;
+        }
         var row=$("#roleTable").bootstrapTable('getSelections');
         if(row.length<=0){
             alert("请选择需要修改的角色")

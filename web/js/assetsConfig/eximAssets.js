@@ -334,7 +334,7 @@ $(function () {
         //导入
     $("#importAssets").click(function () {
         debugger;
-        if(!hasAuth(auth,"8")&&!hasAuth(auth,"18")){
+        if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"18")){
             alert("当前用户无权限进行此操作！");
             return;
         }
@@ -342,7 +342,7 @@ $(function () {
     });
     //导出
     $("#exportAssets").click(function () {
-        if(!hasAuth(auth,"8")&&!hasAuth(auth,"18")){
+        if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"18")){
             alert("当前用户无权限进行此操作！");
             return;
         }
@@ -350,7 +350,7 @@ $(function () {
     });
     //新增资产
     $("#addAsset").click(function () {
-        if(!hasAuth(auth,"8")&&!hasAuth(auth,"16")){
+        if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"16")){
             alert("当前用户无权限进行此操作！");
             return;
         }
@@ -619,6 +619,10 @@ $(function () {
     })
     //资产删除
     $("#deleteAssets").click(function () {
+        if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"25")){
+            alert("当前用户无权限进行此操作！");
+            return;
+        }
         var rowdata = $("#assetsTable").bootstrapTable('getSelections');
         if (rowdata.length > 0) {
             for (var i = 0; i < rowdata.length; i++) {
@@ -668,7 +672,7 @@ $(function () {
         queryParamsType: "limit",
         queryParams: function (params) {
             params.zctype = param.zctype;
-            if(userobj.auth!='8'){
+            if(!hasAuth(userobj.auth,"8")){
                 params.gsmc = gsmc;
             }
 
@@ -818,7 +822,7 @@ function getcolumn() {
                 formatter: btnGroup,    // 自定义方法，添加按钮组
                 events: {               // 注册按钮组事件
                     'click #modRole': function (event, value, row, index) {
-                        if(!hasAuth(auth,"8")&&!hasAuth(auth,"19")){
+                        if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"19")){
                             alert("当前用户无权限进行此操作！");
                             return;
                         }
@@ -832,7 +836,7 @@ function getcolumn() {
                         //$("#view").modal('show');
                     },
                     'click #edit': function (event, value, row, index) {
-                        if(!hasAuth(auth,"8")&&!hasAuth(auth,"16")){
+                        if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"16")){
                             alert("当前用户无权限进行此操作！");
                             return;
                         };
@@ -848,7 +852,7 @@ function getcolumn() {
                         isreset = 0;
                     },
                     'click #filesdown': function (event, value, row, index) {
-                        if(!hasAuth(auth,"8")&&!hasAuth(auth,"16")){
+                        if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"19")){
                             alert("当前用户无权限进行此操作！");
                             return;
                         }
@@ -856,7 +860,7 @@ function getcolumn() {
                         showInfoDown(row);
                     },
                     'click #reset': function (event, value, row, index) {
-                        if(!hasAuth(auth,"8")&&!hasAuth(auth,"19")){
+                        if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"17")){
                             alert("当前用户无权限进行此操作！");
                             return;
                         }

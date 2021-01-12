@@ -18,6 +18,7 @@
     <script src="third/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="third/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
     <script src="third/webuploader/webuploader.nolog.min.js"></script>
+    <script src="js/common/common.js"></script>
     <script type="text/javascript" src="http://192.168.0.108:8097/arcgis_js_api/library/3.34/3.34/init.js"></script>
     <!--<script src="https://js.arcgis.com/3.33/"></script>-->
     <script src="js/assetsConfig/eximAssets.js"></script>
@@ -163,7 +164,6 @@
         .remark {
             display: flex;
             flex-wrap: wrap;
-            margin-left: 15px;
         }
 
         .scroll {
@@ -264,21 +264,7 @@
                                 <li><a class="getAssetsHistoryInfo" data-toggle="tab"
                                        onclick="reloadTable(this)">历史资产信息</a></li>
                             </ul>
-                            <div style="flex: auto;">
-                                <button type="button" class="btn btn-info right" id="exportAssets" name="exportAssets">
-                                    <span class="glyphicon glyphicon-folder-open"></span>导出
-                                </button>
-                                <button type="button" class="btn btn-primary right" id="importAssets"
-                                        name="importAssets">
-                                    <span class="glyphicon glyphicon-folder-open"></span>导入
-                                </button>
-                                <button type="button" class="btn btn-info right" id="deleteAssets" name="addAsset">
-                                    <span class="glyphicon glyphicon-trash"></span>删除资产
-                                </button>
-                                <button type="button" class="btn btn-info right" id="addAsset" name="addAsset">
-                                    <span class="glyphicon glyphicon-plus"></span>新增资产
-                                </button>
-                            </div>
+
                             <div class="remark">
                                 <div class="markt">
                                     <div class="whitred"></div>
@@ -293,7 +279,21 @@
                             <ul id="myTab1" class="nav nav-pills left scroll"
                                 style="overflow-x: auto;height: 50px;width:70%;display: flex;">
                             </ul>
-
+                            <div>
+                                <button type="button" class="btn btn-info right" id="exportAssets" name="exportAssets">
+                                    <span class="glyphicon glyphicon-folder-open"></span>导出
+                                </button>
+                                <button type="button" class="btn btn-primary right" id="importAssets"
+                                        name="importAssets">
+                                    <span class="glyphicon glyphicon-folder-open"></span>导入
+                                </button>
+                                <button type="button" class="btn btn-info right" id="deleteAssets" name="addAsset">
+                                    <span class="glyphicon glyphicon-trash"></span>删除资产
+                                </button>
+                                <button type="button" class="btn btn-info right" id="addAsset" name="addAsset">
+                                    <span class="glyphicon glyphicon-plus"></span>新增资产
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -531,7 +531,7 @@
     </div>
     <script>
         $(".modal").css("height", (parent.window.document.getElementById('chartheight').scrollHeight - 60) + "px");
-        document.getElementById('ifrmheight').style.height = parent.window.document.getElementById('chartheight').scrollHeight * 0.9 + "px";
+        document.getElementById('ifrmheight').style.height = parent.window.document.getElementById('chartheight').scrollHeight * 0.883 + "px";
     </script>
 </div>
 </body>
