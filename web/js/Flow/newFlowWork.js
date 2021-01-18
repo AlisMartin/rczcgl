@@ -262,7 +262,10 @@ $(function(){
                             data="退回";
                             break;
                         case 3:
-                            data="通过";
+                            data="通过(查阅)";
+                            break;
+                        case 4:
+                            data="撤回";
                             break;
                     }
                     return data;

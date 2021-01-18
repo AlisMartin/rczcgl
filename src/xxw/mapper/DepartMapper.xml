@@ -127,4 +127,7 @@
         order BY  PX
     </select>
 
+    <delete id="delNode" parameterType="java.lang.String">
+        DELETE  from DEPARTTREE where 1=1 and NODEID=#{nodeId,jdbcType=DECIMAL}
+    </delete>
 </mapper>

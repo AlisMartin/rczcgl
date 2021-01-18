@@ -10,6 +10,7 @@ import java.util.Map;
  * Created by lp on 2020/9/2.
  */
 public interface DepartMapper {
+    int delNode(@Param("nodeId")String nodeId);
     List<Map<String,String>> getNodes(@Param("level")String level,@Param("parentNodeId")String parentNodeId);
     List<DepartTree> getNodesInfo(@Param("level")String level,@Param("parentNodeId")String parentNodeId);
     String getMaxLevel();

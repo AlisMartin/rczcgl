@@ -118,6 +118,24 @@ public class DepartController {
 
         return new ResponseObject(1,"",null);
     }
+
+
+    @RequestMapping("/delNode")
+    @ResponseBody
+    public ResponseObject delNode(HttpServletRequest request){
+        String  node=request.getParameter("node");
+        if(node.indexOf(",")>-1){
+            String []nodes=node.split(",");
+            for(String nodeId:nodes){
+                departMapper.delNode(nodeId);
+            }
+        }else{
+            departMapper.delNode(node);
+        }
+     return new ResponseObject(200,"",null);
+
+
+    }
     @RequestMapping("/updateNode")
     @ResponseBody
     public ResponseObject updateNode(HttpServletRequest request){

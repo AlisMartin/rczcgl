@@ -13,6 +13,47 @@ $(function(){
     $("#editDepart").click(function(){
         initEditModal();
     })
+    $("#delDepart").click(function(){
+        debugger;
+        var param={};
+        if(confirm("是否刪除,其所有子节点也会被删除且无法恢复!")){
+            var checked=$('#Tree').treeview('getChecked');
+            if(checked.length>1){
+                alert("最多只能选择一个节点！");
+                return;
+            }
+            var nodes=getChildNodeIdArr(checked[0]);
+            nodes.push(checked[0].id);
+            var node="";
+            for(i in nodes){
+                node=node+nodes[i]+",";
+            }
+            if(node.indexOf(",")>-1){
+                node=node.substring(0,node.length-1);
+            }
+            param.node=node;
+            $.ajax({
+                type:"post",
+                url:"/rczcgl/depart/delNode.action",
+                data:param,
+                async:false,
+                success:function(data){
+                    debugger;
+                    if(data.code==200){
+                        alert("删除成功!");
+                        initDepartTree();
+                        closeDiv();
+                    }
+                },
+                error:function(){
+                    alert("系统错误！");
+                }
+            })
+        }
+
+
+
+    });
     //选择类型变化时
     $("#lx").change(function(){
         setCss($("#lx").val());
@@ -182,6 +223,24 @@ function initDepartTree(){
     })
 }
 
+
+function getChildNodeIdArr(node) {
+    var ts = [];
+    if (node.nodes) {
+        for (x in node.nodes) {
+            ts.push(node.nodes[x].id);
+            if (node.nodes[x].nodes) {
+                var getNodeDieDai = getChildNodeIdArr(node.nodes[x]);//有第二层，第三层子节点的情况
+                for (j in getNodeDieDai) {
+                    ts.push(getNodeDieDai[j]);
+                }
+            }
+        }
+    } else {
+        ts.push(node.id);
+    }
+    return ts;
+}
 function queryPx(px){
     var flag=true;
     var param={
