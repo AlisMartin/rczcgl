@@ -43,7 +43,7 @@ $(function(){
         $.ajax({
             type:"post",
             url:"/rczcgl/depart/getDepart.action",
-            data:{"depart":"department","pnodeId":comp},
+            data:{"depart":"depart","pnodeId":comp},
             success:function(response){
                 $("#department").empty();
                 $("#position").empty();
@@ -65,7 +65,7 @@ $(function(){
         $.ajax({
             type:"post",
             url:"/rczcgl/depart/getDepart.action",
-            data:{"depart":"department","pnodeId":comp},
+            data:{"depart":"depart","pnodeId":comp},
             success:function(response){
                 $("#edepartment").empty();
                 $("#eposition").empty();
