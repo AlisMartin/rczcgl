@@ -2,6 +2,22 @@ var user= $.cookie('user');
 var userobj=eval('('+user+')');
 $(function(){
     debugger;
+      /*  $.ajax({
+            type: "post",
+            //	url: "http://jinan.lcshentu.com/n001/exchange/mandatoryprovision",MandatoryProvisions
+            url:"/rczcgl/pro/pro.action",
+            dataType:'json',
+            data:{
+                StartTime:"2020-12-03",
+                EndTime:"2021-01-13",
+                type:"1"
+            },
+            success: function(data) {
+                var datas=data;
+            }})
+
+
+*/
     var auth=userobj.auth;
     $("#loginUserName").text(userobj.userName);
     $("#loginRoleName").text(userobj.role);
@@ -32,7 +48,7 @@ $(function(){
     });
 
     //资产汇总
-    if(hasAuth(auth,"1")||hasAuth(auth,"8")){
+    if(hasAuth(auth,"1")||hasAuth(auth,"8")||hasAuth(auth,"9")){
         $("#landSummary").click(function(){
             $("#InfoList").attr("src","assetsSummary.html?zctype=1&&random="+Math.floor(Math.random()*100000));
         });
@@ -61,7 +77,7 @@ $(function(){
     }
 
 
-    if(hasAuth(auth,"2")||hasAuth(auth,"8")){
+    if(hasAuth(auth,"2")||hasAuth(auth,"8")||hasAuth(auth,"10")){
         $("#landAssets").click(function(){
             $("#InfoList").attr("src","imasset.html?zctype=1&&random="+Math.floor(Math.random()*100000));
         });

@@ -13,7 +13,7 @@ $(function () {
     var zctype = parent.document.getElementById("InfoList").src.split("?")[1].split("&&")[0];
     zctype = zctype.substring(zctype.length - 1, zctype.length);
     param.zctype = zctype;
-   // param.gsmc=userobj.comId;
+    param.gsmc=null;
     //导出
     $("#exportSummary").click(function () {
         exportSummary();
@@ -40,9 +40,12 @@ $(function () {
         queryParams: function (params) {
             debugger;
             params.zctype = param.zctype;
-            if(userobj.comId!==null&&userobj.auth!='8'){
-                params.gsmc=userobj.comId;
+            if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"9")){
+                params.gsmc = userobj.comId;
             }
+        /*    if(userobj.comId!==null&&userobj.auth!='8'){
+                params.gsmc=userobj.comId;
+            }*/
             return JSON.stringify(params);
         },
         onLoadSuccess: function (data) {
@@ -267,9 +270,14 @@ function gettotal(zctype,gs){
     if(zctype!=null&&zctype!=""){
         param.zctype=zctype;
     }
-    if(gs!=null&&gs!=""&&gs!="allcompany"){
+   if(gs!=null&&gs!=""&&gs!="allcompany"){
         param.gsmc=gs;
     }
+  /*  if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"9")){
+        param.gsmc=gs;
+    }else{
+
+    }*/
         $.ajax({
             type: "post",
             url: "/rczcgl/assetsconfig/total.action",
@@ -285,16 +293,25 @@ function gettotal(zctype,gs){
 }
 
 function reloadTable(a){
+
     var comId= a.className;
     if(comId!=""&&comId!="allcompany"){
         param.gsmc = comId;
     }else{
         param.gsmc=null;
     }
+ /*   if(hasAuth(userobj.auth,"8")||hasAuth(userobj.auth,"9")){
+        param.gsmc=null;
+    }else{
+        param.gsmc = comId;
+    }*/
     getcolumn();
     $('#assetsTable').bootstrapTable('refreshOptions', {
         queryParams: function (params) {
             params.zctype = param.zctype;
+       /*     if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"9")){
+                params.gsmc = comId;
+            }*/
             if(comId!=""&&comId!="allcompany"){
                 params.gsmc = comId;
             }

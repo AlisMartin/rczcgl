@@ -5,8 +5,9 @@ var param = {};
 var zcid = "";
 var fileid = "", isreset, newmap, editmap, viewmap, map, toolBar, X, Y,geo,geo1,initExtent,
     financeid = "",
-    url = '/rczcgl/assetsconfig/getAssetsInfo.action',
-    gsmc = userobj.comId;
+    url = '/rczcgl/assetsconfig/getAssetsInfo.action';
+param.gsmc = userobj.comId;
+
 var bootheight;
 
 
@@ -460,7 +461,10 @@ $(function () {
             queryParamsType: "limit",
             queryParams: function (params) {
                 params.zctype = param.zctype;
-                params.gsmc = gsmc;
+                if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"10")){
+                    params.gsmc = userobj.comId;
+                }
+                //params.gsmc = gsmc;
                 return JSON.stringify(params);
             },
             onLoadSuccess: function () {
@@ -672,9 +676,12 @@ $(function () {
         queryParamsType: "limit",
         queryParams: function (params) {
             params.zctype = param.zctype;
-            if(!hasAuth(userobj.auth,"8")){
-                params.gsmc = gsmc;
+            if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"10")){
+                params.gsmc = userobj.comId;
             }
+       /*     if(!hasAuth(userobj.auth,"8")){
+                params.gsmc = gsmc;
+            }*/
 
             return JSON.stringify(params);
         },
@@ -1220,11 +1227,19 @@ function reloadTable(a) {
     }else{
         param.gsmc=null;
     }
+/*    if(hasAuth(userobj.auth,"8")||hasAuth(userobj.auth,"10")){
+        param.gsmc=null;
+    }else{
+        param.gsmc = comId;
+    }*/
     $('#assetsTable').bootstrapTable('refreshOptions', {
         url: url,
         queryParams: function (params) {
 
             params.zctype = param.zctype;
+   /*         if(!hasAuth(userobj.auth,"8")&&!hasAuth(userobj.auth,"10")){
+                params.gsmc = gsmc;
+            }*/
             if(classq!="allcompany"){
                 params.gsmc = gsmc;
             }
@@ -1260,7 +1275,7 @@ function getCompanys() {
                // }
             }
 
-            if (hasAuth(userobj.auth,"9") || hasAuth(userobj.auth,"8")) {
+            if (hasAuth(userobj.auth,"10") || hasAuth(userobj.auth,"8")) {
                 $("#myTab1").append(htmlLeft);
             }
             /* $("#myTab1").append(htmlLeft);*/

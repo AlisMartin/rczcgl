@@ -79,18 +79,41 @@ public class DepartController {
 
         HttpSession session =   request.getSession();
         User user = (User)session.getAttribute("user");
-//        user.getComId();
+
+
 
         if(pxs!=null){
             int px=Integer.parseInt(pxs);
             List<DepartTree> list=departMapper.getDepart(depart,pnodeId,px,user.getComId());
             return new ResponseObject(1,"",list);
         }else{
-            if ("8".equals(user.getAuth())){
-                List<DepartTree> list=departMapper.getDepart(depart,pnodeId,null,null);
+            String [] authArray;
+            if(user.getAuth().indexOf(",")>-1) {
+                List<DepartTree> list=new ArrayList<>();
+                authArray = user.getAuth().split(",");
+                boolean flag=true;
+                for (int i = 0; i < authArray.length; i++) {
+                    if (authArray[i].equals("8") || authArray[i].equals("9") || authArray[i].equals("10")) {
+                        flag=false;
+                        break;
+                    }else{
+                        flag=true;
+                    }
+                }
+                if(flag){
+                    list=departMapper.getDepart(depart,pnodeId,null,user.getComId());
+                }else{
+                    list=departMapper.getDepart(depart,pnodeId,null,null);
+                }
                 return new ResponseObject(1,"",list);
             }else{
-                List<DepartTree> list=departMapper.getDepart(depart,pnodeId,null,user.getComId());
+                List<DepartTree> list=new ArrayList<>();
+                if(user.getAuth().equals("8")||user.getAuth().equals("9")||user.getAuth().equals("10")){
+                    list=departMapper.getDepart(depart,pnodeId,null,null);
+                }else{
+                    list=departMapper.getDepart(depart,pnodeId,null,user.getComId());
+                }
+
                 return new ResponseObject(1,"",list);
             }
 
