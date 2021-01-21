@@ -95,12 +95,12 @@ var historyFlowColum=[
         title:'发起人'
     },
     {
-        title:"待办人",
-        field:'dusers'
+        title:"当前节点处理人",
+        field:'username'
     },
     {
-        title:"处理人",
-        field:'username'
+        title:"下一节点待办人",
+        field:'dusers'
     },
     {
         title:"开始时间",

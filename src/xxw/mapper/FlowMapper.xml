@@ -385,9 +385,10 @@
             and a.FQR= #{fqr,jdbcType=VARCHAR}
         </if>
         <if test="userId !=null">
-            and instr(','||b."USER"||',',concat(concat(',',#{userId}),','))>0
+        and a.flowId in (select a.flowid from FLOWINSTANCE a INNER JOIN FLOWHISTORY b on a.FLOWID=b.FLOWID where
+        (instr(','||b."JSR"||',',concat(concat(',',#{userId}),','))>0 OR instr(','||b."USER"||',',concat(concat(',',#{userId}),','))>0) GROUP BY a.FLOWID)
         </if>
-        order by a.STARTDATE DESC
+        order by a.flowId, a.id
     </select>
 
     <!--查询流程历史信息-->
