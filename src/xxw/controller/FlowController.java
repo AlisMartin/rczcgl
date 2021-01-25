@@ -66,7 +66,7 @@ public class FlowController {
         if(flowInstance.getFlowType().equals("1")){
             flowInstance.setStatus("3");
             flowInstance.setUser(flowInstance.getJsr());
-            flowInstance.setJsr(null);
+            flowInstance.setJsr(flowInstance.getJsr());
             flowInstance.setEndDate(flowInstance.getStartDate());
         }else{
             flowInstance.setStatus("1");
