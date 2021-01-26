@@ -193,12 +193,18 @@ $(function(){
     })
 
     $('#addFlow').on('hide.bs.modal', function () {
+        debugger;
         $("input[type=reset]").trigger("click");
+        $(".afile").empty();
+        $(".bfile").empty();
       //  $("#openPicModal").css('display','none');
     });
 
     $('#queryFlow').on('hide.bs.modal', function () {
+        debugger;
         $("input[type=reset]").trigger("click");
+        $(".afile").empty();
+        $(".bfile").empty();
       //  $("#ckqm1").css('display','none');
         //$("#ckqm2").css('display','none');
     });
@@ -226,7 +232,7 @@ $(function(){
         method:'post',
         contentType: "application/json;charset=UTF-8",
         clickToSelect:true,
-        sidePagination:"client",
+        sidePagination:"server",
         pagination:true,
         pageNumber:1,
         pageSize:10,
@@ -358,6 +364,7 @@ function initmodalinfo(a){
     $("#wjmc").val(a.wjmc);
     $("#bwyj").val(a.bwyj);
     $("#flowId").val(a.flowId);
+    queryFileByFileName(a.file);
 }
 
 
@@ -473,7 +480,8 @@ function queryInfo(a){
         $("#cthdiv").css('display','block');
         $("#cthyy").val(a.rejectReason);
     }
-    querySpInfo(a)
+    queryFileByFileName(spinfo.file);
+  //  querySpInfo(a)
 }
 
 function queryFileByFileName(a){
@@ -487,17 +495,21 @@ function queryFileByFileName(a){
         success:function(responsedata){
             debugger;
             var obj=responsedata.data;
+            var html="";
             if(obj.length>0){
                 for(var i=0;i<obj.length;i++){
-                    var downloadA=document.createElement("a");
+
+                /*    var downloadA=document.createElement("a");
                     downloadA.setAttribute("href","/rczcgl/"+obj[i].filePath+"/"+obj[i].fileName);
                     downloadA.setAttribute("target","_blank");
                     downloadA.setAttribute("download",obj[i].fileName);
                     downloadA.click();
-                    downloadA.remove();
-
+                    downloadA.remove();*/
+                     html=html+"<a href=/rczcgl/"+obj[i].filePath+obj[i].fileName+" download="+obj[i].fileName+">"+obj[i].fileName +"</a>";
                 }
-
+                html=html+"</div>"
+                $(".afile").append(html);
+                $(".bfile").append(html);
             }
 
         },

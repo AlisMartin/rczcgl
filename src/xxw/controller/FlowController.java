@@ -14,6 +14,7 @@ import xxw.mapper.FlowMapper;
 import xxw.mapper.SysMessageMapper;
 import xxw.mapper.UserMapper;
 import xxw.po.*;
+import xxw.util.DateUtils;
 import xxw.util.StringUtil;
 
 import javax.json.Json;
@@ -196,6 +197,10 @@ public class FlowController {
         String duser=json.getString("duser");
         List<FlowHistory> flowInfoList=flowMapper.queryHistoryFlowInfos(flowType,flowId,fqr,duser);
         for(FlowHistory flowHistory:flowInfoList){
+         /*   if(flowHistory.getStartDate()!=null){
+              flowHistory.setOrderTime(DateUtils.StringToUtilDate(flowHistory.getStartDate(),"yyyy-MM-dd hh:mm:ss"));  ;
+            }*/
+
             if(!"".equals(flowHistory.getFqr())&&flowHistory.getFqr()!=null){
                 String cluser=getUserNames(flowHistory.getFqr());
                 flowHistory.setFqrName(cluser);

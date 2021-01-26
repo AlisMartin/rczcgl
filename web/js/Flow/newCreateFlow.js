@@ -45,6 +45,7 @@ $(function(){
         $("#cthdiv").css('display','none');
         $("#ckqm1").css('display','none');
         $("#ckqm2").css('display','none');
+        $("#afile").empty();
     });
 
     $('#departtree').on('nodeChecked',function(event, data) {
@@ -785,7 +786,8 @@ function queryInfo(a){
         $("#cthdiv").css('display','block');
         $("#cthyy").val(a.rejectReason);
     }
-    querySpInfo(a);
+    queryFileByFileName(a.file);
+  //  querySpInfo(a);
 }
 
 function queryFileByFileName(a){
@@ -799,17 +801,20 @@ function queryFileByFileName(a){
         success:function(responsedata){
             debugger;
             var obj=responsedata.data;
+            var html="";
             if(obj.length>0){
                 for(var i=0;i<obj.length;i++){
-                    var downloadA=document.createElement("a");
-                    downloadA.setAttribute("href","/rczcgl/"+obj[i].filePath+"/"+obj[i].fileName);
-                    downloadA.setAttribute("target","_blank");
-                    downloadA.setAttribute("download",obj[i].fileName);
-                    downloadA.click();
-                    downloadA.remove();
 
+                    /*    var downloadA=document.createElement("a");
+                     downloadA.setAttribute("href","/rczcgl/"+obj[i].filePath+"/"+obj[i].fileName);
+                     downloadA.setAttribute("target","_blank");
+                     downloadA.setAttribute("download",obj[i].fileName);
+                     downloadA.click();
+                     downloadA.remove();*/
+                    html=html+"<a href=/rczcgl/"+obj[i].filePath+obj[i].fileName+" download="+obj[i].fileName+">"+obj[i].fileName +"</a>";
                 }
-
+                html=html+"</div>"
+                $("#afile").append(html);
             }
 
         },
