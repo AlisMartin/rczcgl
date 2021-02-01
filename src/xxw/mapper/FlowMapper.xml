@@ -354,7 +354,7 @@
 
     <!--查询流程实例信息-->
     <select id="queryFlowInfos" parameterType="java.lang.String" resultType="xxw.po.FlowHistory">
-        select  *  from FLOWINSTANCE
+        select  flowid,flowname,startdate,enddate,sfdb,status,"FILE",rejectreason,"USER",flowtype,jsr,TO_DATE(STARTDATE, 'yyyy-MM-dd hh24:mi:ss') as ksdate,fqr  from FLOWINSTANCE
         WHERE 1=1
         <if test="flowType !=null">
             and FLOWTYPE= #{flowType,jdbcType=VARCHAR}
@@ -368,12 +368,14 @@
         <if test="jsr !=null">
             and instr(','||JSR||',',concat(concat(',',#{jsr}),','))>0
         </if>
-        order by STARTDATE DESC
+        order by
+        SFDB desc,
+        ksdate DESC
     </select>
 
     <!--查询流程实例信息-->
     <select id="queryHistoryFlowInfos" parameterType="java.lang.String" resultType="xxw.po.FlowHistory">
-        select  a.FQR,a.LWJG,a.SWWH,a.SWSJ,a.SFDB,a.DBSX,a.WJMC,a.BWYJ,b.* from FLOWINSTANCE a inner JOIN  FLOWHISTORY b on a.FLOWID=b.FLOWID
+        select  a.FQR,a.LWJG,a.SWWH,a.SWSJ,a.DBSX,a.WJMC,a.BWYJ,TO_DATE(a.STARTDATE, 'yyyy-MM-dd hh24:mi:ss') as ksdate,b.* from FLOWINSTANCE a inner JOIN  FLOWHISTORY b on a.FLOWID=b.FLOWID
         WHERE 1=1
         <if test="flowType !=null">
             and a.FLOWTYPE= #{flowType,jdbcType=VARCHAR}
@@ -388,12 +390,12 @@
         and a.flowId in (select a.flowid from FLOWINSTANCE a INNER JOIN FLOWHISTORY b on a.FLOWID=b.FLOWID where
         (instr(','||b."JSR"||',',concat(concat(',',#{userId}),','))>0 OR instr(','||b."USER"||',',concat(concat(',',#{userId}),','))>0) GROUP BY a.FLOWID)
         </if>
-        order by a.flowId, a.id desc
+        order by  ksdate desc,a.flowId
     </select>
 
     <!--查询流程历史信息-->
     <select id="queryFlowHistoryInfo" parameterType="java.lang.String" resultType="xxw.po.FlowHistory">
-        select  *  from FLOWHISTORY
+        select  flowid,flowname,startdate,enddate,status,file,rejectreason,"user",flowtype,floworder,jsr,userid,TO_DATE(STARTDATE, 'yyyy-MM-dd hh24:mi:ss') as ksdate  from FLOWHISTORY
         WHERE 1=1
         <if test="flowId !=null">
             and FLOWID= #{flowId,jdbcType=VARCHAR}
@@ -402,6 +404,7 @@
         <if test="node !=null">
             and NODE= #{node,jdbcType=VARCHAR}
         </if>
+        order by ksdate desc,flowid
     </select>
 
     <!--查询文件结构-->

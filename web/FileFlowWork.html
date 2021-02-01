@@ -48,14 +48,27 @@
             -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
             transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
         }
-        .uploadbtn{
-            margin-top: 10%;
-            margin-left: 45%;
-            width: 150px;
+        .whitred {
+            width: 20px;
+            height: 20px;
+            background-color: #d9534f;
         }
-        .ifraheight{
-            height: 585px;
-            background-color: #f1f1f1;
+
+        .red {
+            width: 20px;
+            height: 20px;
+            background-color: #d9534f;
+        }
+
+        .markt {
+            flex-basis: 100%;
+            display: flex;
+        }
+
+        .remark {
+            float: right;
+            display: flex;
+            flex-wrap: wrap;
         }
         .rowheight{
             height: 100%;
@@ -92,10 +105,17 @@
                         <span class="glyphicon glyphicon-plus"></span>发起流程
                     </button>-->
                 </div>
-                <ul id="myTab" class="nav nav-tabs" style="margin-bottom: 8px;">
+                <ul id="myTab" class="nav nav-tabs" style="margin-bottom: 8px;float: left;width: 80%">
                     <li class="active"><a  class="getWorkFlow" data-toggle="tab" onclick="reloadTable(this)">待审批信息</a></li>
                     <li><a  class="getHistoryFlow" data-toggle="tab" onclick="reloadTable(this)">历史信息</a></li>
                 </ul>
+                <div class="remark">
+                    <div class="markt">
+                        <div class="whitred"></div>
+                        <span>:为督办信息&nbsp </span>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                    </div>
+                </div>
                 <table id="flowWorkTable" class="table table-hover tablemar">
                     <caption class="zt">流程信息一览表
                     </caption>

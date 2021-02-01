@@ -76,6 +76,28 @@
         .colorsty{
             background: #efeff6;
         }
+        .whitred {
+            width: 20px;
+            height: 20px;
+            background-color: #d9534f;
+        }
+
+        .red {
+            width: 20px;
+            height: 20px;
+            background-color: #d9534f;
+        }
+
+        .markt {
+            flex-basis: 100%;
+            display: flex;
+        }
+
+        .remark {
+            float: right;
+            display: flex;
+            flex-wrap: wrap;
+        }
     </style>
 </head>
 <body class="colorsty">
@@ -92,7 +114,12 @@
                         <span class="glyphicon glyphicon-plus"></span>发起流程
                     </button>-->
                 </div>
-
+                <div class="remark">
+                    <div class="markt">
+                        <div class="whitred"></div>
+                        <span>:为督办信息&nbsp </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                </div>
                 <table id="flowInstanceTable" class="table table-hover tablemar">
                     <caption class="zt">流程信息一览表
                         <a href="javascript:void(0);" id="chlc" style="float: right"><span class="glyphicon glyphicon-plus"></span>撤回流程</a>

@@ -374,6 +374,16 @@ $(function(){
         //pageList:[5,10,20,50,100],
         paginationPreText:"上一页",
         paginationNextText:"下一页",
+        rowStyle: function(row,index){
+            if(row.sfdb=="是"){
+                /*  var style = {};
+                 style={css:{'color':'#d9534f'}};
+                 return style;*/
+                return {css:{"background-color":"#d9534f"}}
+            }else{
+                return{}
+            }
+        },
         columns:[
             {
                 checkbox:true
@@ -383,40 +393,16 @@ $(function(){
                 title:'流程名称'
             },
             {
-                field:'fqr',
-                title:'发起人',
-                formatter:function(value,row,index){
-                    if(value==null){
-                        return null;
-                    }else{
-                        var names= getUserById(value);
-                        return   names;
-                    }
-                }
+                field:'fqrName',
+                title:'发起人'
             },
             {
                 title:"待办人",
-                field:'jsr',
-                formatter:function(value,row,index){
-                    if(value==null){
-                        return null;
-                    }else{
-                        var names= getUserById(value);
-                        return   names;
-                    }
-                }
+                field:'dusers'
             },
-            {
+           {
                 title:"查阅人",
-                field:'user',
-                formatter:function(value,row,index){
-                    if(value==null){
-                        return null;
-                    }else{
-                        var names= getUserById(value);
-                        return   names;
-                    }
-                }
+                field:'username'
             },
             {
                 title:"审批状态",
@@ -431,10 +417,16 @@ $(function(){
                             data="退回";
                             break;
                         case 3:
-                            data="通过(查阅)";
+                            data="通过";
                             break;
                         case 4:
                             data="撤回";
+                            break;
+                        case 5:
+                            data="待查阅";
+                            break;
+                        case 6:
+                            data="已查阅";
                             break;
                     }
                     return data;
@@ -496,7 +488,7 @@ function initmodalinfo(){
     var userobj=eval('('+user+')');
     var nowdate=getNowDate();
 
-    $("#fqr").val(getUserById(userobj.id));
+    $("#fqr").val(userobj.userName);
     $("#fqrid").val(userobj.id);
     $("#startDate").val(nowdate);
     $("#user").val(userobj.id);
@@ -600,7 +592,7 @@ function insertMassage(flowinfo){
     var nowdate=getNowDate();
     var param={};
     param.tsId=flowinfo.fqr;
-    if(flowinfo.status=="3"){
+    if(flowinfo.status=="3"||flowinfo.status=="5"){
         param.jsId=flowinfo.user;
     }else{
         param.jsId=flowinfo.jsr;

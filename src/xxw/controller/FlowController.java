@@ -65,7 +65,7 @@ public class FlowController {
        // duserId=getUserIds("2");
        // flowInstance.setDusers(duserId);
         if(flowInstance.getFlowType().equals("1")){
-            flowInstance.setStatus("3");
+            flowInstance.setStatus("5");
             flowInstance.setUser(flowInstance.getJsr());
             flowInstance.setJsr(flowInstance.getJsr());
             flowInstance.setEndDate(flowInstance.getStartDate());
@@ -82,6 +82,10 @@ public class FlowController {
        // flowInstance.setNode("1");
         //flowInstance.setUserId(flowInstance.getFqr());
         flowInstance.setFlowOrder(1);
+        if(flowInstance.getFlowType().equals("1")){
+            flowInstance.setStatus("6");
+            flowInstance.setJsr(null);
+        }
         flowMapper.createFlowHistory(flowInstance);
         HttpSession session=request.getSession();
         User user=(User)session.getAttribute("user");

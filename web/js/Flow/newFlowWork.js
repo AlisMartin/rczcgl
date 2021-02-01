@@ -36,6 +36,12 @@ var flowColum=[
                 case 4:
                     data="撤回";
                     break;
+                case 5:
+                    data="待查阅";
+                    break;
+                case 6:
+                    data="已查阅";
+                    break;
             }
             return data;
         }
@@ -57,6 +63,8 @@ var flowColum=[
                 return "<a href='javascript:;'  id='sp'>审批</a>&nbsp;&nbsp;<a href='javascript:;'id='ck'>查看</a>";
             }else if(row.status=="2"){
                 return "<a href='javascript:;' id='ck'>退回详情</a>";
+            }else if(row.status=="5"){
+                return "<a href='javascript:;' id='ck'>查看</a>&nbsp;&nbsp;<a href='javascript:;'id='yd'>已读</a>";
             }else{
                 return "<a href='javascript:;' id='ck'>查看</a>";
             }
@@ -78,6 +86,11 @@ var flowColum=[
                 spinfo={};
                 spinfo=row;
                 queryInfo(row);
+            },
+            'click #yd':function(e,value,row,index){
+                spinfo={};
+                spinfo=row;
+                updateYdFlowInstance();
             }
         }
     }
@@ -232,13 +245,24 @@ $(function(){
         method:'post',
         contentType: "application/json;charset=UTF-8",
         clickToSelect:true,
-        sidePagination:"server",
+        sidePagination:"client",
         pagination:true,
         pageNumber:1,
         pageSize:10,
         //pageList:[5,10,20,50,100],
         paginationPreText:"上一页",
         paginationNextText:"下一页",
+        rowStyle: function(row,index){
+            debugger;
+            if(row.sfdb=="是"){
+              /*  var style = {};
+                style={css:{'color':'#d9534f'}};
+                return style;*/
+                return {css:{"background-color":"#d9534f"}}
+            }else{
+                return{}
+            }
+        },
         columns:[
             {
                 checkbox:true
@@ -268,10 +292,16 @@ $(function(){
                             data="退回";
                             break;
                         case 3:
-                            data="通过(查阅)";
+                            data="通过";
                             break;
                         case 4:
                             data="撤回";
+                            break;
+                        case 5:
+                            data="待查阅";
+                            break;
+                        case 6:
+                            data="已查阅";
                             break;
                     }
                     return data;
@@ -294,6 +324,8 @@ $(function(){
                         return "<a href='javascript:;'  id='sp'>审批</a>&nbsp;&nbsp;<a href='javascript:;'id='ck'>查看</a>";
                     }else if(row.status=="2"){
                         return "<a href='javascript:;' id='ck'>退回详情</a>";
+                    }else if(row.status=="5"){
+                        return "<a href='javascript:;' id='ck'>查看</a>&nbsp;&nbsp;<a href='javascript:;'id='yd'>已读</a>";
                     }else{
                         return "<a href='javascript:;' id='ck'>查看</a>";
                     }
@@ -315,6 +347,11 @@ $(function(){
                         spinfo={};
                         spinfo=row;
                         queryInfo(row);
+                    },
+                    'click #yd':function(e,value,row,index){
+                        spinfo={};
+                        spinfo=row;
+                        updateYdFlowInstance();
                     }
                 }
             }
@@ -394,6 +431,28 @@ function updateFlowInstance(){
         success:function(){
             alert("审批成功!");
             insertMassage(spinfo,param);
+            $('#flowWorkTable').bootstrapTable("refresh");
+        }
+    })
+}
+
+//更新已读
+function updateYdFlowInstance(){
+    debugger;
+    var param={};
+    param.flowId=spinfo.flowId;
+    param.status="6";
+    param.endDate=getNowDate();
+    param.jsr=null;
+    //param.startDate=getNowDate();
+    $.ajax({
+        type:"post",
+        url:"/rczcgl/flow/updateFLow.action",
+        data:param,
+        success:function(){
+            alert("设置成功!");
+            spinfo.status="6";
+           // insertMassage(spinfo,param);
             $('#flowWorkTable').bootstrapTable("refresh");
         }
     })
@@ -553,6 +612,12 @@ function insertMassage(flowinfo,info){
         param.type="3";
     }else if(info.status=="3"){
         param.desc="文件审批通过";
+        param.type="2";
+    }else if(info.status=="5"){
+        param.desc="文件待查阅";
+        param.type="1";
+    }else if(info.status=="6"){
+        param.desc="文件已查阅";
         param.type="2";
     }else{
         param.desc="文件待审批";
