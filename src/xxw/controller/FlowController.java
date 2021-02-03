@@ -147,12 +147,12 @@ public class FlowController {
             String data=flowHistory.getEndDate();
             flowHistory.setStartDate(data);
             flowHistory.setEndDate(data);
-            flowHistory.setNodeOrder(flowHistory.getNodeOrder()+1);
+          //  flowHistory.setNodeOrder(flowHistory.getNodeOrder()+1);
             flowMapper.createFlowHistory(flowHistory);
         }else{
-            List<FlowHistory> list=   flowMapper.queryFlowHistoryInfo(flowHistory.getFlowId(),null,flowHistory.getNodeOrder());
+            List<FlowHistory> list=   flowMapper.queryFlowHistoryInfo(flowHistory.getFlowId(),null,null);
             flowHistory.setStartDate(list.get(0).getEndDate());
-            flowHistory.setNodeOrder(flowHistory.getNodeOrder()+1);
+          //  flowHistory.setNodeOrder(flowHistory.getNodeOrder()+1);
             flowMapper.createFlowHistory(flowHistory);
         }
         return new ResponseObject(i,"","");

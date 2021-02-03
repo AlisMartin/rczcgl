@@ -255,10 +255,11 @@ $(function(){
         rowStyle: function(row,index){
             debugger;
             if(row.sfdb=="是"){
-              /*  var style = {};
-                style={css:{'color':'#d9534f'}};
-                return style;*/
-                return {css:{"background-color":"#d9534f"}}
+                if(row.status=="1"||row.status=="5"){
+                    return {css:{"background-color":"#d9534f"}}
+                }else{
+                    return {}
+                }
             }else{
                 return{}
             }
@@ -688,6 +689,23 @@ function reloadTable(a){
             }
             return JSON.stringify(params);
         },
+        rowStyle: function(row,index){
+            debugger;
+            if(url=='/rczcgl/flow/queryFlowInfos.action'){
+                if(row.sfdb=="是"){
+                    if(row.status=="1"||row.status=="5"){
+                        return {css:{"background-color":"#d9534f"}}
+                    }else{
+                        return {}
+                    }
+                }else{
+                    return{}
+                }
+            }else{
+                return {}
+            }
+
+        }
     })
 
     $(".bootstrap-table.bootstrap3").css('height',"100%");

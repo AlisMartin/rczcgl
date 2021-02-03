@@ -362,7 +362,7 @@ $(function(){
         insertFlowInstance();
     })
 
-    $('#flowInstanceTable').bootstrapTable({
+  var flowinstanceTable=  $('#flowInstanceTable').bootstrapTable({
         url:'/rczcgl/flow/queryFlowInfos.action',
         method:'post',
         contentType: "application/json;charset=UTF-8",
@@ -375,11 +375,19 @@ $(function(){
         paginationPreText:"上一页",
         paginationNextText:"下一页",
         rowStyle: function(row,index){
+            debugger;
+          var a=  flowinstanceTable.url;
+         //   if(flowinstanceTable.url)
             if(row.sfdb=="是"){
+                if(row.status=="1"||row.status=="5"){
+                    return {css:{"background-color":"#d9534f"}}
+                }else{
+                    return {}
+                }
                 /*  var style = {};
                  style={css:{'color':'#d9534f'}};
                  return style;*/
-                return {css:{"background-color":"#d9534f"}}
+
             }else{
                 return{}
             }
