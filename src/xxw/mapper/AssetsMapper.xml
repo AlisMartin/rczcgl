@@ -141,6 +141,9 @@
         insert into ASSETS_CONFIG("ID","ZCTYPE","FIELD","FIELDNAME","ORDER","SHOW","FIELDTYPE","ISDEL") VALUES
         (#{id,jdbcType=VARCHAR},#{zctype,jdbcType=VARCHAR},#{field,jdbcType=VARCHAR},#{fieldname,jdbcType=VARCHAR},#{order,jdbcType=VARCHAR},#{show,jdbcType=VARCHAR},#{fieldType,jdbcType=VARCHAR},#{isdel,jdbcType=VARCHAR})
     </insert>
+    <select id="getMaxField" resultType="java.lang.Integer">
+        select maxField from (SELECT SUBSTR(FIELD, INSTR(FIELD, 'field')+5) maxField FROM ASSETS_CONFIG WHERE ZCTYPE = 1  ORDER BY to_number(maxField) DESC) where rownum=1
+    </select>
     <update id="updateConfig" parameterType="xxw.po.AssetsConfig">
         UPDATE ASSETS_CONFIG
         <set>

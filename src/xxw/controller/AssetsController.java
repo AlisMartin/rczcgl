@@ -111,6 +111,8 @@ public class AssetsController {
     public int insertAssetsConfig(HttpServletRequest request, AssetsConfig assetsConfig) {
         int i = 0;
         assetsConfig.setIsdel("0");
+        Integer max = assetsMapper.getMaxField();
+        assetsConfig.setField("field" + (max + 1));
         UUID id= UUID.randomUUID();
         assetsConfig.setId(id.toString());
         i = assetsMapper.insertConfig(assetsConfig);

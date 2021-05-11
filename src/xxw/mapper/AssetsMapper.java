@@ -27,6 +27,7 @@ public interface AssetsMapper {
     List<String> getAssetsCom(@Param("zctype")String zctype);
     List<Map<String,String>> getAllAssetsInfoByMap(@Param("zctype")String zctype,@Param("gsmc")String gsmc);
     int insertConfig(AssetsConfig assetsConfig);
+    Integer getMaxField();
     int insertAssetsInfo(@Param("assetsMap")Map<String,Object> assetsMap);
     int insertAssetsInfoHistory(@Param("assetsMap")Map<String,String> assetsMap);
     int updateAssetsInfo(@Param("assetsMap")Map<String,Object> assetsMap);
