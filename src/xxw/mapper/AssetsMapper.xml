@@ -138,18 +138,15 @@
         </if>
     </select>
     <insert id="insertConfig" useGeneratedKeys="false" keyProperty="id" parameterType="java.lang.String">
-        <selectKey resultType="String" keyProperty="id" order="BEFORE">
-            select CONFIGSEQ.nextval as id from dual
-        </selectKey>
         insert into ASSETS_CONFIG("ID","ZCTYPE","FIELD","FIELDNAME","ORDER","SHOW","FIELDTYPE","ISDEL") VALUES
         (#{id,jdbcType=VARCHAR},#{zctype,jdbcType=VARCHAR},#{field,jdbcType=VARCHAR},#{fieldname,jdbcType=VARCHAR},#{order,jdbcType=VARCHAR},#{show,jdbcType=VARCHAR},#{fieldType,jdbcType=VARCHAR},#{isdel,jdbcType=VARCHAR})
     </insert>
     <update id="updateConfig" parameterType="xxw.po.AssetsConfig">
         UPDATE ASSETS_CONFIG
         <set>
-            <if test="id != null">
+      <!--      <if test="id != null">
             ID= #{id,jdbcType=VARCHAR},
-        </if>
+        </if>-->
             <if test="zctype != null">
                 ZCTYPE= #{zctype,jdbcType=VARCHAR},
             </if>

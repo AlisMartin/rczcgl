@@ -111,6 +111,8 @@ public class AssetsController {
     public int insertAssetsConfig(HttpServletRequest request, AssetsConfig assetsConfig) {
         int i = 0;
         assetsConfig.setIsdel("0");
+        UUID id= UUID.randomUUID();
+        assetsConfig.setId(id.toString());
         i = assetsMapper.insertConfig(assetsConfig);
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");

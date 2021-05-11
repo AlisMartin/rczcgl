@@ -95,7 +95,7 @@ $(function () {
 });
 
 function getcolumn() {
-    debugger;
+    var a=3.1123
     columns = [
         {
             title:'序号',
@@ -105,6 +105,9 @@ function getcolumn() {
                 return pageSize*(pageNumber-1)+index+1;
             },
         },
+   /*     {field: "field11", title: "印花税(万元)", footerFormatter: function(){
+            return "12.1";
+        }}*/
     ];
     var type=param.zctype+",5";
     $.ajax({
@@ -113,7 +116,7 @@ function getcolumn() {
         async: false,
         data: {'zctype':type},
         success: function (data) {
-
+            debugger;
             configdata=data;
             gettotal(data[0].zctype,param.gsmc);
             for (var i = 0; i < data.length; i++) {
@@ -123,7 +126,7 @@ function getcolumn() {
                     obj.title = data[i].fieldname;
                     obj.footerFormatter="总计：";
                 }else if(data[i].fieldType=="2"){
-                    var count=0;
+                    var count=0.00000;
                     if(countobj!=null&&countobj!=""){
                         for(var sx in countobj){
                             if(sx==data[i].field){
@@ -134,7 +137,12 @@ function getcolumn() {
                         obj={
                             field : data[i].field,
                             title : data[i].fieldname,
-                            footerFormatter:count+""
+                            footerFormatter: function(){
+                                var countTemp = count
+                                return function () {
+                                    return countTemp;
+                                }
+                            }()
                         }
 
                 }else{
@@ -355,7 +363,6 @@ function getCompanys() {
 
 //导出
 function exportSummary(){
-    debugger;
     var data={};
     data.zctype=param.zctype;
 
