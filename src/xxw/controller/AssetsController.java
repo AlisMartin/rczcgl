@@ -111,7 +111,7 @@ public class AssetsController {
     public int insertAssetsConfig(HttpServletRequest request, AssetsConfig assetsConfig) {
         int i = 0;
         assetsConfig.setIsdel("0");
-        Integer max = assetsMapper.getMaxField();
+        Integer max = assetsMapper.getMaxField(assetsConfig.getZctype());
         assetsConfig.setField("field" + (max + 1));
         UUID id= UUID.randomUUID();
         assetsConfig.setId(id.toString());
@@ -339,16 +339,24 @@ public class AssetsController {
             }
             if ("stopday".equals(assetVO.getName())) {
                 SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-                try {
-                    Date realdate1 = dateFormat1.parse(assetVO.getValue());
-                    insertInfo.put("stopday", realdate1);
-                } catch (Exception e) {
+                if(assetVO.getValue()!=null){
+                    try {
+                        Date realdate1 = dateFormat1.parse(assetVO.getValue());
+                        insertInfo.put("stopday", realdate1);
+                    } catch (Exception e) {
+                    }
+                }else{
+                    //asdasd
+                    insertInfo.put("stopday", null);
                 }
+
+
                 continue;
+
             }
-            if (StringUtil.isNotEmpty(assetVO.getValue())) {
+            //if (StringUtil.isNotEmpty(assetVO.getValue())) {
                 insertInfo.put(assetVO.getName(), assetVO.getValue());
-            }
+            //}
         }
         String zcid = insertInfo.get("zcid").toString();
         Map<String, String> assetsInfo = assetsMapper.selectAssetsInfo(zcid);
